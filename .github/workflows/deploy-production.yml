@@ -74,8 +74,9 @@ jobs:
           # don't linger in the production repo
           find "$PROD_DIR" -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
 
-          # Copy the entire dist/ output into the production repo root
-          cp -r dist/. "$PROD_DIR/"
+          # Copy dist/ output excluding all JSON files — the Shopify GitHub App
+          # manages all JSON bidirectionally with the live theme, so we never overwrite them.
+          rsync -a --exclude="*.json" dist/. "$PROD_DIR/"
 
           cd "$PROD_DIR"
           git add -A
