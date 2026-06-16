@@ -1,0 +1,781 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div#div_id.div_class[attribute-one=value]",
+  "layout": "anatta_theme",
+  "sections": {
+    "category_slides_yqJ4xQ": {
+      "type": "category-slides",
+      "blocks": {
+        "item_CTeTHt": {
+          "type": "item",
+          "settings": {
+            "label": "PRE",
+            "link": "shopify://products/pre"
+          }
+        },
+        "item_bzi884": {
+          "type": "item",
+          "settings": {
+            "label": "G.1.M Sport+",
+            "link": "shopify://products/g-1-m-sport-plus"
+          }
+        },
+        "item_Vgehqe": {
+          "type": "item",
+          "settings": {
+            "label": "PUMP",
+            "link": "shopify://products/pump"
+          }
+        },
+        "item_URWncq": {
+          "type": "item",
+          "settings": {
+            "label": "Creatine",
+            "link": "shopify://products/creatine-monohydrate"
+          }
+        },
+        "item_nMebVY": {
+          "type": "item",
+          "settings": {
+            "label": "POST",
+            "link": "shopify://products/post"
+          }
+        },
+        "item_KArdUY": {
+          "type": "item",
+          "settings": {
+            "label": "Whey Protein",
+            "link": "shopify://products/whey-protein-powder"
+          }
+        },
+        "item_F6MR7V": {
+          "type": "item",
+          "settings": {
+            "label": "G.1.M Sport",
+            "link": "shopify://products/g-1-m-sport"
+          }
+        },
+        "item_VaNmkd": {
+          "type": "item",
+          "settings": {
+            "label": "go gels",
+            "link": "shopify://products/go-gel"
+          }
+        },
+        "item_ktiANT": {
+          "type": "item",
+          "settings": {
+            "label": "Electrolytes",
+            "link": "shopify://products/electrolytes"
+          }
+        },
+        "item_NwcPca": {
+          "type": "item",
+          "settings": {
+            "label": "all supplements",
+            "link": "shopify://collections/performance-nutrition"
+          }
+        }
+      },
+      "block_order": [
+        "item_CTeTHt",
+        "item_bzi884",
+        "item_Vgehqe",
+        "item_URWncq",
+        "item_nMebVY",
+        "item_KArdUY",
+        "item_F6MR7V",
+        "item_VaNmkd",
+        "item_ktiANT",
+        "item_NwcPca"
+      ],
+      "name": "Category Slides",
+      "settings": {}
+    },
+    "home_hero_NzFnRB": {
+      "type": "media-banner",
+      "blocks": {
+        "button_9ECXcr": {
+          "type": "button",
+          "settings": {
+            "button_text": "SHOP NOW",
+            "button_link": "shopify://pages/shop-strength-collection",
+            "button_style": "primary",
+            "click_id": "homepage_hero_quiz_cta"
+          }
+        },
+        "button_BHAfwA": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_text": "SHOP ALL SUPPLEMENTS",
+            "button_link": "shopify://collections/performance-nutrition",
+            "button_style": "secondary",
+            "click_id": "homepage_hero_quiz_cta"
+          }
+        }
+      },
+      "block_order": [
+        "button_9ECXcr",
+        "button_BHAfwA"
+      ],
+      "settings": {
+        "desktop_media_type": "image",
+        "hero_image": "shopify://shop_images/DESKTOP_HOMEPAGE_BANNER_1_1.jpg",
+        "hero_video": "shopify://files/videos/G.1.M ULTRA DRONE LOOP_2_16X9 (1).mp4",
+        "desktop_height": 750,
+        "mobile_media_type": "image",
+        "hero_mobile_image": "shopify://shop_images/MOBILE_HOMEPAGE_BANNER_1.jpg",
+        "hero_mobile_video": "shopify://files/videos/G.1.M ULTRA DRONE LOOP_2_16X9 (1).mp4",
+        "mobile_height": 550,
+        "desktop_overlay_color": "linear-gradient(60deg, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.1) 40%)",
+        "mobile_overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.25) 10%, rgba(0, 0, 0, 0.5) 60%)",
+        "title": "THE STRENGTH COLLECTION",
+        "title_color": "",
+        "text": "<p><strong>NOW LIVE - PRE, PUMP, POST</strong></p><p>Three products with clinically studied ingredients to prepare for training, maximize performance, and recover for tomorrow. </p><p>Your new ritual is here. </p>",
+        "text_color": "",
+        "desktop_horizontal_alignment": "left",
+        "desktop_vertical_alignment": "middle",
+        "mobile_horizontal_alignment": "left",
+        "mobile_vertical_alignment": "top"
+      }
+    },
+    "bpn_recommendations_8ajzxx": {
+      "type": "bpn-recommendations",
+      "custom_css": [],
+      "settings": {
+        "title": "BEST SELLERS",
+        "collection_handle": "best-sellers",
+        "click_id": "top-rated",
+        "background_color": "#ffffff"
+      }
+    },
+    "category_list_GzFcbm": {
+      "type": "category-list",
+      "blocks": {
+        "category_hx9pWE": {
+          "type": "category",
+          "settings": {
+            "category_name": "Endurance",
+            "category_url": "shopify://collections/endurance",
+            "cta_text": "SHOP NOW",
+            "category_image": "shopify://shop_images/zzd3590b46-d9be-4dd1-a0ac-fd7001983121_1.jpg",
+            "category_mobile_image": "shopify://shop_images/zzd3590b46-d9be-4dd1-a0ac-fd7001983121_1.jpg",
+            "title_color": "",
+            "cta_color": ""
+          }
+        },
+        "category_7HzwaE": {
+          "type": "category",
+          "settings": {
+            "category_name": "Strength",
+            "category_url": "shopify://collections/strength",
+            "cta_text": "SHOP NOW",
+            "category_image": "shopify://shop_images/nicklift.png",
+            "category_mobile_image": "shopify://shop_images/nicklift.png",
+            "title_color": "",
+            "cta_color": ""
+          }
+        },
+        "category_DNGwfF": {
+          "type": "category",
+          "settings": {
+            "category_name": "RECOVERY",
+            "category_url": "shopify://collections/recovery",
+            "cta_text": "SHOP NOW",
+            "category_image": "shopify://shop_images/ZowZpB5LeNNTw6Si_strength.png",
+            "category_mobile_image": "shopify://shop_images/ZowZpB5LeNNTw6Si_strength.png",
+            "title_color": "",
+            "cta_color": ""
+          }
+        },
+        "category_rjQ9nM": {
+          "type": "category",
+          "settings": {
+            "category_name": "Wellness",
+            "category_url": "shopify://collections/health-wellness",
+            "cta_text": "SHOP NOW",
+            "category_image": "shopify://shop_images/zzBPN_9287_2.jpg",
+            "category_mobile_image": "shopify://shop_images/zzBPN_9287_2.jpg",
+            "title_color": "",
+            "cta_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_hx9pWE",
+        "category_7HzwaE",
+        "category_DNGwfF",
+        "category_rjQ9nM"
+      ],
+      "settings": {}
+    },
+    "athletic_callout_DABc84": {
+      "type": "athletic-callout",
+      "blocks": {
+        "callout_item_JJjNWh": {
+          "type": "callout_item",
+          "settings": {
+            "icon": "shopify://shop_images/tested_20c991a3-cc2e-47a1-8d2e-36c0c43133ce.png",
+            "title": "THIRD-PARTY CERTIFIED",
+            "description": "All BPN supplements are third party tested for banned substances, quality standards and label accuracy."
+          }
+        },
+        "callout_item_4xaqrA": {
+          "type": "callout_item",
+          "settings": {
+            "icon": "shopify://shop_images/Frame_2195.svg",
+            "title": "THE BARE STANDARD",
+            "description": "Built on quality and proven by results, without compromise."
+          }
+        },
+        "callout_item_rzXrU9": {
+          "type": "callout_item",
+          "settings": {
+            "icon": "shopify://shop_images/BPN_USA_1.svg",
+            "title": "VETERAN OWNED",
+            "description": "BPN is a Veteran owned/operated business and is proud to support our troops."
+          }
+        }
+      },
+      "block_order": [
+        "callout_item_JJjNWh",
+        "callout_item_4xaqrA",
+        "callout_item_rzXrU9"
+      ],
+      "settings": {}
+    },
+    "testimonials_Fhip3j": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonials_cYPBtB": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Luke Hopkins",
+            "name_color": "",
+            "role": "Hybrid Athlete",
+            "role_color": "",
+            "text": "\"BPN is more than a supplement company; it's the source that fuels the relentless devotion to achieve greatness.\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo6k_R5LeNNTw_4w_lukehop.png"
+          }
+        },
+        "testimonials_jVa4rk": {
+          "type": "testimonial",
+          "settings": {
+            "name": "SALLY McRAE",
+            "name_color": "",
+            "role": "Professional Ultrarunner",
+            "role_color": "",
+            "text": "“I'm always looking for good, wholesome fuel, to make me feel good and strong. BPN helps me keep fueling strong to keep training strong!\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5yNR5LeNNTw_Sy_sally.png"
+          }
+        },
+        "testimonials_VhWLkq": {
+          "type": "testimonial",
+          "settings": {
+            "name": "RUSSEL ORHII",
+            "name_color": "",
+            "role": "Professional Powerlifter",
+            "role_color": "",
+            "text": "“I choose BPN because of how everything is thoroughly tested to ensure I’m getting products that are CLEAN.”",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5y7R5LeNNTw_TJ_russ.png"
+          }
+        },
+        "testimonials_NDYfzk": {
+          "type": "testimonial",
+          "settings": {
+            "name": "LOGAN WILSON",
+            "name_color": "",
+            "role": "NFL® Linebacker",
+            "role_color": "",
+            "text": "\"I choose BPN products because they test for banned substances all while being a high-quality product that delivers good taste and results.”",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5zsh5LeNNTw_Tn_wilson.png"
+          }
+        },
+        "testimonials_pUmhFW": {
+          "type": "testimonial",
+          "settings": {
+            "name": "AMANDA KIMIKO",
+            "name_color": "",
+            "role": "Hybrid Athlete",
+            "role_color": "",
+            "text": "\"I choose BPN because of the brand’s dedication to using high quality, and clean ingredients while still offering incredible flavors.\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo53yh5LeNNTw_WS_amanda.png"
+          }
+        }
+      },
+      "block_order": [
+        "testimonials_cYPBtB",
+        "testimonials_jVa4rk",
+        "testimonials_VhWLkq",
+        "testimonials_NDYfzk",
+        "testimonials_pUmhFW"
+      ],
+      "settings": {
+        "title": "WE ARE A BRAND FOR THE COMMITTED",
+        "title_color": "",
+        "subtitle": "- UNWAVERING IN THE PURSUIT OF YOUR GOALS.",
+        "subtitle_color": ""
+      }
+    },
+    "youtube_AdMEhX": {
+      "type": "bpn-youtube-video",
+      "blocks": {
+        "video_fzwQ7z": {
+          "type": "video",
+          "settings": {
+            "video_name": "The Committed | 2026",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ydlHcDAKjas?si=goNg6vzot505o2at\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "flight-pre-workout",
+              "electrolytes",
+              "g-1-m-sport"
+            ]
+          }
+        },
+        "video_BrnfwQ": {
+          "type": "video",
+          "settings": {
+            "video_name": "Finished Well",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/5pnc5Lb7LA8?si=3eliUmjBDLbCF-Nx\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "whey-protein-powder",
+              "electrolytes"
+            ]
+          }
+        },
+        "video_KneKqE": {
+          "type": "video",
+          "settings": {
+            "video_name": "SURRENDER | A BPN Media Film",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/LJsFxxtd23Y?si=qakLmkFGDMcN4JzJ\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "electrolytes",
+              "creatine-monohydrate",
+              "whey-protein-powder",
+              "recover-essential-amino-acids",
+              "flight-pre-workout"
+            ]
+          }
+        },
+        "video_kHaMMR": {
+          "type": "video",
+          "settings": {
+            "video_name": "Race Day | Luke Hopkins - Ironman World Championship 2025 Ep.5",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/g9dRYgxL5JQ?si=I-46R7OzP5Ci15Sq\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "flight-pre-workout",
+              "creatine-monohydrate",
+              "whey-protein-powder",
+              "g-1-m-sport",
+              "electrolytes",
+              "go-gel",
+              "go-bar"
+            ]
+          }
+        },
+        "video_6PpYPT": {
+          "type": "video",
+          "settings": {
+            "video_name": "Training Motivation | The Committed",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Y_wGpe5645c?si=2E4zfH3qI-MmDlw8\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "electrolytes",
+              "go-bar",
+              "go-gel",
+              "creatine-monohydrate",
+              "flight-pre-workout"
+            ]
+          }
+        },
+        "video_H7xNb3": {
+          "type": "video",
+          "settings": {
+            "video_name": "The Cost of Winning | Kim Gottwald G1M Ultra EP. 1",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/fT7R1bC9FKY?si=hf4TwV-fa9X-CRsC\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "go-gel",
+              "go-bar",
+              "electrolytes"
+            ]
+          }
+        },
+        "video_U6UARy": {
+          "type": "video",
+          "settings": {
+            "video_name": "The Spirit Is Willing | Max Jolliffe - Mammoth 200",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/7kVOIbD7y7s?si=_9TDe-L12kum_9Cc\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "strong-greens",
+              "strong-reds-superfood-powerhouse",
+              "strong-multi-vitamin",
+              "strong-joints-joint-support",
+              "strong-omega-fish-oil-soft-gel",
+              "go-gel",
+              "electrolytes"
+            ]
+          }
+        },
+        "video_CiKeGM": {
+          "type": "video",
+          "settings": {
+            "video_name": "Run Far & Lift Heavy | Back To Where It All Began",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/I8oNKrtfovI?si=9w9t8nP6YlI7SHPw\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "go-gel",
+              "go-bar",
+              "electrolytes"
+            ]
+          }
+        },
+        "video_JFU89z": {
+          "type": "video",
+          "settings": {
+            "video_name": "Ironman Arizona | The Last Dance Film | Nick Bare",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/jKZo2buNN2k?si=S_OnNEU1BGAu2oB2\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "whey-protein-powder",
+              "vegan-protein"
+            ]
+          }
+        },
+        "video_ytRY3w": {
+          "type": "video",
+          "settings": {
+            "video_name": "ANBESSA | A BPN Media Film on Haftu Knight",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/bK1UxvSoP58?si=Hf-jHkrPXps3vjQV\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "electrolytes"
+            ]
+          }
+        },
+        "video_HGrUR4": {
+          "type": "video",
+          "settings": {
+            "video_name": "50 Miles. No Sleep. No Crowd. Here’s Why",
+            "video_info": "",
+            "iframe": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/O6xGDJZzL8E?si=_FtvBqLgeTubaMDN\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+            "products": [
+              "g-1-m-sport",
+              "go-bar",
+              "go-gel",
+              "electrolytes"
+            ]
+          }
+        }
+      },
+      "block_order": [
+        "video_fzwQ7z",
+        "video_BrnfwQ",
+        "video_KneKqE",
+        "video_kHaMMR",
+        "video_6PpYPT",
+        "video_H7xNb3",
+        "video_U6UARy",
+        "video_CiKeGM",
+        "video_JFU89z",
+        "video_ytRY3w",
+        "video_HGrUR4"
+      ],
+      "settings": {
+        "title": "WATCH OUR STORY",
+        "title_color": "",
+        "subtitle": "(IN REAL TIME)",
+        "subtitle_color": "",
+        "text": "1.3M+ SUBSCRIBERS STRONG ON YOUTUBE",
+        "text_color": "",
+        "link_text": "VIEW CHANNEL",
+        "link_url": "https://www.youtube.com/channel/UCbVEx9qG_hLrb6FrWQJz_Tg",
+        "link_text_color": "",
+        "drawer_title": "FUEL YOUR  PERFORMANCE",
+        "drawer_title_color": "",
+        "drawer_text": "Shop the BPN products featured in this video",
+        "drawer_text_color": ""
+      }
+    },
+    "bpn_recommendations_8hVcnm": {
+      "type": "bpn-recommendations",
+      "settings": {
+        "title": "GEAR UP",
+        "collection_handle": "gear1",
+        "click_id": "gear",
+        "background_color": "#ffffff"
+      }
+    },
+    "tile_group_CmHRW6": {
+      "type": "two-column-group",
+      "blocks": {
+        "tile_CdgLrG": {
+          "type": "tile",
+          "settings": {
+            "tile_title": "BPN YOUTUBE CHANNEL",
+            "tile_title_color": "",
+            "tile_text": "Inspiring stories and films that showcase committed athletes pursing greatness.",
+            "tile_text_color": "",
+            "tile_url": "https://www.youtube.com/@bpnsupps",
+            "click_id": "homepage_community_app_cta",
+            "tile_img_url": "shopify://shop_images/mitch.webp"
+          }
+        },
+        "tile_y66ViG": {
+          "type": "tile",
+          "settings": {
+            "tile_title": "THE NICK BARE PODCAST",
+            "tile_title_color": "",
+            "tile_text": "Our founder's unfiltered look into health, fitness, nutrition, entrepreneurship, and human optimization.",
+            "tile_text_color": "",
+            "tile_url": "https://www.youtube.com/@thenickbarepodcast",
+            "click_id": "homepage_community_academy_cta",
+            "tile_img_url": "shopify://shop_images/Zo_CxR5LeNNTxB9g_pod2.png"
+          }
+        }
+      },
+      "block_order": [
+        "tile_CdgLrG",
+        "tile_y66ViG"
+      ],
+      "settings": {
+        "title": "EQUIPPING THE BPN COMMUNITY TO",
+        "title_color": "",
+        "subtitle": "GO ONE MORE®",
+        "subtitle_color": ""
+      }
+    },
+    "reviews_KbBMH9": {
+      "type": "bpn-reviews",
+      "blocks": {
+        "reviews_rcRwnd": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Whey Protein",
+            "product_name_color": "",
+            "author_name": "Travis A",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "This by far is the best tasting protein I've had and has incredible consistency for mixing into everything. I totally went Forrest Gump with it - protein shakes, protein pancakes, protein cookies, protein smoothies, protein ice cream, protein oatmeal. There's so much you can do with it!",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_NATYnJ": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Flight",
+            "product_name_color": "",
+            "author_name": "Michael U",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "I have tried so many pre workouts over the years. This pre is absolutely the best with clean energy 10 minutes of consumption. I take this when the alarm clock sounds at 4:20 in the morning and it seemingly is still fueling me after vigorous workouts. I've been on the BPN train for over a year now and I just don't believe anyone is doing it better!",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_48X6UL": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "G.1.M Sport",
+            "product_name_color": "",
+            "author_name": "Blaze C",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "I love this supplement. I live in a very hot, humid state and hydration is so easy to loose sight of. I take G.1.M Sport before runs and CrossFit classes. The carbohydrates help fuel my body without a heavy bloated feeling. Highly recommend.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_h4YTWa": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Go Gel",
+            "product_name_color": "",
+            "author_name": "Stephanie C.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "Best tasting and most helpful gel I’ve used in 15 years of running. Thanks to BPN I was able to complete my first marathon since having kids and am planning to run the Pikes Peak Ascent in next. I don’t think I would have been nearly as successful without these products.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_KzEyqK": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Creatine",
+            "product_name_color": "",
+            "author_name": "Douglas R.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "I've been working out for 25 years and have never been a big supplement person other than whey protein. I just started taking creatine about 2 months ago and I have been blown away with the increase of performance I have experienced. I can train harder than ever before and it has already resulted in new PR's on bench and squats. I wish I started taking this stuff a long time ago.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_JpaJ7m": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Strong Greens",
+            "product_name_color": "",
+            "author_name": "Samuel B.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "Throughout my day tracking aircraft I’m constantly being challenged mentally. With this product I’m able to have mental clarity and acuity. This is by far the best greens powder that actually tastes good! Nick Bare always puts quality over everything and it shows! Thank you for making my days more enjoyable and making such great products.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_E77gwP": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Strong Multi-Vitamin",
+            "product_name_color": "",
+            "author_name": "Kurtis C.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "I’ve been using BPN's Strong Multi-Vitamin for a few months now, and I couldn’t be happier with both the product and the subscription service! The multivitamin itself is fantastic, providing me with all the essential nutrients I need to support my active lifestyle. I feel more energized and healthier overall since I started taking it.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_zGXKGN": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Vegan Protein",
+            "product_name_color": "",
+            "author_name": "Tyler D.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "I’ve been taking this protein powder for over a year now and it is exceptional to say the least. I’m a big fan of the community that Bare Performance Nutrition has to offer, and their quality supplements are an amazing bonus. The taste of the vanilla protein powder is my favorite and it mixes with zero clumps!",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_aJd4h3": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Electrolytes",
+            "product_name_color": "",
+            "author_name": "Blake M.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "When you're working hard and sweating a lot, these are the best electrolytes. They dissolve easily and really hit the spot when you need them the most. They contain enough sodium, which most electrolyte products lack. I could personally drink salted watermelon every day for the rest of my life.",
+            "author_comment_color": ""
+          }
+        },
+        "reviews_Rmc89G": {
+          "type": "reviews",
+          "settings": {
+            "product_name": "Go Bar",
+            "product_name_color": "",
+            "author_name": "Jason G.",
+            "author_name_color": "",
+            "author_role": "Verified Buyer",
+            "author_role_color": "",
+            "author_comment": "So many bars out there have an ingredients list a mile long and they taste like candy bars. Not this one! This is a simple ingredient list with clean ingredients and tastes great. It travels well, for example, in a cycling jersey for Ironman training or long rides. They are easy to eat and easy to pass through the gut for optimal nutrient absorption fast.",
+            "author_comment_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "reviews_rcRwnd",
+        "reviews_NATYnJ",
+        "reviews_48X6UL",
+        "reviews_h4YTWa",
+        "reviews_KzEyqK",
+        "reviews_JpaJ7m",
+        "reviews_E77gwP",
+        "reviews_zGXKGN",
+        "reviews_aJd4h3",
+        "reviews_Rmc89G"
+      ],
+      "settings": {
+        "title": "SEE WHAT CUSTOMERS ARE SAYING ABOUT US",
+        "title_color": "",
+        "subtitle": "55,000+ Verified Reviews",
+        "subtitle_color": ""
+      }
+    },
+    "quiz_zRBqaU": {
+      "type": "quiz",
+      "settings": {
+        "title": "NEW TO BPN?",
+        "title_color": "",
+        "subtitle": "FUEL YOUR PERFORMANCE",
+        "subtitle_color": "",
+        "button_text": "SET YOUR GOAL",
+        "button_text_color": "",
+        "button_url": "https://www.bareperformancenutrition.com/pages/quiz",
+        "text": "Set your goals for inspiring content, training resources, and customized supplement recommendations.",
+        "text_color": "",
+        "background_image": "shopify://shop_images/quiz-bg-image.webp"
+      }
+    },
+    "join_us_hKrqxX": {
+      "type": "bpn-newsletter",
+      "disabled": true,
+      "settings": {
+        "title": "JOIN OUR TEXT LIST>",
+        "title_color": "",
+        "mobile_title": "JOIN OUR TEXT LIST>",
+        "mobile_title_color": "",
+        "text": "Get special access to products releases, exclusive content and more.",
+        "text_color": "",
+        "heading": "Thank you for subscribing!",
+        "heading_color": "",
+        "subheading": "Check your phone for a confirmation message.",
+        "subheading_color": "",
+        "content": "<p>I agree to receive recurring automated marketing text messages (e.g. cart reminders) at the phone number provided. Consent is not a condition to purchase. Msg & data rates may apply. Msg frequency varies. Reply HELP for help and STOP to cancel. View our <a href=\"/pages/terms-and-conditions\">Terms of Service</a> and <a href=\"/pages/privacy-policy\">Privacy Policy</a>.</p>",
+        "content_color": ""
+      }
+    },
+    "bfcm_offer_banner_mmD6ym": {
+      "type": "bfcm-offer-banner",
+      "disabled": true,
+      "name": "BFCM Offer Banner",
+      "settings": {}
+    }
+  },
+  "order": [
+    "category_slides_yqJ4xQ",
+    "home_hero_NzFnRB",
+    "bpn_recommendations_8ajzxx",
+    "category_list_GzFcbm",
+    "athletic_callout_DABc84",
+    "testimonials_Fhip3j",
+    "youtube_AdMEhX",
+    "bpn_recommendations_8hVcnm",
+    "tile_group_CmHRW6",
+    "reviews_KbBMH9",
+    "quiz_zRBqaU",
+    "join_us_hKrqxX",
+    "bfcm_offer_banner_mmD6ym"
+  ]
+}
