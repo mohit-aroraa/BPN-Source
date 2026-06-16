@@ -95,7 +95,7 @@ jobs:
           echo "${DELIMITER}" >> $GITHUB_OUTPUT
 
           git commit -m "sync: pull ${CHANGED_COUNT} json files from live theme"
-          git push origin "${{ inputs.sync_branch }}"
+          git push --force origin "${{ inputs.sync_branch }}"
 
       - name: Create pull request
         if: steps.commit.outputs.changed == 'true'
