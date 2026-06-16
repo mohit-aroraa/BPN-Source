@@ -1,0 +1,72 @@
+{%- comment -%}
+  Reusable prismic breadcrumb component
+  Accept: Breadcrumb namespace from prismic (Required)
+  Returns only the json markup in string
+{%- endcomment -%}
+
+{%- assign block_content = metafields.breadcrumb_slice -%}
+{%- assign length = block_content.count | minus: 1 -%}
+{%- capture breadcrumb -%}
+    {%- for index in (0..length) -%}
+        {%- assign breadcrumb_text_key = 'text_' | append: index -%}
+        {%- assign breadcrumb_link_key = 'link_' | append: index -%}
+        {%- assign breadcrumb_text = block_content[breadcrumb_text_key] -%}
+        {%- assign breadcrumb_link = block_content[breadcrumb_link_key] -%}
+        {%- if breadcrumb_link -%}
+            <li><a href="{{breadcrumb_link}}">{{breadcrumb_text}}</a></li>
+        {%- else -%}
+            <li>{{breadcrumb_text}}</li>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+{%- if length > 0 -%}
+  {{- breadcrumb | json -}}
+{%- else -%}
+  {%- unless template == 'index' or template == 'cart' -%}
+    {%- capture breadcrumb -%}
+        <li><a href="/" title="{{ 'general.breadcrumbs.home_link_title' | t }}">Home </a></li>
+        {%- if template contains 'product' -%}
+        {%- if product.collections != blank -%}
+            {%- capture url %}/collections/{{ product.collections[0].handle }}{% endcapture -%}
+            <li>{{ product.collections[0].title | link_to: url }}</li>
+        {%- elsif product.type != blank -%}
+            <li>{{ product.type | link_to_type }}</li>
+        {%- else -%}
+            <li><a href="/collections/all">Products</a></li>
+        {%- endif -%}
+        {%- liquid
+            assign bigTtl = product.title
+            assign smlTtl = ''
+            assign ttlSplt = '/'
+            if bigTtl contains ttlSplt
+            assign var = bigTtl | split: ttlSplt
+            assign bigTtl = var | first | trim | strip
+            assign smlTtl = var | last | trim | strip
+            endif
+        -%}
+        <li>{{ bigTtl }}</li>
+        {%- elsif template contains 'collection' -%}
+        {%- if current_tags -%}
+            {%- capture url -%}/collections/{{ collection.handle }}{%- endcapture -%}
+            {{ collection.title | link_to: url }}
+            <li>{{ current_tags | join: ' + ' }}</li>
+        {%- else -%}
+            <li>{%- if collection.title == 'Products' -%}Shop{%- else -%}{{ collection.title }}{%- endif -%}</li>
+        {%- endif -%}
+        {%- elsif template == 'blog' -%}
+        {%- if current_tags -%}
+            <li>{{ blog.title | link_to: blog.url }}</li>
+            <li>{{ current_tags | join: ' + ' }}</li>
+        {%- else -%}
+            <li>{{ blog.title }}</li>
+        {%- endif -%}
+        {%- elsif template == 'article' -%}
+        <li>{{ blog.title | link_to: blog.url }}</li>
+        <li>{{ article.title }}</li>
+        {%- else -%}
+        <li>{{ page_title }}</li>
+        {%- endif -%}
+    {%- endcapture -%}
+    {{- breadcrumb | json -}}
+  {%- endunless -%}
+{%- endif -%}

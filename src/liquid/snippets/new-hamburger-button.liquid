@@ -1,0 +1,24 @@
+{%- comment -%}
+  Hamburger Button Component
+  -------------
+  Renders the mobile hamburger menu toggle button with three animated lines.
+  Used to open/close the mobile navigation drawer.
+
+  Classes:
+  - bpn-hamburger-button: Container wrapper
+  - bpn-hamburger-button__group: Button element with toggle functionality
+  - bpn-hamburger-button__line: Individual animated line spans
+  - js-hamburger-toggle: JavaScript hook for click handling
+{%- endcomment -%}
+
+<div class='bpn-hamburger-button'>
+  <button
+    class='bpn-hamburger-button__group js-hamburger-toggle'
+    aria-label='Menu'
+    aria-expanded='false'
+  >
+    <span class='bpn-hamburger-button__line'></span>
+    <span class='bpn-hamburger-button__line'></span>
+    <span class='bpn-hamburger-button__line'></span>
+  </button>
+</div>

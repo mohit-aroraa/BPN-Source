@@ -1,0 +1,15 @@
+{% comment %}
+
+Please add following code in customers/account.liquid at the end.
+
+{%- render 'ordergroove_subscription_interface_link' -%}
+
+{% endcomment %}
+
+{% if customer %}
+  {% assign secret_key = shop.metafields.ordergroove.themeHashKey.value %}
+  {% assign customer_id = customer.id  %}
+  {% assign timestamp = "now" | date: "%s" %}
+  {% assign signature = customer_id | append: "|" | append: timestamp | hmac_sha256: secret_key %}
+  <a class="btn" href="/apps/subscriptions/manage/?customer={{customer.id}}&customer_signature={{signature}}&customer_timestamp={{timestamp}}">Manage Your Subscriptions</a>
+{% endif %}

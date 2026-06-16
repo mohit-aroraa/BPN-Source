@@ -1,0 +1,83 @@
+{% assign base_class = 'bpn-athletic-image-multiple-column' %}
+
+<div class="{{ base_class }} {{ base_class }}--{{ section.id }}">
+  <!-- Title & Navigation Container -->
+  {% if section.settings.title != blank %}
+    <div class="{{ base_class }}__header">
+      <div class="{{ base_class }}__title">
+        {{ section.settings.title }}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="{{ base_class }}__slider swiper" data-image-multiple-column-swiper>
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="swiper-slide {{ base_class }}__item">
+          {% if block.settings.image != blank %}
+            <img src="{{ block.settings.image | img_url: '480x' }}" alt="{{ block.settings.alt_text }}">
+          {% endif %}
+          {% if block.settings.caption != blank %}
+            <div class="{{ base_class }}__caption">
+              {{ block.settings.caption }}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="swiper-button-prev" data-click-id="athlete-lp_owp_navigation">
+      {% render 'icons', icon: 'swiper-button' %}
+    </div>
+    <div class="swiper-button-next" data-click-id="athlete-lp_owp_navigation">
+      {% render 'icons', icon: 'swiper-button' %}
+    </div>
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Image Multiple Column",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image_block",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text",
+          "default": "Image description"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "default": "Caption goes here"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Image Multiple Column",
+      "category": "Athletic Landing Pages"
+    }
+  ]
+}
+{% endschema %}

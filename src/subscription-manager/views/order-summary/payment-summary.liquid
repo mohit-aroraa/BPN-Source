@@ -1,0 +1,35 @@
+<div class="og-payments">
+  <div class="og-payment-container">
+    {% if payment_display_name %}
+      <div class="og-payment-name">
+        {% if payment.logo_url %}
+          <img
+            class="og-payment-logo"
+            src="{{ environment.asset_url }}{{ payment.logo_url }}"
+            alt="{{ payment_display_name }}"
+          >
+        {% else %}
+          {{ payment_display_name }}
+        {% endif %}
+        {% if payment.cc_number_ending %}
+          **** {{ payment.cc_number_ending }}
+        {% endif %}
+      </div>
+      {% if payment.cc_exp_date %}
+        <div>{{ 'form_billing_expiration_date' | t }}</div>
+      {% endif %}
+      {% if 'external_payment_enabled' | setting and 'external_payment_url' | setting %}
+        <a href="{{ 'external_payment_url' | setting }}" target="_blank">
+          {{ 'shipment_unsent_footer_billing_edit' | t }}
+          <svg width="16" height="16">
+            <use href="#external-link"></use>
+          </svg>
+        </a>
+        {% elseif 'platform' | setting == 'shopify' %}
+        {% include 'order-summary/change-billing-shopify' %}
+      {% endif %}
+    {% else %}
+      <div>{{ 'form_billing_unavailable' | t }}</div>
+    {% endif %}
+  </div>
+</div>

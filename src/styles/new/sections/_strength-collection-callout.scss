@@ -1,0 +1,296 @@
+// =============================================================================
+// Strength Collection Callout
+// =============================================================================
+
+$sccRed: #e02826;
+$sccDark: #191919;
+$sccBlack: #2d2a26;
+$sccGray: #767676;
+$sccBp: 768px;
+
+.scc {
+  display: flex;
+  width: 100%;
+  padding: var(--scc-pt, 0) var(--scc-px, 0) var(--scc-pb, 0) var(--scc-px, 0);
+  gap: 24px;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    flex-direction: column;
+    gap: 16px;
+    padding: var(--scc-pt-mob, var(--scc-pt, 0)) var(--scc-px-mob, var(--scc-px, 0)) var(--scc-pb-mob, var(--scc-pb, 0)) var(--scc-px-mob, var(--scc-px, 0));
+  }
+}
+
+// ── Image panel (left) ────────────────────────────────────────────────────────
+
+.scc__image-panel {
+  flex: 0 0 50%;
+  position: relative;
+  background: $sccDark;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 345px;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    flex: none;
+    height: 280px;
+    width: 100%;
+  }
+}
+
+// Horizontal promo banner at the top of image panel
+.scc__promo-banner {
+  position: relative;
+  z-index: 2;
+  background: $sccRed;
+  padding: 10px 20px;
+  flex-shrink: 0;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    padding: 8px 16px;
+  }
+}
+
+.scc__promo-text {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-transform: uppercase;
+  display: block;
+  text-align: center;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 11px;
+  }
+}
+
+// Product image fills remaining space below banner
+.scc__product-image {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  @media (max-width: #{$sccBp - 1px}) {
+    padding: 12px 20px;
+  }
+}
+
+// ── Buy box (right) ───────────────────────────────────────────────────────────
+
+.scc__buybox {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 0;
+}
+
+// Okendo star rating widget
+.scc__meta {
+  margin-bottom: 8px;
+}
+
+// Title
+.scc__title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.50px;
+  text-transform: uppercase;
+  color: $sccBlack;
+  margin: 0 0 6px;
+  line-height: 1;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+}
+
+// Subheading + pricing on the same row
+.scc__sub-price-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-bottom: 20px;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    margin-bottom: 14px;
+    gap: 8px 12px;
+  }
+}
+
+.scc__subheading {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: $sccBlack;
+  margin: 0;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 14px;
+  }
+}
+
+// Pricing row (sits inline with subheading)
+.scc__pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.scc__compare-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: $sccRed;
+  text-decoration: line-through;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 14px;
+  }
+}
+
+.scc__current-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: $sccBlack;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 18px;
+  }
+}
+
+// Description
+.scc__desc {
+  font-size: 16px;
+  font-weight: 500;
+  color: $sccBlack;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  padding-right: 24px;
+
+  p {
+    margin: 0 0 12px;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  ul, ol {
+    margin: 0 0 12px;
+    padding-left: 20px;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  ul { list-style: disc; }
+
+  ol { list-style: decimal; }
+
+  li { margin-bottom: 4px; }
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 12px;
+    margin-bottom: 16px;
+    padding-right: 16px;
+  }
+}
+
+// Actions area
+.scc__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: auto;
+}
+
+.scc__learn-more {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $sccBlack;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  width: fit-content;
+
+  &:hover { color: $sccRed; }
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 13px;
+  }
+}
+
+.scc__savings {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $sccRed;
+  margin: 0;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 13px;
+  }
+}
+
+.scc__cta {
+  display: block;
+  width: 100%;
+  background: $sccRed;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    font-size: 12px;
+    padding: 12px 20px;
+  }
+}
+
+// ── Collection grid wrapper ───────────────────────────────────────────────────
+
+.bpn-collection__callout-wrapper {
+  width: 100%;
+  margin-bottom: 32px;
+
+  @media (max-width: #{$sccBp - 1px}) {
+    margin-bottom: 24px;
+  }
+}
+
+// ── Accessibility ─────────────────────────────────────────────────────────────
+
+.scc__cta:focus-visible,
+.scc__learn-more:focus-visible {
+  outline: 3px solid $sccRed;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scc__cta {
+    transition: none;
+  }
+}

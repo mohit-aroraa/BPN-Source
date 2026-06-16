@@ -1,0 +1,410 @@
+{% comment %}
+  Rivo – How It Works (3 Accordions) — Dark/Athletic variant
+{% endcomment %}
+
+<section class="rivo-section rivo-hiw-section" data-section-id="{{ section.id }}">
+  <div class="rivo-content-wrapper">
+    <div class="rivo-container">
+      <div class="rivo-lp-content">
+        <div class="rivo-lp-grid">
+          <div class="rivo-lp-media">
+            {% if section.settings.left_image != blank %}
+              {{ section.settings.left_image | image_url: width: 1200 | image_tag:
+                class: 'rivo-lp-image',
+                widths: '400,600,800,1000,1200',
+                alt: section.settings.left_image.alt | escape
+              }}
+            {% endif %}
+          </div>
+
+          <div class="rivo-lp-copy">
+            {% if section.settings.kicker != blank %}
+              <div class="rivo-lp-kicker">{{ section.settings.kicker }}</div>
+            {% endif %}
+            {% if section.settings.heading != blank %}
+              <h2 class="rivo-lp-title">{{ section.settings.heading }}</h2>
+            {% endif %}
+            {% if section.settings.subheading != blank %}
+              <p class="rivo-lp-subtitle">{{ section.settings.subheading }}</p>
+            {% endif %}
+
+            <div class="rivo-lp-accordion-viewport">
+              <div class="rivo-lp-accordion-list" role="region" aria-label="How it works">
+                {% for block in section.blocks %}
+                  {% assign item_id = section.id | append: '--acc-' | append: forloop.index %}
+                  <div class="rivo-lp-accordion-item" {{ block.shopify_attributes }}>
+                    <button
+                      class="rivo-lp-accordion-trigger"
+                      type="button"
+                      aria-expanded="false"
+                      aria-controls="{{ item_id }}"
+                    >
+                      <span class="rivo-lp-accordion-left">
+                        {% if block.settings.icon != blank %}
+                          {{ block.settings.icon | image_url: width: 40 | image_tag:
+                            class: 'rivo-lp-accordion-bullet',
+                            alt: '',
+                            loading: 'lazy'
+                          }}
+                        {% endif %}
+                        <span class="rivo-lp-accordion-title">{{ block.settings.title }}</span>
+                      </span>
+
+                      <span class="rivo-lp-accordion-icon" aria-hidden="true">
+                        <svg class="rivo-lp-accordion-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                      </span>
+                    </button>
+
+                    <div
+                      class="rivo-lp-accordion-panel"
+                      id="{{ item_id }}"
+                      role="region"
+                      aria-hidden="true"
+                    >
+                      <div class="rivo-lp-accordion-panel-inner">
+                        {{ block.settings.content }}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* ===== Theme Editor color bindings ===== */
+    .rivo-hiw-section {
+      --rivo-hiw-bg:            {{ section.settings.background | default: '#141414' }};
+      --rivo-hiw-title:         {{ section.settings.title_color | default: '#ffffff' }};
+      --rivo-hiw-subtitle:      {{ section.settings.subtitle_color | default: '#9a9a9a' }};
+      --rivo-hiw-body:          {{ section.settings.body_color | default: '#9a9a9a' }};
+      --rivo-hiw-kicker-text:   {{ section.settings.kicker_text | default: '#E8431A' }};
+      --rivo-hiw-border:        {{ section.settings.border_color | default: '#E8431A' }};
+      --rivo-hiw-acc-title:     {{ section.settings.accordion_title_color | default: '#ffffff' }};
+      --rivo-hiw-accent:        {{ section.settings.arrow_color | default: '#ffffff' }};
+      --rivo-hiw-accent-hover:  {{ section.settings.arrow_hover_color | default: '#cccccc' }};
+      background-color: var(--rivo-hiw-bg);
+    }
+
+    .rivo-hiw-section .rivo-content-wrapper {
+      padding: 4rem;
+    }
+
+    .rivo-hiw-section .rivo-container {
+      max-width: 100%;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .rivo-hiw-section .rivo-lp-content { width: 100%; }
+
+    .rivo-hiw-section .rivo-lp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 60px;
+      row-gap: 0;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    /* ===== Image column ===== */
+    .rivo-hiw-section .rivo-lp-media {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rivo-hiw-section .rivo-lp-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      border-radius: 0;
+      max-height: 550px;
+    }
+
+    /* ===== Copy column ===== */
+    .rivo-hiw-section .rivo-lp-copy {
+      width: 100%;
+      {% comment %} padding: 80px 60px; {% endcomment %}
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: start;
+      text-align: left;
+    }
+
+    /* ===== Kicker — plain text, no pill ===== */
+    .rivo-hiw-section .rivo-lp-kicker {
+      display: block;
+      color: var(--rivo-hiw-kicker-text);
+      font-size: var(--rivo-page-section-subtitle-font-size, sans-serif);
+      font-family: var(--rivo-subtitle-font-family, sans-serif);
+      font-weight: var(--rivo-page-section-title-font-weight, sans-serif);
+      line-height: 1;
+      letter-spacing: 2px;
+      text-transform: var(--rivo-title-font-style);
+      margin: 0 0 16px 0;
+    }
+
+    /* ===== Heading ===== */
+    .rivo-hiw-section .rivo-lp-title {
+      font-family: var(--rivo-title-font-family, sans-serif);
+      font-size: var(--rivo-page-section-title-font-size, sans-serif);
+      font-weight: var(--rivo-page-section-title-font-weight, sans-serif);
+      line-height: 1.05;
+      letter-spacing: -0.5px;
+      text-transform: var(--rivo-title-font-style);
+      color: var(--rivo-hiw-title);
+      margin: 0 0 16px 0;
+    }
+
+    /* ===== Subheading ===== */
+    .rivo-hiw-section .rivo-lp-subtitle {
+      font-family: var(--rivo-subtitle-font-family, sans-serif);
+      font-size: var(--rivo-page-section-subtitle-font-size, sans-serif);
+      line-height: 1.6;
+      text-align: left;
+      color: var(--rivo-hiw-subtitle);
+      margin: 0 0 32px 0;
+    }
+
+    /* ===== Accordion viewport ===== */
+    .rivo-hiw-section .rivo-lp-accordion-viewport {
+      height: inherit;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-list {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    /* ===== Accordion items — red borders ===== */
+    .rivo-hiw-section .rivo-lp-accordion-item {
+      border-top: 1px solid var(--rivo-hiw-border);
+    }
+    .rivo-hiw-section .rivo-lp-accordion-item:last-child {
+      border-bottom: 1px solid var(--rivo-hiw-border);
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-trigger {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      border: none;
+      padding: 20px 0;
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-bullet {
+      width: 28px;
+      height: auto;
+      object-fit: contain;
+      flex: 0 0 28px;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-title {
+      font-family: var(--rivo-subtitle-font-family, sans-serif);
+      font-size: var(--rivo-page-section-subtitle-font-size, sans-serif);
+      line-height: 1.4;
+      font-weight: var(--rivo-page-section-title-font-weight, sans-serif);
+      color: var(--rivo-hiw-acc-title);
+      margin: 0 16px 0 0;
+      text-transform: uppercase;
+    }
+
+    /* ===== Arrow ===== */
+    .rivo-hiw-section .rivo-lp-accordion-icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      background: transparent;
+      border: none;
+      color: var(--rivo-hiw-accent);
+      transition: color 200ms ease;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-arrow {
+      width: 18px;
+      height: 18px;
+      transition: transform 250ms ease;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-trigger:hover .rivo-lp-accordion-icon {
+      color: var(--rivo-hiw-accent-hover);
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-item.is-open .rivo-lp-accordion-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ===== Panel ===== */
+    .rivo-hiw-section .rivo-lp-accordion-panel {
+      height: 0;
+      overflow: hidden;
+      transition: height 250ms ease;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-panel-inner {
+      padding: 0 0 20px 0;
+      color: var(--rivo-hiw-body);
+      font-family: var(--rivo-subtitle-font-family, sans-serif);
+      font-size: var(--rivo-page-section-subtitle-font-size, sans-serif);
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .rivo-hiw-section .rivo-lp-accordion-panel-inner p {
+      color: var(--rivo-hiw-body);
+      font-family: var(--rivo-subtitle-font-family, sans-serif);
+      font-size: var(--rivo-page-section-subtitle-font-size, sans-serif);
+      line-height: 1.2em;
+    }
+
+    /* ===== Mobile ===== */
+    @media (max-width: 750px) {
+      .rivo-hiw-section .rivo-lp-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rivo-hiw-section .rivo-content-wrapper {
+        padding: 20px;
+      }
+
+      .rivo-hiw-section .rivo-lp-media {
+        order: -1;
+        height: 60vw;
+        min-height: 260px;
+      }
+
+      .rivo-hiw-section .rivo-lp-copy {
+        padding: 40px 0px;
+      }
+
+      .rivo-hiw-section .rivo-lp-title {
+        font-size: 48px;
+      }
+
+      .rivo-hiw-section .rivo-lp-subtitle {
+        font-size: 16px;
+      }
+
+      .rivo-hiw-section .rivo-lp-accordion-panel-inner p {
+        font-size: 16px;
+      }
+
+      .rivo-hiw-section .rivo-lp-accordion-viewport {
+        height: auto;
+        max-height: none;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var root = document.currentScript.closest('.rivo-section');
+      if (!root) { return; }
+
+      var items = root.querySelectorAll('.rivo-lp-accordion-item');
+
+      items.forEach(function (item) {
+        var trigger = item.querySelector('.rivo-lp-accordion-trigger');
+        var panel = item.querySelector('.rivo-lp-accordion-panel');
+
+        function setHeight(open) {
+          if (open) {
+            var inner = panel.querySelector('.rivo-lp-accordion-panel-inner');
+            panel.style.height = inner.offsetHeight + 'px';
+          } else {
+            panel.style.height = '0px';
+          }
+        }
+
+        trigger.addEventListener('click', function () {
+          var isOpen = item.classList.contains('is-open');
+
+          items.forEach(function (other) {
+            if (other !== item) {
+              other.classList.remove('is-open');
+              var otherTrigger = other.querySelector('.rivo-lp-accordion-trigger');
+              var otherPanel = other.querySelector('.rivo-lp-accordion-panel');
+              otherTrigger.setAttribute('aria-expanded', 'false');
+              otherPanel.setAttribute('aria-hidden', 'true');
+              otherPanel.style.height = '0px';
+            }
+          });
+
+          item.classList.toggle('is-open');
+          trigger.setAttribute('aria-expanded', String(!isOpen));
+          panel.setAttribute('aria-hidden', String(isOpen));
+          setHeight(!isOpen);
+        });
+
+        setHeight(false);
+      });
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Rivo: How It Works",
+  "settings": [
+    { "type": "image_picker", "id": "left_image", "label": "Left image" },
+    { "type": "text", "id": "kicker", "label": "Kicker (small label)", "default": "How it works" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "How it works" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "We provide the targeted steps your family needs to thrive every day." },
+
+    { "type": "color", "id": "background", "label": "Background color", "default": "#141414" },
+    { "type": "color", "id": "title_color", "label": "Heading color", "default": "#ffffff" },
+    { "type": "color", "id": "subtitle_color", "label": "Subheading color", "default": "#9a9a9a" },
+    { "type": "color", "id": "body_color", "label": "Body text color", "default": "#9a9a9a" },
+    { "type": "color", "id": "kicker_text", "label": "Kicker text color", "default": "#E8431A" },
+    { "type": "color", "id": "border_color", "label": "Accordion border color", "default": "#E8431A" },
+    { "type": "color", "id": "accordion_title_color", "label": "Accordion title color", "default": "#ffffff" },
+    { "type": "color", "id": "arrow_color", "label": "Arrow color", "default": "#ffffff" },
+    { "type": "color", "id": "arrow_hover_color", "label": "Arrow hover color", "default": "#cccccc" },
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Accordion item",
+      "limit": 3,
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Item icon (optional)" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Supports strong bone growth" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Explain the step in clear language. Keep it concise and helpful.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Rivo: How It Works", "category": "Rivo LP" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,55 @@
+{% unless blog.title == 'Content' %}
+  {% comment %}
+    The contents of the blog.liquid template can be found in /sections/blog-template.liquid
+  {% endcomment %}
+
+  {% if blog.handle == 'videos' or blog.handle == 'audios' %}
+  	{% section 'blog-video-template' %}
+  {% else %}
+  	{% section 'blog-template' %}
+  {% endif %}
+  <!-- video Modal -->
+  <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Video</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body holds-the-iframe">
+          <iframe width="100%" height="450" src="" id="video">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--Audio Modal -->
+  <div class="modal fade" id="audioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Audio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body holds-the-iframe">
+  <!--         <audio controls controlsList="nodownload" style="width:100%; position:fix" id="audio">
+            Your browser does not support the audio element.
+          </audio> -->
+          <iframe id="audio" width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src=""></iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{% else %}
+
+  {% section 'nine15--blog-feed' %}
+
+
+{% endunless %}

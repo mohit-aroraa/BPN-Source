@@ -1,0 +1,194 @@
+{%- assign _section = section.settings -%}
+<section
+  class='bpn-testimonials'
+  id='bpn-testimonials_{{ section.id }}'
+>
+  <div class='bpn-testimonials__title-container'>
+    {%- if _section.title != blank -%}
+      <h2 class='bpn-testimonials__title bpn-text-h3' style='color: {{ _section.title_color }}'>
+        {{ _section.title }}
+      </h2>
+    {%- endif -%}
+    {%- if _section.subtitle != blank -%}
+      <h3
+        class='bpn-testimonials__subtitle bpn-text-title-1-large'
+        style='color: {{ _section.subtitle_color }}'
+      >
+        {{ _section.subtitle }}
+      </h3>
+    {%- endif -%}
+  </div>
+
+  {%- assign slides_count = section.blocks.size -%}
+  <div
+    class='bpn-testimonials-slider swiper'
+    data-testimonials-swiper
+    data-slides-count='{{ slides_count }}'
+  >
+    <div class='bpn-testimonials-slider__navigation'>
+      <div class='swiper-button swiper-button-prev' data-click-id='homepage_endorsement_navigation'>
+        {% render 'icon', icon: 'left-arrow', tag: 'homepage_endorsement_navigation' %}
+      </div>
+      <div class='swiper-button swiper-button-next' data-click-id='homepage_endorsement_navigation'>
+        {% render 'icon', icon: 'right-arrow', tag: 'homepage_endorsement_navigation' %}
+      </div>
+    </div>
+
+    <div class='swiper-wrapper bpn-testimonials-slider__wrapper'>
+      {%- for block in section.blocks -%}
+        {%- assign _block = block.settings -%}
+        <div class='swiper-slide bpn-testimonial-slide'>
+          {%- if _block.image != blank -%}
+            {{-
+              _block.image
+              | image_url: width: 384
+              | image_tag:
+                loading: 'lazy',
+                class: 'bpn-testimonial-slide__image',
+                alt: _block.name,
+                width: 384,
+                height: 384
+            -}}
+          {%- endif -%}
+          <div class='bpn-testimonial-slide__content'>
+            <div class='bpn-stars-red-container'>
+              {%- render 'icon', icon: 'small-stars-red' -%}
+            </div>
+            {%- if _block.text != blank -%}
+              <p
+                class='bpn-testimonial-slide__text'
+                style='color: {{ _block.testimonial_text_color }}'
+              >
+                {{ _block.text }}
+              </p>
+            {%- endif -%}
+            {%- if _block.name != blank -%}
+              <h3 class='bpn-testimonial-slide__name' style='color: {{ _block.name_color }}'>
+                {{ _block.name }}
+              </h3>
+            {%- endif -%}
+            {%- if _block.role != blank -%}
+              <p class='bpn-testimonial-slide__role' style='color: {{ _block.role_color }}'>
+                {{ _block.role }}
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class='bpn-testimonials-thumbs-slider swiper' data-testimonials-thumbs-swiper>
+    <div class='swiper-wrapper bpn-testimonials-thumbs-slider__wrapper'>
+      {%- for block in section.blocks -%}
+        {%- assign _block = block.settings -%}
+        {%- if _block.image != blank -%}
+          <div class='swiper-slide bpn-testimonials-thumbs-slide'>
+            <img
+              src='{{ _block.image | img_url: "large" }}'
+              alt='{{ _block.name }}'
+              loading='lazy'
+            >
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class='bpn-testimonials-thumbs-slider__controls'>
+      <div class='swiper-pagination bpn-testimonials-thumbs-slider__pagination'></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BPN Testimonials",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Section Title Color"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Section Subtitle Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Customer Details"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer Name"
+        },
+        {
+          "type": "color",
+          "id": "name_color",
+          "label": "Name Color"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Customer Role"
+        },
+        {
+          "type": "color",
+          "id": "role_color",
+          "label": "Role Color"
+        },
+        {
+          "type": "header",
+          "content": "Testimonial Content"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Testimonial Text"
+        },
+        {
+          "type": "color",
+          "id": "testimonial_text_color",
+          "label": "Testimonial Text Color"
+        },
+        {
+          "type": "header",
+          "content": "Media"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Customer Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BPN Testimonials Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

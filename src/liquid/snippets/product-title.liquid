@@ -1,0 +1,20 @@
+<!-- snippets/snippets--product-title -->
+{% comment %}
+  
+  {% render 'product-title', product: product %}
+
+{% endcomment %}
+{% liquid
+  assign bigTtl           = product.title
+  assign smlTtl           = ''
+  assign ttlSplt          = '/'
+  if bigTtl contains ttlSplt
+    assign var            = bigTtl | split: ttlSplt
+    assign bigTtl         = var | first | trim | strip
+    assign smlTtl         = var | last | trim | strip
+  endif 
+%}
+<span class="product-title-split">
+    <span>{{bigTtl}}</span>
+    <span>{{smlTtl}}</span>
+</span>

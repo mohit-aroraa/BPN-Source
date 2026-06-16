@@ -1,0 +1,166 @@
+.#{$prefix}youtube__drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.60);
+}
+
+.#{$prefix}youtube__drawer .hidden {
+  display: none;
+}
+
+.#{$prefix}youtube__drawer-content {
+  position: relative;
+  width: 368px;
+  height: 100%;
+  margin-left: auto;
+  padding: 40.5px 24px 24px;
+  background: color('bpn-white');
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.#{$prefix}youtube__drawer-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  display: flex;
+  padding: 0;
+  justify-content: flex-end;
+}
+
+.#{$prefix}youtube__drawer-close svg {
+  min-width: 16px;
+}
+
+.#{$prefix}youtube__drawer-close-button {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.#{$prefix}youtube__drawer-title {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 32px;
+  text-transform: uppercase;
+  letter-spacing: -0.96px;
+  font-style: normal;
+}
+
+.#{$prefix}youtube__drawer-text {
+  margin-top: 4px;
+  color: color('bpn-grey-60');
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-style: normal;
+}
+
+.#{$prefix}youtube__product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 32px;
+  padding-bottom: 60px;
+}
+
+.#{$prefix}youtube__product-list .product-card {
+  display: flex;
+  flex-direction: row;
+  max-width: unset;
+}
+
+.#{$prefix}youtube__product-list .product-card__image-container {
+  width: 120px;
+  height: 153px;
+  min-width: 120px;
+}
+
+.#{$prefix}youtube__product-list .product-card__image-container img {
+  object-fit: cover;
+}
+
+.#{$prefix}youtube__product-list .product-card__content {
+  width: 100%;
+  margin-left: 16px;
+  padding: 0;
+}
+
+.#{$prefix}youtube__product-list .product-card__rating [data-oke-reviews-version] > div {
+  display: flex;
+}
+
+.#{$prefix}youtube__product-list .oke-sr-stars {
+  margin: 1.5px 4px 0 0;
+}
+
+.#{$prefix}youtube__product-list .oke-sr-stars .oke-stars {
+  width: 60px;
+  margin-left: -3px;
+}
+
+.#{$prefix}youtube__product-list .oke-stars-foreground,
+.#{$prefix}youtube__product-list .oke-stars-background {
+  width: 60px;
+}
+
+.#{$prefix}youtube__product-list .oke-stars svg {
+  width: 60px;
+  height: 9px;
+}
+
+.#{$prefix}youtube__product-list .product-card__rating .oke-sr-count {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.#{$prefix}youtube__product-list .oke-sr-count span {
+  color: color('bpn-grey');
+}
+
+.#{$prefix}youtube__product-list .oke-sr-label-text {
+  display: none;
+}
+
+.#{$prefix}youtube__product-list .product-card__title {
+  margin-top: 0.5px;
+}
+
+.#{$prefix}youtube__product-list .product-card__dropdown {
+  margin-top: 12px;
+}
+
+.#{$prefix}youtube__product-list .product-card__dropdown-content {
+  z-index: 51;
+}
+
+.#{$prefix}youtube__product-list .product-card__dropdown-trigger {
+  padding: 5px 5px 5px 11px;
+}
+
+.#{$prefix}youtube__product-list .product-card__add-button {
+  width: auto;
+  margin-top: 32px;
+  padding: 0 0 3px;
+  border-bottom: 3px solid color('bpn-black');
+  border-radius: 0;
+  background: none;
+  color: color('bpn-black');
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 14px;
+  text-transform: uppercase;
+  letter-spacing: -0.28px;
+  font-style: normal;
+}

@@ -1,0 +1,407 @@
+{%- assign length = mobile-navigation.count | minus: 1 -%}
+{%- assign section_secondary_nav = metafields.secondary_nav_mob -%}
+{%- assign mobile_horizontal_nav = metafields.mobile_horizontal_nav -%}
+{%- assign mobile_horizontal_nav_count = mobile_horizontal_nav.count | minus: 1 -%}
+{%- assign secondary_count = section_secondary_nav.count | minus: 1 -%}
+{%- assign social_nav = metafields.nav_social_links -%}
+{% assign social_nav_count = social_nav.count | minus: 1 %}
+
+{%- if customer -%}
+    {%- assign accountUrl = '/account/' -%}
+{%- else -%}
+    {%- assign accountUrl = '/account/login' -%}
+{%- endif -%}
+
+<div class="mobileDrawer" aria-hidden="true" data-section-type="menuDrawer">
+    <div class="close-menu-link-container">
+        <a href="javascript:void(0);" class="mobile--only close-menu-link" title="Close Mobile menu">
+            {% render 'icon', icon: 'header-close', class: 'js-close-menuDrawer icon--menuClose' %}
+        </a>
+    </div>
+    <nav class="mobile__nav" role="navigation">
+        <ul class="mobile__nav-menu">
+            {% for index in (0..length) %}
+                {%- assign _enable = 'enable_' | append: index -%}
+                {%- assign _has_progressive_menu = 'has_progressive_menu_' | append: index -%}
+                {%- assign _title = 'title_' | append: index -%}
+                {%- assign _link = 'link_' | append: index -%}
+                {%- assign _text_color = 'text_color_' | append: index -%}
+                {%- assign _feature_text = 'feature_text_' | append: index -%}
+                {%- assign has_progressive_menu = mobile-navigation[_has_progressive_menu] -%}
+                {% assign top_click_id = 'm-nav2_' | append: mobile-navigation[_title] | downcase | replace: 'apparel & ', '' %}
+                {% assign top_click_id = top_click_id | replace: 'take the quiz', 'quiz' %}
+                {% assign click_id_prefix = 'm-nav_' | append: mobile-navigation[_title] | append: '_' | downcase %}
+                {% if mobile-navigation[_enable] %}
+                    <li
+                            class="mobile__nav-menu-item {% if has_progressive_menu %}js-mega-mobile-menu{% endif %} {% if mobile-navigation[_title] contains '@hideTest' %}mobile__nav-menu-item--test{% endif %}"
+                            style="--mobile-link-clr: {{ mobile-navigation[_text_color] }};"
+                            {% if has_progressive_menu %}
+                                data-sl="{{ 'js_mega_mobile_menu' | append: index }}"
+                            {% endif %}
+                    >
+                        <div
+                                class="mobile__nav-menuItemToggle {% if has_progressive_menu %}js-menuOpen{% endif %}"
+                                {% if has_progressive_menu %}
+                                    role="button" aria-label="mobile-navigation[_title]" tabindex="0"
+                                {% endif %}
+                                data-click-id="{{- top_click_id -}}"
+                        >
+                            <div class="mobile__nav-menuText-wrapper" data-click-id="{{- top_click_id -}}">
+                                <a
+                                        href="{% if has_progressive_menu and mobile-navigation[_link] != blank %}javascript:void(0);{% else %}{{ mobile-navigation[_link] }}{% endif %}"
+                                        class="mobile__nav-menu-link"
+                                        data-click-id="{{- top_click_id -}}"
+                                >
+                                    {{- mobile-navigation[_title] | remove: '@hideTest' -}}
+                                    {%- if mobile-navigation[_feature_text] != blank -%}
+                                        <sup class="mobile_nav-featureText">{{ mobile-navigation[_feature_text] }}</sup>
+                                    {%- endif -%}
+                                </a>
+                            </div>
+                            {% if has_progressive_menu %}{% render 'icon', icon: 'arrow-right-redesign', class: 'icon--arrow-right', tag: top_click_id %}{% endif %}
+                        </div>
+                        {% if has_progressive_menu %}
+                            <div class="mobile__navInner">
+                                {% assign length = mobile-navigation.count | minus: 1 %}
+                                <div
+                                        class="js-collaposible-back menuDrawer__backWrapper"
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Back to main menu"
+                                >
+                                    <div class="menuDrawer__backBtn">
+                                        {%- render 'icon', icon: 'arrow-left', class: 'icon--arrow-left' -%}
+                                        <span class="menuDrawer__backBtnText">{{ mobile-navigation[_title] }}</span>
+                                        {% render 'icon', icon: 'header-close', class: 'js-close-menuDrawer icon--menuClose' %}
+                                    </div>
+                                </div>
+                                <div class="sidebarMenu__navContent">
+                                    {% for i in (0..length) %}
+                                        {% if i == 0 %}
+                                            {%- assign _nav_dropdown = 'nav_dropdown' -%}
+                                        {% else %}
+                                            {%- assign _nav_dropdown = 'nav_dropdown_' | append: i -%}
+                                        {% endif %}
+                                        {% assign nav_dropdown = metafields[_nav_dropdown] %}
+                                        {% assign show_dropdown_menu_title = nav_dropdown.show_dropdown_menu_title %}
+                                        {% assign show_activities_in_column = false %}
+                                        {% assign nav_dropdown_parent_id = metafields[_nav_dropdown].parent_id | downcase %}
+                                        {% assign mobile_nav_title = mobile-navigation[_title] | downcase %}
+                                        {% if nav_dropdown_parent_id == mobile_nav_title %}
+                                            {% assign linklist = linklists[nav_dropdown.dropdown_mobile_handle] %}
+                                            {% assign linklist_size = linklist | size %}
+                                            {% if linklist_size == 0 %}
+                                                {% assign show_activities_in_column = true %}
+                                            {% endif %}
+                                            {% for link in linklist.links %}
+                                                {% assign dropdown_click_id_prefix = click_id_prefix %}
+                                                {% if link.title != 'skip title' %}
+                                                    {% if link.links.size > 0 %}
+                                                        {% if show_dropdown_menu_title %}
+                                                            {% assign dropdown_click_id_prefix = click_id_prefix | append: link.title | downcase | replace: '_supplements', '_supps' | replace: ' ', '-' %}
+                                                            <div class="sidebarMenu-navWrapper js-menuOpen"
+                                                                 data-sl="{{ 'js_menu_open_' | append: link.title | downcase | replace: ' ', '_' | replace: '-', "_" }}"
+                                                                 data-click-id="{{ dropdown_click_id_prefix }}"
+                                                                 data-name="{{ link.title | downcase }}"
+                                                            >
+                                                                <a href="javascript:void(0);"
+                                                                   class="sidebarMenu-navLink"
+                                                                   data-click-id="{{ dropdown_click_id_prefix }}">{{ link.title }}</a>
+                                                                {% render 'icon', icon: 'plus-header', class: 'icon--plus', tag: dropdown_click_id_prefix %}
+                                                                {% render 'icon', icon: 'minus-header', class: 'icon--minus', tag: dropdown_click_id_prefix %}
+                                                            </div>
+                                                            {% assign dropdown_click_id_prefix = dropdown_click_id_prefix | append: '_' %}
+
+                                                        {% endif %}
+
+                                                        <div class="sidebarMenu__InnerNavContent{% if show_dropdown_menu_title == false %} is--active standalone{% endif %} is--active">
+                                                            {% for sublink in link.links %}
+
+                                                                {% assign sub_click_id = dropdown_click_id_prefix | append: sublink.title | downcase %}
+                                                                {% assign sub_click_id = sub_click_id | replace: 'health & ', '' | replace: ' supplements', '' | replace: 'shop_shop', 'shop' %}
+                                                                {% assign sub_click_id = sub_click_id | replace: ' ', '-' | replace: '.', '' %}
+
+                                                                {% if sublink.title contains '@lr' %}
+                                                                                                        <a
+                                                                            href="{{ sublink.url }}"
+                                                                            class="sidebarMenu-navLinkProduct sidebarMenu-navLinkProduct--red"
+                                                                            data-click-id="{{- sub_click_id -}}"
+                                                                    >
+                                                                        {{- sublink.title | remove: '@lr' -}}
+                                                                    </a>
+                                                                {% else %}
+                                                                                                        <a
+                                                                            href="{{ sublink.url }}"
+                                                                            class="sidebarMenu-navLinkProduct"
+                                                                            data-click-id="{{- sub_click_id -}}"
+                                                                    >
+                                                                        {{- sublink.title }}
+                                                                        {% if sublink.url contains '/products/' %}
+                                                                            {%- assign _product_handle = sublink.url | remove: '/products/' -%}
+                                                                        {% endif %}
+                                                                        {% if _product_handle != blank %}
+                                                                            {% assign product_drop = sublink.object %}
+                                                                            {%- assign PID = '' | append: product_drop.id -%}
+                                                                            {% assign _metafields = pages[PID].metafields %}
+                                                                            {% assign _block_content = _metafields.mob_menu_excerpt %}
+                                                                            {% assign _short_desc_enable = _block_content.enable %}
+                                                                            {% if _short_desc_enable %}
+                                                                                {% assign short_desc = _block_content.text %}
+                                                                                {% comment %}<span class="sidebarMenu-navLinkProduct--shortDescription">{% endcomment %}
+                                                                                {% comment %}{{- short_desc -}}{% endcomment %}
+                                                                                {% comment %}</span>{% endcomment %}
+                                                                            {% endif %}
+                                                                        {% endif %}
+                                                                    </a>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+                                                {% elsif link.title == 'skip title' %}
+                                                    {% if link.links.size > 0 %}
+                                                        <div class="sidebarMenu--subNav">
+                                                            {% for sublink in link.links %}
+                                                                {% assign sub_click_id = click_id_prefix | append: sublink.title | downcase %}
+                                                                {% assign sub_click_id = sub_click_id | replace: 'health & ', '' | replace: ' protein', '' | replace: ' ', '-' | replace: '.', '' %}
+
+                                                                {% if sublink.title contains '@lr' %}
+                                                                                                        <a
+                                                                            href="{{ sublink.url }}"
+                                                                            class="sidebarMenu-navLink sidebarMenu-navLink--noFlex sidebarMenu-navLink--red"
+                                                                            data-click-id="{{- sub_click_id -}}"
+                                                                    >
+                                                                        {{- sublink.title | remove: '@lr' -}}
+                                                                    </a>
+                                                                {% elsif sublink.title contains '@ft' %}
+                                                                    {% assign _featured_text_letters = sublink.title | split: '=' %}
+                                                                    {% for letter in _featured_text_letters %}
+                                                                        {% if letter contains '$' %}
+                                                                            {% assign _feature_text = letter %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                    {% assign _remove_text_from_title = '@ft=' | append: _feature_text | append: '=' %}
+                                                                                                        <a
+                                                                            href="{{ sublink.url }}"
+                                                                            class="sidebarMenu-navLink sidebarMenu-navLink--noFlex"
+                                                                            data-click-id="{{- sub_click_id -}}"
+                                                                    >
+                                                                        {{- sublink.title | remove: _remove_text_from_title -}}
+                                                                        <sup>{{ _feature_text | remove: '$' }}</sup></a
+                                                                    >
+                                                                {% else %}
+                                                                    <a
+                                                                            href="{{ sublink.url }}"
+                                                                            class="sidebarMenu-navLink sidebarMenu-navLink--noFlex"
+                                                                            data-click-id="{{- sub_click_id -}}"
+                                                                    >
+                                                                        {{- sublink.title -}}
+                                                                    </a>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if nav_dropdown_parent_id == mobile_nav_title %}
+                                            {% assign activity_count = nav_dropdown.count | default: 0 %}
+                                            {% assign length = activity_count | minus: 1 %}
+                                            {% if activity_count != 0 %}
+                                                <div class="header-mobile-dropdown__activity-container {% if show_activities_in_column %} column{% elsif show_dropdown_menu_title == false %} carousel{% endif %}">
+                                                    {% for index in (0..length) %}
+                                                        {% assign _activity_header_text = 'activity_header_text_' | append: index %}
+                                                        {% assign _activity_header_text_clr = 'activity_header_text_color_' | append: index %}
+                                                        {% assign _activity_image = 'activity_image_' | append: index %}
+                                                        {% assign _cta_variant = 'cta_variant_' | append: index %}
+                                                        {% assign _cta_link = 'cta_link_' | append: index %}
+                                                        {% assign _cta_text = 'cta_text_' | append: index %}
+                                                        {% assign activity_click_id = "" %}
+                                                        {% assign one_index = index | plus: 1 %}
+                                                        {% case click_id_prefix %}
+                                                            {% when 'm-nav_supplements_' %}
+                                                                {% assign activity_click_id = click_id_prefix | replace: 'supplements', 'supps' | append: 'promo' %}
+                                                            {% else %}
+                                                                {% assign activity_click_id = click_id_prefix | append: 'thumbnail-' | append: one_index %}
+                                                        {% endcase %}
+                                                        <div
+                                                                class="header-dropdown__activity-area"
+                                                                data-href="{{ nav_dropdown[_cta_link] }}"
+                                                                data-click-id="{{- activity_click_id -}}"
+                                                        >
+                                                            <img
+                                                                    class="header-dropdown__activity-img lazyload"
+                                                                    src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                                                    data-src="{{ nav_dropdown[_activity_image].url }}"
+                                                                    alt="{{ nav_dropdown[_activity_image].alt }}"
+                                                                    data-click-id="{{- activity_click_id -}}"
+                                                            >
+                                                            <div
+                                                                    class="header-dropdown__activity-content"
+                                                                    data-click-id="{{- activity_click_id -}}"
+                                                            >
+                                                                <p
+                                                                        class="header-dropdown__activity-title"
+                                                                        style="color:{% if nav_dropdown[_activity_header_text_clr] %}{{ dropdownData[_activity_header_text_clr] }};{% else %}#000000;{% endif %}"
+                                                                        data-click-id="{{- activity_click_id -}}"
+                                                                >
+                                                                    {{ nav_dropdown[_activity_header_text] }}
+                                                                </p>
+                                                                <a
+                                                                        href="{{ nav_dropdown[_cta_link] }}"
+                                                                        data-sl="{{ nav_dropdown[_cta_text] | downcase | replace: ' ', '_' }}"
+                                                                        class="button button-small{% if nav_dropdown[_cta_variant] == 'primary' %} button-primary {% else %} button-secondary {% endif %}"
+                                                                        data-click-id="{{- activity_click_id -}}"
+                                                                >
+                                                                    {{- nav_dropdown[_cta_text] -}}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+    {% if mobile_horizontal_nav.enable %}
+        <div class="mobile__horizontal_nav">
+            {% for index in (0..mobile_horizontal_nav_count) %}
+                {%- assign title = 'title_' | append: index -%}
+                {%- assign link = 'link_' | append: index -%}
+                {%- assign background_color = 'background_color_' | append: index -%}
+
+                <a class="mobile__horizontal_nav-link" href="{{ mobile_horizontal_nav[link].url }}"
+                   style="background-color: {{ mobile_horizontal_nav[background_color] }};"
+                   data-click-id="m-nav2_{{ mobile_horizontal_nav[title] | downcase | replace: ' ', '' }}"
+                >{{ mobile_horizontal_nav[title] }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if section_secondary_nav.enable %}
+        <div class="mobile__SecondaryNav no-display">
+            {% for index in (0..secondary_count) %}
+                {%- assign _enable = 'enable_link_' | append: index -%}
+                {%- assign _has_bottom_space = 'has_bottom_space_' | append: index -%}
+                {%- assign _link_text = 'link_text_' | append: index -%}
+                {%- assign _link = 'link_' | append: index -%}
+                {%- assign _text_color = 'link_text_color_' | append: index -%}
+                {%- assign has_bottom_space = section_secondary_nav[_has_bottom_space] -%}
+
+                {% if section_secondary_nav[_enable] %}
+                    {%- if section_secondary_nav[_link_text] contains 'Cart' -%}
+                        <a class="mobile__SecondaryNav-link{% if request.path != '/cart' %} cart-trigger{% endif %}"
+                           href="javascript:void(0)"
+                                {% if request.path == '/cart' %}
+                                    style="cursor: default;"
+                                {% endif %}
+                           data-click-id="m-nav2_my-cart"
+                        >
+                            {% render 'icon', icon: 'bag', class: 'icon--link', tag: 'm-nav2_my-cart' %}
+                            My Cart
+                        </a>
+                    {%- else -%}
+                        <a
+                                class="mobile__SecondaryNav-link"
+                                style="--color: {{ section_secondary_nav[_text_color] }};"
+                                href="
+              {%- if section_secondary_nav[_link_text] contains 'Account' or section_secondary_nav[_link_text] contains 'Login' -%}
+                {{ accountUrl }}
+              {%- else -%}
+                {{ section_secondary_nav[_link] }}
+              {%- endif -%}
+            "
+                                data-click-id="m-nav2_login"
+                        >
+                            {%- if section_secondary_nav[_link_text] contains 'Account' or section_secondary_nav[_link_text] contains 'Login' -%}
+                                {% render 'icon', icon: 'account', class: 'icon--link', tag: 'm-nav2_login' %}
+                            {%- endif -%}
+                            {{- section_secondary_nav[_link_text] -}}
+                        </a>
+                    {%- endif -%}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="mobile__SecondaryNav">
+            {% for index in (0..secondary_count) %}
+                {%- assign _enable = 'enable_link_' | append: index -%}
+                {%- assign _has_bottom_space = 'has_bottom_space_' | append: index -%}
+                {%- assign _link_text = 'link_text_' | append: index -%}
+                {%- assign _link = 'link_' | append: index -%}
+                {%- assign _text_color = 'link_text_color_' | append: index -%}
+                {%- assign has_bottom_space = section_secondary_nav[_has_bottom_space] -%}
+
+                {% if section_secondary_nav[_enable] %}
+                    {%- if section_secondary_nav[_link_text] contains 'Cart' -%}
+                        <a class="mobile__SecondaryNav-link{% if request.path != '/cart' %} cart-trigger{% endif %}"
+                           href="javascript:void(0)"
+                                {% if request.path == '/cart' %}
+                                    style="cursor: default;"
+                                {% endif %}
+                           data-click-id="m-nav2_my-cart"
+                        >
+                            {% render 'icon', icon: 'bag', class: 'icon--link', tag: 'm-nav2_my-cart' %}
+                            My Cart
+                        </a>
+                    {%- else -%}
+                        <a
+                                class="mobile__SecondaryNav-link"
+                                style="--color: {{ section_secondary_nav[_text_color] }};"
+                                href="
+              {%- if section_secondary_nav[_link_text] contains 'Account' or section_secondary_nav[_link_text] contains 'Login' -%}
+                {{ accountUrl }}
+              {%- else -%}
+                {{ section_secondary_nav[_link] }}
+              {%- endif -%}
+            "
+                                data-click-id="m-nav2_login"
+                        >
+                            {%- if section_secondary_nav[_link_text] contains 'Account' or section_secondary_nav[_link_text] contains 'Login' -%}
+                                {% render 'icon', icon: 'account', class: 'icon--link', tag: 'm-nav2_login' %}
+                            {%- endif -%}
+                            {{- section_secondary_nav[_link_text] -}}
+                        </a>
+                    {%- endif -%}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {%- comment -%}Social Menu{%- endcomment -%}
+    {% if social_nav.enable and false %}
+        <div class="mobileSocialLinks">
+            {% for index in (0..social_nav_count) %}
+                {% assign _social_type = 'social_type_' | append: index %}
+                {% assign _social_link = 'social_link_' | append: index %}
+                {% assign _social_logo = 'logo_' | append: index %}
+
+                {% if social_nav[_social_type] %}
+                    <a
+                            class="mobileSocialLink"
+                            href="{{ social_nav[_social_link] }}"
+                            target="_blank"
+                            rel="noopener"
+                            title="{{ social_nav[_social_type] }}"
+                    >
+                        <img
+                                class="lazyload"
+                                src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                data-src="{{ social_nav[_social_logo].url }}"
+                                alt="{{ social_nav[_social_logo].alt }}"
+                                width="25"
+                                height="25"
+                        >
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

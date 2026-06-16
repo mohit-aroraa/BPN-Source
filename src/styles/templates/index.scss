@@ -1,0 +1,45 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+// Design tokens
+@import "../../design-tokens/index";
+@import "../components/shared/prismic/page-banner";
+@import "../components/shared/prismic/categories.scss";
+@import "../components/shared/prismic/copy-block";
+@import "../components/shared/prismic/two-column-grid";
+@import "../components/shared/prismic/tested-block";
+@import "../components/shared/prismic/curated-reviews";
+@import "../components/shared/prismic/featured-in";
+@import "../components/shared/prismic/site-banner";
+@import "../components/shared/prismic/community-block";
+@import "../components/shared/prismic/rebuy-product-cross-sell";
+@import "../components/shared/prismic/carrusel-test";
+
+// anatta-redesign
+@import "../components/shared/prismic/utils";
+@import "../components/shared/prismic/validators";
+@import "../components/shared/prismic/reviews";
+@import "../components/shared/prismic/tile-group";
+@import "../components/shared/prismic/recommendations";
+@import "../components/shared/prismic/homepage-hero";
+@import "../components/shared/prismic/testimonials";
+@import "../components/shared/prismic/quiz";
+@import "../components/shared/prismic/join-us";
+@import "../components/shared/prismic/youtube/youtube";
+
+.homepage {
+  font-weight: 400;
+
+  .button-link {
+    padding-bottom: 3.5px;
+    @include above("tablet-large") {
+      padding-bottom: 4px;
+    }
+  }
+}

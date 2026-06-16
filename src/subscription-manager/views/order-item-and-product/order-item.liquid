@@ -1,0 +1,43 @@
+{# required: product and order_item and order and subscription #}
+<div class="og-order-item" data-order-item-id="{{ order_item.public_id }}">
+  {% include 'order-item-and-product/order-item-badge' %}
+  <div class="og-card og-order-item-grid" data-item-type="{{ 'subscription' if subscription else 'one_time' }}">
+    <div class="flex-row og-order-item-info">
+      <div class="og-thumbnail">
+        <img src="{{ product.image_url }}" alt="" onerror="this.style.display='none';">
+      </div>
+      <div class="flex-column">
+        <h4 class="og-product-title">{{ product.name }}</h4>
+        {% include 'order-item-and-product/price-display' %}
+      </div>
+    </div>
+    <div class="og-frequency-display">
+      {% if subscription %}
+        {% set frequency_text = 'frequency_period' | t(every = subscription.every, period = subscription.every_period) %}
+        {% if order.status == 'SEND_NOW' %}
+          {# We are in the Order Processing section #}
+          <p>
+            {{ 'item_controls_sending' | t }}
+            {{ order_item.quantity }}
+            {{ 'item_controls_every' | t }}
+            {{ frequency_text }}
+          </p>
+        {% else %}
+          {% include 'order-item-and-product/order-controls' %}
+        {% endif %}
+      {% else %}
+        {% if order.status == 'SEND_NOW' %}
+          <p>
+            {{ 'item_controls_sending' | t }}
+            {{ order_item.quantity }}
+          </p>
+        {% else %}
+          {% include 'order-item-and-product/order-controls' %}
+        {% endif %}
+      {% endif %}
+    </div>
+    {% if order.status == 'UNSENT' %}
+      {% include 'order-item-and-product/order-item-buttons' %}
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,31 @@
+
+<div class="about-page">
+  <!--<div class="shg-clearfix"></div>-->
+  {% if page.handle == 'about' %}
+	{% section 'about-intro' %}
+  {% else if page.handle == 'our-story' %}
+  	{% section 'our-story-intro' %}
+  {% else if page.handle == 'ambassador-program' %}
+  	{% section 'ambassador-program-intro' %}
+  {% endif%}
+  <!-- Our story -->
+  {% if page.handle == 'about' %}
+	{% section 'about-video' %}
+  	{% comment %}
+  	<div class="our-story">
+  		{% include 'about-podcast' %}
+  	</div>
+	{% endcomment %}
+  {% else if page.handle == 'our-story' %}
+	  {% section 'our-story-video' %}
+  	{% comment %}  
+	  <div class="our-story">
+  		{% include 'about-podcast' %}
+	  </div>
+  	{% endcomment %}  
+  {% else if page.handle == 'ambassador-program' %}
+  	{% section 'ambassador-program-video' %}
+	{% include 'ambassador-program-form' %}
+  {% endif%}
+  <!-- /Our story -->
+</div>

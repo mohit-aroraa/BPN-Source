@@ -1,0 +1,36 @@
+{%- if settings.gtm_datalayer_enabled -%}
+  <script id="gtm-data-layer-config" type="application/json">
+    {
+      "enabled": true,
+      "templateName": {{ template.name | default: "" | json }},
+      "templateSuffix": {{ template.suffix | default: "" | json }},
+      "pageType": {{ request.page_type | default: "" | json }},
+      "events": {
+        "view_item": {{ settings.gtm_track_view_item | json }},
+        "view_item_list": {{ settings.gtm_track_view_item_list | json }},
+        "select_item": {{ settings.gtm_track_select_item | json }},
+        "add_to_cart": {{ settings.gtm_track_add_to_cart | json }},
+        "view_cart": {{ settings.gtm_track_view_cart | json }},
+        "update_cart": {{ settings.gtm_track_update_cart | json }},
+        "remove_from_cart": {{ settings.gtm_track_remove_from_cart | json }},
+        "subscription_upsell": {{ settings.gtm_track_subscription_upsell | json }},
+        "search": {{ settings.gtm_track_search | json }},
+        "cta_click": {{ settings.gtm_track_cta_click | json }},
+        "product_option_selected": {{ settings.gtm_track_product_option_selected | json }},
+        "select_content": {{ settings.gtm_track_select_content | json }},
+        "faq_toggle": {{ settings.gtm_track_faq_toggle | json }},
+        "carousel_interaction": {{ settings.gtm_track_carousel_interaction | json }},
+        "chat_initiated": {{ settings.gtm_track_chat_initiated | json }},
+        "login": {{ settings.gtm_track_login | json }},
+        "sign_up": {{ settings.gtm_track_sign_up | json }},
+        "generate_lead": {{ settings.gtm_track_generate_lead | json }},
+        "view_promotion": {{ settings.gtm_track_view_promotion | json }},
+        "select_promotion": {{ settings.gtm_track_select_promotion | json }},
+        "error_404": {{ settings.gtm_track_error_404 | json }},
+        "out_of_stock_view": {{ settings.gtm_track_out_of_stock_view | json }}
+      }
+    }
+  </script>
+
+  <script src="{{ 'bundle.new-gtm-data-layer.min.js' | asset_url }}" defer></script>
+{%- endif -%}

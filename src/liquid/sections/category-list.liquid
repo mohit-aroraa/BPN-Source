@@ -1,0 +1,145 @@
+<div class='bpn-category-list swiper' data-homepage-hero-swiper role="region">
+  <a href="#bpn-category-list-end-{{ section.id }}" class="visually-hidden skip-link in-page-link">Skip all shop by category Links</a>
+  <div class='swiper-wrapper'>
+    {% for block in section.blocks %}
+      {%- assign _block = block.settings -%}
+      {% assign click_id = 'homepage_hero_' | append: _block.category_name | downcase %}
+      <a
+        class='bpn-category-list__item swiper-slide'
+        href='{{ _block.category_url }}'
+        data-click-id='{{ click_id }}'
+      >
+        <div class='bpn-category-list__media'>
+          {% if _block.category_mobile_image != blank %}
+            {{
+              _block.category_mobile_image
+              | image_url: width: 848
+              | image_tag:
+                loading: 'lazy',
+                class: 'bpn-category-list__image bpn-category-list__image--mobile',
+                alt: _block.category_mobile_image.alt,
+                width: 848,
+                height: 520
+            }}
+          {% endif %}
+
+          {% if _block.category_image != blank %}
+            {{
+              _block.category_image
+              | image_url: width: 848
+              | image_tag:
+                loading: 'lazy',
+                class: 'bpn-category-list__image bpn-category-list__image--desktop',
+                alt: _block.category_image.alt,
+                width: 848,
+                height: 520
+            }}
+          {% endif %}
+        </div>
+
+        <div class='bpn-category-list__content'>
+          {% if _block.category_name != blank %}
+            <h3
+              class='bpn-category-list__title bpn-text-h6'
+              data-click-id='{{ click_id }}'
+              style='color: {{ _block.title_color }}'
+            >
+              {{ _block.category_name }}
+            </h3>
+          {% endif %}
+
+          {% if _block.category_url != blank %}
+            <span
+              class='bpn-category-list__link bpn-text-callout-base'
+              href='{{ _block.category_url }}'
+              data-click-id='{{ click_id }}'
+              style='color: {{ _block.cta_color }}'
+            >
+              {{- _block.cta_text | default: 'SHOP NOW' -}}
+            </span>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class='bpn-category-list__controls'>
+    <div class='swiper-pagination bpn-category-list__pagination'></div>
+  </div>
+</div>
+
+<div class="visually-hidden" id="bpn-category-list-end-{{ section.id }}"></div>
+
+{% schema %}
+{
+  "name": "Category List",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content Settings"
+        },
+        {
+          "type": "text",
+          "id": "category_name",
+          "label": "Category Name",
+          "info": "Enter the name of the category"
+        },
+        {
+          "type": "url",
+          "id": "category_url",
+          "label": "Category URL",
+          "info": "Select the destination URL for this category"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Call to Action Text",
+          "default": "SHOP NOW",
+          "info": "Text displayed on the category button"
+        },
+        {
+          "type": "header",
+          "content": "Media Settings"
+        },
+        {
+          "type": "image_picker",
+          "id": "category_image",
+          "label": "Desktop Image",
+          "info": "Recommended size: 848px x 520px"
+        },
+        {
+          "type": "image_picker",
+          "id": "category_mobile_image",
+          "label": "Mobile Image",
+          "info": "Recommended size: 400px x 520px"
+        },
+        {
+          "type": "header",
+          "content": "Color Settings"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Category Title Color"
+        },
+        {
+          "type": "color",
+          "id": "cta_color",
+          "label": "Call to Action Text Color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category List",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{% for block in section.blocks %}
+  {% if block.type == 'liquid' %}
+    <div class="ll-widget-block">
+      {{ block.settings.custom_liquid }}
+    </div>
+  {% endif %}
+{% endfor %}
+
+<style>
+.ll-widget-block {
+  margin-top: 24px;
+}
+</style>

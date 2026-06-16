@@ -1,0 +1,60 @@
+/**
+ *
+ * @element cart loader (Shimmer effect)
+ *
+*/
+
+$component: ".cartLoader";
+
+#{$component} {
+  @include flex();
+  @include margin($bottom: 10px);
+  &.wrap {
+    flex-wrap: wrap;
+  }
+}
+
+// @block
+// -------------
+
+#{$component}__left {
+  @include blocksize(72px, 83px);
+  @include margin($right: 19px);
+
+  @include above("tablet") {
+    @include blocksize(96px, 111px);
+  }
+}
+
+#{$component}__right {
+  @include flex($direction: column);
+  @include blocksize(calc(100% - 91px), 119px);
+
+  @include above("mobile-large") {
+    @include blocksize(calc(100% - 115px), 119px);
+  }
+}
+
+#{$component}__title {
+  @include blocksize(90%, 15px);
+}
+
+#{$component}__title--section {
+  @include blocksize(90%, 15px);
+  margin-bottom: 1rem;
+}
+
+#{$component}__color {
+  @include blocksize(80%, 15px);
+  @include margin($top: 10px);
+}
+
+#{$component}__counter {
+  @include flex($justify-content: space-between, $align-items: center);
+  @include margin($top: 20px);
+}
+
+#{$component}__action {
+  @include blocksize(30%, 15px);
+  @include margin($top: 5px);
+}

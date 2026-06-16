@@ -1,0 +1,29 @@
+{% assign section = metafields[module] %}
+
+{% liquid 
+    assign gwp_threshold_amount = section['threshold_amount'] | times: 100
+    assign gwp_product_handle = section['gift_product_handle']
+    assign gwp_text = section['gwp_text'] | default: ""
+%}
+{%- comment -%}
+    Get GWP product
+{%- endcomment -%}
+{%- assign products = collections.gwp-collection.products -%}
+
+{%- for product in products -%}
+    {% if product.handle == gwp_product_handle %}
+        {% assign gwp_product = product %}
+        {% break %}
+    {% endif %}
+{%- endfor -%}
+
+
+<script>
+    window.GWP = {
+        gwpThresholdAmount:{{ gwp_threshold_amount }},
+        gwpProductHandle:'{{ gwp_product_handle }}',
+        gwpText: "{{gwp_text}}",
+        gwpProduct: {{ gwp_product | json }}
+    }
+</script>
+

@@ -1,0 +1,23 @@
+{%- assign block = section[module] -%}
+{%- assign length = block.count | minus: 1 -%}
+{%- if length > 2 -%}
+    {%- assign length = 2 -%}
+{%- endif -%}
+
+{%- assign background_color = block.background_color | default: '#F6F4F3' -%}
+
+<section class="trustedBadges trustedBadges--{{id}}" style="background-color:{{background_color}}">
+    <div class="trustedBadges__wrapper">
+        {% for index in (0..length) %}
+        {% assign icon_key = 'icon_' | append: index %}
+        {% assign text_key = 'text_' | append: index %}
+
+            <div class="trustedBadges__block">
+                <div class="trustedBadges__icon">
+                    {% render 'prismic-responsive-image' with image: block[icon_key], %}
+                </div>
+                <p class="trustedBadges__text">{{block[text_key]}}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>

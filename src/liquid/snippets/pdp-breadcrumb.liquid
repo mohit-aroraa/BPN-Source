@@ -1,0 +1,11 @@
+{%- comment -%}
+    Expect Breadcrumb value from Prismic (Rich text editor content).
+    If breadcrumb is empty then default breadcrumb will load
+{%- endcomment -%}
+
+
+{% if breadcrumb %}
+    <code>
+        {{breadcrumb}}
+    </code>
+{% endif %}

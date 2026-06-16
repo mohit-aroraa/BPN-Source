@@ -1,0 +1,210 @@
+{%- liquid
+  assign img_pos      = section.settings.image_position
+  assign mob_img_pos  = section.settings.mobile_image_position | default: 'top'
+  assign has_img = false
+  if section.settings.image != blank
+    assign has_img = true
+  endif
+-%}
+
+<section
+  class="acc-img acc-img--{{ img_pos }} acc-img--mob-{{ mob_img_pos }}"
+  id="acc-img-{{ section.id }}"
+  style="--ai-pt: {{ section.settings.section_padding_top }}px; --ai-pb: {{ section.settings.section_padding_bottom }}px;"
+>
+
+  {%- comment -%} Image column — always rendered when set; CSS controls desktop/mobile visibility and order {%- endcomment -%}
+  {%- if has_img -%}
+    <div class="acc-img__media">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="lazy"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Accordion column {%- endcomment -%}
+  <div class="acc-img__accordion">
+    {%- if section.settings.heading != blank -%}
+      <{{ section.settings.heading_tag | default: 'h2' }} class="acc-img__heading">
+        {{ section.settings.heading }}
+      </{{ section.settings.heading_tag | default: 'h2' }}>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      <div
+        class="acc-img__item{% if forloop.first %} is-open{% endif %}"
+        {{ block.shopify_attributes }}
+      >
+        <button
+          class="acc-img__trigger"
+          type="button"
+          id="acc-trigger-{{ section.id }}-{{ forloop.index }}"
+          aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="acc-body-{{ section.id }}-{{ forloop.index }}"
+        >
+          <span class="acc-img__item-title">{{ block.settings.title }}</span>
+          <span class="acc-img__chevron" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <div
+          class="acc-img__body"
+          id="acc-body-{{ section.id }}-{{ forloop.index }}"
+          role="region"
+          aria-labelledby="acc-trigger-{{ section.id }}-{{ forloop.index }}"
+        >
+          <div class="acc-img__body-inner">
+            {%- if block.settings.content != blank -%}
+              <div class="acc-img__richtext rte">{{ block.settings.content }}</div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+
+</section>
+
+<script>
+(function () {
+  var section = document.getElementById('acc-img-{{ section.id }}');
+  if (!section) return;
+
+  section.querySelectorAll('.acc-img__trigger').forEach(function (trigger) {
+    trigger.addEventListener('click', function () {
+      var item   = trigger.closest('.acc-img__item');
+      var isOpen = item.classList.contains('is-open');
+
+      // Close all
+      section.querySelectorAll('.acc-img__item').forEach(function (el) {
+        el.classList.remove('is-open');
+        el.querySelector('.acc-img__trigger').setAttribute('aria-expanded', 'false');
+      });
+
+      // Open clicked item unless it was already open
+      if (!isOpen) {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Accordion + Image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+      "options": [
+        { "value": "right", "label": "Right" },
+        { "value": "left",  "label": "Left" },
+        { "value": "none",  "label": "Hidden" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_position",
+      "label": "Image position (mobile)",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "hidden", "label": "Hidden" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading tag",
+      "options": [
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 56,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Accordion item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "THE STRENGTH COLLECTION SYSTEM"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Enter content here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion + Image",
+      "category": "Content",
+      "settings": {
+        "image_position": "right"
+      },
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "title": "THE STRENGTH COLLECTION SYSTEM",
+            "content": "<p>The Strength Collection eliminates complexity from your training. Show up ready, maximize training, and recover for tomorrow.</p><p>Pre is our pre-workout that provides you with sustained energy and mental focus. This product is the difference between getting to rep 8 versus 10.</p><p>Pump is our muscle pump enhancer that supports increased blood flow, for better muscle contractions and pump.</p><p>Post was made so you can show up tomorrow. Formulated clinically studied ingredients like EAAs and CherryPURE to keep you training day after day.</p>"
+          }
+        },
+        { "type": "item", "settings": { "title": "TBD", "content": "<p>Content coming soon.</p>" } },
+        { "type": "item", "settings": { "title": "TBD", "content": "<p>Content coming soon.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

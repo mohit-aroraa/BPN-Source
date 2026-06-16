@@ -1,0 +1,59 @@
+
+{% include 'discovery-content' %}
+{% schema %}
+  {
+    "name": "Content",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "left_image_right_content",
+        "name": "Left Image Right Content",
+        "settings": [
+          {
+            "id": "title",
+            "type": "text",
+            "label": "Title"
+          },
+		  {
+            "id": "description",
+            "type": "richtext",
+            "label": "Description"
+          },
+		  {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Image"
+          }
+        ]
+      },
+	 {
+        "type": "right_image_left_content",
+        "name": "Righ Image Left Content",
+        "settings": [
+                    {
+            "id": "title1",
+            "type": "text",
+            "label": "Title"
+          },
+		  {
+            "id": "description1",
+            "type": "richtext",
+            "label": "Description"
+          },
+		  {
+            "id": "image1",
+            "type": "image_picker",
+            "label": "Image"
+          }
+        ]
+      }	
+    ]
+  
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

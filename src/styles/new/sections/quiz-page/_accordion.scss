@@ -1,0 +1,57 @@
+.accordion {
+  .accordion-item {
+    // Box Model
+    margin: 12px 0 0;
+    padding: 12px 0;
+    border-bottom: 1px solid color('bpn-grey-20');
+
+    @include use-text-style('bpn-body-base');
+
+    &__heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__title {
+      // Typography
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    &__content {
+      // Box Model
+      height: 0;
+
+      // Typography
+      font-weight: 500;
+
+      // Misc
+      transition: height 0.5s ease-out;
+      overflow: hidden;
+      will-change: height;
+
+      img {
+        // Box Model
+        margin: 12px 0 0;
+        border-radius: 5px;
+        max-width: 365px;
+      }
+
+      ul {
+        list-style: disc;
+        padding: 0 0 0 16px;
+      }
+    }
+
+    &.active {
+      .accordion-item__content {
+        height: auto;
+      }
+
+      .toggle-icon {
+        transform: rotate(180deg)
+      }
+    }
+  }
+}

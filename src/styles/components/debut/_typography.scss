@@ -1,0 +1,307 @@
+/*================ Typography ================*/
+blockquote {
+  font-size: calc(18px);
+  font-style: normal;
+  text-align: center;
+  padding: 0 30px;
+  margin: 0;
+
+  .rte & {
+    border-color: $color-border;
+    border-width: 1px 0;
+    border-style: solid;
+    padding: 30px 0;
+    margin-bottom: $gutter-site / 2;
+  }
+
+  p + cite {
+    margin-top: $gutter-site / 2;
+  }
+
+  cite {
+    display: block;
+    font-size: 0.85em;
+    font-weight: $font-weight-body;
+
+    &::before {
+      content: "\2014 \0020";
+    }
+  }
+}
+
+code,
+pre {
+  /*font-family: Consolas, monospace;*/
+  font-size: 1em;
+}
+
+pre {
+  overflow: auto;
+}
+
+body,
+input,
+textarea,
+button,
+select {
+  font-size: $font-size-base;
+  /*font-family: $font-stack-body;*/
+  font-style: $font-style-body;
+  font-weight: $font-weight-body;
+  color: $color-text;
+  line-height: 1.5;
+}
+
+// Prevent zoom on touch devices in active inputs
+@include mq($medium-down) {
+  input,
+  textarea,
+  select,
+  button {
+    font-size: $font-size-mobile-input;
+  }
+}
+
+/*================ Headings ================*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 ($section-spacing-small / 2);
+  /*font-family: $font-stack-header;*/
+  font-style: $font-style-header;
+  font-weight: 900;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: inherit;
+  }
+}
+h5,
+h6 {
+  font-weight: 700;
+}
+h1 {
+  font-size: calc(#{$font-size-header} * 1.35);
+  text-transform: none;
+  letter-spacing: 0;
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-header} * 1.25);
+  }
+}
+
+h2 {
+  font-size: calc(#{$font-size-header} * 0.78);
+  /*   text-transform: uppercase;
+      letter-spacing: 0.1em; */
+
+  @include mq($small) {
+    font-size: calc((#{$font-size-header} * 0.78) * 0.9);
+  }
+}
+
+h3 {
+  font-size: calc(#{$font-size-header});
+  text-transform: none;
+  letter-spacing: 0;
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-header} * 0.78);
+  }
+}
+
+h4 {
+  font-size: calc(#{$font-size-header} * 0.68);
+
+  @include mq($small) {
+    font-size: calc((#{$font-size-header} * 0.68) * 0.9);
+  }
+}
+
+h5 {
+  font-size: calc(#{$font-size-header} * 0.58);
+
+  @include mq($small) {
+    font-size: calc((#{$font-size-header} * 0.58) * 0.9);
+  }
+}
+
+h6 {
+  font-size: calc(#{$font-size-header} * 0.54);
+
+  @include mq($small) {
+    font-size: calc((#{$font-size-header} * 0.54) * 0.9);
+  }
+}
+
+.h1 {
+  @extend h1;
+}
+
+.h2 {
+  @extend h2;
+}
+
+.h3 {
+  @extend h3;
+}
+
+.h4 {
+  @extend h4;
+}
+
+.h5 {
+  @extend h5;
+}
+
+.h6 {
+  @extend h6;
+}
+
+/*================ RTE headings ================*/
+.rte {
+  color: $color-body-text;
+  margin-bottom: $section-spacing-small;
+
+  // If an .rte div is the last element in its parent,
+  // make it flush with the bottom of the container
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: $gutter-site;
+    margin-bottom: $gutter-site / 2;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  li {
+    margin-bottom: 4px;
+    list-style: inherit;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// rte setting type to act like a <p> tag
+.rte-setting {
+  margin-bottom: $section-spacing-small / 1.8; // same as p
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/*================ Paragraph styles ================*/
+p {
+  color: #000000;
+  margin: 0 0 ($section-spacing-small / 1.8);
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-base} - 1px);
+  }
+
+  &:last-child {
+    // margin-bottom: 0;
+  }
+}
+
+/*================ Lists ================*/
+li {
+  list-style: none;
+}
+
+/*================ Misc styles ================*/
+.fine-print {
+  font-size: calc(14);
+  font-style: italic;
+}
+
+.txt--minor {
+  font-size: 80%; // match <small>
+}
+
+.txt--emphasis {
+  font-style: italic;
+}
+
+.address {
+  margin-bottom: $gutter-site;
+}
+
+/*================ Hero and slideshow headers ================*/
+.mega-title,
+.mega-subtitle {
+  color: $color-overlay-title-text;
+
+  .hero & {
+    text-shadow: 0 0 4px $color-text-shadow;
+  }
+
+  @include mq($medium-up) {
+    text-shadow: 0 0 4px $color-text-shadow;
+  }
+}
+
+.mega-title {
+  margin-bottom: 8px;
+}
+
+.mega-title--large {
+  font-size: calc(#{$font-size-base} + 8px);
+
+  @include mq($medium-up) {
+    font-size: calc(#{$font-size-base} * 2.5);
+  }
+}
+
+.mega-subtitle {
+  @include mq($medium-up) {
+    font-size: calc(#{$font-size-base} + 4px);
+    margin: 0 auto;
+
+    .text-center & {
+      max-width: 75%;
+    }
+  }
+
+  p {
+    color: $color-overlay-title-text;
+  }
+
+  a {
+    color: $color-overlay-title-text;
+    border-bottom: 1px solid currentColor;
+
+    &:hover,
+    &:focus {
+      color: $color-overlay-text-focus;
+    }
+  }
+}
+
+.mega-subtitle--large {
+  font-size: calc(#{$font-size-base} + 2px);
+  font-weight: $font-weight-header;
+
+  @include mq($medium-up) {
+    font-size: calc(#{$font-size-base} + 8px);
+  }
+}

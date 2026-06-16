@@ -1,0 +1,43 @@
+
+{% include 'discovery-product-tabs' %}
+{% schema %}
+	{
+		"name": "Product Tabs",
+	 	"settings": [
+			{
+              "type"	: "text",
+              "id"		: "title",
+              "label"	: "Section Title"
+            }
+		],
+        "blocks":[
+			{
+              "type": "product_Tab",
+              "name": "Product tab",
+              "settings": [
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Tab Title"
+                },
+                {
+                  "type": "url",
+                  "id": "view_more_link",
+                  "label": "View More Link"
+                },
+				{
+                  "type": "product",
+                  "id": "product_1",
+                  "label": "Product"
+              	},
+				{
+                  "type": "product",
+                  "id": "product_2",
+                  "label": "Product"
+              	}
+
+              ]
+        	}
+        ]
+	}
+{% endschema %}

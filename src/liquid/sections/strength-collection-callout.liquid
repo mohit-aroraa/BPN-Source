@@ -1,0 +1,101 @@
+<div
+  id="scc-{{ section.id }}"
+  style="
+    --scc-pt: {{ section.settings.section_padding_top | default: 0 }}px;
+    --scc-pb: {{ section.settings.section_padding_bottom | default: 0 }}px;
+    --scc-px: {{ section.settings.section_padding_horizontal | default: 0 }}px;
+    --scc-pt-mob: {{ section.settings.section_padding_top_mobile | default: 0 }}px;
+    --scc-pb-mob: {{ section.settings.section_padding_bottom_mobile | default: 0 }}px;
+    --scc-px-mob: {{ section.settings.section_padding_horizontal_mobile | default: 0 }}px;
+  "
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Collection Callout",
+  "blocks": [
+    { "type": "@theme" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Desktop padding"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Horizontal",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Mobile padding"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "label": "Top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "label": "Bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal_mobile",
+      "label": "Horizontal",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Callout",
+      "category": "Strength Collection",
+      "blocks": [
+        { "type": "strength-collection-callout" }
+      ]
+    }
+  ]
+}
+{% endschema %}

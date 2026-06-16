@@ -1,0 +1,169 @@
+<!-- sections/nine15--cta -->
+
+{% include 'master--ctas' %}
+
+{% schema %}
+{
+	"name": "CTAs",
+	"settings": [
+		{
+            "type":"text",
+            "id":"title",
+            "label":"Title"
+        },
+        {
+            "type":"textarea",
+            "id":"text",
+            "label":"Text"
+        },
+        {
+            "type":"text",
+            "id":"btn_text",
+            "label":"Button Text"
+        },
+        {
+            "type":"url",
+            "id":"btn_url",
+            "label":"Button Url"
+        },
+        {
+            "type":"header",
+            "content": "Colors"
+        },
+        {
+            "type":"color",
+            "id":"color_bg",
+            "label":"Background Color"
+        },
+        {
+            "type":"color",
+            "id":"color_txt",
+            "label":"Text Color"
+        },
+        {
+            "type":"color",
+            "id":"color_ttl_bg",
+            "label":"Title Background Color",
+            "default": "#E6DAC0"
+        },
+		{
+			"type":"header",
+			"content": "Custom CSS Rules"
+		},
+		{
+			"type":"paragraph",
+			"content": "Explanation of Custom CSS rules below input."
+		},
+		{
+			"type": "liquid",
+			"id": "custom_css",
+			"label": "Custom CSS"
+		},
+		{
+			"type":"paragraph",
+			"content": "Use '==' to reference this block's parent container, that way the css you use only applies to this container. The example below applies font size to only the h2 element in the current block's container."
+		},
+		{
+			"type":"paragraph",
+			"content": "Ex: '== h2 { font-size: 20px; }'"
+		},
+		{
+			"type":"paragraph",
+			"content": "Use '/MEDIA_QUERY/' to create media queries that match css defaults. The example below would output '@media screen and (max-width: 749px)' before the css."
+		},
+		{
+			"type":"paragraph",
+			"content": "Ex: '/small/ { == h2 { font-size: 20px; } }'"
+		},
+		{
+			"type":"paragraph",
+			"content": "Media Queries: narrow, not-narrow, small, medium, medium-up, medium-down, large, large-up, large-down, ex-large, ex-large-up, ex-large-down, widescreen"
+		}
+	],
+	"blocks": [
+        {
+            "type":"block",
+            "name":"Block",
+            "settings":[
+                {
+                    "type":"image_picker",
+                    "id":"image",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"title",
+                    "label":"Title"
+                },
+                {
+                    "type":"textarea",
+                    "id":"text",
+                    "label":"Text"
+                },
+                {
+                    "type":"text",
+                    "id":"link_text",
+                    "label":"Link Text (optional)"
+                },
+                {
+                    "type":"url",
+                    "id":"url",
+                    "label":"Link Url"
+                },
+                {
+		            "type":"header",
+		            "content": "Colors"
+		        },
+		        {
+		            "type":"color",
+		            "id":"color_bg",
+		            "label":"Background Color",
+		            "info": "Overrides sections colors"
+		        },
+		        {
+		            "type":"color",
+		            "id":"color_txt",
+		            "label":"Text Color",
+		            "info": "Overrides sections colors"
+		        },
+		        {
+		            "type":"color",
+		            "id":"color_ttl_bg",
+		            "label":"Title Background Color",
+		            "info": "Overrides sections colors"
+		        },
+                {
+                    "type": "header",
+                    "content": "Video Settings"
+                },
+                {
+                    "type": "video_url",
+                    "id": "video_url",
+                    "label": "Video url",
+                    "accept": [
+                        "youtube",
+                        "vimeo"
+                    ]
+                },
+                {
+                    "type": "text",
+                    "id": "video_hosted",
+                    "label": "Video url if hosted"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "video_hosted_thumbnail",
+                    "label": "Video thumbnail (only if hosted)"
+                }
+            ]
+        }
+	],
+	"presets": [
+		{
+			"name": "CTAs",
+			"category": "1 - NINE15"
+		}
+	]
+}
+{% endschema %}
+

@@ -1,0 +1,16 @@
+{%- assign block = section[module] -%}
+{%- assign section_title = block.section_title -%}
+{%- assign description = block.description -%}
+{%- assign max_width = block.max_width | default:640 -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+
+<section class="textBlock">
+    <div class="textBlock__wrapper">
+        <div class="textBlock__content" style="--max-width:{{max_width}}px">
+            <h2 class="sectionTitle">{{section_title | strip}}</h2>
+            <p class="textBlock__description">{{description | strip}}</p>
+            <a href="{{cta_link | strip}}" class="button-link">{{cta_text | strip}}</a>
+        </div>
+    </div>
+</section>

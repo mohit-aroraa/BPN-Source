@@ -1,0 +1,23 @@
+{%- assign image = pdp_image -%}
+<div class="swiper-slide {% unless type == "thumb" %}productGallery__slide{%endunless%}" data-image="{{ image.id }}">
+  {% if type == 'thumb' %}
+    <img
+      class="productGallery__thumbImage swiper-lazy"
+      src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+      data-src="{{image | image_url: width: 64, height: 64, crop: 'center'}}"
+      alt="{{image.alt}}"
+      width="64"
+      height="64"
+    >
+  {% else %}
+    <img
+      class="productGallery__image swiper-lazy"
+      src="{{image | image_url: width: 10, height: 10, crop: 'center'}}"
+      data-src="{{image | image_url: width: 1080, height: 1080, crop: 'center'}}"
+      alt="{{image.alt}}"
+      width="560"
+      height="560"
+    >
+  {% endif %}
+  {%- comment -%}<div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>{%- endcomment -%}
+</div>

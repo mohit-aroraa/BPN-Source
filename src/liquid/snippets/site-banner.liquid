@@ -1,0 +1,48 @@
+{%- assign block = section[module] -%}
+{%- assign height_on_desktop = block.height_on_desktop | default: 500 -%}
+{%- assign height_on_mob = block.height_on_mob | default: 506 -%}
+{%- assign content_on_mob = block.content_on_mob -%}
+{%- assign text_color = block.text_color | default: '#ffffff' -%}
+{%- assign banner_title = block.banner_title -%}
+{%- assign banner_text = block.banner_text -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+{%- assign cta_bg_color = block.cta_bg_color | default: '#000000' -%}
+{%- assign cta_text_color = block.cta_text_color | default: '#ffffff' -%}
+{%- assign banner_img_desktop = block.banner_img_desktop -%}
+{%- assign banner_img_alt = banner_img_desktop.alt | default: 'Banner image' -%}
+{%- assign banner_img_mob = block.banner_img_mob | default: banner_img_desktop -%}
+{%- assign overlay_color = block.overlay_color | default: '#000000' -%}
+{%- assign overlay_opacity = block.overlay_opacity | default: 0 -%}
+
+<section
+  class="siteBanner {{ snippet_name }} siteBanner--{{ id }} siteBanner--{{ request.page_type | handle }} siteBanner--{{ template | handle }}"
+  style="--height-desktop:{{height_on_desktop}}px;--height-mobile:{{ height_on_mob }}px;--text-color:{{ text_color }}"
+>
+  <div class="siteBanner__wrapper">
+    {% render 'prismic-responsive-image' with image: banner_img_desktop, wrapper_class:'responsive-image__wrapper--desktop' image_class:"siteBanner__image" image_attributes: 'width="1440" height="561"', image_attributes: "aria-hidden='true'" %}
+    {% render 'prismic-responsive-image' with image: banner_img_mob, wrapper_class:'responsive-image__wrapper--mobile' image_class:"siteBanner__image" image_attributes: 'width="1440" height="561"', image_attributes: "aria-hidden='true'" %}
+    <div
+      class="siteBanner__overlay"
+      style="--overlay-background-color:{{overlay_color}};--opacity:{{overlay_opacity}}"
+    ></div>
+    <div class="siteBanner__content">
+      {% if banner_text != blank %}
+        <p class="siteBanner__shortText">{{ banner_text }}</p>
+      {% endif %}
+      {% if banner_title != blank %}
+        <h1 class="siteBanner__title">{{ banner_title }}</h1>
+      {% endif %}
+      {% if cta_link != blank and cta_text != blank %}
+        <a
+          href="{{cta_link | strip}}"
+          role="button"
+          class="button-link siteBanner__cta"
+          style="--cta-background-color:{{cta_bg_color}};--cta-text-color:{{cta_text_color}}"
+        >
+          {{- cta_text -}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>

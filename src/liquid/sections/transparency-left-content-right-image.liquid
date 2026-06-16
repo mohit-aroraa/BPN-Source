@@ -1,0 +1,61 @@
+<div class="sectiontype1  our-quality-program space-bottom animation-img">
+  <div class="fancy-text3 mobile-view text-center">
+    <!-- <h2>Our Quality <span>Program</span></h2> -->
+    <h2 class=" wow fadeInUp">{{ section.settings.title }}</h2>
+  </div>
+  <div class="content-block text14">
+    <div class="fancy-text3 desktop-view wow fadeInUp">
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+    <div class="wow fadeInUp">
+      <p>{{ section.settings.description }}</p>
+    </div>
+    <div class="quote-wrapper  wow fadeInUp">
+      <h3>{{ section.settings.quote }}</h3>
+    </div>
+  </div>
+  <div class="img-block texture-wrap ">
+    <div class="anim__image-swipe anim__image-swipe--right">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        loading="lazy"
+        width="320"
+        height="343"
+        alt="{{ section.settings.image.alt | escape }}"
+      >
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Left content right image",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "id": "quote",
+      "type": "text",
+      "label": "Quote"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

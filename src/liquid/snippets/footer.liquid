@@ -1,0 +1,179 @@
+{%- assign footer_metafields = pages.footer.metafields -%}
+{%- assign footer_global_section = footer_metafields.footer_global -%}
+{%- assign enable = footer_global_section.enable -%}
+{%- assign background_texture = footer_global_section.background_texture -%}
+{%- assign signup_title = footer_global_section.signup_title -%}
+{%- assign fda_statement = footer_global_section.fda_statement -%}
+{%- assign bottom_nav_handle = footer_global_section.bottom_nav_handle -%}
+{%- assign email = footer_global_section.email -%}
+{%- assign contact_number = footer_global_section.contact_number -%}
+{%- assign tcpa_text = footer_global_section.tcpa_text -%}
+{%- assign footer_global_length = footer_global_section.count | minus: 1 -%}
+
+{%- if footer_global_length > 3 -%}
+  {%- assign footer_global_length = 3 -%}
+{%- endif -%}
+{%- comment -%}
+  Fetch social links
+{%- endcomment -%}
+{%- assign global_data_meta = pages['site-global-data'].metafields -%}
+{%- assign social_section = global_data_meta.social_links -%}
+{%- assign fb_link = social_section.facebook_link -%}
+{%- assign yt_link = social_section.youtube_link -%}
+{%- assign ig_link = social_section.instagram_link -%}
+{%- assign tiktok_link = social_section.tiktok_link -%}
+
+{%- if enable -%}
+  {%- for index in (0..footer_global_length) -%}
+    {%- assign menu_title_key = 'menu_title_' | append: index -%}
+    {%- assign footer_nav_handle_key = 'footer_nav_handle_' | append: index -%}
+    {%- assign footer_linklist = footer_global_section[footer_nav_handle_key] | strip -%}
+
+    {% capture desktop_menu %}
+      {{ desktop_menu }}
+      <div class="siteFooter__linkBlock">
+        <p class="footerTitle">{{ footer_global_section[menu_title_key] }}</p>
+        {% render 'footer-links', footer_linklist: footer_linklist, email: email, contact_number: contact_number %}
+      </div>
+    {% endcapture %}
+
+    {% capture mobile_menu %}
+      {{ mobile_menu }}
+      <div class="siteAccordion__wrapper">
+        <a
+          href="javascript:void(0);"
+          role="button"
+          class="siteAccordion__header"
+          data-accordion-trigger
+          aria-expanded="false"
+          aria-controls="footer_accordion_{{index}}"
+        >
+          <span class="siteAccordion__headerText">{{ footer_global_section[menu_title_key] }}</span>
+          <span class="siteAccordion__icon">
+            <svg
+              width="12px"
+              height="6px"
+              viewBox="0 0 12 6"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <title>Path</title>
+              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                  <g  transform="translate(-294.000000, -299.000000)" stroke="#FFFFFF" stroke-width="2">
+                      <g transform="translate(16.000000, 286.500000)">
+                          <path d="M282,11.3740105 L285.903821,15.2778313 C285.965188,15.3354259 286,15.4158388 286,15.5 C286,15.5841612 285.965188,15.6645741 285.903821,15.7221687 L282,19.6259895" transform="translate(284.000000, 15.500000) scale(-1, -1) rotate(270.000000) translate(-284.000000, -15.500000) "></path>
+                      </g>
+                  </g>
+              </g>
+            </svg>
+          </span>
+        </a>
+        <div class="siteAccordion__content" id="footer_accordion_{{index}}">
+          <div class="siteAccordion__contentPaddingBottom">
+            {% render 'footer-links', footer_linklist: footer_linklist, mobile: true, email: email, contact_number: contact_number %}
+          </div>
+        </div>
+      </div>
+    {% endcapture %}
+  {%- endfor -%}
+
+  <footer
+    class="siteFooter {% if template contains 'athletic' %}siteFooter--athletic{% endif %}"
+  >
+    {% unless template contains 'athletic' %}
+      <div class="siteFooter__top">
+        <div class="siteFooter__wrapper">
+          <div class="siteFooter__linkSection">
+            <div class="siteFooter__subscriptions">
+              <p class="footerTitle">{{ signup_title }}</p>
+              <div class="footerSubscriptionForm">
+                <div class="footerSubscriptionForm__group">
+                  <input
+                    type="text"
+                    class="footerSubscriptionForm__field js-subscription-field"
+                    name="subscription_number"
+                    placeholder="Mobile XXX-XXX-XXXX"
+                    aria-label="Enter mobile number"
+                  >
+                  <button type="button" class="footerSubscriptionForm__button js-subscription-button">Join</button>
+                </div>
+                <p class="js-subscription-message"></p>
+                <div class="footerSubscriptionForm__tcpaText js-footer-tcpa-text">
+                  {% render 'prismic-rich-text', rich_text: tcpa_text %}
+                </div>
+              </div>
+              <ul class="siteFooter__socialIcons">
+                <li>
+                  <a href="{{fb_link | strip}}" target="_blank" aria-label="BPN facebook url">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 16">
+                      <path d="M8.249.003 6.193 0C3.883 0 2.39 1.546 2.39 3.938v1.815H.323A.325.325 0 0 0 0 6.08v2.63c0 .18.145.326.323.326H2.39v6.638c0 .18.145.326.324.326H5.41a.325.325 0 0 0 .323-.326V9.036H8.15a.325.325 0 0 0 .323-.326l.001-2.63a.328.328 0 0 0-.095-.231.322.322 0 0 0-.228-.096H5.734V4.214c0-.74.175-1.115 1.13-1.115h1.384a.325.325 0 0 0 .323-.327V.33A.325.325 0 0 0 8.25.003Z" fill="#FFF" fill-rule="nonzero"/>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ig_link | strip}}" target="_blank" aria-label="BPN instagram url">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 16">
+                      <g fill="#FFF" fill-rule="nonzero"><path d="M16.34 4.704c-.037-.85-.175-1.435-.372-1.941a3.904 3.904 0 0 0-.925-1.419 3.939 3.939 0 0 0-1.416-.922c-.51-.197-1.091-.334-1.942-.372C10.83.01 10.557 0 8.385 0c-2.174 0-2.446.01-3.3.047-.85.037-1.434.175-1.94.372a3.905 3.905 0 0 0-1.42.925A3.94 3.94 0 0 0 .803 2.76C.606 3.27.469 3.85.431 4.7c-.04.857-.05 1.13-.05 3.302s.01 2.444.047 3.297c.037.85.175 1.435.372 1.941.203.538.519 1.02.925 1.42.4.405.885.721 1.416.921.51.197 1.091.335 1.942.372.853.038 1.125.047 3.298.047s2.445-.01 3.298-.047c.85-.037 1.435-.175 1.941-.372a4.093 4.093 0 0 0 2.342-2.34c.197-.51.335-1.092.372-1.942.038-.853.047-1.125.047-3.297 0-2.173-.003-2.445-.04-3.298Zm-1.44 6.533c-.035.781-.167 1.203-.276 1.484a2.654 2.654 0 0 1-1.52 1.52c-.28.109-.706.24-1.484.274-.844.038-1.098.047-3.233.047s-2.391-.01-3.232-.047c-.782-.034-1.204-.165-1.485-.275a2.463 2.463 0 0 1-.92-.597 2.487 2.487 0 0 1-.597-.919c-.109-.28-.24-.706-.275-1.484-.037-.844-.046-1.097-.046-3.232 0-2.135.009-2.391.046-3.232.035-.781.166-1.203.275-1.485.129-.347.332-.662.6-.919.26-.265.573-.469.92-.597.281-.109.706-.24 1.485-.275.844-.037 1.097-.047 3.232-.047 2.139 0 2.392.01 3.233.047.781.035 1.203.166 1.485.275.347.128.663.332.919.597.266.26.469.572.597.92.11.28.24.706.275 1.484.038.844.047 1.097.047 3.232 0 2.135-.01 2.385-.047 3.229Z"/><path d="M8.381 4a4.001 4.001 0 0 0 0 8 4 4 0 0 0 0-8Zm0 6.595a2.595 2.595 0 1 1 0-5.19 2.595 2.595 0 0 1 0 5.19ZM13.524 3.714a.857.857 0 1 1-1.715 0 .857.857 0 0 1 1.715 0Z"/></g>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{yt_link | strip}}" target="_blank" aria-label="BPN youtube url">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16">
+                      <path d="M23.148 2.504A2.863 2.863 0 0 0 21.134.489C19.344 0 12.19 0 12.19 0S5.036 0 3.247.47a2.921 2.921 0 0 0-2.014 2.034C.762 4.292.762 8 .762 8s0 3.727.47 5.496a2.864 2.864 0 0 0 2.015 2.015C5.055 16 12.19 16 12.19 16s7.155 0 8.944-.47a2.863 2.863 0 0 0 2.014-2.015c.471-1.788.471-5.496.471-5.496s.019-3.727-.471-5.515ZM9.912 11.426V4.574L15.862 8l-5.95 3.426Z" fill="#FFF" fill-rule="nonzero"/>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="{{tiktok_link | strip}}" target="_blank" aria-label="BPN tiktok url">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 19">
+                      <path fill="#fff" d="M16.63 7.792a7.797 7.797 0 0 1-4.556-1.457v6.634a6.033 6.033 0 1 1-5.205-5.98v3.337a2.77 2.77 0 1 0 1.938 2.643V0h3.267c-.003.276.02.551.069.823a4.535 4.535 0 0 0 2 2.978 4.507 4.507 0 0 0 2.488.747v3.244Z"/>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="siteFooter__linkBlocks siteFooter__linkBlocks--desktop">
+              {{ desktop_menu }}
+            </div>
+            <div class="siteFooter__linkBlocks siteFooter__linkBlocks--mobile">
+              <div class="siteAccordion siteAccordion--footer js-site-accordion-parent">
+                {{ mobile_menu }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endunless %}
+    <div class="siteFooter__bottom">
+      <div class="siteFooter__wrapper">
+        <div class="siteFooterBottomSection">
+          <div class="siteFooterBottomSection__left">
+            {% render 'icon' with 'site-logo', class: 'siteFooter__logo' %}
+          </div>
+          <div class="siteFooterBottomSection__right">
+            <p class="footerFDAtext">{{ fda_statement | strip }}</p>
+            <p class="footerCopyRight">
+              &copy; {{ 'now' | date: '%Y' }}
+              {{ shop.name | link_to: shop.url }}
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    {%- if background_texture != blank -%}
+      <img
+        class="siteFooter__texture lazyload"
+        data-src="{{ background_texture.url }}"
+        src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/u3zfwAJrQPhbkYXzAAAAABJRU5ErkJggg=="
+        alt=""
+        role="presentation"
+        width="300"
+        height="200"
+      >
+    {%- endif -%}
+    {% render 'theme-version' %}
+  </footer>
+{%- endif -%}

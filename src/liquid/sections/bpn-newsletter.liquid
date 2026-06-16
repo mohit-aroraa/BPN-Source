@@ -1,0 +1,151 @@
+{%- assign _section = section.settings -%}
+<section class='bpn-newsletter'>
+  <div class='bpn-newsletter__content'>
+    <div class='bpn-newsletter__content-info'>
+      {% if _section.mobile_title != blank %}
+        <h3
+          class='bpn-newsletter__title bpn-newsletter__title--mobile'
+          style='color: {{ _section.mobile_title_color }}'
+        >
+          {{ _section.mobile_title }}
+        </h3>
+      {% endif %}
+      {% if _section.title != blank %}
+        <h3
+          class='bpn-newsletter__title bpn-newsletter__title--desktop'
+          style='color: {{ _section.title_color }}'
+        >
+          {{ _section.title }}
+        </h3>
+      {% endif %}
+      {% if _section.text != blank %}
+        <p class='bpn-newsletter__text' style='color: {{ _section.text_color }}'>
+          {{ _section.text }}
+        </p>
+      {% endif %}
+    </div>
+    <div>
+      <form class='bpn-newsletter__form' id='bpn-newsletter-form'>
+        <div class='bpn-newsletter__message hidden'>
+          {% if _section.heading != blank %}
+            <h3 class='bpn-newsletter__message-heading' style='color: {{ _section.heading_color }}'>
+              {{ _section.heading }}
+            </h3>
+          {% endif %}
+          {% if _section.subheading != blank %}
+            <p
+              class='bpn-newsletter__message-subheading'
+              style='color: {{ _section.subheading_color }}'
+            >
+              {{ _section.subheading }}
+            </p>
+          {% endif %}
+        </div>
+        <input
+          class='bpn-newsletter__input'
+          type='tel'
+          placeholder='Mobile xxx.xxx.xxxx'
+          aria-label='Phone number'
+          required
+        >
+        <div class='bpn-newsletter__error hidden' role='alert'>error</div>
+        <input class='bpn-join-us__button' type='submit' value='TEXT ME' data-click-id='footer_sms'>
+      </form>
+      {% if _section.content != blank %}
+        <div class='bpn-newsletter__footer' style='color: {{ _section.content_color }}'>
+          {{ _section.content }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Join Us",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Desktop Title"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Desktop Title Color"
+    },
+    {
+      "type": "text",
+      "id": "mobile_title",
+      "label": "Mobile Title"
+    },
+    {
+      "type": "color",
+      "id": "mobile_title_color",
+      "label": "Mobile Title Color"
+    },
+    {
+      "type": "header",
+      "content": "Description Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Description Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Form Success Message"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Success Heading"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Success Heading Color"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Success Subheading"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Success Subheading Color"
+    },
+    {
+      "type": "header",
+      "content": "Footer Content"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Footer Text"
+    },
+    {
+      "type": "color",
+      "id": "content_color",
+      "label": "Footer Text Color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Join Us",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,63 @@
+/*================ Input Groups ================*/
+
+.input-group {
+  @include display-flexbox;
+  @include flex-wrap(wrap);
+  @include justify-content(center);
+
+  .form-vertical & {
+    margin-bottom: $gutter-site;
+  }
+}
+
+.input-group--nowrap {
+  flex-wrap: nowrap;
+}
+
+.input-group--error {
+  margin-bottom: ($section-spacing-small / 3);
+}
+
+.input-group__field,
+.input-group__field input,
+.input-group__btn .btn {
+  min-height: $input-group-height-small;
+
+  @include mq($medium-up) {
+    min-height: $input-group-height;
+  }
+}
+
+.input-group__field {
+  @include flex-basis(15rem);
+  flex-grow: 9999;
+  margin-bottom: 1rem;
+  border-radius: $border-radius 0 0 $border-radius;
+  text-align: left;
+
+  input {
+    width: 100%;
+  }
+
+  .form-vertical & {
+    margin: 0;
+  }
+}
+
+.input-group__field--connected {
+  margin-bottom: 0;
+
+  input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.input-group__btn {
+  flex-grow: 1;
+
+  .btn {
+    width: 100%;
+    border-radius: 0 $border-radius $border-radius 0;
+  }
+}

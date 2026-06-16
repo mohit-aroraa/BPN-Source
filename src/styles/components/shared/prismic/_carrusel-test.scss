@@ -1,0 +1,118 @@
+/**
+ * Carousel Mobile Component
+ * 
+ * A responsive horizontal scrolling carousel component optimized for mobile devices.
+ * Supports both collection items and custom items with configurable styling.
+ */
+
+// Component variables
+$carouselMobileBreakpoint: 768px !default;
+$carouselMobileTransition: var(--transition-duration, 0.3s) var(--transition-timing, ease) !default;
+$carouselMobileBorderRadius: var(--border-radius-sm, 8px) !default;
+$carouselMobileOutlineOffset: var(--spacing-xs, 4px) !default;
+
+// Base carousel container
+.carousel-mobile {
+  display: none;
+
+  @media screen and (max-width: $carouselMobileBreakpoint) {
+    display: none;
+  }
+
+  &__container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  &__track {
+    display: flex;
+    width: auto;
+    margin: 0;
+    padding-right: var(--spacing-md);
+    padding-left: var(--spacing-md);
+    overflow: hidden;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-padding: 0 var(--spacing-md);
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__slide {
+    position: relative;
+    display: flex;
+    flex: none;
+    width: auto;
+    scroll-snap-align: start;
+
+    &--last {
+      margin-right: 5px;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    text-align: center;
+  }
+
+  &__link {
+    display: block;
+    width: 100%;
+    border-radius: $carouselMobileBorderRadius;
+    color: inherit;
+    text-decoration: none;
+    outline-offset: $carouselMobileOutlineOffset;
+    transition: transform $carouselMobileTransition;
+  }
+
+  &__image-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  &__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__caption {
+    margin: 0;
+    font-family: "Blender Pro", sans-serif;
+    font-size: inherit;
+    line-height: 7px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+}

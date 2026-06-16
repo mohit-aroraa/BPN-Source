@@ -1,0 +1,43 @@
+<div class="og-shipping-wrapper">
+  {% if not order_processing %}
+    <button
+      class="og-shipping-card"
+      aria-current="{{ isActive }}"
+    >
+      <span class="visually-hidden">{{ 'shipment_address_indicator' | t }}</span>
+      <div class="og-shipping-address-container" data-address-id="{{ address.public_id }}">
+        <div class="og-shipping-name">
+          {{ address.first_name }}
+          {{ address.last_name }}
+        </div>
+        <div>{{ address.address }}</div>
+        <div>{{ address.address2 }}</div>
+        <div>
+          {{ address.city }}, {{ address.state_province_code }}
+          {{ address.zip_postal_code }}
+        </div>
+      </div>
+    </button>
+    {% include 'order-summary/change-shipping' %}
+  {% else %}
+    <div class="og-shipping-card">
+      <div>
+        <button
+          class="og-shipping-address"
+          aria-current="{{ isActive }}"
+        >
+          <span class="visually-hidden">{{ 'shipment_address_indicator' | t }}</span>
+          <div class="og-shipping-address-container" data-address-id="{{ address.public_id }}">
+            <div class="og-shipping-name">
+              {{ address.first_name }}
+              {{ address.last_name }}
+            </div>
+            <div>{{ address.address }}</div>
+            <div>{{ address.address2 }}</div>
+            <div>
+              {{ address.city }}, {{ address.state_province_code }}
+              {{ address.zip_postal_code }}
+            </div>
+          </div>
+  {% endif %}
+</div>

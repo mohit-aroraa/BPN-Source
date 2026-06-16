@@ -1,0 +1,114 @@
+.upsells-compact {
+  padding: 8px 8px 12px 8px;
+  background-color: #eee;
+  letter-spacing: normal;
+  width: 100%;
+  z-index: 1;
+  margin-top: auto;
+  &__title {
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 18px;
+    margin-bottom: 8px;
+  }
+  .swiper {
+    overflow-y: auto !important;
+    align-items: stretch;
+  }
+  .swiper-slide {
+    width: auto !important;
+    display: flex;
+    height: auto;
+  }
+
+  &__item {
+    background-color: white;
+    border-radius: 5px;
+    flex-shrink: 0;
+    max-width: 306px;
+    width: 100%;
+    padding: 6px;
+    scroll-snap-align: start;
+    gap: 12px;
+    display: flex;
+
+    &-image-wrapper {
+      flex-shrink: 0;
+    }
+    &-image {
+      width: 114px;
+      height: 114px;
+      border-radius: 5px;
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+    }
+
+    &-price {
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 18px;
+    }
+    &-title {
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 18px;
+    }
+    &-add {
+      font-size: 12px;
+      background-color: #000;
+      border: none;
+      color: #fff;
+      padding: 6px;
+      border-radius: 3px;
+      font-weight: 900;
+      line-height: 12px;
+      letter-spacing: -0.24px;
+      margin-top: auto;
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+  .bpn-product-content__option-name {
+    display: none;
+  }
+  .bpn-product-content__variant {
+    padding: 0;
+  }
+
+  .bpn-product-content__dropdown-selected {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    padding: 6px 8px;
+    min-height: auto;
+    svg {
+      height: 10px;
+      width: 10px;
+    }
+  }
+  .bpn-product-content__option {
+    margin: 4px 0;
+  }
+ .bpn-product-content__dropdown-option {
+    min-height: auto;
+    padding: 4px 7px;
+    font-size: 12px;
+    line-height: 14px;
+ }
+ .bpn-product-content__custom-dropdown {
+  position: static;
+ }
+ .bpn-product-content__dropdown-options {
+  max-height: 80px;
+  bottom: 0;
+  top: auto;
+}
+}

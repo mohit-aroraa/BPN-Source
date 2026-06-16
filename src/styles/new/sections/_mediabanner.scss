@@ -1,0 +1,294 @@
+// ==========================================================================
+// Media Banner Section
+// ==========================================================================
+//
+// Contains styles for the homepage hero banner section with video/image background
+// Uses design system tokens and follows BEM naming conventions
+// Supports responsive layouts, independent mobile/desktop alignment (horizontal
+// + vertical), configurable overlay colors, and native <video> elements
+
+// Main container
+.#{$prefix}homepage-hero {
+  position: relative;
+  margin: 0 auto;
+  max-width: 1920px;
+  z-index: 10;
+  min-height: var(--mobile-height);
+
+  @include above('desktop-med') {
+    min-height: var(--desktop-height);
+  }
+}
+
+// Title styles
+.#{$prefix}homepage-hero__title {
+  color: color('bpn-white');
+  text-transform: uppercase;
+  letter-spacing: -2.88px;
+  max-width: 374px;
+
+  @include below('desktop-med') {
+   @include use-text-style('bpn-h3');
+  }
+
+  @include above('desktop-med') {
+    @include use-text-style('bpn-h2');
+    letter-spacing: -4.32px;
+    max-width: 640px;
+  }
+}
+
+// Description text
+.#{$prefix}homepage-hero__text {
+  margin-top: 28px;
+  color: color('bpn-white');
+  max-width: 310px;
+
+  @include above('desktop-med') {
+    @include use-text-style('bpn-body-xlarge');
+    margin-top: 20px;
+    max-width: 520px;
+  }
+}
+
+// ==========================================================================
+// Content & Alignment
+// ==========================================================================
+
+// Content container — uses flexbox for vertical alignment
+.#{$prefix}homepage-hero__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: var(--mobile-height);
+  padding: 40px 16px;
+
+  @include above('desktop') {
+    padding: 63px;
+  }
+
+  @include above('desktop-med') {
+    min-height: var(--desktop-height);
+  }
+
+  // Mobile vertical alignment (default, overridden on desktop)
+  &.mobile-v-top {
+    justify-content: flex-start;
+  }
+
+  &.mobile-v-middle {
+    justify-content: center;
+  }
+
+  &.mobile-v-bottom {
+    justify-content: flex-end;
+  }
+
+  // Desktop vertical alignment
+  @include above('desktop-med') {
+    &.desktop-v-top {
+      justify-content: flex-start;
+    }
+
+    &.desktop-v-middle {
+      justify-content: center;
+    }
+
+    &.desktop-v-bottom {
+      justify-content: flex-end;
+    }
+  }
+}
+
+// Content wrapper — handles horizontal alignment and z-index layering
+.#{$prefix}homepage-hero__content-wrapper {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  @include above('desktop-med') {
+    flex: unset;
+  }
+
+  // Mobile horizontal alignment (default, overridden on desktop)
+  &.mobile-h-left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  &.mobile-h-center {
+    align-items: center;
+    text-align: center;
+  }
+
+  &.mobile-h-right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  // Desktop horizontal alignment
+  @include above('desktop-med') {
+    &.desktop-h-left {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    &.desktop-h-center {
+      align-items: center;
+      text-align: center;
+    }
+
+    &.desktop-h-right {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+}
+
+// ==========================================================================
+// Media Background (Video / Image)
+// ==========================================================================
+
+// Absolute-fill container behind content
+.#{$prefix}homepage-hero__video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+// Overlay — sits between media and content for readability
+// Uses color_background settings via CSS custom properties so the merchant
+// can configure solid colours or gradients independently per breakpoint
+.#{$prefix}homepage-hero__video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: var(--mobile-overlay, transparent);
+
+  @include above('desktop-med') {
+    background: var(--desktop-overlay, transparent);
+  }
+}
+
+// Desktop media wrapper — hidden on mobile, visible on desktop
+.#{$prefix}homepage-hero__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+
+  @include above('desktop-med') {
+    display: block;
+  }
+
+  // Mobile media wrapper — visible on mobile, hidden on desktop
+  &--mobile {
+    display: block;
+
+    @include above('desktop-med') {
+      display: none;
+    }
+  }
+}
+
+// Native <video> element sizing
+.#{$prefix}homepage-hero__video video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// Desktop image — hidden on mobile
+.#{$prefix}homepage-hero__img-desktop {
+  display: none;
+
+  @include above('desktop-med') {
+    display: block;
+  }
+}
+
+// Mobile image — hidden on desktop
+.#{$prefix}homepage-hero__img-mobile {
+  display: block;
+
+  @include above('desktop-med') {
+    display: none;
+  }
+}
+
+// ==========================================================================
+// CTA Buttons
+// ==========================================================================
+
+// Button container
+.#{$prefix}homepage-hero__controls {
+  display: flex;
+  width: 100%;
+  margin-top: auto;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 353px;
+
+  @include above('desktop-med') {
+    margin-top: 40px;
+    margin-left: 0.75px;
+    flex-direction: row;
+    gap: 16px;
+    max-width: 300px;
+  }
+}
+
+// Base CTA button
+.#{$prefix}homepage-hero__cta {
+  width: 100%;
+  padding: 17px 0;
+  border-radius: 5px;
+  text-align: center;
+}
+
+// Primary CTA
+.#{$prefix}homepage-hero__cta--primary {
+  border: 1px solid color('bpn-red');
+  background: color('bpn-red');
+  color: color('bpn-white');
+
+  &:hover {
+    background: color('bpn-red-100');
+    color: color('bpn-white');
+  }
+
+  &:focus {
+    border: 1px solid color('bpn-red-150');
+    color: color('bpn-white');
+  }
+}
+
+// Secondary CTA
+.#{$prefix}homepage-hero__cta--secondary {
+  border: 1px solid color('bpn-grey-20');
+  color: color('bpn-white');
+
+  &:hover {
+    background: color('bpn-white');
+    color: color('bpn-black-950');
+  }
+
+  &:focus {
+    border: 1px solid color('bpn-white');
+    color: color('bpn-white');
+  }
+}

@@ -1,0 +1,63 @@
+{% assign information_block_count = 0 %}
+
+{% for block in section.blocks %}
+    {% if block.type == 'information' %}
+        {% assign information_block_count = information_block_count | plus: 1 %}
+    {% endif %}
+{% endfor %}
+
+{% assign nutrition_facts_count = 0 %}
+
+{% for variant in product.variants %}
+    {% if variant.metafields.custom.nutrition_facts != blank %}
+        {% assign nutrition_facts_count = nutrition_facts_count | plus: 1 %}
+    {% endif %}
+{% endfor %}
+
+{% if information_block_count != 0 or nutrition_facts_count != 0 %}
+    <div class="information-accordion">
+        {% for variant in product.variants %}
+            {% if variant.metafields.custom.nutrition_facts != blank %}
+                <div class="information-accordion__item nutrition-facts nutrition-facts-{{ variant.id }} {% if selected_variation_id != variant.id %} hidden{% endif %}"
+                     data-click-id="pdp_buyblock_nutrition-facts">
+                    <h3 class="information-accordion__item-title" data-click-id="pdp_buyblock_nutrition-facts">
+                        {{ nutrition_facts_title }}
+
+                        {% render 'icon', icon: 'buttom-arrow', tag: 'pdp_buyblock_nutrition-facts' %}
+                    </h3>
+                    <div class="information-accordion__item-content">
+                        <img src="{{ variant.metafields.custom.nutrition_facts.value | img_url: 'master' }}"
+                             alt="{{ block.settings.title }}"
+                             loading="lazy"/>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for block in section.blocks %}
+            {% if block.type == 'information' %}
+                {% assign formatted_title = block.settings.title | downcase | replace: ' ', '_' %}
+                {% assign click_id = 'pdp_buyblock_' | append: formatted_title %}
+
+                <div class="information-accordion__item" data-click-id="{{ click_id }}">
+                    <h3 class="information-accordion__item-title" data-click-id="{{ click_id }}">
+                        {{ block.settings.title }}
+
+                        {% render 'icon', icon: 'buttom-arrow', tag: click_id %}
+                    </h3>
+                    <div class="information-accordion__item-content">
+                        {% if block.settings.text != blank %}
+                            <div class="information-accordion__item-text">
+                                {{ block.settings.text }}
+                            </div>
+                        {% endif %}
+                        {% if block.settings.image != blank %}
+                            <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.title }}"
+                                 loading="lazy"/>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

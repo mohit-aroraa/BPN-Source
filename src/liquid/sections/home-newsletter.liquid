@@ -1,0 +1,83 @@
+
+<div class="subscribe-section">
+	<div class="container">
+		<div class="subscribe-section-row">
+			<div class="subscribe-section-text">
+				<p>{{ section.settings.signup_text }}</p>
+			</div>
+			<div class="subscribe-section-form">
+				{% form 'customer' %}
+				<div class="form-group">  
+				  {% if form.posted_successfully? %}
+				  <p class="success">{{ 'password.general.thanks' | t }}</p>
+				  {% else %}
+				  <input type="hidden" name="contact[tags]" value="prospect, password page">
+				  <input type="email" class="form-control" name="contact[email]" id="mce-EMAIL" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" required>
+				  <input type="submit" class="btn" id="mc-embedded-subscribe" value="Join">
+				  {% endif %}
+				  {{ form.errors | default_errors }}
+					</div>
+				  {% endform %}
+				<ul>
+                  {% if settings.social_facebook_link != blank %}
+					<li>
+						<a href="{{ settings.social_facebook_link }}" target="_blank">
+							<img src="{{ 'facebook.svg' | asset_url }}" alt="facebook" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_instagram_link != blank %}
+					<li>
+						<a href="{{ settings.social_instagram_link }}" target="_blank">
+							<img src="{{ 'instagram.svg' | asset_url }}" alt="instagram" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_pinterest_link != blank %}
+					<li>
+						<a href="{{ settings.social_pinterest_link }}" target="_blank">
+							<img src="{{ 'pinterest.svg' | asset_url }}" alt="pinterest" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_twitter_link != blank %}
+					<li>
+						<a href="{{ settings.social_twitter_link }}" target="_blank">
+							<img src="{{ 'twitter.svg' | asset_url }}" alt="twitter" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_youtube_link != blank %}
+					<li>
+						<a href="{{ settings.social_youtube_link }}" target="_blank">
+							<img src="{{ 'youtube.svg' | asset_url }}" alt="youtube" />
+						</a>
+					</li>
+                  {% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% schema %}
+   {
+    "name": "Sign up for emails",
+    "settings": [
+	{
+      "type": "text",
+      "id": "signup_text",
+      "label": "Sign up text"
+      }
+	],
+   "presets": [{
+    "name": "Sign up for emails"
+    }]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

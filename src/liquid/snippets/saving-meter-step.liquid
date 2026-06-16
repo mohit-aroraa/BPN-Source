@@ -1,0 +1,24 @@
+{%- assign section = metafields[module] -%}
+{%- assign free_shipping_text = section.free_text -%}
+{%- assign cart_free_shipping_text = section.cart_free_shipping_text -%}
+{%- assign empty_cart_image = section.empty_cart_image -%}
+{%- assign enable_step_0 = section.enable_step_0 -%}
+{%- assign step_name_0 = section.step_name_0 -%}
+{%- assign threshold_amount_0 = section.threshold_amount_0 | times: 100 -%}
+{%- assign payment_title = section.payment_title -%}
+{%- assign payment_text = section.payment_text -%}
+{%- assign payment_icon = section.payment_icon -%}
+
+<script type="text/javascript">
+  window.SavingsMeter = {
+    enableStep: "{{ enable_step_0 }}",
+    emptyCartImage:{{ empty_cart_image | json }},
+    stepName: "{{ step_name_0 }}",
+    cartFreeShippingText: "{{ cart_free_shipping_text }}",
+    freeShippingValue: "{{ threshold_amount_0 }}",
+    freeShippingInfo:"{{ free_shipping_text }}",
+    paymentTitle: "{{ payment_title }}",
+    paymentText: "{{ payment_text }}",
+    paymentIcon: {{ payment_icon | json }}
+  };
+</script>

@@ -1,0 +1,95 @@
+{%- assign availability = selected_variation.metafields.custom.availability | default: 'default' -%}
+
+{%- assign external_link = selected_variation.metafields.custom.external_link.value.url | default: '' -%}
+{%- assign external_link_text = selected_variation.metafields.custom.external_link.value.text | default: '' -%}
+
+{%- assign show_notify = false -%}
+{% if selected_variation.available == false or availability == 'oos' %}
+  {% assign show_notify = true %}
+{% endif %}
+{% if availability == 'external' %}
+  {% assign show_notify = false %}
+{% endif %}
+
+{%- assign default_price_adjustment = nil -%}
+{% if default_subscription_plan != blank %}
+  {% assign default_price_adjustment = default_subscription_plan.selling_plans | first %}
+{% endif %}
+
+{%- assign tag_final_price = nil -%}
+{% if tag_discount %}
+  {% assign _tag_discount_adjusted = tag_discount | divided_by: 100.00 %}
+  {% assign tag_discounted_price = selected_variation.price | times: _tag_discount_adjusted %}
+  {% assign tag_final_price = selected_variation.price | minus: tag_discounted_price %}
+{% endif %}
+<div class="add-to-cart__control-wrapper">
+  <div class="add-to-cart__add-button-container">
+    <button
+      class="add-to-cart__add-button{% if selected_variation.available != true or availability != 'default' %} hidden{% endif %}"
+      {% if option and option.values and option.values.size > 0 %}
+        data-frequency="{{ option.values[0] }}"
+      {% endif %}
+      data-click-id="pdp_sticky-atc_cta"
+      {% if default_price_adjustment and selected_variation.selling_plan_allocations.size > 0 %}
+        data-selling_plan="{{ default_price_adjustment.id }}"
+      {% endif %}
+      data-variation_id="{{ selected_variation.id }}"
+      data-product_id="{{ product.id }}"
+      data-quantity="1"
+      aria-label="Add subscription to cart"
+    >
+    {% if default_to_otp %}
+
+      {% if tag_final_price %}
+        ADD TO CART - <span class='compare-price'>{%- render 'price-value', price: selected_variation.price -%}</span> {% render 'price-value', price: tag_final_price %}
+      {% else %}
+        ADD TO CART - {% render 'price-value', price: selected_variation.price %}
+      {% endif %}
+
+
+      {% elsif product.metafields.custom.enable_stack_and_save %}
+        ADD TO CART - {% render 'price-value', price: selected_variation.price %}
+
+
+      {% elsif default_subscription_plan != blank and selected_variation.selling_plan_allocations.size > 0 %}
+        {% if tag_discount != '' %}
+          {% assign final_price = tag_final_price %}
+        {% else %}
+          {% liquid
+            assign _price_adjustment = default_price_adjustment.price_adjustments | first
+            assign discount_percentage = _price_adjustment.value | divided_by: 100.00
+          %}
+          {% assign discounted_price = selected_variation.price | times: discount_percentage %}
+          {% assign final_price = selected_variation.price | minus: discounted_price %}
+        {% endif %}
+        ADD TO CART -
+          <span class='compare-price'>
+            {%- render 'price-value', price: selected_variation.price -%}
+          </span>
+        {% render 'price-value', price: final_price %}
+      {% else %}
+        {%- comment -%} One-time purchase path {%- endcomment -%}
+        {% if tag_final_price %}
+          ADD TO CART - <span class='compare-price'>{%- render 'price-value', price: selected_variation.price -%}</span> {% render 'price-value', price: tag_final_price %}
+        {% else %}
+          ADD TO CART - {% render 'price-value', price: selected_variation.price %}
+        {% endif %}
+      {% endif %}
+    </button>
+  </div>
+
+  <a href="{{ external_link }}" target="_blank" rel="noopener noreferrer"
+     class="buy-box__add-button external_link {% if availability != 'external' %} hidden{% endif %}"
+     {% if show_quantity_selector == true %}
+       style="min-width: unset; width: 100%"
+     {% endif %}
+  >
+    {{ external_link_text }}
+  </a>
+
+  <a id="BIS_trigger" href="#"
+     class="buy-box__bis-button {% unless show_notify %} hidden{% endunless %}"
+  >
+    Notify me via email
+  </a>
+</div>

@@ -1,0 +1,197 @@
+// Base Layer - Typography
+// Contains typography utility classes using tokens from typography.scss
+// These classes can be used to apply consistent typography styles across the site
+
+// ========================================
+// Heading Typography Utility Classes
+// ========================================
+
+// H1 Typography
+.#{$prefix}text-h1 {
+  @include use-text-style('bpn-h1');
+}
+
+.#{$prefix}text-h1-small {
+  @include use-text-style('bpn-h1-small');
+}
+
+// H2 Typography
+.#{$prefix}text-h2 {
+  @include use-text-style('bpn-h2');
+}
+
+.#{$prefix}text-h2-small {
+  @include use-text-style('bpn-h2-small');
+}
+
+// H3-H6 Typography
+.#{$prefix}text-h3 {
+  @include use-text-style('bpn-h3');
+}
+
+.#{$prefix}text-h4 {
+  @include use-text-style('bpn-h4');
+}
+
+.#{$prefix}text-h5 {
+  @include use-text-style('bpn-h5');
+}
+
+.#{$prefix}text-h6 {
+  @include use-text-style('bpn-h6');
+}
+
+// ========================================
+// Body Typography Utility Classes
+// ========================================
+
+.#{$prefix}text-body-xlarge {
+  @include use-text-style('bpn-body-xlarge');
+}
+
+.#{$prefix}text-body-large {
+  @include use-text-style('bpn-body-large');
+}
+
+.#{$prefix}text-body-base {
+  @include use-text-style('bpn-body-base');
+}
+
+.#{$prefix}text-body-sm {
+  @include use-text-style('bpn-body-sm');
+}
+
+.#{$prefix}text-body-xs {
+  @include use-text-style('bpn-body-xs');
+}
+
+.#{$prefix}text-body-xxs {
+  @include use-text-style('bpn-body-xxs');
+}
+
+// ========================================
+// Title Typography Utility Classes
+// ========================================
+
+.#{$prefix}text-title-1-large {
+  @include use-text-style('bpn-title-1-large');
+}
+
+.#{$prefix}text-title-1-small {
+  @include use-text-style('bpn-title-1-small');
+}
+
+.#{$prefix}text-title-2 {
+  @include use-text-style('bpn-title-2');
+}
+
+// ========================================
+// Callout Typography Utility Classes
+// ========================================
+
+.#{$prefix}text-callout-base {
+  @include use-text-style('bpn-callout-base');
+}
+
+.#{$prefix}text-callout-small {
+  @include use-text-style('bpn-callout-small');
+}
+
+.#{$prefix}text-callout-xs {
+  @include use-text-style('bpn-callout-xs');
+}
+
+// ========================================
+// Text Alignment Utility Classes
+// ========================================
+
+.#{$prefix}text-left {
+  text-align: left;
+}
+
+.#{$prefix}text-center {
+  text-align: center;
+}
+
+.#{$prefix}text-right {
+  text-align: right;
+}
+
+// ========================================
+// Text Transformation Utility Classes
+// ========================================
+
+.#{$prefix}text-uppercase {
+  text-transform: uppercase;
+}
+
+.#{$prefix}text-lowercase {
+  text-transform: lowercase;
+}
+
+.#{$prefix}text-capitalize {
+  text-transform: capitalize;
+}
+
+// ========================================
+// Text Weight Utility Classes
+// ========================================
+
+.#{$prefix}text-regular {
+  font-weight: 400;
+}
+
+.#{$prefix}text-medium {
+  font-weight: 500;
+}
+
+.#{$prefix}text-semibold {
+  font-weight: 600;
+}
+
+.#{$prefix}text-bold {
+  font-weight: 700;
+}
+
+.#{$prefix}text-black {
+  font-weight: 900;
+}
+
+// ========================================
+// Text Style Utility Classes
+// ========================================
+
+.#{$prefix}text-italic {
+  font-style: italic;
+}
+
+.#{$prefix}text-underline {
+  text-decoration: underline;
+}
+
+.#{$prefix}text-no-underline {
+  text-decoration: none;
+}
+
+// Screen-reader-only — hides visually, keeps in accessibility tree
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+html {
+  background-color: color("bpn-grey-20");
+}
+
+body {
+  max-width: 1920px;
+  margin: 0 auto;
+  background-color: color("bpn-white");
+}

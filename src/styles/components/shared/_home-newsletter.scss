@@ -1,0 +1,118 @@
+.subscribe-section {
+  padding: 43px 0 119px;
+  padding-top: 0;
+
+  p {
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.27;
+    letter-spacing: 0.57px;
+    color: color("black");
+  }
+
+  .form-group {
+    display: flex;
+
+    input {
+      width: 363px;
+      height: 56px;
+      background-color: #efefef;
+      border-right: 0;
+      border: none;
+    }
+
+    .btn {
+      max-width: 171px;
+      width: 100%;
+      height: 56px;
+      background-color: color("black");
+      font-weight: 700;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0.36px;
+      text-align: center;
+      color: color("white");
+    }
+  }
+
+  ul {
+    padding-left: 0;
+    display: flex;
+    list-style: none;
+    margin-top: 35px;
+
+    li {
+      margin-right: 24px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+.subscribe-section-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.subscribe-section-text {
+  flex: 0 0 40%;
+  padding-right: 1rem;
+}
+.subscribe-section-form {
+  flex: 0 0 60%;
+  padding-left: 1rem;
+}
+@include below("tablet-large") {
+  .subscribe-section-text {
+    flex: 0 0 100%;
+    padding-right: 0;
+  }
+  .subscribe-section-form {
+    flex: 0 0 100%;
+    padding-left: 0;
+  }
+  .subscribe-section {
+    form {
+      margin-top: 10px;
+    }
+  }
+
+  .subscribe-section {
+    padding: 43px 0 74px;
+
+    .container {
+      max-width: 33.75rem;
+    }
+  }
+}
+@include below("tablet") {
+  .subscribe-section {
+    text-align: center;
+    padding: 43px 25px 46px;
+    padding-top: 0;
+
+    p {
+      font-size: 17px;
+      line-height: 1.65;
+      letter-spacing: 0.44px;
+      margin-bottom: 27px;
+    }
+
+    .form-group {
+      display: block;
+
+      input {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        max-width: 100%;
+      }
+    }
+
+    ul {
+      justify-content: center;
+    }
+  }
+}

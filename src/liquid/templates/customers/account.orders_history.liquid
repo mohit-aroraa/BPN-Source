@@ -1,0 +1,129 @@
+<div class='account account-orders-history'>
+  {% render 'account-side-nav' %}
+
+  <div class='account__main-content'>
+    <div class='account__top-wrapper'>
+      <div class='account-breadcrumbs'>
+        <a href='/'>Home</a>/ <a href='/account'>Account</a>/
+        <a href='/account?view=orders_history'>Order History</a>
+      </div>
+
+      <section class='account__section'>
+        <h2 class='account-orders-history__heading'>{{ 'Order History' | upcase }}</h2>
+
+        {% if customer.orders.size == 0 %}
+          <div class='account-orders-history__no-order-info'>
+            <p class='order-summary__text'>You don't have any order yet.</p>
+
+            <p class='order-summary__text' style='max-width: unset'>
+              Take our short questionnaire to get your personalized routine – in less than 3
+              minutes.
+            </p>
+
+            <a class='btn primary-button' href='/pages/quiz'>Take the quiz</a>
+          </div>
+
+        {% else %}
+          {% for order in customer.orders %}
+            {% assign is_order_cancelled = false %}
+
+            {% if order.fulfillment_status == 'restocked' %}
+              {% assign is_order_cancelled = true %}
+            {% endif %}
+
+            <div class='order-summary' data-href='{{ order.customer_url }}'>
+              <div class='order-summary__information'>
+                <div class='order-summary__item'>
+                  <span class='order-summary__label'
+                    >Order ID<span class='mobile--only'>:</span></span
+                  >
+                  <span class='order-summary__value'>{{ order.name }}</span>
+
+                  <span
+                    class='order-summary__value mobile--only price'
+                    style='margin-left: auto'
+                  >
+                    {{- order.total_price | money_with_currency -}}
+                  </span>
+                </div>
+
+                <div class='order-summary__item'>
+                  <span class='order-summary__label'
+                    >Placed on<span class='mobile--only'>:</span></span
+                  >
+                  <span class='order-summary__value'>
+                    {{- order.created_at | date: '%d %B %Y' -}}
+                  </span>
+                </div>
+
+                <div class='order-summary__item'>
+                  <span class='order-summary__label'
+                    >Order status<span class='mobile--only'>:</span></span
+                  >
+                  <span class='order-summary__value'>
+                    {% if is_order_cancelled == false %}
+                      {{ order.fulfillment_status_label }}
+                    {% else %}
+                      Canceled
+                    {% endif %}
+                  </span>
+                </div>
+
+                <div class='order-summary__item desktop--only'>
+                  <span class='order-summary__label'>Total</span>
+                  <span class='order-summary__value'>
+                    {{- order.total_price | money | replace: ' ', '' -}}
+                  </span>
+                </div>
+              </div>
+
+              <div class='order-summary__container'>
+                <div data-order-images-swiper class='order-summary__images-container swiper'>
+                  <div class='swiper-wrapper'>
+                    {% for item in order.line_items %}
+                      <div class='order-summary__image swiper-slide'>
+                        <img src='{{ item.image | img_url: '96x96' }}' alt='{{ item.title }}'>
+                      </div>
+                    {% endfor %}
+                  </div>
+
+                  <div class='swiper-button swiper-button-prev hidden'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='22'
+                      height='22'
+                      viewBox='0 0 22 22'
+                      fill='none'
+                      style='pointer-events: none'
+                    >
+                      <rect x="0.5" y="0.5" width="21" height="21" rx="10.5" fill="white" stroke="#CCCCCC"/>
+                      <path d="M12.375 6.875L7.5625 11L12.375 15.125" stroke="#333333" stroke-width="1.5"
+                            stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class='swiper-button swiper-button-next hidden'>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='22'
+                      height='22'
+                      viewBox='0 0 22 22'
+                      fill='none'
+                      style='pointer-events: none'
+                    >
+                      <rect x="0.5" y="0.5" width="21" height="21" rx="10.5" fill="white" stroke="#CCCCCC"/>
+                      <path d="M9.625 15.125L14.4375 11L9.625 6.875" stroke="#333333" stroke-width="1.5"
+                            stroke-linecap="square" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class='order-summary__controls'>
+                  <a class='btn secondary-button' href='{{ order.customer_url }}'>view details</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </section>
+    </div>
+  </div>
+</div>

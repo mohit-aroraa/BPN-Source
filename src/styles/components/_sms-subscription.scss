@@ -1,0 +1,232 @@
+.sms-subscription {
+  padding: 9px 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2010;
+  top: 0;
+
+  &.sms-subscription-not-subscribed {
+    // position: sticky;
+  }
+
+  @include above('desktop') {
+    padding: 13px 0 15px;
+  }
+
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0;
+
+  .metafield-rich_text_field {
+    margin-bottom: 0 !important;
+  }
+
+  .sms-subscription__text {
+    pointer-events: none;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0;
+    display: block;
+
+    @include above('desktop') {
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    * {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  &__button {
+    //height: 18px;
+    padding: 0;
+    background: none;
+    border: none;
+    position: relative;
+    color: inherit;
+    font-weight: 500;
+
+    .metafield-rich_text_field {
+      display: block;
+      width: max-content !important;
+      margin-bottom: 0 !important;
+
+      * {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    .sms-subscription__text {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: inherit;
+
+      @include above('desktop') {
+        font-size: 16px;
+        line-height: 16px;
+        margin-top: 2px;
+      }
+    }
+
+    &::after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      content: ' ';
+      width: 100%;
+      height: 1px;
+      background: var(--text-color);
+    }
+  }
+}
+
+.sms-subscription-modal-wrapper {
+  z-index: 10000001;
+  background: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.sms-subscription-modal {
+  border-radius: 6px;
+  display: block;
+  position: relative;
+  top: 150px;
+  margin: 0 auto;
+  max-width: 343px;
+  padding: 40px 16px 36px;
+  background: var(--background-color);
+  color: var(--text-color);
+
+  @include above('desktop') {
+    width: 448px;
+    max-width: 448px;
+    padding: 50px 46px 40px;
+  }
+
+  &.hidden {
+    display: none !important;
+  }
+
+  &__close-button {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__title {
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 40px; /* 100% */
+    letter-spacing: -1.2px;
+    text-align: center;
+
+    * {
+      font-size: 40px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 40px; /* 100% */
+      letter-spacing: -1.2px;
+      text-align: center;
+    }
+  }
+
+  &__text {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: normal;
+
+    strong {
+      font-weight: 900;
+    }
+
+    * {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--text-color);
+      letter-spacing: 0;
+
+      strong {
+        font-weight: 900;
+      }
+    }
+  }
+
+  &__sub-text {
+    margin: 28px auto 0;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: normal;
+    text-align: center;
+    max-width: 230px;
+
+    strong {
+      font-weight: 900;
+    }
+
+    @include above('desktop') {
+      margin-top: 40px;
+    }
+
+    a {
+      position: relative;
+
+      &::after {
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        content: ' ';
+        width: 100%;
+        height: 1px;
+        background: var(--text-color);
+      }
+    }
+
+    * {
+      text-align: center;
+      color: var(--text-color);
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 16px;
+      letter-spacing: 0;
+
+      strong {
+        font-weight: 900;
+      }
+    }
+  }
+}
+
+body:has(.cart.visible):has(.sms-subscription-modal-wrapper:not(.hidden)) #cart-backdrop.visible {
+  visibility: hidden;
+}

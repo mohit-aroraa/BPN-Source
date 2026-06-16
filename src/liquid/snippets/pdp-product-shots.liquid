@@ -1,0 +1,65 @@
+
+{% comment %}
+{% if product.metafields.custom_fields["product_shots"] != blank %}
+<div class="product-alt">
+	<div class="container-fluid">
+      {% assign separator = "|###|" %}
+      {% assign product_shot_image_array = product.metafields.custom_fields["product_shot_image"] | split: separator %}
+      {% assign product_shot_content_array = product.metafields.custom_fields["product_shot_content"] | split: separator %}
+      {% assign fc_keys = product.metafields.custom_fields["product_shots"] | split: "," %}
+      {% for i in fc_keys %}
+        {% assign index = i | plus: 0 %}
+        {% assign even_or_odd = index | modulo:2 %}      
+      <div class="row align-items-center {% if even_or_odd == 0 %} flex-mobile {% endif %}">
+        <div class="col-md-5">
+          <div class="product-left">
+          	{{ product_shot_content_array[index] }}
+          </div>
+        </div>
+        <div class="col-md-7 {% if even_or_odd == 0 %} pr-md-0 pr-2 {% else %} pl-md-0 pl-2 {% endif %}">
+        	<div class="product-media">             
+          		<img src="{{ product_shot_image_array[index] }}"/>
+        	</div>
+          </div>
+      </div>
+      {% endfor %}
+  	</div>
+</div>
+{% endif %}
+{% endcomment %}
+
+
+
+{% comment %}
+<div class="product-alt">
+	<div class="container-fluid">
+      <div class="row align-items-center flex-mobile">
+        <div class="col-md-5">
+          <div class="product-left">
+          <h2>Benefit</h2>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+        	</div>
+        </div>
+        <div class="col-md-7 pr-md-0 pr-2">
+        	<div class="product-media">
+          		<img src="https://cdn.shopify.com/s/files/1/1103/4864/files/2_cf329736-6041-494b-9303-ad9281e4d7d8.png?v=1592232647"/>
+        	</div>
+          </div>
+      </div>
+<!--       2nd row -->
+      <div class="row align-items-center">
+        <div class="col-md-5">
+          <div class="product-right">
+          <h2>Benefit</h2>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+          </div>
+        </div>
+        <div class="col-md-7 pl-md-0 pl-2">
+           <div class="product-media">
+          		<img src="https://cdn.shopify.com/s/files/1/1103/4864/files/2_cf329736-6041-494b-9303-ad9281e4d7d8.png?v=1592232647"/>
+         	</div>
+          </div>
+      </div>
+  	</div>
+</div>
+{% endcomment %}

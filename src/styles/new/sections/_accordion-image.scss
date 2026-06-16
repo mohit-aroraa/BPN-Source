@@ -1,0 +1,196 @@
+// =============================================================================
+// Accordion + Image
+// =============================================================================
+
+$aiBp: 991px;
+$aiGap: 48px;
+
+.acc-img {
+  display: flex;
+  align-items: stretch;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--ai-pt, 56px) 48px var(--ai-pb, 56px) 48px;
+  gap: $aiGap;
+
+  @media (max-width: #{$aiBp - 1px}) {
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 32px;
+  }
+}
+
+// ── Accordion column ──────────────────────────────────────────────────────────
+
+.acc-img__accordion {
+  flex: 1;
+  min-width: 0;
+}
+
+.acc-img--none .acc-img__accordion {
+  max-width: 780px;
+  margin: 0 auto;
+  position: static;
+}
+
+.acc-img__heading {
+  font-family: 'Blender Pro', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #2d2a26;
+  margin: 0 0 24px;
+}
+
+// ── Accordion items ───────────────────────────────────────────────────────────
+
+.acc-img__item {
+  border-top: 1px solid #e0e0e0;
+
+  &:last-child {
+    border-bottom: 1px solid #e0e0e0;
+  }
+}
+
+.acc-img__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  text-align: left;
+  transition: color 0.15s;
+
+  @media (max-width: #{$aiBp - 1px}) {
+    font-size: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  &:hover { color: #000; }
+}
+
+.acc-img__item-title {
+  flex: 1;
+  color: #000;
+}
+
+.acc-img__chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: #2d2a26;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Collapsed: chevron points down (v)
+  // Open: chevron rotates -90deg to point right (>)
+  .acc-img__item.is-open & {
+    transform: rotate(-90deg);
+  }
+}
+
+// ── Accordion body (CSS grid for smooth height animation) ─────────────────────
+
+.acc-img__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .acc-img__item.is-open & {
+    grid-template-rows: 1fr;
+  }
+}
+
+.acc-img__body-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.acc-img__richtext {
+  padding: 4px 0 20px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+
+  @media (max-width: #{$aiBp - 1px}) {
+    font-size: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  p { margin: 0 0 12px; }
+
+  p:last-child { margin-bottom: 0; }
+
+  a {
+    color: #2d2a26;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+// ── Image column ──────────────────────────────────────────────────────────────
+
+.acc-img__media {
+  flex: 1;
+  min-width: 0;
+  min-height: 400px;
+  border-radius: 4px;
+  overflow: hidden;
+  align-self: flex-start;
+  position: sticky;
+  top: 80px;
+  margin: auto;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: #{$aiBp - 1px}) {
+    flex: none;
+    height: 380px;
+    border-radius: 4px;
+    position: static;
+  }
+}
+
+// ── Desktop / mobile image position ──────────────────────────────────────────
+
+@media (min-width: $aiBp) {
+  .acc-img--right .acc-img__media { order: 2; }
+
+  .acc-img--none  .acc-img__media { display: none; }
+}
+
+@media (max-width: #{$aiBp - 1px}) {
+  .acc-img--mob-top .acc-img__media    { order: -1; height: auto; }
+
+  .acc-img--mob-bottom .acc-img__media { order: 1; height: auto; }
+
+  .acc-img--mob-hidden .acc-img__media { display: none; }
+}
+
+// ── Accessibility ─────────────────────────────────────────────────────────────
+
+.acc-img__trigger:focus-visible {
+  outline: 3px solid currentcolor;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acc-img__body,
+  .acc-img__chevron {
+    transition: none !important;
+  }
+}

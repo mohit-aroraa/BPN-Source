@@ -1,0 +1,96 @@
+<script type="text/javascript">
+function closeAppBanner(){
+ if(typeof document.getElementById("sg-smartbanner") !== null){
+  var sgSmartBanner = document.getElementById("sg-smartbanner");
+  sgSmartBanner.parentNode.removeChild(sgSmartBanner);
+  document.cookie = "removeSGsmartBanners=true;path=/";
+  }
+}
+ 
+var sgSmartBannerisMobile = {
+  Windows: function() {
+      return /IEMobile/i.test(navigator.userAgent);
+  },
+  Android: function() {
+      return /Android/i.test(navigator.userAgent);
+  },
+  BlackBerry: function() {
+      return /BlackBerry/i.test(navigator.userAgent);
+  },
+  iOS: function() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  },
+  any: function() {
+      return (sgSmartBannerisMobile.Android() || sgSmartBannerisMobile.BlackBerry() || sgSmartBannerisMobile.iOS() || isMobile.Windows());
+  }
+};
+ 
+function checkAddSmartBannerSGRightPage(){
+ var rightPageSG = false;
+ if(typeof document.getElementsByTagName("body")[0] !== "undefined"){
+  var currentPageType = document.getElementsByTagName("body")[0].getAttribute('class');
+  if(currentPageType == "home" || currentPageType == "product-page"){
+      rightPageSG = true;
+  }
+ }
+ if(typeof document.getElementById("ProductList") === "object"){
+  rightPageSG = true;
+ }
+ return rightPageSG;
+}
+ 
+function checkAddSmartBannerSG(){
+  if(document.cookie.indexOf("removeSGsmartBanners=true") < 0 && checkAddSmartBannerSGRightPage()){
+    if(sgSmartBannerisMobile.Android() || sgSmartBannerisMobile.iOS()){
+    /***** Replace the values in the following lines *****/
+      var iosAppLink = 'https://apps.apple.com/us/app/bare-performance-nutrition/id1478543231?ls=1';
+      var appIconImg = 'https://shopgate-public.s3.amazonaws.com/shops/25551/a.png';
+      var androidAppLink = 'https://play.google.com/store/apps/details?id=com.bareperformancenutrition.app';
+      var appName = 'Bare Performance Nutrition';
+      var appDescription = 'The Trusted Source For Performance Supplements';
+      var bannerBackgroundColor = "#f7f6f6";
+      var bannerTextColor = "#000";
+    /**** Replace the values in the lines above *****/
+      var linkToUse = '';
+      if(sgSmartBannerisMobile.Android()){
+        //console.log("using android link");
+        linkToUse = androidAppLink;
+      }
+      else{
+        //console.log("using ios link");
+        linkToUse = iosAppLink;
+      }
+      if(document.getElementById('sg-smartbanner') == null){
+        var sgSmartBanner = document.createElement('div');
+        sgSmartBanner.setAttribute("id","sg-smartbanner");
+        // Parent container styles
+        sgSmartBanner.style.cssText = 'z-index: 99999!important; display: table-cell; max-width:100%; width:450px; height:80px;margin:0px auto !important;overflow:hidden;padding:10px 0px !important; font-family: "SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif; background-color: '+bannerBackgroundColor+'; color:'+bannerTextColor+';';
+        // Left container (x button to close banner)
+        var sgSmartBannerContentStng = '<div style="display:inline-block; float:left; margin-left:1%; text-align:center; width:7%; height:50px; padding:7% 0; color:#777; font-size:14px;" onclick="closeAppBanner();">&#x2715;</div>';
+        // 2nd to left container (App icon)
+        sgSmartBannerContentStng += '<div style="width:18%; display:inline-block; margin-right: 1%; float:left; border:.5px solid #e4e0e0; border-radius:15px; overflow:overlay; background-color:white;"><img style="height:100%; width: 100%;" src="'+appIconImg+'" /></div>';
+        // 2nd to right container (App name and text)
+        sgSmartBannerContentStng += '<div style="display:inline-block; float:left; width:58%; line-height:17px; font-size:15px; margin-top: 2%; padding-left: 1%;"><span>'+appName+'</span><br /><span style="color: #8e8e93; font-size: 12px;">'+appDescription+'</span><br /><span style="font-size: 12px">Get — On the App Store</span></div>';
+        // Far right container (View app in app store)
+        sgSmartBannerContentStng += '<div style="width:10%; display:inline-block; float:left; text-align:center; height:50px; padding:7% 0 0 2%;"><a style="color:#3288ff; font-size:18px;" target="_blank" href="'+linkToUse+'">View</a></div>';
+        sgSmartBanner.innerHTML = sgSmartBannerContentStng;
+       
+      /***** Insertion point. Adjust the selector in the 2 lines below (the selector depends on the layout of desktop site) *****/
+        if(document.getElementsByClassName('header-section')[0] !== null){
+            var sgInsertPoint= document.getElementsByClassName('header-section')[0];
+            // Comment out the line below to toggle the smart banner on or off
+            sgInsertPoint.parentNode.insertBefore(sgSmartBanner, sgInsertPoint);
+        }
+      } 
+    }
+  }
+}
+// checkAddSmartBannerSG(); // For testing only, should be left disabled. The function below will load the script on page load.
+ 
+window.addEventListener("DOMContentLoaded",function(){
+  setTimeout(function(){
+  // console.log("firing smart banner function");
+ // checkAddSmartBannerSG();
+        }, 500);
+});
+</script>

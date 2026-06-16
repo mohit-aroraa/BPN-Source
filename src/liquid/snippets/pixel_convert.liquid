@@ -1,0 +1,77 @@
+<script>
+  purchase_goalid = '10046444';
+  addToCart_goalid = '10047025';
+
+  function postTransaction(convert_attributes_str) {
+    var convert_attributes = JSON.parse(convert_attributes_str);
+
+    if (convert_attributes) {
+
+      //build POST data to be sent
+      const post = {
+        'cid': convert_attributes.cid,
+        'pid': convert_attributes.pid,
+        'seg': convert_attributes.defaultSegments,
+        's': 'shopify',
+        'vid': convert_attributes.vid,
+        'ev': [{
+          'evt': 'tr',
+          'goals': [purchase_goalid],
+          'exps': convert_attributes.exps,
+          'vars': convert_attributes.vars,
+          'r': parseFloat(purchase_event.data.checkout.totalPrice.amount),
+          'prc': purchase_event.data.checkout.lineItems.length
+        },
+          {
+            'evt': 'hitGoal',
+            'goals': [purchase_goalid],
+            'exps': convert_attributes.exps,
+            'vars': convert_attributes.vars
+          }
+        ]
+      }
+      const data = JSON.stringify(post);
+      console.log('Data:' + data);
+      browser.sendBeacon(`https://${convert_attributes.pid}.metrics.convertexperiments.com/track`, data);
+    }
+  }
+
+  function postConversion(convert_attributes_str, goalid) {
+    console.log('Convert: Triggering Add to Cart Shopify Customer Event with goal id:' + goalid)
+    var convert_attributes = JSON.parse(convert_attributes_str);
+
+    if (convert_attributes) {
+
+      //build POST data to be sent
+      const post = {
+        'cid': convert_attributes.cid,
+        'pid': convert_attributes.pid,
+        'seg': convert_attributes.defaultSegments,
+        's': 'shopify',
+        'vid': convert_attributes.vid,
+        'ev': [{
+          'evt': 'hitGoal',
+          'goals': [goalid],
+          'exps': convert_attributes.exps,
+          'vars': convert_attributes.vars
+        }]
+      }
+      const data = JSON.stringify(post);
+      console.log('Data:' + data);
+      browser.sendBeacon(`https://${convert_attributes.pid}.metrics.convertexperiments.com/track`, data);
+    }
+  }
+
+  analytics.subscribe("checkout_completed", async (event) => {
+    purchase_event = event;
+    browser.localStorage.getItem('convert_attributes').then(postTransaction, console.log('Convert localStorage retrieval failed.'));
+  });
+
+  analytics.subscribe("product_added_to_cart", async (event) => {
+    browser.localStorage.getItem('convert_attributes')
+      .then((result) => postConversion(result, addToCart_goalid))
+      .catch((error) => {
+        console.log('Convert localStorage retrieval failed.')
+      });
+  });
+</script>

@@ -1,0 +1,80 @@
+
+<div class="our-story">
+  {% for block in section.blocks %}
+    {% if block.type == 'video' %}
+        {% include 'about-video' %}
+    {% elsif block.type == 'our_story' %}
+        {% include 'about-our-story' %}
+    {% elsif block.type == 'founder_section' %}
+      {% include 'about-founder-section' %}
+    {% endif %}
+  {% endfor %}
+</div>
+{% schema %}
+  {
+    "name": "Content",
+    "settings": [],
+    "blocks": [
+      {
+        "type": "video",
+        "name": "Video Section",
+        "settings": [
+          {
+            "id": "background_text",
+            "type": "text",
+            "label": "background Text"
+          },
+		  {
+            "id": "video_url",
+            "type": "text",
+            "label": "text"
+          }
+        ]
+      },
+ 	{
+        "type": "our_story",
+        "name": "Our Story",
+        "settings": [
+                    {
+            "id": "title1",
+            "type": "text",
+            "label": "Title"
+          },
+		  {
+            "id": "description",
+            "type": "richtext",
+            "label": "Description"
+          },
+		  {
+            "id": "image",
+            "type": "image_picker",
+            "label": "Image"
+          }
+        ]
+      },
+	{
+        "type": "founder_section",
+        "name": "Founder Section",
+        "settings": [
+			{
+            "id": "title2",
+            "type": "text",
+            "label": "Title"
+          },
+		  {
+            "id": "description2",
+            "type": "richtext",
+            "label": "Description"
+          }
+        ]
+      }
+    ]
+  
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,15 @@
+@function return-value-only($target) {
+  @return $target;
+}
+// scss doesn't like min() and max(), so use these mixins to fix
+@function css-function($function, $values...) {
+  @return $function + unquote("(") + $values + unquote(")");
+}
+
+@function css-min($values...) {
+  @return css-function(min, $values);
+}
+
+@function css-max($values...) {
+  @return css-function(max, $values);
+}

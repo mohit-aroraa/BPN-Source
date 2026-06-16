@@ -1,0 +1,220 @@
+<nav class="desktopNav" role="navigation" aria-label="Header primary navigation">
+  <ul class="nav__menu">
+    {% for block in section.blocks %}
+      {% if block.type == "mega_menu" %}
+
+        {%- liquid
+          assign nav_suffix = block.settings.menu_nav_text | downcase | replace: ' ', '_'
+          assign nav_suffix = nav_suffix | replace: 'supplements', 'supps' | default: "" 
+          assign link_count = linklists[block.settings.navigation].links.size
+        -%}
+        <li class="nav__menu-item js-mega-menu" data-sl="{{ block.settings.menu_nav_text  | downcase | replace: ' ', '_'}}">
+          <a
+            href="{{ block.settings.menu_nav_texturl }}"
+            class="nav__menu-link link--bold"
+            data-click-id="nav_top-{{- nav_suffix -}}">
+            {{ block.settings.menu_nav_text }}
+          </a>
+          <div class="header-dropdown">
+            <div class="header-container">
+              <div class="header-dropdown__menu{%if link_count > 1 %} full-view{% endif %}">
+                <ul class="header-dropdown__menu-header">
+                  {%- for link in linklists[block.settings.navigation].links -%}
+                    {%- if link_count == 1 and link.links != blank -%}
+                      <li class="header-dropdown__menu-item">
+                        <ul class="header-dropdown__subMenu-header">
+                          {%- for child_link in link.links -%}
+                            {%-liquid
+                              assign subnav_suffix = nav_suffix | append: '_' | append: child_link.title | downcase | replace: ' ', '_' | replace: '.', ''
+                              assign subnav_suffix = subnav_suffix | replace: '-protein', '' 
+                            -%}
+                            <li class="header-dropdown__subMenu-item">
+                              <a
+                                href="{{ child_link.url }}"
+
+                                class="header-dropdown__subMenu-title"
+                                data-sl="{{ child_link.title | downcase | replace: ' ', '_' }}"
+                                data-click-id="nav_{{- subnav_suffix -}}"
+                              >
+                                {{- child_link.title -}}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+
+                    {%- elsif link_count > 1 -%}
+                      <li class="header-dropdown__menu-item">
+                        <div class="header-dropdown__menu-title">
+                          <a onclick="return undefined">
+                            {{- link.title -}}
+                          </a>
+                        </div>
+                        <ul class="header-dropdown__subMenu-header">
+                          {%- for child_link in link.links -%}
+                            {%-liquid
+                              assign subnav_suffix = nav_suffix | append: '_' | append: child_link.title | downcase | replace: ' ', '_' | replace: '.', ''
+                              assign subnav_suffix = subnav_suffix | replace: '-protein', '' 
+                            -%}
+                            <li class="header-dropdown__subMenu-item">
+                              <a
+                                href="{{ child_link.url }}"
+
+                                class="header-dropdown__subMenu-title"
+                                data-sl="{{ child_link.title | downcase | replace: ' ', '_' }}"
+                                data-click-id="nav_{{- subnav_suffix -}}"
+                              >
+                                {{- child_link.title -}}
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </li>
+                    {%- endif -%}
+                  {% endfor %}
+                </ul>
+
+                <ul class="header-dropdown__subMenu-header">
+                  {%- for link in linklists[block.settings.navigation].links -%}
+                    {%- liquid 
+                      assign subnav_suffix = nav_suffix | append: child_link.title | downcase | replace: ' ', '-' | replace: '.', ''
+                      assign subnav_suffix = subnav_suffix | replace: '-protein', '' 
+                    -%}
+
+                    {%- unless link.levels == 1 or link.levels > 1 -%}
+                      <li class="header-dropdown__subMenu-item">
+                        <a
+                          href="{{link.url}}"
+                          class="header-dropdown__subMenu-title"
+
+                          data-sl="{{ link.title | downcase | replace: ' ', '_' }}"
+                          data-click-id="nav_{{- subnav_suffix -}}"
+                        >
+                          {{ link.title }}
+                        </a>
+                      </li>
+                    {%- endunless -%}
+                  {% endfor %}
+                </ul>
+                {% if block.settings.btn_text != blank and block.settings.btn_url != blank %}
+                  {% assign cta_click_id = block.settings.btn_text | downcase | replace: ' ', '-' %}
+                  <p class="header-dropdown__menu-link-container">
+                    <a href="{{ block.settings.btn_url }}" data-click-id="nav_{{- cta_click_id | replace: '_supplements', '_supps' | replace: '-content', '' | replace: '-supplements', '' -}}">
+                      {{ block.settings.btn_text }}
+                    </a>
+                  </p>
+                {% endif %}
+              </div>
+              <div class="header-dropdown__activity-container {% unless block.settings.activity_image_first != blank and block.settings.activity_image_second != blank and block.settings.activity_image_third != blank%} full-view {% endunless %}">
+                {%- liquid
+                  if nav_suffix == 'supps'
+                    assign activity_click_id_one = 'nav_' | append: nav_suffix | append: '-promo-1'
+                    assign activity_click_id_two = 'nav_' | append: nav_suffix | append: '-promo-2'
+                    assign activity_click_id_three = 'nav_' | append: nav_suffix | append: '-promo-3'
+                  else 
+                    assign activity_click_id_one = 'nav_' | append: nav_suffix | append: '-thumbnail-1'
+                    assign activity_click_id_two = 'nav_' | append: nav_suffix | append: '-thumbnail-2'
+                    assign activity_click_id_three = 'nav_' | append: nav_suffix | append: '-thumbnail-3'
+                  endif 
+                -%}
+                
+                {% if block.settings.activity_image_first != blank %}
+                  <div
+                    class="header-dropdown__activity-area"
+                    data-href="{{ block.settings.activity_cta_url_first }}"
+                    data-click-id="{{- activity_click_id_one -}}">
+                    <img
+                      class="header-dropdown__activity-img lazyload"
+                      data-src="{{ block.settings.activity_image_first | img_url: '500x' }}"
+                      alt="{{ block.settings.activity_image_first.alt }}"
+                      data-click-id="{{- activity_click_id_one -}}"
+                      width="500"
+                      height="500"
+                    />
+                    <div class="header-dropdown__activity-content" data-click-id="{{- activity_click_id_one -}}">
+                      <p class="header-dropdown__activity-title" data-click-id="{{- activity_click_id_one -}}">
+                        {{ block.settings.activity_text_first }}
+                      </p>
+                      <a
+                        href="{{ block.settings.activity_cta_url_first }}"
+                        data-sl="{{ block.settings.activity_cta_text_first | downcase | replace: ' ', '_' }}"
+                        class="button button-small button-primary}"
+                        data-click-id="{{- activity_click_id_one -}}">
+                        {{- block.settings.activity_cta_text_first -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.activity_image_second != blank %}
+                  <div
+                    class="header-dropdown__activity-area"
+                    data-href="{{ block.settings.activity_cta_url_second }}"
+                    data-click-id="{{- activity_click_id_two -}}">
+                    <img
+                      class="header-dropdown__activity-img lazyload"
+                      data-src="{{ block.settings.activity_image_second | img_url: '500x' }}"
+                      alt="{{ block.settings.activity_image_second.alt }}"
+                      data-click-id="{{- activity_click_id_two -}}"
+                      width="500"
+                      height="500"
+                    />
+                    <div class="header-dropdown__activity-content" data-click-id="{{- activity_click_id_two -}}">
+                      <p class="header-dropdown__activity-title" data-click-id="{{- activity_click_id_two -}}">
+                        {{ block.settings.activity_text_second }}
+                      </p>
+                      <a
+                        href="{{ block.settings.activity_cta_url_second }}"
+                        data-sl="{{ block.settings.activity_cta_text_second | downcase | replace: ' ', '_' }}"
+                        class="button button-small button-primary}"
+                        data-click-id="{{- activity_click_id_two -}}">
+                        {{- block.settings.activity_cta_text_second -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.activity_image_third != blank %}
+                  <div
+                    class="header-dropdown__activity-area"
+                    data-href="{{ block.settings.activity_cta_url_third }}"
+                    data-click-id="{{- activity_click_id_three -}}">
+                    <img
+                      class="header-dropdown__activity-img lazyload"
+                      data-src="{{ block.settings.activity_image_third | img_url: '500x' }}"
+                      alt="{{ block.settings.activity_image_third.alt }}"
+                      data-click-id="{{- activity_click_id_three -}}"
+                      width="500"
+                      height="500"
+                    />
+                    <div class="header-dropdown__activity-content" data-click-id="{{- activity_click_id_three -}}">
+                      <p class="header-dropdown__activity-title" data-click-id="{{- activity_click_id_three -}}">
+                        {{ block.settings.activity_text_third }}
+                      </p>
+                      <a
+                        href="{{ block.settings.activity_cta_url_third }}"
+                        data-sl="{{ block.settings.activity_cta_text_third | downcase | replace: ' ', '_' }}"
+                        class="button button-small button-primary}"
+                        data-click-id="{{- activity_click_id_three -}}"
+                      >
+                        {{- block.settings.activity_cta_text_third -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </li>
+      {% elsif block.type == "single_link" %}
+        {% assign click_id_suffix = block.settings.nav_link | downcase | replace: ' ', '-' %}
+        <li class="nav__menu-item" data-sl="{{ block.settings.nav_link  | downcase | replace: ' ', '_'}}">
+          <a
+            href="{{ block.settings.nav_link_url }}"
+            class="nav__menu-link link--bold"
+            data-click-id="nav_top-{{- click_id_suffix -}}">
+            {{ block.settings.nav_link }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>

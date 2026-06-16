@@ -1,0 +1,274 @@
+// Variables
+$cross-sell-bg: #F7F7F7;
+$primary-font: 'Blender Pro';
+$primary-color: #353535;
+$text-color: #666;
+$border-color: #ccc;
+$white: #fff;
+$black: #000;
+$button-hover: #333;
+$button-disabled: #ccc;
+
+// Breakpoints
+$desktop-large: 990px;
+$tablet: 768px;
+$mobile-large: 425px;
+
+// Mixins
+@mixin font-blender($weight: 400, $size: 16px, $line-height: normal) {
+  font-family: $primary-font;
+  font-weight: $weight;
+  font-size: $size;
+  line-height: $line-height;
+}
+
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+
+// Main cross-sell section
+.cross-sell-section {
+  margin: 2rem 0;
+  padding: 16px;
+  background-color: $cross-sell-bg;
+
+  // Title styling
+  .cross-sell-title {
+    @include font-blender(900, 18px, 150%);
+    text-transform: uppercase;
+    letter-spacing: 0;
+  }
+
+  // Products container
+  .cross-sell-products {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 12px;
+  }
+
+  // Individual product item
+  .cross-sell-item {
+    @include flex-center;
+    align-items: stretch;
+    gap: 16px;
+    @include transition();
+  }
+
+  // Product image section
+  .product-image {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      @include transition();
+    }
+  }
+
+  // Product information section
+  .product-info {
+    flex: 1;
+    position: relative;
+    min-width: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 8.5px 0;
+  }
+
+  .container-info {
+    width: 229px;
+  }
+
+  // Product title
+  .product-title {
+    @include font-blender(900, 16px);
+    @include text-ellipsis;
+    text-transform: uppercase;
+    color: $primary-color;
+    margin-bottom: 5px;
+    @include transition();
+    cursor: default;
+    letter-spacing: 0;
+  }
+
+  // Product metadata
+  .product-meta {
+    font-size: 0.75rem;
+    color: $text-color;
+    margin-bottom: 0.5rem;
+    @include transition();
+  }
+
+  .separator {
+    margin: 0 0.25rem;
+  }
+
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+
+    .select-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      @include transition(transform, 0.2s);
+
+      @media (max-width: 375px) {
+        right: 0;
+      }
+    }
+  }
+
+  .variant-selector {
+    width: 100%;
+    padding: 8px 35px 8px 12px;
+    font-size: 0.8rem;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    background-color: $white;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    @include transition();
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+
+  // Product actions section
+  .product-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: auto;
+    justify-content: space-between;
+    max-width: 92px;
+    width: 100%;
+    margin: 8.5px 0;
+  }
+
+  // Price display
+  .price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: $button-hover;
+    @include transition();
+    letter-spacing: 0;
+  }
+
+  // Add to cart button
+  .add-to-cart-btn {
+    @include font-blender(900, 16px, 14px);
+    background-color: $black;
+    color: $white;
+    font-style: Heavy;
+    leading-trim: CAP_HEIGHT;
+    letter-spacing: 0%;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 100%;
+    height: 30px;
+
+    &:hover:not(:disabled) {
+      background-color: $button-hover;
+    }
+
+    &:disabled {
+      background-color: $button-disabled;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(-5px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+// Responsive design
+@media (max-width: $desktop-large) {
+  .cross-sell-section {
+    .container-info {
+      width: 190px;
+    }
+  }
+}
+
+@media (max-width: $tablet) {
+  .cross-sell-section {
+    padding: 12px;
+
+    .cross-sell-title {
+      margin-bottom: unset;
+    }
+
+    .cross-sell-products {
+      padding-top: 8px;
+      gap: 14px;
+    }
+
+    .container-info {
+      width: auto;
+    }
+
+    .product-title {
+      white-space: unset;
+    }
+
+    .variant-selector {
+      min-width: 115px;
+    }
+
+    .product-actions {
+      margin: 0;
+    }
+
+    .product-info {
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: $mobile-large) {
+  .cross-sell-section {
+    .container-info {
+      width: 164px;
+    }
+  }
+}

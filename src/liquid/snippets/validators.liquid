@@ -1,0 +1,26 @@
+{%- assign block = section[module] -%}
+{%- assign top_padding = block.top_padding | default: 0 %}
+{%- assign items = block.blocks -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="validators validators--{{ request.page_type | handle }} validators--{{ id }}" id="validators_{{ id }}"
+         style="padding-top: {{ top_padding }}">
+    <ul class="validators__list">
+
+        {% for index in (0..length) %}
+            {% assign title = 'title_' | append: index %}
+            {% assign text = 'text_' | append: index %}
+            {% assign logo = 'logo_' | append: index %}
+
+            <li class="validator">
+                <div class="validator__image-container">
+                    <img src="{{ block[logo].url }}" alt="{{ block[title] }}"/>
+                </div>
+                <div class="validator__content">
+                    <h3 class="validator__title">{{ block[title] }}</h3>
+                    <p class="validator__text">{{ block[text] }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</section>

@@ -1,0 +1,96 @@
+{% layout 'anatta_theme' %}
+<div class="newsletterWrapper">
+
+  <div class="section-header text-center">
+    <h1>{{ page.title }}</h1>
+  </div>
+
+
+  <div class="events-form-section{% if section.settings.show_background %} index-section--newsletter-background{% endif %}">
+    <div class="page-width" style="display: flex; justify-content: space-evenly; flex-wrap: wrap-reverse;">
+  
+      <form id="event-form" style="width: 30em;">
+        {% comment %} <label for="Name">Name</label><br> {% endcomment %}
+        <input type="text" id="Name" name="Name" value="" placeholder="Name" style="width: 100%;margin-bottom: 15px;border:1px solid #000;"><br>
+
+        {% comment %} <label for="Email">Email</label><br> {% endcomment %}
+        <input type="email" id="Email" name="Email" value="" placeholder="Email" style="width: 100%;margin-bottom: 15px;border:1px solid #000;">
+
+        {% comment %} <label for="Phone">Phone</label><br> {% endcomment %}
+        <input type="tel" id="Phone" name="Phone" value="" placeholder="Phone" style="width: 100%;margin-bottom: 15px;border:1px solid #000;">
+
+        {% comment %} <label for="Location">Location of Event</label><br> {% endcomment %}
+        <input type="text" id="Location" name="Location" value="" placeholder="Location for Event" style="width: 100%;margin-bottom: 15px;border:1px solid #000;">
+
+        {% comment %} <label for="Count">Expected Participant Count</label><br> {% endcomment %}
+        <input type="number" id="Count" name="Count" value="" placeholder="Expected Participant Count" style="width: 100%;margin-bottom: 15px;border:1px solid #000;">
+        
+        <textarea
+          name="textarea"
+          rows="5"
+          cols="30"
+          id="Description" name="Description"'
+          placeholder="Describe the event"
+          style="width: 100%;border:1px solid #000;"
+          ></textarea>
+
+        <input 
+          type="submit" 
+          value="Submit"
+          style="font-size:16px;text-transform: uppercase;font-weight: 700;height: var(--form-field-height);background-color: #ff4438;border: 0;color: white;"  
+        >
+        
+        <p id="my-form-status"></p>
+      </form> 
+
+      <div class="image-wrapper" style="width: 20em;">
+        <img src="{{ 'g1m.jpg' | asset_url }}"
+          alt="Strong greens" 
+          width="500" 
+          height="500" 
+          style="margin-bottom: 15px;"
+          loading="eager"
+        >
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var form = document.getElementById("event-form");
+
+  async function handleSubmit(event) {
+  event.preventDefault();
+
+  var status = document.getElementById("my-form-status");
+  var data = new FormData(event.target);
+  fetch('https://formspree.io/f/xrgneeee', {
+    method: 'POST',
+    body: data,
+    headers: {
+      'Accept': 'application/json'
+  }
+  })
+  .then(response => {
+    if (response.ok) {
+      status.innerHTML = "Thanks for your submission!";
+      form.reset()
+    } else {
+      response.json().then(data => {
+      if (Object.hasOwn(data, 'errors')) {
+        status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+      } else {
+        status.innerHTML = "Oops! There was a problem submitting your form"
+      }
+    })
+  }})
+  .catch(error => {
+    status.innerHTML = "Oops! There was a problem submitting your form"
+  });
+  }
+  form.addEventListener("submit", handleSubmit)
+
+</script>
+
+

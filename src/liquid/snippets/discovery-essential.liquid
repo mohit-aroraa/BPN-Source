@@ -1,0 +1,47 @@
+
+{% if section.settings.title != blank %}
+<!-- Essential -->
+<div class="essential">
+	<div class="container">
+		<div class="section-title-fourth">
+			<h2>{{ section.settings.title }}</h2>
+		</div>
+		<div class="row">
+          	{% assign article = articles[section.settings.article_1] %}
+            {% if article != blank %}
+          		{% include 'discovery-blog-grid' %}
+            {% endif %}
+          	{% assign article = articles[section.settings.article_2] %}
+            {% if article != blank %}
+          		{% include 'discovery-blog-grid' %}
+            {% endif %}
+          
+          
+          {% comment %}
+			{% for article in blogs.blog.articles %}
+			{% assign article_content_downcase = article.content | downcase %}
+          	{% if forloop.index < 3 %}
+			<div class="col-md-12 col-lg-6">
+				<div class="essential-box">
+					<div class="essential-img">
+						<a href="{{ article.url }}"><img src="{{ article.image | img_url: '412x353' }}" alt="Essential Reading" /></a>
+					</div>
+					<h4>{{ article.title }}</h4>
+					{% if article.excerpt.size > 0 %}
+					  <p>{{ article.excerpt }}</p>
+					{% else %}
+					  <p>{{ article.content | strip_html | truncate: 150 }}</p>
+					{% endif %}
+					<div class="text-link">
+						<a href="{{ article.url }}">Read more</a>
+					</div>
+				</div>
+			</div>
+          	{% endif %}
+			{% endfor %}
+          {% endcomment %}          
+		</div>
+	</div>
+</div>
+<!-- /Essential -->
+{% endif %}

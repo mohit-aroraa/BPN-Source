@@ -1,0 +1,223 @@
+<!-- snippets/master--two-grid -->
+
+
+{% liquid 
+
+    assign s                    = section.settings
+
+    assign sID                  = section.id
+
+    assign i                    = block
+    assign lp                   = section.blocks
+
+    assign prevImgs             = '' 
+    assign imageRow             = '' 
+    assign splt                 = '<!--SPLIT-->' 
+
+    assign isRev                = s.reverse
+
+    assign sectionCustomCSS     = s.custom_css
+    assign class                = 'section--' | append: sID
+    assign cssClass             = '.' | append: class
+
+    
+
+    assign cF                   = false
+
+    assign sep                  = "|###|"
+    assign pCF                  = product.metafields.custom_fields
+    if template.name == 'page'
+        assign pCF              = page.metafields.custom_fields
+    endif
+    assign tg_image             = "image"
+    assign tg_title             = "title"
+    assign tg_top_title         = "top_title"
+    assign tg_text              = "text"
+    assign tg_linkText          = "link_text"
+    assign tg_link_Url          = "link_url"
+    assign tg_textColor         = "text_color"
+    assign tg_backgroundColor   = "background_color"
+    assign tg_customCss         = "custom_css"
+    assign cfTwoGridHndl        = "two_grid"
+    if num 
+        assign cfTwoGridHndl    = cfTwoGridHndl | append: num
+    endif 
+    assign cfTwoGrid            = pCF[cfTwoGridHndl] 
+
+    assign cfhideDefHndl        = "hide_default"
+    if num 
+        assign cfhideDefHndl    = cfhideDefHndl | append: num
+    endif 
+    assign tg_hideDef           = pCF[cfhideDefHndl] | replace: 0, 'false' | replace: 1, 'true' | replace: '0', 'false' | replace: '1', 'true'
+    
+    assign cfisRevHndl          = "two_grid_reverse"
+    if num 
+        assign cfisRevHndl      = cfisRevHndl | append: num
+    endif 
+
+    for item in cfTwoGrid
+        if item[tg_image] != blank 
+            assign cF           = true
+            assign i            = item
+            assign lp           = cfTwoGrid
+            assign tg_hideDef   = false
+            assign isRev        = pCF[cfisRevHndl] | replace: 0, 'false' | replace: 1, 'true' | replace: '0', 'false' | replace: '1', 'true'
+            break
+        endif 
+    endfor 
+
+    assign count                = 0 
+    if isRev == true or isRev == 'true'
+        assign count            = 1 
+    endif 
+
+%}
+
+{% if cF == true or section.blocks.size > 0 and tg_hideDef != 'true' %}
+ 
+    {% for i in lp %}
+
+        {% liquid 
+
+            assign b                = i.settings
+            assign bID              = i.id
+
+            assign mainImg          = blank 
+            assign rawImg           = b.image
+
+            assign count            = count | plus: 1 
+            assign rev              = count | modulo: 2 | plus: 1 | pluralize: 'reverse', ''
+
+            assign ttl              = b.title 
+            assign topTtl           = b.top_title 
+            assign txt              = b.text 
+            assign lnkTxt           = b.lnk_txt 
+            assign lnkUrl           = b.lnk_url 
+            assign txtClr           = b.color_txt 
+            assign bgClr            = b.color_bg 
+
+            assign extVid           = b.video_url
+            assign hstVid           = b.video_hosted
+
+            assign hasVid           = '' 
+            if extVid != blank or hstVid != blank 
+                assign hasVid       = 'medium-up--hide'
+            endif 
+
+            assign blockCustomCSS   = b.custom_css
+
+            if cF == true
+
+                assign ind              = forloop.index0
+                assign bID              = ind | append: '-' | append: class 
+
+                assign rawImg           = i[tg_image]
+                assign ttl              = i[tg_title]
+                assign topTtl           = i[tg_top_title]
+                assign txt              = i[tg_text]
+                assign lnkTxt           = i[tg_linkText]
+                assign lnkUrl           = i[tg_link_Url]
+                assign txtClr           = i[tg_textColor]
+                assign bgClr            = i[tg_backgroundColor]
+
+                assign blockCustomCSS   = i[tg_customCss]
+
+            endif
+
+            assign blkClass         = 'block--' | append: bID
+            assign blkCssClass      = '.' | append: blkClass
+
+        %}
+        {% capture blockCSS %}
+            {{blkCssClass}} {
+                background-color: {{bgClr}};
+            }
+            {{blkCssClass}} h2,
+            {{blkCssClass}} h3,
+            {{blkCssClass}} .rte,
+            {{blkCssClass}} .rte * {
+                color: {{txtClr}};
+            }
+        {% endcapture %}
+
+        {% if rawImg != '' %}
+            {% capture mainImg %}
+                <div class="grid__item medium-up--one-half image-block">
+                    {% include 'snippet--image', 
+                        img:  rawImg, 
+                        cf: cF,
+                        extraClass: hasVid,
+                        useBG: false 
+                    %}
+                    {% include 'snippet--video', 
+                        vidExt: extVid, 
+                        vidHosted: hstVid, 
+                        vidClass: blkClass, 
+                        bg_style: false,
+                        autoPlay: false
+                    %}
+                </div>
+            {% endcapture %}
+        {% endif %}
+
+        {% unless mainImg == blank and topTtl == blank and ttl == blank and txt == blank %}
+            {% capture imageRow %}
+                {{imageRow}}
+                <div class="grid_no_gutter {{rev}} {{blkClass}}" {{block.shopify_attributes}}>
+                    {{mainImg}}
+                    <div class="grid__item {% if mainImg != blank %}medium-up--one-half{% else %}full-width{% endif %} text-block text-{{forloop.index}}">
+                        <div class="text-content">
+                            {% if topTtl != blank %}
+                                <h3>{{topTtl}}</h3>
+                            {% endif %}
+                            {% if ttl != blank %}
+                                <h2>{{ttl}}</h2>
+                            {% endif %}
+                            {% if txt != blank %}
+                                <div class="rte">{{txt}}</div>
+                            {% endif %}
+                            {% if lnkUrl != blank and lnkTxt != blank %}
+                                <a class="btn {% comment %}btn--link{% endcomment %}" href="{{lnkUrl}}">
+                                    <span>{{lnkTxt}}</span>
+                                    {% comment %}{% include 'icon-arrow-right' %}{% endcomment %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                    {% include 'custom-css', 
+                        css: blockCSS, 
+                        class: blkCssClass 
+                    %}
+                    {% include 'custom-css', 
+                        css: blockCustomCSS, 
+                        class: blkCssClass 
+                    %}
+                </div>
+                {{splt}}
+            {% endcapture %}
+        {% endunless %}
+        {% liquid 
+            assign mainImg  = blank
+            assign ttl      = blank
+            assign txt      = blank
+            assign topTtl   = blank
+            assign txtClr   = blank
+            assign bgClr    = blank
+            assign lnkTxt   = blank
+            assign lnkUrl   = blank 
+        %}
+    {% endfor %}
+    {% if imageRow != '' %}
+        <div class="nine15--two-grid {{class}} {{extraClass}}" >
+            {% include 'custom-css', 
+                css: sectionCustomCSS, 
+                class: cssClass 
+            %}
+            {{imageRow|split:splt|uniq}}
+        </div>
+    {% endif %}
+{% endif %}
+
+
+

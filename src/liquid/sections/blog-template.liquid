@@ -1,0 +1,184 @@
+
+{% paginate blog.articles by 12 %}
+
+<!-- Blog -->
+<div class="blog">
+	<div class="featured-blog red-stripe-left texture-right">
+		<div class="container">
+			<div class="title d-lg-none d-md-block text-center">
+				<h1>{{ page_title }}</h1>
+			</div>
+          {% if shop.metafields.custom_fields["featured_article"] != blank %}
+          {% assign article_blog_handle = shop.metafields.custom_fields["featured_article"] | split: "." %}
+          {% for article in blogs[article_blog_handle[0]].articles %}
+          {% if article.handle contains article_blog_handle[1] %}
+          <div class="row align-items-center">
+            <div class="col-md-12 col-lg-6 order-1 order-lg-0">
+              <div class="featured-blog-content">
+                <h4>Featured Article</h4>
+                <h2>{{ article.title }}</h2>
+                {% if article.excerpt.size > 0 %}
+                <p>{{ article.excerpt }}</p>
+                {% else %}
+                <p>{{ article.content | strip_html | truncate: 150 }}</p>
+                {% endif %}
+                <div class="text-link">
+                  <a href="{{ article.url }}">READ MORE</a>
+                </div>									
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 order-0 order-lg-1">
+              <img src="{{ article.image | img_url: 'master' }}" alt="Blog" />
+            </div>
+            {% break %}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+			</div>
+		</div>
+	</div>
+
+	<!-- Blog list -->
+	<div class="blog-list">
+		<div class="container">
+			<div class="section-title-tertiary">
+				<h2>All Content</h2>
+			</div>
+           {% if blog.all_tags.size > 0 %}
+			<div class="sort-filter">
+				<label>Sort by</label>
+				<select id="BlogTagFilter" aria-describedby="a11y-refresh-page-message a11y-selection-message">
+				  {% for tag in blog.all_tags %}
+				    <option value="{{ blog.url }}/tagged/{{ tag | handleize }}" {% if current_tags contains tag %}selected{% endif %}>{{ tag }}</option>
+				  {% endfor %}
+				</select>
+			</div>
+          {% endif %}
+			<div class="row">
+				{% for article in blog.articles %}
+					<div class="col-lg-4 col-md-6">
+						<div class="blog-item">
+							<div class="blog-item-img">
+								<img src="{{ article.image | img_url: '283x303' }}" alt="Blog" />
+							</div>
+							<div class="blog-item-content">
+								<h5>{{ article.title }}</h5>
+								{% if article.excerpt.size > 0 %}
+								  <p>{{ article.excerpt }}</p>
+								{% else %}
+								  <p>{{ article.content | strip_html | truncate: 150 }}</p>
+								{% endif %}
+							</div>
+							<a href="{{ article.url }}" class="stretched-link"></a>
+						</div>
+					</div>
+				 {% endfor %}
+			</div>
+          {%- if paginate.pages > 1 -%}
+          {% include 'pagination', paginate: paginate %}
+          {%- endif -%}
+
+          {% endpaginate %}
+		</div>
+	</div>
+	<!-- /Blog list -->
+
+	<div class="subscribe-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-5">
+				<p>{{ section.settings.signup_text }}</p>
+			</div>
+			<div class="col-sm-7">
+				{% form 'customer' %}
+				<div class="form-group">  
+				  {% if form.posted_successfully? %}
+				  <p class="success">{{ 'password.general.thanks' | t }}</p>
+				  {% else %}
+				  <input type="hidden" name="contact[tags]" value="prospect, password page">
+				  <input type="email" class="form-control" name="contact[email]" id="mce-EMAIL" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" required>
+				  <input type="submit" class="btn" id="mc-embedded-subscribe" value="Join">
+				  {% endif %}
+				  {{ form.errors | default_errors }}
+					</div>
+				  {% endform %}
+				<ul>
+                  {% if settings.social_facebook_link != blank %}
+					<li>
+						<a href="{{ settings.social_facebook_link }}" target="_blank">
+							<img src="{{ 'facebook.svg' | asset_url }}" alt="facebook" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_instagram_link != blank %}
+					<li>
+						<a href="{{ settings.social_instagram_link }}" target="_blank">
+							<img src="{{ 'instagram.svg' | asset_url }}" alt="instagram" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_pinterest_link != blank %}
+					<li>
+						<a href="{{ settings.social_pinterest_link }}" target="_blank">
+							<img src="{{ 'pinterest.svg' | asset_url }}" alt="pinterest" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_twitter_link != blank %}
+					<li>
+						<a href="{{ settings.social_twitter_link }}" target="_blank">
+							<img src="{{ 'twitter.svg' | asset_url }}" alt="twitter" />
+						</a>
+					</li>
+                  {% endif %}
+                  {% if settings.social_youtube_link != blank %}
+					<li>
+						<a href="{{ settings.social_youtube_link }}" target="_blank">
+							<img src="{{ 'youtube.svg' | asset_url }}" alt="youtube" />
+						</a>
+					</li>
+                  {% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
+			<!-- /Blog-->
+
+
+
+
+{% schema %}
+{
+  "name": {
+    "da": "Blogsider",
+    "de": "Blogseiten",
+    "en": "Blog pages",
+    "es": "Páginas del blog",
+    "fi": "Blogisivut",
+    "fr": "Pages du blog",
+    "hi": "ब्लॉग पेज",
+    "it": "Pagine del blog",
+    "ja": "ブログページ",
+    "ko": "블로그 페이지",
+    "nb": "Bloggsider",
+    "nl": "Blogpagina's",
+    "pt-BR": "Páginas do blog",
+    "pt-PT": "Páginas do blogue",
+    "sv": "Bloggsidor",
+    "th": "หน้าบล็อก",
+    "zh-CN": "博客页面",
+    "zh-TW": "部落格頁面"
+  },
+  "settings": [
+    
+{
+      "type": "text",
+      "id": "signup_text",
+      "label": "Sign up text"
+      }
+  ]
+}
+{% endschema %}

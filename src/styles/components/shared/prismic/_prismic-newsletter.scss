@@ -1,0 +1,117 @@
+.newsletterSubscription {
+  margin-bottom: 64px;
+  @include above("desktop-med") {
+    margin-bottom: 96px;
+  }
+  &__wrapper {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+    @include above("tablet") {
+      padding-left: 32px;
+      padding-right: 32px;
+      display: flex;
+    }
+    @include above("desktop-med") {
+      padding-left: 176px;
+      padding-right: 176px;
+    }
+  }
+  &__heading {
+    text-align: center;
+    margin-bottom: 24px;
+    @include above("tablet") {
+      flex: 1;
+      max-width: 448px;
+      text-align: left;
+      padding-right: 32px;
+      margin-bottom: 0;
+    }
+  }
+  &__headingText {
+    font-size: 22px;
+    letter-spacing: -0.5px;
+    line-height: 1.091;
+    font-weight: 700;
+    @include above("desktop-med") {
+      font-size: 40px;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+  }
+  &__fields {
+    @include above("tablet") {
+      flex: 1;
+    }
+    .errors {
+      color: color("warm-red");
+    }
+  }
+  &__socialIcons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    @include above("desktop-med") {
+      justify-content: flex-start;
+      margin-top: 48px;
+    }
+    li {
+      margin-right: 24px;
+      &:last-child {
+        margin-right: 0;
+      }
+      & > a {
+        svg {
+          height: 24px;
+        }
+      }
+    }
+  }
+}
+.newsletterSubscriptionForm {
+  &__field {
+    font-size: 16px;
+    letter-spacing: 0.2px;
+    line-height: 1.125;
+    font-weight: 400;
+    color: color("black");
+    background-color: #efefef;
+    width: 100%;
+    border: 1px solid #efefef;
+    border-radius: 0;
+    padding: 14px 16px 18px 16px;
+    margin-bottom: 12px;
+    &::placeholder {
+      color: rgba($color: #000000, $alpha: 0.4);
+      @include above("desktop-med") {
+        color: color("warm-gray");
+      }
+    }
+    &:focus {
+      border-color: #efefef;
+    }
+    @include above("desktop-med") {
+      flex-grow: 1;
+      margin-bottom: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.23px;
+      line-height: 1.111;
+    }
+  }
+  &__group {
+    .button {
+      width: 100%;
+      @include above("desktop-med") {
+        width: 226px;
+        flex-shrink: 0;
+      }
+    }
+    @include above("desktop-med") {
+      display: flex;
+    }
+  }
+}

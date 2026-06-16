@@ -1,0 +1,139 @@
+{% assign downcase_title = selected_variation.title | downcase %}
+{% assign downcase_product_title = product.title | downcase %}
+
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign product_filter_section = metafields.filters -%}
+{%- assign has_badge = product_filter_section.has_badge | default: false -%}
+{%- assign badge_title = product_filter_section.badge_title -%}
+{%- assign badge_background_color = product_filter_section.badge_background_color
+  | default: '#D9C79C'
+-%}
+{%- assign badge_text_color = product_filter_section.badge_text_color | default: '#ffffff' -%}
+
+<div class='product-images-carousel'>
+  <div class='product-images-carousel-vertical-slider' data-product-images-carousel-vertical-slider>
+    <div class='swiper-wrapper product-images-carousel-vertical-slider__wrapper'>
+      {% for media in product.media %}
+        {% assign media_type = media.media_type %}
+        {% unless media_type == 'image' or media_type == 'video' %}
+          {% continue %}
+        {% endunless %}
+
+        {% assign downcase_alt = media.alt | downcase | default: '' %}
+
+        {% comment %} Skip @exclude images (videos are never excluded this way) {% endcomment %}
+        {% if media_type == 'image' and downcase_alt contains '@exclude' %}
+          {% continue %}
+        {% endif %}
+
+        {% comment %} Shared visibility logic {% endcomment %}
+        {% assign hide = true %}
+        {% if downcase_alt contains downcase_title
+          or downcase_alt contains '@common'
+          or downcase_alt contains downcase_product_title
+        %}
+          {% assign hide = false %}
+        {% endif %}
+
+        {% comment %} Go Gel CAF variant fix {% endcomment %}
+        {% if downcase_alt contains 'caf' %}
+          {% unless downcase_title contains 'caf' %}
+            {% assign hide = true %}
+          {% endunless %}
+        {% endif %}
+
+        {% comment %} Resolve src based on media type {% endcomment %}
+        {% if media_type == 'video' %}
+          {% assign media_src = media.preview_image | image_url: width: 1200 %}
+        {% else %}
+          {% assign media_src = media | image_url: width: 1200 %}
+        {% endif %}
+
+        <div
+          class="image-slide swiper-slide{% if hide %} hidden{% endif %}"
+          data-click-id="pdp_gallery_thumbnail_clicks"
+          data-alt="{{ downcase_alt }}"
+        >
+          <img
+            class="image-slide__image"
+            src="{{ media_src }}"
+            alt="{{ media.alt }}"
+            loading="lazy"
+            width="{{ media.preview_image.width }}"
+            height="{{ media.preview_image.height }}"
+          >
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class='product-images-carousel-slider' data-product-images-carousel-slider>
+    {% if has_badge == true %}
+      <div
+        class='product-images-carousel__badge'
+        style='background-color: {{ badge_background_color }}; color: {{ badge_text_color }}'
+      >
+        {{ badge_title }}
+      </div>
+    {% endif %}
+
+    <div class='swiper-wrapper product-images-carousel-slider__wrapper'>
+      {% for media in product.media %}
+        {% assign media_type = media.media_type %}
+        {% unless media_type == 'image' or media_type == 'video' %}{% continue %}{% endunless %}
+
+        {% comment %} Images with blank or @exclude alt are skipped entirely {% endcomment %}
+        {% if media_type == 'image' and media.alt == blank %}{% continue %}{% endif %}
+        {% if media_type == 'image' and media.alt contains '@exclude' %}{% continue %}{% endif %}
+
+        {% assign downcase_alt = media.alt | downcase | default: '' %}
+
+        {% comment %} Shared visibility logic {% endcomment %}
+        {% assign hide = true %}
+        {% if downcase_alt contains downcase_title
+          or downcase_alt contains '@common'
+          or downcase_alt contains downcase_product_title
+        %}
+          {% assign hide = false %}
+        {% endif %}
+
+        {% comment %} Go Gel CAF variant fix {% endcomment %}
+        {% if downcase_alt contains 'caf' %}
+          {% unless downcase_title contains 'caf' %}
+            {% assign hide = true %}
+          {% endunless %}
+        {% endif %}
+
+        <div
+          class="image-slide swiper-slide{% if hide %} hidden{% endif %}"
+          data-alt="{{ downcase_alt }}"
+        >
+          {% if media_type == 'video' %}
+            {{ media | video_tag: autoplay: false, loop: false, controls: false, muted: true, loading: 'lazy', controls: true }}
+          {% else %}
+            <img
+              class="image-slide__image"
+              src="{{ media | image_url: width: 1200 }}"
+              alt="{{ media.alt }}"
+              loading="lazy"
+              width="{{ media.width }}"
+              height="{{ media.height }}"
+            >
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class='product-images-carousel-slider__controls'>
+      <div class='product-images-carousel-slider__pagination swiper-pagination'></div>
+    </div>
+
+    <div class='swiper-button swiper-button-prev' data-click-id='pdp_gallery_nav_buttons'>
+      {% render 'icon', icon: 'swiper-button-prev', tag: 'pdp_gallery_nav_buttons' %}
+    </div>
+
+    <div class='swiper-button swiper-button-next' data-click-id='pdp_gallery_nav_buttons'>
+      {% render 'icon', icon: 'swiper-button-next', tag: 'pdp_gallery_nav_buttons' %}
+    </div>
+  </div>
+</div>

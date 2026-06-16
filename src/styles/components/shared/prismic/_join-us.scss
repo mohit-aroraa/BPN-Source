@@ -1,0 +1,259 @@
+.join-us {
+  overflow: hidden;
+  background-color: #000;
+  padding: 32px 16px;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  @include above('tablet') {
+    padding: 0;
+  }
+
+  &__content {
+    padding: 32px 16px 32px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: var(--background-color);
+    max-width: 400px;
+    gap: 16px;
+
+    @include above('tablet') {
+      border-radius: 0;
+      max-width: unset;
+    }
+
+    @include above('tablet-large') {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @include above("desktop") {
+      padding: 56px 184px 47px;
+    }
+  }
+
+  &__content-info {
+    max-width: 640px;
+
+    @include above('tablet') {
+      max-width: 448px;
+    }
+
+    @include above('tablet-large') {
+      min-width: 448px;
+    }
+  }
+
+  &__title {
+    color: var(--title-color);
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 40px;
+    letter-spacing: -1.44px;
+
+    @include above('tablet') {
+      line-height: 40px;
+
+      br {
+        display: none;
+      }
+    }
+  }
+
+  &__text {
+    margin-top: 16px;
+    color: var(--text-color);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0;
+
+    @include above('tablet') {
+      margin-top: 16px;
+      width: 100%;
+      font-size: 20px;
+      line-height: 26px;
+    }
+  }
+
+  &__form {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+
+    @include above('tablet') {
+      max-width: 448px;
+    }
+
+    @include above('desktop') {
+      margin-top: 0;
+    }
+  }
+
+  &__input-error {
+    text-align: left;
+    position: absolute;
+    width: 100%;
+    top: 44px;
+    padding: 0 0 0 16px;
+    color: #EB1000;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 13px;
+
+    @include above('tablet') {
+      padding: 0 0 0 22px;
+      text-align: left;
+      top: 50px;
+    }
+  }
+
+  &__input-message {
+    padding: 32px 0 42px;
+
+    @include above('tablet') {
+      min-width: 424px;
+      padding: 36px 0 22px;
+    }
+
+    @include above('desktop') {
+      min-width: 424px;
+      padding: 36px 0 0px;
+    }
+
+    h3 {
+      color: #000;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 22px;
+      letter-spacing: -0.36px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    p {
+      margin-top: 8px;
+      color: #000;
+      text-align: center;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    text-align: left;
+    border-radius: 5px 0 0 5px;
+    background-color: var(--input-background-color);
+    border: 1px solid var(--input-background-color);
+    padding: 20px 16px;
+    height: 64px;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 22px;
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
+    color: var(--input-text-color);
+
+    &:focus {
+      border: 1px solid var(--input-background-color);
+      background-color: var(--input-background-color);
+    }
+
+    &.focused {
+      background-color: var(--input-background-color);
+    }
+
+    &::placeholder {
+      color: var(--input-text-color);
+    }
+
+    &.has-error {
+      color: color('warm-red');
+    }
+
+    @include above('tablet') {
+      width: 312px;
+      border-radius: 5px 0 0 5px;
+      padding: 27px 0 28px 20px;
+      text-align: left;
+      font-size: 24px;
+      line-height: 24px;
+      height: 72px;
+    }
+
+    @include above('tablet-large') {
+      width: 335px
+    }
+  }
+
+  &__button {
+    text-align: center;
+    width: 121px;
+    margin: 0;
+    cursor: pointer;
+    border: none;
+    padding: 20px 16px;
+    color: var(--button-text-color);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 22px;
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
+    border-radius: 0 5px 5px 0;
+    background-color: var(--button-background-color);
+
+    @include above('tablet') {
+      margin: 0;
+      max-height: 75px;
+      width: 122px;
+      border-radius: 0 5px 5px 0;
+      -webkit-border-radius: 0 5px 5px 0;
+      -moz-border-radius: 0 5px 5px 0;
+      padding: 0 25px 0 25px;
+    }
+  }
+
+  &__small-text {
+    margin-top: 20px;
+    color: var(--small-text-color);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 13px;
+    letter-spacing: 0;
+    max-width: 448px;
+
+    @include above('desktop') {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    b {
+      font-weight: 900;
+    }
+
+    a {
+      color: var(--small-text-color);
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 13px;
+      letter-spacing: 0;
+      text-decoration: underline;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}

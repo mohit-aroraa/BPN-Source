@@ -1,0 +1,50 @@
+{%- assign block = section[module] -%}
+{%- assign heading = block.heading -%}
+{%- assign facebook_url = block.facebook_url -%}
+{%- assign insta_url = block.insta_url -%}
+{%- assign youtube_url = block.youtube_url -%}
+
+<section class="newsletterSubscription">
+	<div class="newsletterSubscription__wrapper">
+        <div class="newsletterSubscription__heading">
+            <h3 class="newsletterSubscription__headingText">{{ heading | strip }}</h3>
+        </div>
+        <div class="newsletterSubscription__fields">
+            {% form 'customer' %}
+                <div class="newsletterSubscriptionForm__group">  
+                    {% if form.posted_successfully? %}
+                        <p class="success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                    {% else %}
+                        <input type="hidden" name="contact[tags]" value="prospect, password page">
+                        <input type="email" class="newsletterSubscriptionForm__field" name="contact[email]" id="mce-EMAIL" placeholder="Enter email" required pattern="[A-Za-z0-9._%+-]{2,}@[a-zA-Z]{1,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})">
+                        <button type="submit" class="button button-primary" id="mc-embedded-subscribe" >Subscribe</button>
+                    {% endif %}
+                </div>
+                {{ form.errors | default_errors }}
+            {% endform %}
+            <ul class="newsletterSubscription__socialIcons">
+              {% if facebook_url != blank %}
+                <li>
+                    <a href="{{ facebook_url }}" target="_blank" aria-label="bare performance nutrition facebook link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 24"><path d="M12.373.005 9.289 0C5.825 0 3.586 2.318 3.586 5.906V8.63H.485A.487.487 0 0 0 0 9.12v3.945c0 .27.217.49.485.49h3.1v9.956c0 .27.218.489.485.489h4.046c.268 0 .485-.22.485-.49v-9.956h3.625a.487.487 0 0 0 .485-.489l.002-3.946a.492.492 0 0 0-.142-.346.483.483 0 0 0-.343-.143H8.6V6.32c0-1.11.262-1.673 1.694-1.673h2.077c.268 0 .485-.22.485-.49V.494a.487.487 0 0 0-.484-.489Z" fill="#000" fill-rule="nonzero"/></svg>
+                    </a>
+                </li>
+              {% endif %}
+              {% if insta_url != blank %}
+                <li>
+                    <a href="{{ insta_url }}" target="_blank" aria-label="bare performance nutrition inastagram link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 24"><g fill="#000" fill-rule="nonzero"><path d="M24.51 7.056c-.056-1.275-.262-2.152-.558-2.912a5.857 5.857 0 0 0-1.388-2.128A5.908 5.908 0 0 0 20.44.633C19.676.338 18.804.13 17.528.075 16.243.015 15.835 0 12.576 0S8.91.014 7.63.07C6.353.127 5.477.333 4.717.628a5.857 5.857 0 0 0-2.13 1.388A5.909 5.909 0 0 0 1.205 4.14C.91 4.904.703 5.776.647 7.05.586 8.336.57 8.744.57 12.002c0 3.259.015 3.667.07 4.947.057 1.275.263 2.152.559 2.911a5.918 5.918 0 0 0 1.388 2.129c.6.61 1.327 1.083 2.124 1.383.765.295 1.637.501 2.912.558 1.28.056 1.688.07 4.948.07 3.259 0 3.667-.014 4.947-.07 1.275-.057 2.152-.263 2.912-.558a6.14 6.14 0 0 0 3.512-3.512c.295-.764.502-1.636.558-2.911.056-1.28.07-1.688.07-4.947 0-3.258-.004-3.666-.06-4.946Zm-2.161 9.799c-.052 1.172-.249 1.805-.413 2.227a3.982 3.982 0 0 1-2.279 2.279c-.422.164-1.06.36-2.227.412-1.267.056-1.646.07-4.85.07-3.202 0-3.586-.014-4.848-.07-1.172-.051-1.805-.248-2.227-.412a3.694 3.694 0 0 1-1.379-.896 3.731 3.731 0 0 1-.896-1.378c-.164-.422-.36-1.06-.412-2.227-.057-1.266-.07-1.646-.07-4.848 0-3.203.013-3.587.07-4.848.051-1.172.248-1.805.412-2.227.193-.52.497-.994.9-1.379.39-.398.859-.703 1.38-.895.421-.164 1.06-.36 2.227-.413 1.266-.056 1.646-.07 4.848-.07 3.208 0 3.588.014 4.85.07 1.172.052 1.805.249 2.227.413.52.192.994.497 1.378.895.399.39.704.858.896 1.379.164.422.361 1.06.413 2.227.056 1.266.07 1.645.07 4.848 0 3.202-.014 3.577-.07 4.843Z"/><path d="M12.571 6c-3.312 0-6 2.687-6 6s2.688 6 6 6c3.313 0 6-2.687 6-6s-2.687-6-6-6Zm0 9.892a3.893 3.893 0 1 1 .002-7.785 3.893 3.893 0 0 1-.002 7.785ZM20.286 5.571a1.286 1.286 0 1 1-2.572 0 1.286 1.286 0 0 1 2.572 0Z"/></g></svg>
+                    </a>
+                </li>
+              {% endif %}
+              {% if youtube_url != blank %}
+                <li>
+                    <a href="{{ youtube_url }}" target="_blank" aria-label="bare performance nutrition youtube link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><path d="M34.722 3.755A4.295 4.295 0 0 0 31.7.734C29.017 0 18.285 0 18.285 0S7.554 0 4.871.706c-1.44.395-2.627 1.581-3.022 3.05C1.143 6.437 1.143 12 1.143 12s0 5.59.706 8.245a4.295 4.295 0 0 0 3.022 3.02C7.58 24 18.286 24 18.286 24s10.731 0 13.414-.706a4.295 4.295 0 0 0 3.022-3.021c.706-2.683.706-8.245.706-8.245s.029-5.59-.706-8.273ZM14.868 17.14V6.86L23.793 12l-8.925 5.139Z" fill="#000" fill-rule="nonzero"/></svg>
+                    </a>
+                </li>
+              {% endif %}
+            </ul>
+        </div>
+	</div>
+</section>

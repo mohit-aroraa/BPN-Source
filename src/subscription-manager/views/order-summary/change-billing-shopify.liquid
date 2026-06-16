@@ -1,0 +1,57 @@
+<button
+  data-click-target="og-change-shopify-payment-dialog-{{ order.public_id }}"
+  @click="{{ 'SMDialog.open' | js }}"
+  aria-label="{{ 'shipment_unsent_footer_billing_edit' | t }}"
+  class="og-tile-action og-icon-button"
+>
+  <svg width="14" height="13">
+    <use href="#edit"></use>
+  </svg>
+</button>
+
+<sm-dialog id="og-change-shopify-payment-dialog-{{ order.public_id }}">
+  <dialog>
+    {% set dialog_header_text = 'modal_billing_header' | t %}
+    {% include 'dialog-header' %}
+    <form
+      action="{{ 'send_payment_email' | action }}"
+      @success="{{ 'SMDialog.close' | js }}"
+      @reset="{{ 'SMDialog.close' | js }}"
+    >
+      <div class="og-dialog-body og-change-billing-shopify flex-column">
+        <input
+          type="hidden"
+          value="{{ payment.token_id }}"
+          name="payment_token"
+        >
+        <input
+          type="hidden"
+          value="{{ customer.sig_field }}"
+          name="customer"
+        >
+
+        <div>
+          {{ 'modal_billing_current_display' | t }} - {{ payment.cc_type }}
+          {{ payment_method_names[payment.payment_method] }}
+          {% if payment.cc_number_ending %}
+            <span class="og-payment-last-4">{{ 'form_billing_ending_in' | t }}</span>
+          {% endif %}
+        </div>
+        <div class="og-info">
+          <svg width="17" height="16">
+            <use href="#info"></use>
+          </svg>
+          <div>
+            <p class="og-info-header">{{ 'modal_billing_info_header' | t }}</p>
+            <p>{{ 'modal_billing_info_text' | t }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="og-dialog-footer">
+        <button class="og-button" type="submit" name="send_payment_email">
+          {{ 'modal_billing_confirm' | t }}
+        </button>
+      </div>
+    </form>
+  </dialog>
+</sm-dialog>

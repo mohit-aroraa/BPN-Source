@@ -1,0 +1,201 @@
+.order-table {
+  border: 1px solid $color-border;
+
+  a {
+    border-bottom: 1px solid currentColor;
+  }
+
+  th,
+  td {
+    border: 0;
+  }
+
+  tbody th,
+  tfoot th {
+    /*font-weight: normal;*/
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  tbody tr + tr {
+    border-top: 1px solid $color-border;
+  }
+
+  thead {
+    border-bottom: 1px solid $color-body-text;
+  }
+
+  tfoot {
+    border-top: 1px solid $color-body-text;
+
+    tr {
+      &:first-child th,
+      &:first-child td {
+        padding-top: 1.25em;
+      }
+
+      &:nth-last-child(2) th,
+      &:nth-last-child(2) td {
+        padding-bottom: 1.25em;
+      }
+
+      &:last-child th,
+      &:last-child td {
+        border-top: 1px solid $color-body-text;
+        font-weight: $font-weight-body--bold;
+        padding-top: 1.25em;
+        padding-bottom: 1.25em;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  @include mq($medium-up) {
+    thead {
+      th {
+        text-transform: uppercase;
+        padding-top: 1.25em;
+        padding-bottom: 1.25em;
+      }
+    }
+
+    tbody {
+      tr {
+        th,
+        td {
+          padding-top: 1.25em;
+          padding-bottom: 1.25em;
+        }
+      }
+    }
+
+    tfoot {
+      tr {
+        td,
+        th {
+          vertical-align: bottom;
+        }
+      }
+    }
+  }
+
+  @include mq($small) {
+    border: 0;
+
+    thead {
+      display: none;
+    }
+
+    th,
+    td {
+      float: left;
+      clear: left;
+      width: 100%;
+      text-align: right;
+      padding: 0.5rem 0;
+      border: 0;
+      margin: 0;
+    }
+
+    th::before,
+    td::before {
+      content: attr(data-label);
+      float: left;
+      text-align: left;
+      padding-right: 2em;
+      max-width: 80%;
+    }
+
+    tbody {
+      tr {
+        th:first-child {
+          padding-top: 1.25em;
+        }
+
+        td:last-child {
+          padding-bottom: 1.25em;
+        }
+      }
+
+      th::before,
+      td::before {
+        font-weight: $font-weight-body--bold;
+      }
+    }
+  }
+}
+
+.order-table__product {
+  @include mq($small) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.order-discount {
+  color: $color-sale-text;
+  display: block;
+  line-height: 1.2em;
+
+  .icon-saletag {
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.4em;
+  }
+}
+
+.order-discount--title {
+  text-transform: uppercase;
+  word-break: break-word;
+  padding-right: 1em;
+}
+
+.order-discount--list {
+  margin: 0.8em 0 0 1.3em;
+  list-style: none;
+  padding: 0;
+}
+
+.order-discount__item {
+  text-indent: -1.3em;
+
+  & + .order-discount__item {
+    margin-top: 0.6em;
+  }
+}
+
+.order-discount-wrapper {
+  @include mq($small) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+.order-discount-card-wrapper {
+  display: flex;
+  justify-content: center;
+
+  @include mq($medium-up) {
+    justify-content: flex-end;
+  }
+}
+
+.order-discount--cart {
+  font-size: calc(#{$font-size-base} - 1px);
+  padding-right: 0;
+
+  @include mq($medium-up) {
+    font-size: calc(#{$font-size-base} - 2px);
+  }
+}
+
+.order-discount--cart-total {
+  padding-left: $gutter-site / 2;
+
+  @include mq($medium-up) {
+    padding-left: $gutter-site;
+    min-width: 150px;
+  }
+}

@@ -1,0 +1,212 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+// Design tokens
+@import "./src/design-tokens/index";
+
+.section-cart {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  min-height: 360px;
+
+  .container {
+    .cart {
+      max-width: unset;
+      position: static;
+      transform: unset;
+      box-shadow: unset;
+    }
+  }
+
+  .nav-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    height: 90px;
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      width: 10px;
+      height: 8px;
+    }
+  }
+
+  .section__cols {
+    border-top: 1px solid color("warm-gray");
+    padding: 40px 0;
+    margin-top: 40px;
+  }
+
+  .section__col {
+    position: relative;
+    padding: 0 20px;
+  }
+
+  .cart__total {
+    color: color("black");
+    font-weight: 700;
+  }
+
+  .cart__totalPrice {
+    font-weight: 700;
+  }
+
+  .section__col + .section__col::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background-color: color("warm-gray");
+  }
+
+  .section__col-inner {
+    max-width: 440px;
+    margin: 0 auto;
+
+    > .heading-4 {
+      margin-bottom: rem(50px);
+    }
+
+    > p {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      line-height: 1.67;
+      color: color("black");
+    }
+
+    > em {
+      display: block;
+      margin-bottom: 76px;
+      font-size: 12px;
+      line-height: 1.25;
+      color: color("black");
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+
+    /* Modifiers */
+    &--small {
+      max-width: 380px;
+    }
+
+    .cart__shippingText {
+      display: block;
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.25;
+      letter-spacing: 0.3px;
+      color: color("black");
+      text-align: center;
+
+      a {
+        color: color("black");
+        text-decoration: none;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .product-cart {
+    margin-bottom: 40px;
+  }
+
+  .section__message {
+    padding: 40px 0 80px;
+    text-align: center;
+  }
+
+  .button {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .additional-checkout-buttons-container {
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  /* Mobile */
+
+  @include below("tablet") {
+    padding-top: 0;
+    border-top: 1px solid color("black");
+
+    .nav-steps {
+      padding: 0;
+      height: 50px;
+      justify-content: flex-start;
+    }
+
+    .cart__orderTitle {
+      display: none;
+    }
+
+    .section__cols {
+      padding: 0;
+      border: none;
+    }
+
+    .section__col {
+      max-width: 100%;
+      min-height: 0;
+      flex: 0 0 100%;
+      padding: 10px 0;
+    }
+
+    .section__col + .section__col::before {
+      bottom: auto;
+      right: 0;
+      width: auto;
+      height: 1px;
+    }
+
+    .button {
+      margin-bottom: 20px;
+    }
+
+    .section__col-inner {
+      max-width: none;
+
+      > h5 {
+        margin-bottom: 20px;
+        text-align: left;
+        font-size: 24px;
+        line-height: 30px;
+      }
+
+      > p {
+        margin: 10px 0 20px;
+        padding-bottom: 0;
+        font-size: 14px;
+      }
+
+      > em {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}

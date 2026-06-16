@@ -1,0 +1,8 @@
+<div class="og-upcoming-orders">
+  <h2 class="og-subheading">{{ 'shipments_unsent_header' | t }}</h2>
+  {% if orders %}
+    {% for order in orders | select(status='UNSENT') | key %}
+      {% include 'order' %}
+    {% endfor %}
+  {% endif %}
+</div>

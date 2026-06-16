@@ -1,0 +1,144 @@
+// ------------------
+// Headings
+// ------------------
+@mixin h1 {
+  font-size: 144px;
+  line-height: 112px;
+  font-weight: 900;
+}
+
+@mixin h2-large {
+  font-size: 128px;
+  line-height: 104px;
+  font-weight: 900;
+}
+
+@mixin h3-large {
+  font-size: 96px;
+  line-height: 80px;
+  font-weight: 900;
+}
+
+@mixin h4-large {
+  font-size: 80px;
+  line-height: 64px;
+  font-weight: 900;
+}
+
+// Smaller headings
+@mixin h2 {
+  font-size: 48px;
+  line-height: 40px;
+  font-weight: 900;
+}
+
+@mixin h3 {
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: 900;
+}
+
+@mixin h4 {
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 900;
+}
+
+@mixin h5 {
+  font-size: 24px;
+  line-height: 20px;
+  font-weight: 900;
+}
+
+// ------------------
+// Body text
+// ------------------
+@mixin body-xl {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+}
+
+@mixin body-lg {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 500;
+}
+
+@mixin body-base {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+@mixin body-sm {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+@mixin body-xs {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 500;
+}
+
+@mixin body-xxs {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 500;
+}
+
+// ------------------
+// Titles (same sizes repeated?)
+// ------------------
+@mixin title-1 {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+@mixin title-1-bold {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 900;
+}
+
+@mixin title-2 {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 500;
+}
+
+@mixin title-2-bold {
+  font-size: 12px;
+  line-height: 14px;
+  font-weight: 900;
+}
+
+// ------------------
+// Callouts
+// ------------------
+@mixin callout-base {
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 900;
+}
+
+@mixin callout-small {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: 900;
+}
+
+@mixin callout-3 {
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 701;
+}
+
+@mixin text-style($font-size, $line-height, $font-weight: 400) {
+  font-size: $font-size;
+  line-height: $line-height;
+  font-weight: $font-weight;
+}

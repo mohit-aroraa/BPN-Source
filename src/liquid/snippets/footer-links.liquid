@@ -1,0 +1,48 @@
+<ul class="siteFooter__linkItems">
+  {%- for link in linklists[footer_linklist].links -%}
+    {%- if link.title contains 'Accessibility Tool' -%}
+      <li class="siteFooter__linkItem siteFooter__linkItem--ae-toolbar">
+        <a
+          data-sl="{{ link.title }}"
+          href="javascript:void(0);"
+          class="js-ae-toolbar-trigger"
+          role="button"
+          aria-label="Open Accessibility Tool"
+        >
+          {{- link.title -}}
+        </a>
+      </li>
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if link.title contains '@email' -%}
+      <li class="siteFooter__linkItem">
+        <a
+          data-sl="footer_email"
+          onclick="ga('send', 'event', 'FooterEmailClick', 'Email Click');"
+          href="mailto:{{ email | strip }}"
+        >
+          {{- link.title | remove: '@email' | strip -}}
+        </a>
+      </li>
+      {%- continue -%}
+    {%- endif -%}
+
+    {%- if link.title contains '@tel' -%}
+      <li class="siteFooter__linkItem">
+        <a
+          data-sl="footer_telephone"
+          onclick="ga('send', 'event', 'FooterPhoneCall', 'PhoneClick', 'Call');"
+          href="tel:{{ contact_number | strip }}"
+        >
+          {{- link.title | remove: '@tel' | strip -}}
+        </a>
+      </li>
+      {%- continue -%}
+    {%- endif -%}
+
+    <li class="siteFooter__linkItem">
+      <a href="{{ link.url }}">{{ link.title }}</a>
+    </li>
+  {%- endfor -%}
+</ul>

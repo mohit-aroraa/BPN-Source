@@ -1,0 +1,50 @@
+{%- comment -%}
+  Utility Navigation Component
+  -------------
+  Navigation links for search, account and cart functionality.
+
+  Components:
+  - Search link: Opens search functionality
+  - Account link: Links to customer account
+  - Cart link: Links to shopping cart
+{%- endcomment -%}
+
+<div class='bpn-utility-nav'>
+  <div
+    class='header__search-wrapper search-icon bpn-utility-nav__link {% if is_athletic %}header__search-wrapper--athletic {% endif %}'>
+    <a
+      class='header-extra__item js-search'
+      href='javascript:void(0);'
+      data-sl='search_trigger'
+      title='Open searchbar'
+    >
+      {% render 'icon',
+        icon: 'header-search',
+        class: 'icon-search--desktop header-extra__icon',
+        tag: 'nav_top-search'
+      %}
+      {% render 'icon',
+        icon: 'header-close',
+        class: 'js-closeSearch-icon icon--closeSearch--mobile header-extra__icon'
+      %}
+    </a>
+    {% render 'search-drawer' %}
+  </div>
+
+  <a href='/account' class='bpn-utility-nav__link'>
+    {% render 'icon', icon: 'account' %}
+  </a>
+
+  <a
+    href='javascript:void(0);'
+    id='cart-trigger'
+    class='bpn-utility-nav__link{% if request.path == '/cart' %} hidden{% endif %}'
+    onclick='window.openCartDrawer && window.openCartDrawer()'
+  >
+    {% render 'icon', icon: 'bag' %}
+    <span class='bpn-cart-count cart-count' data-click-id='nav_top-cart'>
+      {{ cart.item_count }}
+    </span>
+  </a>
+
+</div>

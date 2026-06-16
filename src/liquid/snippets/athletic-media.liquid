@@ -1,0 +1,149 @@
+{%- comment -%}
+  Snippet: athletic-media.liquid
+  Description: Renders the media container (desktop and mobile) for athletic sections.
+{%- endcomment -%}
+
+{% assign current_settings = block_settings | default: section.settings %}
+{% assign user_play = current_settings.video_user_play %}
+
+<div class="{{ base_class }}__media-container">
+  <!-- Desktop Media -->
+  {% if current_settings.video_desktop_type != blank %}
+    <div class="{{ base_class }}__video {{ base_class }}__video-desktop">
+      {% assign poster = current_settings.video_desktop_poster | img_url: 'master' %}
+      {% if current_settings.video_desktop_type == 'media' and current_settings.video_desktop_media != nil %}
+        {% if current_settings.video_user_play %}
+          {% assign autoplay_attr  = false %}
+          {% assign loop_attr      = false %}
+          {% assign muted_attr     = false %}
+          {% assign controls_attr  = true  %}
+        {% else %}
+          {% assign autoplay_attr  = true  %}
+          {% assign loop_attr      = true  %}
+          {% assign muted_attr     = true  %}
+          {% assign controls_attr  = false %}
+        {% endif %}
+
+        {{ current_settings.video_desktop_media | video_tag:
+            autoplay: autoplay_attr,
+            loop:     loop_attr,
+            muted:    muted_attr,
+            controls: controls_attr,
+            poster:   poster
+        }}
+      {% elsif current_settings.video_desktop_type == 'url' and current_settings.video_desktop_url != blank %}
+        {% if current_settings.video_desktop_url.type == 'youtube' %}
+          {% if user_play %}
+            {%- capture yt_params -%}
+              enablejsapi=1&autoplay=0&mute=0&controls=1&modestbranding=1&rel=0
+            {%- endcapture -%}
+          {% else %}
+            {%- capture yt_params -%}
+              enablejsapi=1&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1
+            {%- endcapture -%}
+          {% endif %}
+
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/{{ current_settings.video_desktop_url.id }}?{{ yt_params }}"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        {% else %}
+          {% if user_play %}
+            {%- assign vm_params = "autoplay=0&muted=0&controls=1" -%}
+          {% else %}
+            {%- assign vm_params = "autoplay=1&muted=1&controls=0&loop=1" -%}
+          {% endif %}
+
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://player.vimeo.com/video/{{ current_settings.video_desktop_url.id }}?{{ vm_params }}"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% elsif current_settings.image_desktop != blank %}
+    <div class="{{ base_class }}__image-desktop">
+      {% assign wrapper_class = base_class | append: '__image-desktop__image-wrapper' %}
+      {% include 'shopify-responsive-image',
+        image: current_settings.image_desktop,
+        wrapper_class: wrapper_class
+      %}
+    </div>
+  {% endif %}
+
+  <!-- Mobile Media -->
+  {% if current_settings.video_mobile_type != blank %}
+    <div class="{{ base_class }}__video {{ base_class }}__video-mobile">
+      {% assign poster = current_settings.video_mobile_poster | img_url: 'master' %}
+      {% if current_settings.video_mobile_type == 'media' and current_settings.video_mobile_media != nil %}
+        {% if current_settings.video_user_play %}
+          {% assign autoplay_attr  = false %}
+          {% assign loop_attr      = false %}
+          {% assign muted_attr     = false %}
+          {% assign controls_attr  = true  %}
+        {% else %}
+          {% assign autoplay_attr  = true  %}
+          {% assign loop_attr      = true  %}
+          {% assign muted_attr     = true  %}
+          {% assign controls_attr  = false %}
+        {% endif %}
+
+        {{ current_settings.video_mobile_media | video_tag:
+            autoplay: autoplay_attr,
+            loop:     loop_attr,
+            muted:    muted_attr,
+            controls: controls_attr,
+            poster:   poster
+        }}
+      {% elsif current_settings.video_mobile_type == 'url' and current_settings.video_mobile_url != blank %}
+        {% if current_settings.video_mobile_url.type == 'youtube' %}
+          {% if user_play %}
+            {%- assign vm_params = "autoplay=0&muted=0&controls=1" -%}
+          {% else %}
+            {%- assign vm_params = "autoplay=1&muted=1&controls=0&loop=1" -%}
+          {% endif %}
+
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/{{ current_settings.video_mobile_url.id }}?{{ yt_params }}"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        {% else %}
+          {% if user_play %}
+            {%- assign vm_params = "autoplay=0&muted=0&controls=1" -%}
+          {% else %}
+            {%- assign vm_params = "autoplay=1&muted=1&controls=0&loop=1" -%}
+          {% endif %}
+
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://player.vimeo.com/video/{{ current_settings.video_mobile_url.id }}?{{ vm_params }}"
+            frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+            allowfullscreen
+          ></iframe>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% elsif current_settings.image_mobile != blank %}
+    <div class="{{ base_class }}__image-mobile">
+      {% assign wrapper_class = base_class | append: '__image-mobile__image-wrapper' %}
+      {% include 'shopify-responsive-image',
+        image: current_settings.image_mobile,
+        wrapper_class: wrapper_class
+      %}
+    </div>
+  {% endif %}
+</div>

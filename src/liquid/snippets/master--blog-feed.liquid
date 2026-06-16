@@ -1,0 +1,191 @@
+<!-- snippets/master--blog-feed -->
+
+{% liquid
+  assign s = section.settings
+  assign sID = section.id
+
+  assign sectionCustomCSS = s.custom_css
+  assign class = 'section--' | append: sID
+  assign cssClass = '.' | append: class
+
+  assign totalRows = s.total_rows | plus: 0
+  assign perRow = s.per_row | plus: 0
+
+  assign b = block
+  assign lp = section.blocks
+  assign blks = lp.size
+  assign total = 200
+
+  if perRow == 0 and blks > 0
+    assign perRow = blks
+  endif
+
+  assign lnk_url = s.link_url
+  assign lnk_txt = s.link_text
+  assign use_lnk = false
+  assign titleEl = 'h2'
+
+  if blog.title contains 'Content' or template.name == 'blog'
+    assign titleEl = 'h1'
+  endif
+
+  if blks == 0
+    if template.name == 'blog'
+      assign blog = blog
+    else
+      assign blog = blogs[s.blog]
+    endif
+    assign b = article
+    assign lp = blog.articles
+    assign lnk_url = blog.url
+    assign total = totalRows | times: perRow
+  endif
+
+  assign ttl = s.title | default: blog.title
+  assign txt = s.text
+  assign hideDesc = s.hide_desc
+
+  if lnk_url != blank and lnk_txt != blank
+    assign use_lnk = true
+  endif
+
+  case perRow
+    when 1
+      assign width = ''
+      assign max = 1
+    when 2
+      assign width = 'medium-up--one-half'
+      assign max = 2
+    when 3
+      assign width = 'medium-up--one-third'
+      assign max = 3
+    when 5, 9, 10
+      assign width = 'medium--one-third large-up--one-fifth'
+      assign max = 5
+    when 6, 11, 12
+      assign width = 'medium--one-third large-up--one-sixth'
+      assign max = 6
+    else
+      assign width = 'medium-up--one-quarter'
+      assign max = 4
+  endcase
+%}
+
+{% if template.name == 'blog' or template.suffix contains 'press' %}
+  {% capture sectionCustomCSS %}
+        {% if template.suffix contains 'press' %}
+        == .article-item__image-with-placeholder-wrapper {
+            {% if s.color_card_bg != blank %}
+            background: {{s.color_card_bg}};
+            {% endif %}
+        }
+        == .section--title,
+        == .section--title .rte,
+        == .section--title .rte *,
+        {% endif %}
+        == .section--title h1 {
+            {% if s.color_bg != blank %}
+            background: {{s.color_bg}};
+            {% endif %}
+            {% if s.color_txt != blank %}
+            color: {{s.color_txt}};
+            {% endif %}
+        }
+        {{sectionCustomCSS}}
+    {% endcapture %}
+{% endif %}
+
+<div class="section--blog-feed {{class}}" data-section-id="{{ sID }}">
+  <div class="page-width">
+    {% if ttl != blank or img != blank or txt != blank %}
+      <div class="section--title text-center {% if ttl != blank and img == blank and txt == blank and use_lnk == true %}inline--link{% endif %}">
+        {% if ttl != blank %}
+          <{{ titleEl }} class="">{{ ttl }}</{{ titleEl }}>
+        {% endif %}
+
+        {% if txt != blank %}
+          <div class="rte ">{{ txt }}</div>
+        {% endif %}
+
+        {% if use_lnk == true %}
+          <a href="{{lnk_url}}" class="text-link ">{{ lnk_txt }}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if template.name == 'blog' or template.suffix == 'press' %}
+      {% if blog.all_tags.size > 0 %}
+        <div class="section--blog-filter ">
+          <div class="blog-flex">
+            <div class="tags">
+              {% if current_tags %}
+                <a href="{{ blog.url }}" class=" view-all">All {{ blog.title }}</a>
+              {% endif %}
+              <a href="/blogs/content/tagged/articles">
+                Articles
+              </a>
+              <a href="/blogs/content/tagged/recipes">
+                Recipes
+              </a>
+              <a href="/pages/podcasts">Podcasts</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {% if lp.size > 0 %}
+      <div class="grid vert-top grid_margin_bottom small--text-center">
+        {% for b in lp limit: total %}
+          {% liquid
+            assign aBtn = s.button_text
+            assign article = b
+            if blks > 0
+              assign bs = b.settings
+              assign article = articles[bs.article]
+              assign aTtl = bs.title
+              assign aTxt = bs.text
+              assign aImg = bs.image
+              assign aBgImg = bs.bg_image
+              assign aDte = bs.date
+              assign aLnk = bs.url
+              if bs.button_text != blank
+                assign aBtn = bs.button_text
+              endif
+            endif
+
+            assign blkCls = 'block--' | append: b.id
+            assign blkClass = '.' | append: blkCls
+          %}
+          {% if article.title != blank or aTtl != blank or aImg != blank or aDte != blank or aTxt != blank %}
+            <div class="grid__item {{width}} {{blkCls}} {% if bs.color_card_bg != blank or s.color_card_bg != blank or s.bg_image != blank %}center-logo{% endif %} ">
+              {% if template.suffix contains 'press' %}
+                {% capture blkCSS %}
+                            {{cssClass}} == .article-item__image-with-placeholder-wrapper {
+                                {% if bs.color_card_bg != blank %}
+                                background: {{bs.color_card_bg}};
+                                {% endif %}
+                            }
+                            {% endcapture %}
+                {% include 'custom-css', css: blkCSS, class: blkClass %}
+              {% endif %}
+              {% render 'snippet--article-item',
+                article: article,
+                overrideTitle: aTtl,
+                overrideText: aTxt,
+                overrideImage: aImg,
+                backgroundImage: aBgImg,
+                overrideDate: '',
+                overrideButton: aBtn,
+                overrideLink: aLnk,
+                show_desc: false
+              %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% include 'custom-css', css: sectionCustomCSS, class: cssClass %}
+</div>

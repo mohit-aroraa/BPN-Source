@@ -1,0 +1,113 @@
+.#{$prefix}recommendations {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 48px 16px 60px;
+  overflow-x: clip;
+
+  @include above('desktop') {
+    padding: 60px 64px 72px;
+  }
+}
+
+.#{$prefix}recommendations .swiper {
+  overflow: visible;
+}
+
+.#{$prefix}recommendations__title {
+  margin: 0 0 32px;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 40px;
+  letter-spacing: -1.44px;
+  text-transform: uppercase;
+
+  @include above('desktop') {
+    margin: 0 0 31px;
+  }
+}
+
+.#{$prefix}recommendations__slider {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  @include above('desktop') {
+    padding-top: 25px;
+  }
+}
+
+.#{$prefix}recommendations__navigation {
+  display: none;
+
+  @include above('desktop') {
+    width: 100%;
+    justify-content: flex-end;
+    display: flex;
+    position: absolute;
+    top: -53px;
+    gap: 16px;
+  }
+}
+
+.#{$prefix}recommendations__navigation .bpn-recommendations__nav-button {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.#{$prefix}recommendations__navigation .swiper-button:hover {
+  cursor: pointer;
+}
+
+.#{$prefix}recommendations__navigation .swiper-button-disabled {
+  color: black;
+}
+
+.#{$prefix}recommendations__navigation .swiper-button-disabled svg path {
+  stroke: #CCCCCC !important;
+}
+
+.#{$prefix}recommendations__controls {
+  margin: 32px auto 0;
+  display: flex;
+  column-gap: 16px;
+
+  @include above('desktop') {
+    display: none;
+  }
+}
+
+.#{$prefix}recommendations__pagination {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.#{$prefix}recommendations__pagination .swiper-pagination-bullet {
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: #767676;
+
+  &:hover {
+    background: black;
+    cursor: pointer;
+  }
+
+  &:last-of-type:not(.swiper-pagination-bullet-active) {
+    width: 8px;
+    height: 8px;
+  }
+
+  &.swiper-pagination-bullet-active {
+    width: 48px;
+    border-radius: 18px;
+    background: black;
+  }
+}
+
+  .#{$prefix}recommendations__products .bpn-product-grid-item {
+    max-width: 304px;
+    border-radius: 5px;
+  }

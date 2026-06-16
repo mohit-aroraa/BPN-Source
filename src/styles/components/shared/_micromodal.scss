@@ -1,0 +1,199 @@
+/**************************\
+  Basic Modal Styles
+\**************************/
+
+.micromodal {
+  $parent: &;
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 40px 12px;
+
+    @include above("tablet-large") {
+      padding: 60px;
+    }
+  }
+
+  &__container {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    max-height: calc(100% - 60px);
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    @include above("tablet-large") {
+      max-height: calc(100vh - 120px);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    padding: 12px 14px 0 14px;
+    margin-bottom: 24px;
+    #{ $parent}__close:before {
+      content: "\2715";
+      color: color("black");
+      @include above("tablet-large") {
+        font-size: 20px;
+        font-weight: 900;
+      }
+    }
+    @include above("tablet-large") {
+      padding: 20px 20px 0 20px;
+    }
+  }
+
+  &__title {
+    @include use-text-style("paragraph-body-1");
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0;
+    @include above("tablet-large") {
+      @include use-text-style("heading-4");
+      font-weight: 900;
+      flex: 0 0 100%;
+      order: 2;
+      text-align: center;
+    }
+  }
+
+  &__close {
+    background: transparent;
+    border: 0;
+    margin-left: auto;
+    margin-bottom: 8px;
+    @include above("tablet-large") {
+      order: 1;
+      text-align: center;
+    }
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    padding: 12px 14px 12px 14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    @include above("tablet-large") {
+      padding: 12px 20px 12px 20px;
+    }
+    /* Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #000000 color("warm-gray");
+    }
+
+    /* Chrome, Edge and Safari */
+    &::-webkit-scrollbar {
+      width: 4px;
+      width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      border-radius: 0px;
+      background-color: color("warm-gray");
+    }
+
+    &::-webkit-scrollbar-track:hover {
+      background-color: color("warm-gray");
+    }
+
+    &::-webkit-scrollbar-track:active {
+      background-color: color("warm-gray");
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 0px;
+      background-color: color("black");
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: color("black");
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+      background-color: color("black");
+    }
+  }
+}
+
+/**************************\
+    Demo Animation Style
+  \**************************/
+@keyframes mmfadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mmfadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mmslideIn {
+  from {
+    transform: translateY(15%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes mmslideOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10%);
+  }
+}
+
+.micromodal-slide {
+  display: none;
+}
+
+.micromodal-slide.is-open {
+  display: block;
+}
+
+.micromodal-slide[aria-hidden="false"] .micromodal__overlay {
+  animation: mmfadeIn 0.3s cubic-bezier(0, 0, 0.2, 1);
+}
+
+// .micromodal-slide[aria-hidden="false"] .micromodal__container {
+//   animation: mmslideIn 0.3s cubic-bezier(0, 0, 0.2, 1);
+// }
+
+.micromodal-slide[aria-hidden="true"] .micromodal__overlay {
+  animation: mmfadeOut 0.3s cubic-bezier(0, 0, 0.2, 1);
+}
+
+// .micromodal-slide[aria-hidden="true"] .micromodal__container {
+//   animation: mmslideOut 0.3s cubic-bezier(0, 0, 0.2, 1);
+// }
+
+.micromodal-slide .micromodal__container,
+.micromodal-slide .micromodal__overlay {
+  will-change: transform;
+}

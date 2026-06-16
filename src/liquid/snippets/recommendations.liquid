@@ -1,0 +1,39 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title -%}
+{%- assign click_id = block.click_id -%}
+{%- assign collection_handle = block.collection_handle -%}
+{%- assign collection = collections[collection_handle] -%}
+{% assign click_id_prefix = 'homepage_' | append: click_id %}
+
+<section
+  class='recommendations js-recommendations recommendations--{{ request.page_type | handle }} recommendations--{{ id }}'
+  id='recommendations_{{ id }}'
+>
+  <h2 class='recommendations__title'>{{ title }}</h2>
+
+  <div class='recommendations-slider swiper' data-recommendations-swiper>
+    <div class='recommendations-slider__navigation'>
+      {% assign nav_click_id = click_id_prefix | append: '_navigation' %}
+      <div class='swiper-button swiper-button-prev' data-click-id='{{- nav_click_id -}}'>
+        {% render 'icon', icon: 'left-arrow', tag: nav_click_id %}
+      </div>
+      <div class='swiper-button swiper-button-next' data-click-id='{{- nav_click_id -}}'>
+        {% render 'icon', icon: 'right-arrow', tag: nav_click_id %}
+      </div>
+    </div>
+
+    <div class='swiper-wrapper recommendations-slider__wrapper'>
+      {% for product in collection.products limit: 6 %}
+        {% render 'product-card',
+          product: product,
+          click_id_prefix: click_id_prefix,
+          index: forloop.index
+        %}
+      {% endfor %}
+    </div>
+
+    <div class='recommendations-slider__controls'>
+      <div class='swiper-pagination recommendations-slider__pagination'></div>
+    </div>
+  </div>
+</section>

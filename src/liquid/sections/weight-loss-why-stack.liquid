@@ -1,0 +1,53 @@
+
+{% include 'discovery-why-stack' %}
+{% schema %}
+  {
+    "name": "Why Stack",
+    "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    },
+    {
+      "id": "choose_stack_title",
+      "type": "text",
+      "label": "Choose stack title"
+    },
+    {
+      "id": "choose_stack_link",
+      "type": "text",
+      "label": "Choose stack link"
+    }
+    ],
+    "blocks":[
+    {
+    "type": "text",
+    "name": "Stack details",
+    "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "richtext",
+                "id": "description",
+                "label": "Description"
+            }
+        ]
+    }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

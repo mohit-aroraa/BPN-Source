@@ -1,0 +1,239 @@
+
+{% comment %}
+    Renders a list of menu items
+    Accepts:
+    - linklist: {Object} Linklist Liquid object (required)
+    - wrapper_class: {String} CSS wrapper class for the navigation (optional)
+
+    Usage:
+    {% include 'site-nav', linklist: section.settings.main_linklist, wrapper_class: 'site-nav--centered' %}
+{% endcomment %}
+
+{% capture badgeSection %}
+  <div class="badge-section">
+    <img src="https://cdn.shopify.com/s/files/1/1103/4864/files/InformedSport_OnPack_Horizontal_DUO_REVERSE_WHITE_RGB.png?v=1622144262" alt="Informed Badge: Banned Substance Tested" />
+    <div class="rte">
+      <p>
+        All of our products are tested for banned substances
+      </p>
+    </div>
+  </div>
+{% endcapture %}
+
+<ul class="navbar-nav mr-auto{% if wrapper_class != blank %} {{ wrapper_class }}{% endif %}">
+  
+  {% for link in linklists[linklist].links %}
+    {%- assign child_list_handle = link.title | handleize -%}
+
+    {% comment %}
+      Check if third-level nav exists on each parent link.
+    {% endcomment %}
+    {%- assign three_level_nav = false -%}
+    {% if link.links != blank %}
+      {% if link.levels == 2 %}
+        {%- assign three_level_nav = true -%}
+      {% endif %}
+    {% endif %}
+
+    {% if link.links != blank %}
+      
+      <li class="has-submenu site-nav--has-dropdown{% if three_level_nav %} site-nav--has-centered-dropdown{% endif %}{% if link.active %} site-nav--active{% endif %} {% if forloop.index == 1 %} shop-menu {% endif %}"  data-has-dropdowns>
+        {% if forloop.index == 1 %} 
+          <a href="javascript:void(0);" class="shop-custom-menu">{{ link.title | escape }}</a>
+        {% else %}
+          <a href="{{link.url}}">{{ link.title | escape }}</a>
+        {% endif %}
+        {% if three_level_nav %}
+          {% if forloop.index == 1 %}
+            <div class="shop-menu-slide">
+              <div class="scroll">              
+                <ul class="sub-menu shop-sub-menu">
+                  {% for childlink in link.links %}
+                   
+                    {% liquid 
+                      
+                      assign matchFound       = false
+                      
+                      for block in section.blocks
+                        
+                        assign b              = block.settings
+                        
+                        assign lnkHndl        = childlink.title | handle
+                        assign blkHndl        = b.handle | handle
+                        assign grdWdth        = b.grid_width | plus: 0
+                        
+                        case grdWdth
+                          when 2  
+                            assign width      = 'one-half'
+                          when 3  
+                            assign width      = 'one-half ex-large-up--one-third'
+                          when 4  
+                            assign width      = 'one-half ex-large-up--one-quarter'
+                        endcase 
+
+                        assign lnkTtl_1       = b.title_1
+                        assign lnkImg_1       = b.image_1
+
+                        assign lnkTtl_2       = b.title_2
+                        assign lnkImg_2       = b.image_2
+
+                        assign lnkTtl_3       = b.title_3
+                        assign lnkImg_3       = b.image_3
+
+                        assign lnkTtl_4       = b.title_4
+                        assign lnkImg_4       = b.image_4
+
+                        assign lnkTtl_5       = b.title_5
+                        assign lnkImg_5       = b.image_5
+
+                        assign lnkTtl_6       = b.title_6
+                        assign lnkImg_6       = b.image_6
+
+                        assign lnkTtl_7       = b.title_7
+                        assign lnkImg_7       = b.image_7
+
+                        if lnkHndl == blkHndl 
+                          assign matchFound   = true
+                          break
+                        endif 
+
+                      endfor
+
+                    %}
+
+                    <!-- 1: {{grdWdth}} -->
+
+                    <li class="{% if childlink.links != blank %}site-nav--has-dropdown-child{% endif %}">
+                      <h3><a href="{{ childlink.url }}">{{ childlink.title | escape }}</a></h3>
+                      {% if childlink.links != blank %}
+                        <div class="sub-menu-inner {% if matchFound %} section--ctas{% endif %}">
+                          <ul {% if matchFound %} class="grid_no_gutter vert-top" {% endif %}>
+                            {% for grandchildlink in childlink.links %}
+                              <li {% if matchFound %} class="grid__item {% comment %}narrow--one-whole{% endcomment %} {{width}}" {% endif %}>
+                                {% if matchFound %} 
+                                  {% liquid 
+                                    assign lp     = forloop.index 
+                                    assign lnkTtl = 'lnkTtl_' | append: lp
+                                    assign ttl    = [lnkTtl] | default: grandchildlink.title
+                                    assign lnkImg = 'lnkImg_' | append: lp
+                                    assign img    = [lnkImg]
+                                  %}
+                                  <a href="{{ grandchildlink.url }}" class="inner-container">
+                                    {% include 'snippet--image', 
+                                      img: img, 
+                                      useBG: false,
+                                    %}
+                                      {% comment %}extraClass: 'medium-down--hide'{% endcomment %}
+                                    {% if ttl != blank %}
+                                      <h2 class="{% comment %}medium-down--hide{% endcomment %}">{{ttl}}</h2>
+                                      {% comment %}<span class="large-up--hide">{{ttl}}</span>{% endcomment %}
+                                    {% endif %}
+                                  </a>
+                                {% else %}
+                                  <a href="{{ grandchildlink.url }}">
+                                    {{ grandchildlink.title | escape }}
+                                  </a>
+                                {% endif %}
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                  <li class="medium-down--hide badge-placement">
+                    {{badgeSection}}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          {% else %}
+            <ul class="sub-menu {{forloop.index}}">
+              {% for childlink in link.links %}
+                <li class="{% if childlink.links != blank %}site-nav--has-dropdown-child{% endif %}">
+                  <a href="{{ childlink.url }}" class="site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}" {% if childlink.current %} aria-current="page"{% endif %}>
+                    {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% else %}
+          {% if forloop.index == 1 %}
+            <div class="shop-menu-slide">
+              <ul class="sub-menu shop-sub-menu">
+                {% for childlink in link.links %}
+                  <li>
+                    <h3>{{ childlink.title | escape }}</h3>
+                    <div class="sub-menu-inner">
+                      <ul>
+                        {% for grandchildlink in childlink.links %}
+                          <li><a href="{{ grandchildlink.url }}">{{ grandchildlink.title | escape }}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            <ul class="sub-menu {{forloop.index}}">
+              {% for childlink in link.links %}
+                <li>
+                  <a href="{{ childlink.url }}" class="site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}" {% if childlink.current %} aria-current="page"{% endif %}>
+                    {{ childlink.title | escape }}
+                  </a>
+                </li>
+              {% endfor %}
+        	  </ul>
+          {% endif %}
+        {% endif %}
+      </li>
+    
+    {% else %}
+      
+      <li class="{% if link.active %} site-nav--active{% endif %}{% if forloop.last == true %} discover-menu {% endif %} " >
+        <a href="{% if forloop.last == true %}javascript:void(0) {% else %}{{ link.url }} {% endif %}" class="site-nav__link site-nav__link--main{% if link.active %} site-nav__link--active{% endif %}" {% if link.current %} aria-current="page"{% endif %}>
+          <span class="site-nav__label">{{ link.title | escape }}</span>
+        </a>
+        {% if forloop.last == true %}
+        	<div class="discover-menu-slide">
+            <button class="menu-toggle-discover" type="button">
+              <span class="d-block"></span>
+              <span class="d-block"></span>
+              <span class="d-block"></span>
+            </button>
+            <ul>
+             {% for link1 in linklists.discover-menu.links %}
+                <li class="text-center wow bounceInDown" data-wow-duration="1s">
+                  <a href="{{ link1.url }}"><span class="heading-span">{{ link1.title | escape }}</span></a>
+                </li>
+              {% endfor %}					
+            </ul>
+          </div>
+        {% endif %}
+      </li>
+    
+    {% endif %}
+  {% endfor %}
+
+  {% comment %}<li class="mobile-menu-show">
+      <a href="/account">Account</a>
+  </li>
+
+  <li class="mobile-menu-show">
+    <a href="/cart">Cart</a>
+  </li>{% endcomment %}
+
+  <li class="large-up--hide text-center">
+    <a href="/pages/quiz" class="btn">
+      Take the Quiz
+    </a>
+  </li>
+
+  <li class="large-up--hide">
+    {{badgeSection}}
+  </li>
+  
+</ul>
+

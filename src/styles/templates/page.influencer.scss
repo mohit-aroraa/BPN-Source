@@ -1,0 +1,96 @@
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+// Design tokens
+@import "./src/design-tokens/index";
+
+@import "./src/styles/components/shared/section-inline-ctas";
+
+.template--page-influencer {
+  .nine15--two-grid {
+    .btn[href="#"] {
+      border-color: #e6dac0 !important;
+      background: #e6dac0 !important;
+      color: #000 !important;
+      cursor: text !important;
+    }
+    .image-content__image-wrapper,
+    .image-content__image-wrapper img,
+    .image-content__image-container {
+      position: relative !important;
+      inset: unset !important;
+      padding: 0 !important;
+      height: auto !important;
+    }
+    .image-block {
+      padding-top: 0;
+      display: flex;
+      align-items: center;
+    }
+    @include mq($small) {
+      .text-content {
+        text-align: center;
+        h2,
+        .rte * {
+          text-align: left;
+          display: block;
+        }
+      }
+    }
+    @include mq($large-up) {
+      .grid_no_gutter {
+        grid-auto-columns: 40% 60%;
+        max-width: 1400px;
+        margin: 0 auto;
+        .text-block {
+          padding: 60px;
+        }
+      }
+    }
+  }
+
+  .section--influencer-products {
+    position: relative;
+    padding: 60px 0;
+
+    .section-title h2 {
+      position: relative;
+      font-family: var(--font_main_BoldEx);
+      font-size: 28px;
+      letter-spacing: normal;
+      color: #000000;
+      display: inline-block;
+      position: relative;
+      text-transform: uppercase;
+      margin: 0 auto 50px;
+      text-align: center;
+      line-height: 1.1;
+      z-index: 1;
+
+      span {
+        position: relative;
+      }
+
+      span:after {
+        --left: 100% !important;
+        content: "" !important;
+        background-image: var(--Hand_Drawn_Circle_svg) !important;
+        background-image: url(https://cdn.shopify.com/s/files/1/1103/4864/t/83/assets/integrity_products_doubleLine.svg?v=1831169…) !important;
+        padding-top: 6% !important;
+        width: 90px !important;
+        left: var(--left) !important;
+        bottom: -60% !important;
+        transform: translateX(calc(var(--left) * -1)) !important;
+        position: absolute !important;
+        background-repeat: no-repeat !important;
+        background-size: contain !important;
+        z-index: -1 !important;
+      }
+    }
+  }
+  .section--inline-cta {
+    .page-width {
+      margin-bottom: 0;
+    }
+  }
+}

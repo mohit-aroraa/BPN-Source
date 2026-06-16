@@ -1,0 +1,103 @@
+ {
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement_RzRmNz": {
+      "type": "announcement",
+      "blocks": {
+        "announcement_N9XtY6": {
+          "type": "announcement",
+          "settings": {
+            "announcement_text": "COMMIT NOW - 25% OFF ALL NEW SUBSCRIPTIONS",
+            "announcement_link": "shopify://collections/performance-nutrition"
+          }
+        },
+        "announcement_FaVcU6": {
+          "type": "announcement",
+          "settings": {
+            "announcement_text": "FREE SHIPPING ON ALL ORDERS $99+ (US ONLY)",
+            "announcement_link": "shopify://collections/performance-nutrition"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_N9XtY6",
+        "announcement_FaVcU6"
+      ],
+      "settings": {
+        "enable_announcement": true,
+        "slide_duration": 4000,
+        "announcement_background_color": "#dcff00",
+        "background_hover_color": "#dcff00",
+        "announcement_text_color": "#000000"
+      }
+    },
+    "promo-bar": {
+      "type": "promo-bar",
+      "disabled": true,
+      "settings": {
+        "announcement_enable": true,
+        "announcement_background_color": "#dcff00",
+        "announcement_text_color": "#000000",
+        "announcement_button_text": "GET TEXTS",
+        "announcement_text": "FOR FIRST ACCESS TO SALES, DROPS AND MORE",
+        "subscribed_customer_button_text": "",
+        "subscribed_customer_text": "FREE SHIPPING FOR ALL ORDERS $99+ (US ONLY)",
+        "paid_media_traffic_not_subscribed_button": "JOIN BPN MEMBERSHIP",
+        "paid_media_traffic_not_subscribed_text": "to unlock 20% off for life",
+        "paid_media_traffic_subscribed_text": "You’ve unlocked 20% OFF Subscriptions",
+        "modal_title": "You are part of the BPN Membership",
+        "modal_text": "Stay subscribed to SMS to enjoy an <strong>EXTRA 5% OFF</strong> on all product subscriptions for life.",
+        "modal_sub_text": "Reply <strong>HELP</strong> for help and <strong>STOP</strong> to cancel. View our <a href=\"/\" title=\"/\">Terms of Service</a> and <a href=\"/\" title=\"/\">Privacy Policy</a>."
+      }
+    },
+    "new-header": {
+      "type": "new-header",
+      "blocks": {
+        "featured_media_desktop_qJde9g": {
+          "type": "featured_media_desktop",
+          "settings": {
+            "featured_desktop_image": "shopify://shop_images/endurancef-fuel.jpg",
+            "featured_desktop_image_link": "shopify://collections/performance-nutrition",
+            "image_overlay_color": "linear-gradient(180deg, rgba(91, 91, 91, 0.57), rgba(164, 164, 164, 0) 100%)",
+            "featured_desktop_image_title": "Endurance Fuel",
+            "featured_desktop_image_cta_text": "Shop Now",
+            "parent_link": "Supplements"
+          }
+        },
+        "featured_media_mobile_g3FYik": {
+          "type": "featured_media_mobile",
+          "settings": {
+            "featured_mobile_image": "shopify://shop_images/endurancef-fuel.jpg",
+            "featured_mobile_image_link": "shopify://collections/performance-nutrition",
+            "image_overlay_color": "linear-gradient(180deg, rgba(91, 91, 91, 0.57), rgba(164, 164, 164, 0) 100%)",
+            "featured_mobile_image_title": "Endurance Fuel",
+            "featured_mobile_image_cta_text": "Shop Now",
+            "parent_link": "Shop Hybrid"
+          }
+        }
+      },
+      "block_order": [
+        "featured_media_desktop_qJde9g",
+        "featured_media_mobile_g3FYik"
+      ],
+      "custom_css": [],
+      "settings": {
+        "menu": "dev-desktop-menu-v2",
+        "mobile_menu": "dev-mobile-menu-v2",
+        "main_cta_text": "SHOP ALL SUPPLEMENTS",
+        "main_cta_link": "shopify://collections/performance-nutrition",
+        "mobile_cta_copy": "Not sure where to start?text",
+        "mobile_cta_text": "Take the quiz.....",
+        "mobile_cta_link": "shopify://pages/2025-store-locator",
+        "rotational_offer_image": "shopify://shop_images/SavedBy_Package_Icon_BPN_v1.png",
+        "rotational_offer_link": "shopify://blogs/fitness"
+      }
+    }
+  },
+  "order": [
+    "announcement_RzRmNz",
+    "promo-bar",
+    "new-header"
+  ]
+}

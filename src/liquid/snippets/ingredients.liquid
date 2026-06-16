@@ -1,0 +1,81 @@
+{%- assign block = section[module] -%}
+{%- assign header = block.header -%}
+{%- assign modal_title = block.modal_title -%}
+{%- assign ingredients_modal = block.ingredients_modal -%}
+{%- assign trigger_text = block.trigger_text -%}
+{%- assign image = block.image -%}
+{%- assign length = block.count | minus: 1 -%}
+
+{%- assign global_section = pages['site-global-data'].metafields.global_data -%}
+{%- assign background_texture = global_section.gray_block_bg_landscape -%}
+
+<section class="landingPageIngredients" style="background-image:url({{ background_texture.url }})">
+  <div class="landingPageIngredients__wrapper">
+    <div class="landingPageIngredients__image">
+      {% render 'prismic-responsive-image', image: image, image_attributes: 'width="320" height="270"', random_id: id %}
+    </div>
+    <div class="landingPageIngredients__content">
+      {% if header != blank %}
+        <div class="landingPageIngredients__title">{{ header }}</div>
+      {% endif %}
+      <div class="siteAccordion landingPageIngredients__accordion">
+        <div class="js-site-accordion-parent">
+          {% for index in (0..length) limit: 4 %}
+            {% assign ingredient_name_key = 'ingredient_name_' | append: index %}
+            {% assign ingredients_details_key = 'ingredients_details_' | append: index %}
+            {% assign aria_controls_id = 'ingredients_' | append: id | append: '_' | append: index %}
+
+            <div class="siteAccordion__wrapper">
+              <a
+                class="siteAccordion__header"
+                role="button"
+                data-accordion-trigger
+                href="javascript:void(0);"
+                aria-expanded="false"
+                aria-controls="{{aria_controls_id}}"
+              >
+                <span class="siteAccordion__headerText">{{ block[ingredient_name_key] }}</span>
+                <span class="siteAccordion__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7">
+                    <path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </a>
+              <div class="siteAccordion__content" id="{{aria_controls_id}}">
+                <div class="siteAccordion__contentPaddingBottom">
+                  {% render 'prismic-rich-text', rich_text: block[ingredients_details_key] %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="landingPageIngredients__modalTrigger">
+        {% if trigger_text != blank %}
+          <a class="button-link" href="javascript:void(0);" data-micromodal-trigger="ingredients-slice-modal-content">
+            {{- trigger_text -}}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div
+    class="micromodal micromodal-slide productIngredients__modal"
+    id="ingredients-slice-modal-content"
+    aria-hidden="true"
+  >
+    <div class="micromodal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="micromodal__container" role="dialog" aria-modal="true" aria-labelledby="{{ modal_title | handle }}">
+        <header class="micromodal__header">
+          {%- if modal_title != blank -%}
+            <h2 class="micromodal__title" id="{{ modal_title | handle }}">{{ modal_title }}</h2>
+          {%- endif -%}
+          <button class="micromodal__close" aria-label="Close modal" data-micromodal-close></button>
+        </header>
+        <div class="micromodal__content productIngredientContent__modalContent">
+          {% render 'prismic-rich-text', rich_text: ingredients_modal %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

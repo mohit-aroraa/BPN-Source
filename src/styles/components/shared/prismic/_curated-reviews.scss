@@ -1,0 +1,205 @@
+.curatedReviews {
+  margin-bottom: 40px;
+  @include above("desktop-med") {
+    margin-bottom: 120px;
+  }
+  &__header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding-left: 12px;
+    padding-right: 12px;
+    @include above("tablet-large") {
+      margin-bottom: 41px;
+    }
+    .sectionTitle {
+      margin-bottom: 4px;
+      @include above("tablet-large") {
+        margin-bottom: 16px;
+      }
+    }
+  }
+  &__subHeading {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: normal;
+    color: color("black");
+    margin-bottom: 0;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-1");
+    }
+  }
+  &__wrapper {
+    display: flex;
+    padding-left: 12px;
+    @include above("tablet-large") {
+      padding-left: 32px;
+    }
+    @include above("tablet-large") {
+      padding-left: 64px;
+    }
+    @include above("desktop-med") {
+      padding-left: 142px;
+    }
+  }
+  &__reviewBlock {
+    display: none;
+    flex: 0 0 280px;
+    max-width: 280px;
+    margin-right: 34px;
+    height: 451px;
+    position: relative;
+    @include above("mobile-large") {
+      display: block;
+    }
+    @include above("tablet-large") {
+      flex: 0 0 303px;
+      max-width: 303px;
+    }
+    .swiper {
+      height: calc(100% - 70px);
+      width: 100%;
+    }
+  }
+  &__reviewerBlock {
+    flex-grow: 1;
+    overflow: hidden;
+    .swiper {
+      padding-bottom: 33px;
+      @include above("mobile-large") {
+        padding-bottom: 0;
+      }
+    }
+    .swiper-slide-active {
+      .reviewerCard {
+        @include above("tablet") {
+          height: 451px;
+          .reviewerCard__image {
+            opacity: 100%;
+          }
+        }
+      }
+    }
+    .swiper-scrollbar {
+      @include above("mobile-large") {
+        display: none;
+      }
+    }
+    .responsive-image {
+      &__wrapper {
+        @include above("mobile-large") {
+          height: 100%;
+        }
+      }
+    }
+  }
+  &__controls {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    .control {
+      width: 56px;
+      height: 56px;
+      cursor: pointer;
+      &[aria-disabled="true"] {
+        opacity: 0.3;
+        cursor: default;
+      }
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  &--page-all_prismic_component {
+    .reviewStars {
+      display: none;
+    }
+  }
+}
+.reviewBlock {
+  line-height: 1;
+  padding-top: 30px;
+
+  &__text {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 0.906;
+    letter-spacing: 0;
+    margin-bottom: 23px;
+    text-transform: none;
+  }
+  &__reviewer {
+    @include use-text-style("paragraph-body-1");
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+}
+.reviewerCard {
+  position: relative;
+  @include above("mobile-large") {
+    height: 400px;
+  }
+  &__image {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    &::selection {
+      background-color: transparent;
+    }
+    @include above("mobile-large") {
+      object-fit: cover;
+      object-position: center;
+      opacity: 20%;
+      transition: opacity 0.3s ease-in-out;
+    }
+  }
+  &__media {
+    @include above("mobile-large") {
+      height: 100%;
+    }
+  }
+  &__content {
+    margin-top: 24px;
+    @include above("mobile-large") {
+      display: none;
+    }
+  }
+  &__review {
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: normal;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  &__reviewer {
+    @include use-text-style("paragraph-body-4");
+    font-weight: 400;
+    margin-bottom: 0;
+  }
+}
+.reviewStars {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  line-height: normal;
+  @include above("tablet") {
+    margin-bottom: 15px;
+  }
+}
+.reviewStar {
+  margin-left: 4px;
+  &:first-child {
+    margin-left: 0;
+  }
+  svg {
+    width: 12px;
+    @include above("desktop-med") {
+      width: 16px;
+    }
+  }
+}

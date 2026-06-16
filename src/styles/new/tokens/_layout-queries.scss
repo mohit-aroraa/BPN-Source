@@ -1,0 +1,60 @@
+/// Media Breakpoints
+/// @link https://www.oddbird.net/accoutrement/docs/layout-queries.html#variable--breakpoints
+/// @group config-layout
+/// @see {map} $breakpoints - Map of breakpoint values
+/// @see {map} $sizes - Map of page size values
+$sizes: (
+  'page': 20rem, // 320px
+    
+  'page-mobile-large': '#page'
+  (
+    'times': 2, // 640px
+  ),
+    
+  'page-tablet': '#page'
+  (
+    'times': 2.4, // 768px
+  ),
+    
+  'page-tablet-large': '#page'
+  (
+    'times': 3.0969, // 991px
+  ),
+    
+  'page-desktop-med': '#page'
+  (
+    'times': 3.75, // 1200px
+  ),
+    
+  'page-desktop': '#page'
+  (
+    'times': 4.5, // 1440px
+  ),
+    
+  'page-desktop-large': '#page'
+  (
+    'times': 6, // 1920px
+  ),
+);
+
+/// Breakpoint values, adjusted to the proper units
+/// @group config-layout
+$breakpoints: (
+  'mobile': size('page'),
+  'mobile-large': size('page-mobile-large'), 
+  'tablet': size('page-tablet'),
+  'tablet-large': size('page-tablet-large'),
+  'desktop-med': size('page-desktop-med'),
+  'desktop': size('page-desktop'),
+  'desktop-large': size('page-desktop-large'),
+);
+
+/// Available Mixins for responsive breakpoints
+/// @link https://www.oddbird.net/accoutrement/docs/layout-queries.html#mixin--below
+/// @example scss
+///   @include below('mobile') {
+///     @content
+///   }
+///   @include above('tablet') {
+///     @content
+///   }

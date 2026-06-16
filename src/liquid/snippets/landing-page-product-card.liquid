@@ -1,0 +1,137 @@
+{%- comment -%}
+  All bundle products are assigned in "[hidden] Combo bundle collections" collection (Handle: combo-bundle-collections)
+  -featured_image: featured image from Prismic. If not passed in Prismic then default image from Shopify will be in use
+  -product_handle: Product handle required
+  -description: description of the product
+  -card_type: card type (single or combo) required
+  -class: additional class for the container
+  -first_product_handle: required for combo product
+  -second_product_handle: required for combo product
+  -featured_text: required for combo product
+  -landing-page-product-card.js required
+  -All combo products
+{%- endcomment -%}
+
+{%- assign all_bundle_products = collections['combo-bundle-collections'].products -%}
+
+{%- if card_type == 'combo' -%}
+  {%- assign one_item_is_not_available = false -%}
+  {% for product in all_bundle_products %}
+    {% comment %} Combo product object {% endcomment %}
+    {% if product.handle == product_handle %}
+      {% assign product_object = product %}
+      {% assign discount_value = product_object.metafields.custom_fields.combo_discount %}
+      {% assign selected_variant = product_object.selected_or_first_available_variant %}
+      {% continue %}
+    {% endif %}
+
+    {% if product_id contains product.id %}
+      {% comment %} Combo product markup {% endcomment %}
+      {% assign individual_product_object = product %}
+      {% if individual_product_object.availale == false %}
+        {%- assign one_item_is_not_available = true -%}
+      {% endif %}
+      {% assign variants_count = individual_product_object.variants | size %}
+      {%- capture combo_gird_markup -%}
+        {{ combo_gird_markup }}
+        {% if variants_count == 1 %}
+          {% assign first_variant = individual_product_object.variants | first %}
+
+          <p class="landingPageProductCard__dropdownLabel">
+            <span class="landingPageProductCard__dropdownLabel--uppercase">
+              {{- individual_product_object.title | split: '/' | first | trim | strip }}:</span
+            >
+            <span class="landingPageProductCard__dropdownLabelVariant">{{ first_variant.title }}</span>
+          </p>
+        {% else %}
+          <p class="landingPageProductCard__dropdownLabel landingPageProductCard__dropdownLabel--uppercase">
+            Choose Flavor For {{ individual_product_object.title | split: '/' | first | trim | strip }}:
+          </p>
+        {% endif %}
+        {%
+          render 'landing-page-dropdown',
+          selected_variant: individual_product_object.selected_or_first_available_variant,
+          variants: individual_product_object.variants,
+        %}
+      {%- endcapture -%}
+      {% continue %}
+    {% endif %}
+  {%- endfor -%}
+{%- else -%}
+  {% for product in all_bundle_products %}
+    {% if product.handle == product_handle %}
+      {% assign product_object = product %}
+      {% assign selected_variant = product_object.selected_or_first_available_variant %}
+      {% continue %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<div class="landingPageProductCard js-product-card {{class}}" data-product-card-type="{{card_type | escape}}">
+  {% unless card_type == 'single' %}
+    <div class="landingPageProductCard__featuredText">{{ featured_text }}</div>
+  {% endunless %}
+  <div class="landingPageProductCard__image">
+    {% if featured_image != blank %}
+      {% render 'prismic-responsive-image' with image: featured_image, image_attributes: 'width="300" height="320"' %}
+    {%- else -%}
+      {% render 'shopify-responsive-image' with image: product_object.featured_image, image_attributes: 'width="300" height="320"' %}
+    {% endif %}
+  </div>
+  <div class="landingPageProductCard__details">
+    <p class="landingPageProductCard__title">{{ product_object.title | split: '/' | first | trim | strip }}</p>
+    <div class="landingPageProductCard__priceWrapper">
+      <p class="landingPageProductCard__price">{% render 'product-tile-price', product: product_object %}</p>
+      {% if discount_tag != blank %}
+        <span class="discount-tag">{{ discount_tag }}</span>
+      {% endif %}
+    </div>
+    {% if description != blank %}
+      <div class="landingPageProductCard__description">
+        {% render 'prismic-rich-text', rich_text: description %}
+      </div>
+    {% endif %}
+    {% if card_type == 'single' %}
+      {% if product_object.variants.size > 1 %}
+        <p class="landingPageProductCard__dropdownLabel landingPageProductCard__dropdownLabel--uppercase landingPageProductCard__dropdownLabel--hideMobile">
+          Choose Flavor:
+        </p>
+        {% render 'landing-page-dropdown', selected_variant: selected_variant, variants: product_object.variants %}
+      {% endif %}
+      <button
+        type="button"
+        title="Add to cart"
+        data-sl="add_to_cart_landing_page_single"
+        class="button button-primary landingPageProductCard__cta"
+        {% if selected_variant.available == false %}
+          disabled
+        {% endif %}
+        data-selected-variant="{{selected_variant.id}}"
+        data-add-to-cart-cta
+        data-cta-type="{{card_type | escape}}"
+      >
+        {% if selected_variant.available %}BUY NOW{% else %}SOLD OUT{% endif %}
+      </button>
+    {% else %}
+      <div class="landingPageProductCard__comboDropdown">
+        {{ combo_gird_markup }}
+      </div>
+      <button
+        type="button"
+        title="Add to cart"
+        data-sl="add_to_cart_landing_page_combo"
+        class="button button-primary landingPageProductCard__cta"
+        {% if one_item_is_not_available %}
+          disabled
+        {% endif %}
+        data-combo-discount-value="{{ discount_value }}"
+        data-page-handle="{{ page.handle }}"
+        data-add-to-cart-cta
+        data-cta-type="{{ card_type | escape }}"
+      >
+        {% if one_item_is_not_available %} SOLD OUT {% else %} BUY NOW {% endif %}
+      </button>
+    {% endif %}
+    <p class="landingPageProductCard__error"></p>
+  </div>
+</div>

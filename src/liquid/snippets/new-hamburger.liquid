@@ -1,0 +1,27 @@
+{%- comment -%}
+  Hamburger Menu Component
+  -------------
+  Renders the complete mobile hamburger menu system including:
+  - Toggle button with animated lines
+  - Full-screen overlay background
+  - Sliding drawer with navigation menu
+  - Mega menu submenus and featured content
+
+  Parameters:
+  - menu: The menu handle to use for navigation items (required)
+      Uses same menu configuration as desktop navigation
+  - blocks: Theme section blocks containing mega menu settings (required)
+      Each block can configure:
+      - Parent menu item to attach mega menu to
+      - Up to 3 submenu link lists with optional titles
+      - Featured content with image, title and URL
+{%- endcomment -%}
+
+{%- liquid
+  assign menu_handle = menu | default: 'main-menu'
+  assign menu_items = linklists[menu_handle].links
+-%}
+
+{% render 'new-hamburger-button' %}
+
+{% render 'new-hamburger-drawer', menu: menu_handle, blocks: blocks %}

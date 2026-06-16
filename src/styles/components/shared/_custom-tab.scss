@@ -1,0 +1,26 @@
+.custom-tab {
+  .acc-container {
+    margin: 0 0 60px;
+
+    .fade {
+      opacity: 1 !important;
+    }
+
+    .acc-btn {
+      text-align: center;
+      padding: 0.7em 0em 0.6em;
+
+      h3 {
+        max-width: calc(100% - 50px - 1em);
+        width: auto;
+      }
+
+      .img {
+        position: relative;
+        top: initial;
+        left: initial;
+        transform: initial;
+      }
+    }
+  }
+}

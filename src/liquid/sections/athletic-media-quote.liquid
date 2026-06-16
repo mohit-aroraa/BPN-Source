@@ -1,0 +1,204 @@
+{% assign base_class = 'bpn-athletic-media-quote' %}
+{% assign podcast_title = section.settings.podcast_title | strip_html | strip %}
+
+<div class="{{ base_class }} {{ base_class }}--{{ section.id }}">
+  <div class="{{ base_class }}__media-wrapper">
+    {% include 'athletic-media', base_class: base_class %}
+
+    {%- if podcast_title != blank -%}
+      <div class="{{ base_class }}__podcast-title">{{ section.settings.podcast_title }}</div>
+    {%- endif -%}
+  </div>
+  <div class="{{ base_class }}__content-wrapper"
+       style="{%- if section.settings.background_color -%}background: {{ section.settings.background_color }};{%- endif -%}"
+  >
+    {% include 'athletic-shared-content',
+      base_class: base_class,
+      include_author_block: true
+    %}
+  </div>
+</div>
+
+<style>
+  .{{ base_class }}--{{ section.id }} .{{ base_class }}__content {
+    color: {{ section.settings.mobile_font_color }};
+  }
+
+  {%- if podcast_title == blank -%}
+    @media (max-width: 991px) {
+      .{{ base_class }}--{{ section.id }} {
+        margin-bottom: 56px;
+      }
+    }
+  {%- endif -%}
+
+  @media (max-width: 991px) {
+    .{{ base_class }}--{{ section.id }} .{{ base_class }}__media-wrapper {
+      background: {{ section.settings.background_color }}
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Media & Quote",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "id": "background_color",
+      "type": "color",
+      "label": "Background Color",
+      "default": "#f2f2f2"
+    },
+    {
+      "id": "font_color",
+      "type": "color",
+      "label": "Font Color",
+      "default": "#ffffff"
+    },
+    {
+      "id": "image_desktop",
+      "type": "image_picker",
+      "label": "Desktop Image",
+      "info": "Recommended 2880X1200 Image"
+    },
+    {
+      "id": "image_mobile",
+      "type": "image_picker",
+      "label": "Mobile Image",
+      "info": "Recommended 752X1104 Image"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_user_play",
+      "label": "User-initiated play (with sound & controls)",
+      "default": false
+    },
+    {
+      "id": "video_desktop_type",
+      "type": "select",
+      "label": "Desktop Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_desktop_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Desktop Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Desktop Video Source is set to URL."
+    },
+    {
+      "id": "video_desktop_media",
+      "type": "video",
+      "label": "Video Desktop Media",
+      "info": "Select a video from your Media Gallery if Desktop Video Source is set to Media."
+    },
+    {
+      "id": "video_desktop_poster",
+      "type": "image_picker",
+      "label": "Desktop Video Poster"
+    },
+    {
+      "id": "video_mobile_type",
+      "type": "select",
+      "label": "Mobile Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_mobile_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Mobile Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Mobile Video Source is set to URL."
+    },
+    {
+      "id": "video_mobile_media",
+      "type": "video",
+      "label": "Video Mobile Media",
+      "info": "Select a video from your Media Gallery if Mobile Video Source is set to Media."
+    },
+    {
+      "id": "video_mobile_poster",
+      "type": "image_picker",
+      "label": "Mobile Video Poster"
+    },
+    {
+      "type": "richtext",
+      "id": "podcast_title",
+      "label": "Podcast Title",
+      "default": "<p>How To Use Curiosity and Courage To Change Your Life with Lucy Davis | The Nick Bare Podcast 094</p>"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "label": "Text"
+    },
+    {
+      "id": "title",
+      "type": "richtext",
+      "label": "Title",
+      "default": "<p>Two Column Title</p>"
+    },
+    {
+      "type": "header",
+      "content": "Author Block"
+    },
+    {
+      "type": "image_picker",
+      "id": "author_image",
+      "label": "Author Image"
+    },
+    {
+      "type": "text",
+      "id": "author_name",
+      "label": "Author Name",
+      "default": "Nick Bare"
+    },
+    {
+      "type": "text",
+      "id": "author_title",
+      "label": "Author Title",
+      "default": "Hybrid Athlete and BPN Founder"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Athletic: Media Quote",
+      "category": "Athletic Landing Pages"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html class="no-js" lang="{{ shop.locale }}">
+  <head>
+    {% comment %} 1. Character Encodings {% endcomment %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+
+    {% comment %} 2. Title {% endcomment %}
+    <title>{{ 'gift_cards.issued.title_html' | t: value: formatted_initial_value_stripped, shop: shop.name }}</title>
+    <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
+
+    {% comment %} 3. Preconnected Links {% endcomment %}
+
+    {% comment %} 4. Synchronous Scripts {% endcomment %}
+    {% include 'head-first-scripts' %}
+
+    {% comment %} 5. Synchronous CSS {% endcomment %}
+    {% render 'head-fonts' %}
+    {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+    {{ 'gift-card.scss.css' | asset_url | stylesheet_tag }}
+    {% comment %} 6. Preloaded Links {% endcomment %}
+
+    {% comment %} 7. Asynchronous or deferred Scripts {% endcomment %}
+    <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer="defer"></script>
+    <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'gift-card.js' | asset_url }}" defer="defer"></script>
+    <script async src="https://cdn.rebuyengine.com/onsite/js/rebuy.js?shop={{ shop.permanent_domain }}"></script>
+
+    {% comment %} 8. Prefetched Links {% endcomment %}
+
+    {% comment %} 9. Prerendered Links {% endcomment %}
+
+    {% comment %} 10. Non-rendering assets {% endcomment %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {% render 'head-favicon' %}
+    {%- assign formatted_initial_value = gift_card.initial_value | money_without_trailing_zeros: gift_card.currency -%}
+    {%- assign formatted_initial_value_stripped = formatted_initial_value | strip_html -%}
+    <script>
+      var theme = {
+        strings: {
+          qrImageAlt: {{ 'gift_cards.issued.qr_image_alt' | t | json }}
+        }
+      };
+    </script>
+    {{ content_for_header }}
+    {% render 'shogun-head' %}
+  </head>
+
+  <body class="template-giftcard">
+    {% render 'gtm-data-layer-user-data' %}
+
+    {{ content_for_layout }}
+    <ul class="visually-hidden" aria-hidden="true">
+      <li id="a11y-new-window-message">{{ 'general.accessibility.link_messages.new_window' | t }}</li>
+      <li id="a11y-external-message">{{ 'general.accessibility.link_messages.external' | t }}</li>
+      <li id="a11y-new-window-external-message">
+        {{ 'general.accessibility.link_messages.new_window_and_external' | t }}
+      </li>
+    </ul>
+    {% include 'footer-crazy-egg' %}
+    <script type="text/javascript" data-em-load="afterInteractive" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WXXxWk"></script>
+    {% render 'audioeye-script' %}
+  </body>
+</html>

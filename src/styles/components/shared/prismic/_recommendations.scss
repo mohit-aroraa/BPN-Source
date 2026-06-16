@@ -1,0 +1,110 @@
+@import "product-card";
+
+.recommendations {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 48px 16px 60px;
+  background: #EEE;
+  overflow-x: clip;
+
+  @include above('desktop') {
+    padding: 80px 64px 72px;
+  }
+
+  .swiper {
+    overflow: visible;
+  }
+
+  &__title {
+    margin: 0 0 32px;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 40px;
+    letter-spacing: -1.44px;
+    text-transform: uppercase;
+
+    @include above('desktop') {
+      margin: 0 0 31px;
+    }
+  }
+}
+
+
+.recommendations-slider {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  @include above('desktop') {
+    padding-top: 25px;
+  }
+
+  &__navigation {
+    display: none;
+
+    @include above('desktop') {
+      width: 100%;
+      justify-content: flex-end;
+      display: flex;
+      position: absolute;
+      top: -53px;
+      gap: 16px;
+    }
+
+    .swiper-button {
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.swiper-button-disabled {
+        color: black;
+
+        svg {
+          path {
+            stroke: #CCCCCC !important;
+          }
+        }
+      }
+    }
+  }
+
+  &__controls {
+    margin: 32px auto 0;
+    display: flex;
+    column-gap: 16px;
+
+    @include above('desktop') {
+      display: none;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    .swiper-pagination-bullet {
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      background-color: #767676;
+
+      &:hover {
+        background: black;
+        cursor: pointer;
+      }
+
+      &:last-of-type:not(.swiper-pagination-bullet-active) {
+        width: 8px;
+        height: 8px;
+      }
+
+      &.swiper-pagination-bullet-active {
+        width: 48px;
+        border-radius: 18px;
+        background: black;
+      }
+    }
+  }
+}

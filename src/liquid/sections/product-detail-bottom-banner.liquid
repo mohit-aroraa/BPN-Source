@@ -1,0 +1,49 @@
+
+<div class="product-bottom-banner">
+  <div class="container-fluid d-flex justify-content-center">
+    <ul>
+      <li><img src="{{ 'bpn-logo.svg'| asset_url }}"> </li>
+      <li>
+        <h3>{{section.settings.title}}</h3>
+        <h6>{{section.settings.sub_title}}</h6>
+      </li>
+      <li>
+        <a href="{{section.settings.cta_link}}" class="learn-more ">{{section.settings.cta_title}} <i class="arrow-icon right-direction"></i> </a>
+      </li>
+    </ul>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Announcement Bar",
+    "settings": [
+	{
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+	},
+	{
+      "id": "sub_title",
+      "type": "text",
+      "label": "Sub-Title"
+	},
+	{
+      "id": "cta_title",
+      "type": "text",
+      "label": "CTA Title"
+	},
+	{
+      "id": "cta_link",
+      "type": "text",
+      "label": "CTA Link"
+	}
+	
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,44 @@
+{% assign gwp_settings = shop.metaobjects.gwp['settings'] %}
+<div class='bfcm-offer-banner {% if fixed == false %} fluid {% endif %}'>
+  <div class='bfcm-offer-banner__content'>
+    {% if fixed == true %}
+      <button
+        id='bfcm-offer-banner-close'
+        class='bfcm-offer-banner__close'
+        aria-label='Close offer banner'
+      >
+        <svg
+          xmlns='http://www.w3.org/2000/svg'
+          width='12'
+          height='12'
+          viewBox='0 0 12 12'
+          fill='none'
+        >
+          <path d="M1.2 12L0 10.8L4.8 6L0 1.2L1.2 0L6 4.8L10.8 0L12 1.2L7.2 6L12 10.8L10.8 12L6 7.2L1.2 12Z" fill="black"/>
+        </svg>
+      </button>
+    {% endif %}
+    <div class='bfcm-offer-banner__title'>{{ gwp_settings.bfcm_promo_banner_title }}</div>
+    <div class='bfcm-offer-banner__text bfcm-sale-text'>
+    </div>
+    <span class='bfcm-countdown'></span>
+  </div>
+</div>
+
+<style>
+    .bfcm-offer-banner {
+      background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.00) 31.22%, #000 76.1%),
+      url({{ gwp_settings.bfcm_promo_banner_image | image_url: width: 800 }}) center/cover no-repeat;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('bfcm-offer-banner-close');
+    button.addEventListener('click', () => {
+        const banner = document.querySelector('.bfcm-offer-banner');
+        banner.style.display = 'none';
+      });
+  });
+</script>

@@ -1,0 +1,201 @@
+/*================ Add to cart form ================*/
+
+.product-form {
+  width: auto;
+  padding-top: 2rem;
+}
+
+.product-form__controls-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+// When there are no form controls aside from submit
+.product-form__controls-group--submit {
+  margin-top: 0px;
+}
+
+.product-form__controls-group ~ .product-form__controls-group--submit {
+  margin-top: 15px;
+}
+
+.product-form__item {
+  flex-grow: 0;
+  flex-basis: 100%;
+  margin-bottom: 10px;
+  padding: 0;
+
+  @include mq($large-up) {
+    flex-basis: 50%;
+
+    .product-single--large-image & {
+      flex-basis: 100%;
+    }
+  }
+
+  label {
+    display: block;
+
+    .product-form--hide-variant-labels & {
+      // sass-lint:disable no-important
+      position: absolute !important;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      width: 1px;
+      margin: -1px;
+      padding: 0;
+      border: 0;
+    }
+  }
+}
+
+.product-form__item--submit {
+  display: flex;
+  flex: 1 1 300px;
+}
+
+.product-form__item--no-variants {
+  max-width: 400px;
+}
+
+.product-form__item--payment-button {
+  @include flex-basis(100%);
+
+  .product-single--small-media &,
+  .product-single--full-media & {
+    @include mq($large-up) {
+      display: inline-flex;
+      @include align-items(flex-start);
+    }
+  }
+
+  &.product-form__item--no-variants {
+    @include flex-direction(column);
+    @include align-items(stretch);
+  }
+}
+
+.product-form--variant-sold-out {
+  .shopify-payment-button {
+    display: none;
+  }
+}
+
+.product-form--payment-button-no-variants {
+  max-width: 25rem;
+}
+
+.product-form__variants {
+  display: none;
+
+  .no-js & {
+    display: block;
+  }
+}
+
+.product-form__input {
+  display: block;
+  width: 100%;
+
+  &.input--error {
+    margin-bottom: 0;
+  }
+}
+
+.product-form__input--quantity {
+  max-width: 5rem;
+}
+
+.product-form__error-message-wrapper {
+  display: flex;
+  flex-basis: 100%;
+  padding: 0.5rem 0;
+  margin: 0 calc(5px) 20px;
+}
+
+// No extra spacing if there are other form controls before it
+.product-form__controls-group ~ .product-form__error-message-wrapper {
+  margin-bottom: 0;
+}
+
+.product-form__error-message-wrapper--has-payment-button {
+  padding: 0.5rem 0;
+}
+
+.product-form__error-message-wrapper--hidden {
+  display: none;
+}
+
+.product-form__error-message {
+  margin-left: 0.5rem;
+  font-size: calc(#{$font-size-base} - 2px);
+  line-height: 1.2;
+  color: $color-body-text;
+}
+
+.product-form__cart-submit {
+  display: block;
+  width: 100%;
+  line-height: 1.4;
+  padding-left: 5px;
+  padding-right: 5px;
+  white-space: normal;
+  margin-top: 0;
+  margin-bottom: 10px;
+  min-height: 44px;
+
+  .product-single--small-media &,
+  .product-single--full-media & {
+    @include flex(50%);
+    margin-right: 10px;
+  }
+}
+
+.shopify-payment-button {
+  .product-single--small-media &,
+  .product-single--full-media & {
+    @include flex(50%);
+  }
+
+  .shopify-payment-button__button--unbranded {
+    @extend .btn;
+    @extend .product-form__cart-submit;
+
+    &:hover {
+      background-color: $color-btn-primary-focus !important;
+    }
+  }
+
+  .shopify-payment-button__button--branded {
+    border-radius: $border-radius;
+    overflow: hidden;
+  }
+
+  .shopify-payment-button__more-options {
+    margin: 16px 0 10px;
+    font-size: calc(#{$font-size-base} - 2px);
+    text-decoration: underline;
+
+    &:hover,
+    &:focus {
+      opacity: $opacity-link-hover;
+    }
+  }
+}
+
+@include mq($medium-up) {
+  .product-form__cart-submit--small {
+    max-width: 300px;
+  }
+}
+
+.product-single__description {
+  margin-top: $grid-gutter;
+}
+
+.product__quantity-error {
+  .icon {
+    margin-right: 1rem;
+  }
+}

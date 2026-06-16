@@ -1,0 +1,52 @@
+{%- comment -%}
+  -skip_snippets: To skip any snippet from rendering
+  - render tag won't work. We will have to use include tag
+  {% include 'prismic-dynamic-slices' section: page_metafields, skip_snippets: "announcement landing-header" %}
+{%- endcomment -%}
+
+{%- comment -%} fetch metafields of page using page-handle {%- endcomment -%}
+{%- assign metafields = section | default: page.metafields -%}
+
+{% comment %} *** Namespaces *** {% endcomment %}
+{% comment %} *** Controller *** {% endcomment %}
+
+{%- for priorities in metafields.meta_field_priority -%}
+  {% for p in priorities %}
+    {%- assign snippet_names = '' -%}
+    {% for module in p %}
+      {%- assign snippet_name = module | replace: '_', '-' -%}
+      {%- assign enable = metafields[module].enable -%}
+      {%- assign min = 1200 -%}
+      {%- assign max = 2300 -%}
+      {%- assign diff = max | minus: min -%}
+      {%- assign random_id = 'now' | date: '%N' | modulo: diff | plus: min | plus: forloop.index -%}
+      {%- if module != 'priority' -%}
+        {%- if skip_snippets contains snippet_name -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- capture slice_data -%}
+          <!-- {{ snippet_name }} -->
+          {% if enable == true %}
+            {% include snippet_name, id: random_id, snippet_name: snippet_name %}
+          {% endif %}
+        {%- endcapture -%}
+
+        {%- if slice_data contains 'Could not find asset snippets' -%}
+          {%- assign allSlices = snippet_names | split: ',' -%}
+          {% for slice_name in allSlices %}
+            {%- if snippet_name contains slice_name -%}
+              {%- if enable == true -%}
+                <!-- {{ snippet_name }} -->
+                {% include slice_name, id: random_id, snippet_name: snippet_name %}
+              {%- endif -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign snippet_names = snippet_names | append: snippet_name | append: ',' -%}
+          {{ slice_data }}
+        {%- endif -%}
+      {%- endif -%}
+    {% endfor %}
+  {% endfor %}
+{%- endfor -%}

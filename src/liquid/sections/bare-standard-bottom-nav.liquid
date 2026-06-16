@@ -1,0 +1,54 @@
+
+{% include 'bottom-nav-bar' %}
+
+{% schema %}
+  {
+    "name": "Bottom Navigation Bar",
+    "settings": [
+		{
+            "id": "bottom_nav1_title",
+            "type": "text",
+            "label": "Bottom Nav1 Title"
+		},
+		{
+            "id": "bottom_nav1_link",
+            "type": "url",
+            "label": "Bottom Nav1 Link"
+		},
+		{
+            "id": "bottom_nav2_title",
+            "type": "text",
+            "label": "Bottom Nav2 Title"
+		},
+		{
+            "id": "bottom_nav2_link",
+            "type": "url",
+            "label": "Bottom Nav2 Link"
+		}
+	],
+	"blocks": [
+            {
+              "type": "nav-links",
+			  "limit": 3,
+              "name": "Mobile Links",
+              "settings": [
+				 {
+                  "id": "title",
+                  "type": "text",
+                  "label": "Title"
+                },
+                  {
+                  "id": "link",
+                  "type": "url",
+                  "label": "Link"
+                }
+              ]
+            }]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

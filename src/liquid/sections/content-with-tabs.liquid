@@ -1,0 +1,70 @@
+<div class="sectiontype1 sectiontype2 space-bottom text14 what-we-test">
+  <div class="content-block  wow fadeInUp">
+    <h2>{{ section.settings.title }}</h2>
+    <div class="desktop-view  wow fadeInUp">
+      {{ section.settings.content }}
+    </div>
+  </div>
+  <div class="content-block1">
+    <div id="accordion" class="custom-accordian-new wow fadeInUp">
+      {% for block in section.blocks %}
+        <div class="card">
+          <div class="card-header" id="heading{{ forloop.index }}">
+            <a
+              class="collapsed"
+              data-toggle="collapse"
+              data-target="#collapse{{ forloop.index }}"
+            >
+              {{ block.settings.title }}
+            </a>
+          </div>
+          <div
+            id="collapse{{ forloop.index }}"
+            class="collapse"
+            aria-labelledby="heading{{ forloop.index }}"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              {{ block.settings.description }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Content with tabs",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "Content"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tabs",
+      "name": "Tabs",
+      "settings": [
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title"
+        },
+        {
+          "id": "description",
+          "type": "richtext",
+          "label": "Description"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

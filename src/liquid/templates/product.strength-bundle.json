@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "main-product-strength-bundle": {
+      "type": "main-product-strength-bundle"
+    }
+  },
+  "order": ["main-product-strength-bundle"]
+}

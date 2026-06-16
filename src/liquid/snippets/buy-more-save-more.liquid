@@ -1,0 +1,51 @@
+{% assign base_price = product.selected_or_first_available_variant.price %}
+{% assign count_per_box = product.selected_or_first_available_variant.metafields.custom.serving_size_or_count | plus: 0 %}
+
+<div
+  class='buy-more-save-more__section hidden'
+  data-count-per-box='{{ count_per_box }}'
+>
+  <h3>{{ settings.bmsm_text | default: 'STACK & SAVE — MIX ANY FLAVORS' }}</h3>
+  <div class='buy-more-save-more__section-items'>
+    {% for block in section.blocks %}
+      {% if block.type == 'packs' %}
+        {% assign box_multiplier = block.settings.num_boxes | default: 1 %}
+        {% assign total_units = count_per_box | times: box_multiplier %}
+        {% assign discount_pct = block.settings.discount_pct | default: 0 %}
+        {% assign unit_label = block.settings.unit_label | default: 'unit' | upcase %}
+
+        {% assign total_raw = base_price | times: box_multiplier %}
+        {% assign discount_amount = total_raw | times: discount_pct | divided_by: 100.0 | round %}
+        {% assign total_price = total_raw | minus: discount_amount %}
+        {% assign price_per_unit = total_price | times: 1.0 | divided_by: total_units | round %}
+
+        <div
+          class='buy-more-save-more__section-item'
+          data-qty='{{ box_multiplier }}'
+          data-price='{{ total_price | money }}'
+          data-multiplier='{{ box_multiplier }}'
+          data-discount='{{ discount_pct }}'
+          data-unit-label='{{ unit_label }}'
+        >
+          {% if block.settings.most_popular == true %}
+            <em>{{ block.settings.heading }}</em>
+          {% endif %}
+          {% if block.settings.best_deal == true %}
+            <em class='best-deal'>{{ block.settings.heading }}</em>
+          {% endif %}
+          <div>
+            <h4>
+              {{ box_multiplier }}
+              {% if box_multiplier == 1 %}BOX{% else %}BOXES{% endif %}
+            </h4>
+            <p>{{ total_price | money }}</p>
+            <small>{{ price_per_unit | money }}/{{ unit_label }}</small>
+          </div>
+          {% if discount_pct > 0 %}
+            <span>save {{ discount_pct }}%</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

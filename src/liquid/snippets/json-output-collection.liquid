@@ -1,0 +1,38 @@
+{%- comment -%}
+    We are making the filter array here
+{%- endcomment -%}
+
+{% assign section = metafields %}
+
+{% assign block_content = section['collection_filters'] %}
+{%- assign length = block_content.count | minus: 1 -%}
+
+{% if length > 1 %}
+    {%- assign length = 1 -%}
+{% endif %}
+
+{% capture filter_array %}
+    [
+        {% for index in (0..length) %}
+            {% assign _enable = 'enable_' | append: index %}
+            {% assign _filter_heading = 'filter_heading_' | append: index %}
+            {% assign _filter_type = 'filter_type_' | append: index %}
+            {% assign _filters = 'filters_' | append: index %}
+                
+            {% capture filter_data %}
+                {
+                    "filter_enable": {{block_content[_enable]}},
+                    "filter_heading": "{{block_content[_filter_heading]}}",
+                    "filter_type": "{{block_content[_filter_type]}}",
+                    "filters": "{{block_content[_filters]}}"
+                }
+                {% unless forloop.last %}
+                    ,
+                {% endunless %}
+            {% endcapture %}
+            {{filter_data}}
+        {% endfor %}
+    ]
+{% endcapture %}
+
+{{filter_array}}

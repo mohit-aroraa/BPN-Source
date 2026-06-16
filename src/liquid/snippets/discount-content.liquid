@@ -1,0 +1,72 @@
+{%- assign block = section[module] -%}
+{%- assign _layout = block.layout -%}
+{%- assign text_color = block.text_color -%}
+{%- assign background_color = block.background_color -%}
+{%- assign desktop_image = block.desktop_image -%}
+{%- assign mobile_image = block.mobile_image | default: desktop_image -%}
+{%- assign title = block.title[0] -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign content_title = block.content_title -%}
+{%- assign content = block.content -%}
+{%- if page.handle == 'military-discount' -%}
+  {%- assign discount_trigger_class = 'vfyps_mil' -%}
+{%- else -%}
+  {%- assign discount_trigger_class = block.discount_trigger_class | strip -%}
+{%- endif -%}
+{%- assign mobile_image_height = block.mobile_image_height -%}
+
+{% assign _layout_string = 'image-on-left' %}
+{% if _layout %}
+  {%- assign _layout_string = 'image-on-right' -%}
+{% endif %}
+
+{% capture section_classes %}
+{{snippet_name}}
+discountContent 
+discountContent--{{id}} 
+discountContent--{{_layout_string}}
+js-discount-conetent
+{% endcapture %}
+{% capture section_styles %}
+--text-color:{{text_color}};
+--background-color:{{background_color}};
+--mobile-image-height:{{mobile_image_height}};
+{% endcapture %}
+
+<section class="{{- section_classes -}}" style="{{- section_styles -}}">
+  <div class="discountContent__container">
+    <div class="discountContent__inner">
+      <div class="discountContent__aside">
+        <div class="discountContent__image is-desktop">
+          {% render 'prismic-responsive-image' with image: desktop_image %}
+        </div>
+
+        <div class="discountContent__image is-mobile">
+          {% render 'prismic-responsive-image' with image: mobile_image %}
+        </div>
+      </div>
+
+      <div class="discountContent__content">
+        {% if title != blank %}
+          <h1 class="discountContent__title">{{- title.text -}}</h1>
+        {% endif %}
+
+        <div class="discountContent__cta">
+          <a href="#!" class="button button-primary" onclick="idmePopUp()" role="button" title="{{- cta_text -}}">
+            {{- cta_text -}}
+          </a>
+        </div>
+
+        <div class="discountContent__entry">
+          {% if content_title != blank %}
+            <h5 class="discountContent__entry-title">{{- content_title -}}</h5>
+          {% endif %}
+
+          {% if content != blank %}
+            {{- content -}}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

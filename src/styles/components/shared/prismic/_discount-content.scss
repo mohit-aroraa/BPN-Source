@@ -1,0 +1,192 @@
+.discountContent {
+  margin-bottom: 40px;
+  color: var(--text-color);
+
+  @include above("tablet") {
+    background-color: var(--background-color);
+    margin-top: 9px;
+    margin-bottom: 90px;
+  }
+
+  .is-mobile {
+    @include above("tablet") {
+      display: none;
+    }
+  }
+
+  .is-desktop {
+    @include below("tablet") {
+      display: none;
+    }
+  }
+}
+
+.discountContent__container {
+  padding: 0 12px;
+  @include above("tablet") {
+    padding: 0;
+  }
+}
+
+.discountContent__inner {
+  @include above("tablet") {
+    display: flex;
+  }
+}
+
+.discountContent__aside {
+  height: var(--mobile-image-height);
+  position: relative;
+
+  @include above("tablet") {
+    flex: 0 0 48.9%;
+    max-width: 48.9%;
+    height: auto;
+  }
+  @include above("tablet") {
+    min-height: 566px;
+  }
+}
+
+.discountContent__image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: 100%;
+
+  .responsive-image__wrapper {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .responsive-image__image {
+    object-fit: cover;
+    max-height: 100% !important;
+  }
+}
+
+.discountContent__content {
+  background-color: var(--background-color);
+  padding: 18px 12px 27px;
+  border: 1px solid #e9e9e9;
+  border-top: 0;
+
+  @include above("tablet") {
+    padding: 80px 0 80px 96px;
+    max-width: 535px;
+    border: none;
+  }
+  @include above("desktop-med") {
+    padding: 80px 0 80px 112px;
+  }
+
+  .button {
+    font-size: 16px;
+    display: block;
+    line-height: 1.2;
+
+    @include above("tablet") {
+      font-size: 18px;
+      letter-spacing: 0.2px;
+      line-height: 1.3;
+    }
+  }
+}
+
+.discountContent__title {
+  text-align: center;
+  font-weight: 900;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: 0;
+  margin-bottom: 18px;
+
+  @include above("tablet") {
+    text-align: left;
+    font-size: 36px;
+    letter-spacing: -1.2px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+}
+
+.discountContent__entry {
+  border-top: 1px solid #dbd9d9;
+  margin-top: 21px;
+  padding-top: 15px;
+  font-size: 14px;
+  line-height: 1.15;
+  letter-spacing: 0;
+
+  @include above("tablet") {
+    margin-top: 32px;
+    padding-top: 23px;
+    font-size: 18px;
+    letter-spacing: 0.23px;
+    line-height: 1.22;
+  }
+
+  li {
+    position: relative;
+    padding-left: 16px;
+  }
+
+  li + li {
+    margin-top: 10px;
+
+    @include above("tablet") {
+      margin-top: 8px;
+    }
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+
+    @include above("tablet") {
+      top: 10px;
+    }
+  }
+}
+
+.discountContent__entry-title {
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  line-height: 1.14;
+  margin-bottom: 10px;
+
+  @include above("tablet") {
+    font-size: 18px;
+    letter-spacing: 0.23px;
+    line-height: 1.11;
+  }
+}
+
+.discountContent--image-on-right {
+  .discountContent__inner {
+    @include above("tablet") {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .discountContent__image {
+    @include above("tablet") {
+      right: auto;
+      left: 0;
+    }
+  }
+
+  .discountContent__content {
+    @include above("tablet") {
+      padding: 88px 96px 80px 0;
+    }
+  }
+}

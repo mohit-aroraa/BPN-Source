@@ -1,0 +1,154 @@
+// ------------------
+// Headings
+// ------------------
+
+// Extra-large headings
+@mixin athletic-h1 {
+  font-size: 144px;
+  font-weight: 900;
+  line-height: 112px;
+}
+
+@mixin athletic-h2-large {
+  font-size: 128px;
+  font-weight: 900;
+  line-height: 104px;
+}
+
+@mixin athletic-h3-large {
+  font-size: 96px;
+  font-weight: 900;
+  line-height: 80px;
+}
+
+@mixin athletic-h4-large {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 64px;
+}
+
+// Smaller headings
+@mixin athletic-h2 {
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 40px;
+}
+
+@mixin athletic-h3 {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 40px;
+}
+
+@mixin athletic-h4 {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 32px;
+}
+
+@mixin athletic-h5 {
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 24px;
+}
+
+// ------------------
+// Body Text
+// ------------------
+
+@mixin athletic-body-xl {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 26px;
+}
+
+@mixin athletic-body-lg {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+@mixin athletic-body-base {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+@mixin athletic-body-bold {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 20px;
+}
+
+@mixin athletic-body-sm {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+@mixin athletic-body-bold-sm {
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 18px;
+}
+
+@mixin athletic-body-xs {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+}
+
+@mixin athletic-body-xxs {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 12px;
+}
+
+// ------------------
+// Titles
+// ------------------
+// Title-1: default weight is 500; pass 900 for bold.
+@mixin athletic-title-1($weight: 500) {
+  font-size: 16px;
+  font-weight: $weight;
+  line-height: 20px;
+}
+
+// Title-2: default weight is 500; pass 900 for bold.
+@mixin athletic-title-2($weight: 500) {
+  font-size: 12px;
+  font-weight: $weight;
+  line-height: 14px;
+}
+
+// ------------------
+// Callouts
+// ------------------
+
+@mixin athletic-callout-base {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 18px;
+}
+
+@mixin athletic-callout-small {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 16px;
+}
+
+@mixin athletic-callout-bold {
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 12px;
+}
+
+// ------------------
+// Generic Text Style Utility
+// ------------------
+
+@mixin athletic-text-style($font-size, $line-height, $font-weight: 400) {
+  font-size: $font-size;
+  font-weight: $font-weight;
+  line-height: $line-height;
+}

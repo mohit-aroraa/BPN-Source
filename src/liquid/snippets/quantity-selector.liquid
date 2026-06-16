@@ -1,0 +1,9 @@
+<div class="quantity-selector{% if availability == 'oos' or availability == 'external' %} hidden{% endif %}">
+    <div class="quantity-selector__control disabled" data-direction="prev" disabled>
+        {% render 'icon', icon: 'quantity-selector-minus' %}
+    </div>
+    <span class="quantity-selector__value">1</span>
+    <div class="quantity-selector__control" data-direction="next">
+        {% render 'icon', icon: 'quantity-selector-plus' %}
+    </div>
+</div>

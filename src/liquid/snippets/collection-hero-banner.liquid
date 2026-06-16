@@ -1,0 +1,45 @@
+{%- comment -%}
+  Collection page banner top
+  ===Expect metafileds
+{%- endcomment -%}
+{%- assign block_content = metafields.collection_banner -%}
+{%- assign banner_enable = block_content.enable -%}
+{%- assign banner_desktop_image = block_content.banner_img_desktop -%}
+{%- assign banner_mobile_image = block_content.banner_img_mobile | default: banner_desktop_image -%}
+{%- assign banner_title = block_content.banner_title -%}
+{%- assign banner_img_alt = banner_desktop_image.alt | default: banner_title -%}
+{%- assign banner_desc = block_content.banner_desc -%}
+{%- assign overlay_color = block_content.overlay_color -%}
+{%- assign overlay_opacity = block_content.overlay_opacity -%}
+{%- assign length = block_content.count | minus: 1 -%}
+
+{%- capture breadcrumb -%}
+    {%- for index in (0..length) -%}
+        {%- assign _breadcrumb_text = 'breadcrumb_text_' | append: index -%}
+        {%- assign _breadcrumb_link = 'breadcrumb_link_' | append: index -%}
+        {%- assign breadcrumb_text = block_content[_breadcrumb_text] -%}
+        {%- assign breadcrumb_link = block_content[_breadcrumb_link] -%}
+
+        {%- if breadcrumb_link -%}
+            <li><a href="{{ breadcrumb_link }}">{{ breadcrumb_text }}</a></li>
+        {%- else -%}
+            <li>{{ breadcrumb_text }}</li>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+{% comment %}
+  {% if breadcrumb %}
+    <ul class="collectionBanner__breadcrumb collectionBanner__breadcrumb--outsideBanner">
+      {{ breadcrumb }}
+    </ul>
+  {% endif %}
+{% endcomment %}
+{%- if banner_enable -%}
+  {% render 'page-banner',
+    banner_title: banner_title,
+    banner_subtitle: banner_desc,
+    banner_image_desktop: banner_desktop_image,
+    banner_image_mobile: banner_mobile_image
+  %}
+{%- endif -%}

@@ -1,0 +1,115 @@
+.#{$athleticPrefix}callout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 52px;
+  padding: 20px;
+  background: #F0F0F0;
+
+  @include above('tablet-large') {
+    padding: 24px;
+  }
+}
+
+.#{$athleticPrefix}callout__container {
+  display: flex;
+  gap: 36px;
+
+  @include above('tablet-large') {
+    gap: 16px;
+  }
+}
+
+.#{$athleticPrefix}callout__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.#{$athleticPrefix}callout__item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+@include above('tablet-large') {
+  .#{$athleticPrefix}callout__item {
+    position: relative;
+    flex: 0 0 calc(33.333% - 20px);
+    max-width: 416px;
+    padding: 14px 22px;
+    flex-direction: row;
+    text-align: initial;
+  }
+
+  .#{$athleticPrefix}callout__item:not(:last-child) {
+    margin-right: 16px;
+  }
+
+  .#{$athleticPrefix}callout__item:not(:last-child)::after {
+    position: absolute;
+    top: 0;
+    right: -16px;
+    width: 1px;
+    height: 100%;
+    background-color: #ccc;
+    content: "";
+  }
+}
+
+.#{$athleticPrefix}callout__icon {
+  display: flex;
+  width: 100%;
+  height: 52px;
+  justify-content: center;
+
+  @include above('tablet-large') {
+    height: 100%;
+    margin-right: 24px;
+  }
+}
+
+.#{$athleticPrefix}callout__icon img {
+  display: block;
+  max-width: 80px;
+  object-fit: contain;
+}
+
+.#{$athleticPrefix}callout__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include above('tablet-large') {
+    align-items: flex-start;
+  }
+}
+
+.#{$athleticPrefix}callout__title {
+  text-transform: uppercase;
+  letter-spacing: -0.24px;
+
+  @include athletic-callout-bold;
+
+  @include above('tablet-large') {
+    color: #000;
+    letter-spacing: -0.32px;
+
+    @include athletic-body-bold;
+  }
+}
+
+.#{$athleticPrefix}callout__description {
+  display: none;
+  color: #444;
+
+  @include athletic-body-base;
+
+  @include above('tablet-large') {
+    display: inline-flex;
+  }
+}

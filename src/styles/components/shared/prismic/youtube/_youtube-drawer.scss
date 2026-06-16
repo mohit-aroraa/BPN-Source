@@ -1,0 +1,168 @@
+.youtube-drawer {
+  z-index: 10000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.60);
+
+  .hidden {
+    display: none;
+  }
+
+  &__content {
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 40.5px 24px 24px;
+    margin-left: auto;
+    width: 368px;
+    background: white;
+    height: 100%;
+    position: relative;
+  }
+
+  &__content-close-button-container {
+    display: flex;
+    top: 22px;
+    right: 22px;
+    position: absolute;
+    justify-content: flex-end;
+    padding: 0;
+
+    svg {
+      min-width: 16px;
+    }
+  }
+
+  &__content-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+  }
+
+  &__content-title {
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 32px; /* 100% */
+    letter-spacing: -0.96px;
+    text-transform: uppercase;
+  }
+
+  &__content-text {
+    margin-top: 4px;
+    color: #767676;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0;
+  }
+
+  .product-list {
+    margin-top: 32px;
+    gap: 24px;
+    display: flex;
+    flex-direction: column;
+
+    .product-card {
+      max-width: unset;
+      display: flex;
+      flex-direction: row;
+
+      .product-card__image-container {
+        min-width: 120px;
+        width: 120px;
+        height: 153px;
+
+        img {
+          object-fit: cover;
+        }
+      }
+
+      .product-card__content {
+        width: 100%;
+        padding: 0;
+        margin-left: 16px;
+      }
+
+      .product-card__rating {
+        [data-oke-reviews-version] > div {
+          display: flex;
+        }
+
+        .oke-sr-stars {
+          margin: 1.5px 4px 0 0;
+
+          .oke-stars {
+            margin-left: -3px;
+            width: 60px;
+
+            .oke-stars-foreground,
+            .oke-stars-background {
+              width: 60px;
+
+              svg {
+                width: 60px;
+                height: 9px;
+              }
+            }
+          }
+
+        }
+
+        .oke-sr-count {
+          display: inline-block;
+          margin-top: 3px;
+          font-size: 10px;
+          line-height: 12px;
+
+          span {
+            color: #767676;
+          }
+        }
+
+        .oke-sr-label-text {
+          display: none;
+        }
+      }
+
+      .product-card__title {
+        margin-top: 0.5px;
+      }
+
+      .product-card__dropdown {
+        margin-top: 12px;
+
+        .product-card__dropdown-content {
+          z-index: 51;
+        }
+
+        .product-card__dropdown-trigger {
+          padding: 5px 5px 5px 11px;
+        }
+      }
+
+      .product-card__add-button {
+        padding: 0 0 3px 0;
+        margin-top: 32px;
+        width: auto;
+        background: none;
+        color: black;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: 14px;
+        border-radius: 0;
+        letter-spacing: -0.28px;
+        text-transform: uppercase;
+        border-bottom: 3px solid black;
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{% liquid
+  assign settings = shop.metaobjects.sms_subscription_settings['global_sms_subscription_settings']
+  assign enabled = settings.enabled | default: true
+
+  assign popup_id = settings.desktop_popup_id
+  assign mobile_popup_id = settings.mobile_popup_id
+  assign sms_benefit_popup_id = settings.sms_benefit_popup_id
+  assign sms_benefit_mobile_popup_id = settings.sms_benefit_mobile_popup_id
+  assign gwp_id = settings.gwp_id
+
+  assign background_color = settings.background_color
+  assign text_color = settings.text_color
+%}
+
+{% if enabled == true %}
+  <div id="sms-subscription-information-modal" class="sms-subscription-modal-wrapper hidden"
+       data-popupId="{{ popup_id }}"
+       data-modilePopupId="{{ mobile_popup_id }}"
+       data-smsBenefitPopupId="{{ sms_benefit_popup_id }}"
+       data-smsBenefitMobilePopupId="{{ sms_benefit_mobile_popup_id }}"
+       data-gwpId="{{ gwp_id }}"
+  >
+    <section class="sms-subscription-modal"
+             style="--background-color: {{ background_color }}; --text-color: {{ text_color }};">
+      <span class="sms-subscription-modal__close-button">
+          {% render 'icon', icon: 'modal-close' %}
+      </span>
+      <h2 class="sms-subscription-modal__title">
+        {{ settings.modal_title | metafield_tag }}
+      </h2>
+      <div class="sms-subscription-modal__text">
+        {{ settings.modal_text | metafield_tag }}
+      </div>
+      <div class="sms-subscription-modal__sub-text">
+        {{ settings.modal_sub_text | metafield_tag }}
+      </div>
+    </section>
+  </div>
+{% endif %}

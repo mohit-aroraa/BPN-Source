@@ -1,0 +1,62 @@
+<ul class='bpn-footer__social-list'>
+  {% if youtube_link != blank %}
+    <li class='bpn-footer__social-item'>
+      <a
+        href='{{ youtube_link }}'
+        target='_blank'
+        aria-label='{{ 'layout.footer.youtube' | t }}'
+        data-click-id='footer_socials_youtube'
+        class='bpn-footer__social-link'
+      >
+        {% render 'social-icons', icon: 'youtube' %}
+        {{ 'layout.footer.youtube' | t }}
+        {% render 'icon', icon: 'plus' %}
+      </a>
+    </li>
+  {% endif %}
+  {% if instagram_link != blank %}
+    <li class='bpn-footer__social-item'>
+      <a
+        href='{{ instagram_link }}'
+        target='_blank'
+        aria-label='{{ 'layout.footer.instagram' | t }}'
+        data-click-id='footer_socials_ig'
+        class='bpn-footer__social-link'
+      >
+        {% render 'social-icons', icon: 'insta' %}
+        {{ 'layout.footer.instagram' | t }}
+        {% render 'icon', icon: 'plus' %}
+      </a>
+    </li>
+  {% endif %}
+  {% if facebook_link != blank %}
+    <li class='bpn-footer__social-item'>
+      <a
+        href='{{ facebook_link }}'
+        target='_blank'
+        aria-label='{{ 'layout.footer.facebook' | t }}'
+        data-click-id='footer_socials_facebook'
+        class='bpn-footer__social-link'
+      >
+        {% render 'social-icons', icon: 'facebook' %}
+        {{ 'layout.footer.facebook' | t }}
+        {% render 'icon', icon: 'plus' %}
+      </a>
+    </li>
+  {% endif %}
+  {% if tiktok_link != blank %}
+    <li class='bpn-footer__social-item'>
+      <a
+        href='{{ tiktok_link }}'
+        target='_blank'
+        aria-label='{{ 'layout.footer.tiktok' | t }}'
+        data-click-id='footer_socials_tiktok'
+        class='bpn-footer__social-link'
+      >
+        {% render 'social-icons', icon: 'tik-tok' %}
+        {{ 'layout.footer.tiktok' | t }}
+        {% render 'icon', icon: 'plus' %}
+      </a>
+    </li>
+  {% endif %}
+</ul>

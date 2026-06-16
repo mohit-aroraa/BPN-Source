@@ -1,0 +1,53 @@
+
+
+  <div class="product-list-col">
+    <div class="row">
+      {% for block in section.blocks %}
+      	{% assign product_item = all_products[block.settings.product] %}
+      	{% include 'perfomance-product-grid', product: product_item %}
+      {% endfor %}
+    </div>
+    <div class="text-link text-center">
+      <a href="{{ section.settings.view_more_link }}">VIEW MORE</a>
+    </div>
+  </div>
+
+{% schema %}
+{
+    "name": "Fast Recovery Product",
+	"settings": [
+   		{
+          "type": "url",
+          "id": "view_more_link1",
+          "label": "View More Link"
+        }
+    ],
+    "blocks":[
+      {
+      "type": "text",
+      "name": "Fast Recovery Product",
+      "settings": [
+
+
+              {
+                  "type": "product",
+                  "id": "product",
+                  "label": "Product"
+              }
+          ]
+      }
+    ],
+    "presets": [{
+    "name": 
+		{    
+			"en": "Fast Recovery Product"
+	    }
+    }]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

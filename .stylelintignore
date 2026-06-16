@@ -1,0 +1,15 @@
+# Ignore artifacts and dependencies
+dist/
+build/
+coverage/
+node_modules/
+
+# Ignore vendor and tools
+styles/vendor/
+styles/tools/
+
+# Ignore all legacy code but allow new structure
+src/design-tokens/**/*.scss
+src/assets/*.scss
+src/styles/**/*.scss
+!src/styles/new/**/*.scss

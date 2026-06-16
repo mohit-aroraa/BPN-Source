@@ -1,0 +1,26 @@
+/*================ Selectors ================*/
+
+.selectors-form {
+  @include display-flexbox();
+  @include justify-content(center);
+  @include flex-wrap(wrap);
+  margin-bottom: $footer-spacing-small;
+
+  @include mq($medium-up) {
+    @include justify-content(flex-start);
+    @include flex-wrap(nowrap);
+  }
+}
+
+.selectors-form__item {
+  padding-bottom: $footer-spacing-small;
+  margin: 0 $footer-spacing-extra-small;
+
+  @include mq($medium-up) {
+    padding-bottom: 0;
+
+    &:first-of-type {
+      margin-left: 0;
+    }
+  }
+}

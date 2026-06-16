@@ -1,0 +1,29 @@
+{%- comment -%}
+  _landing-page-banner is required
+{%- endcomment -%}
+{%- assign block = metafields[module] -%}
+{%- assign header = block.header -%}
+{%- assign text = block.text -%}
+{%- assign button_text = block.button_text -%}
+{%- assign layout = block.layout -%}
+{%- assign info_text = block.info_text -%}
+{%- assign image = block.image -%}
+
+<section class="landingPageBanner {% if layout %}landingPageBanner--imageLeft{% endif %}">
+  <div class="landingPageBanner__image">
+    {% render 'prismic-responsive-image' with image: image, image_attributes: 'width="320" height="280"', random_id: id %}
+  </div>
+  <div class="landingPageBanner__content">
+    <h1 class="landingPageBanner__header">{% render 'prismic-rich-text', rich_text: header %}</h1>
+
+    {% if text != blank %}
+      <p class="landingPageBanner__text">{{ text }}</p>
+    {% endif %}
+
+    {% if button_text != blank %}
+      <a href="javscript:void(0)" class="button button-primary landingPageBanner__cta js-scroll-to-section">
+        {{- button_text -}}
+      </a>
+    {% endif %}
+  </div>
+</section>

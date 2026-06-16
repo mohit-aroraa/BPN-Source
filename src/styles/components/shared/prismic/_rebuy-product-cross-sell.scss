@@ -1,0 +1,12 @@
+.rebuyWidget {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 25px;
+  @include above("desktop-med") {
+    margin-bottom: 80px;
+  }
+  &__block {
+    min-height: 500px;
+  }
+}

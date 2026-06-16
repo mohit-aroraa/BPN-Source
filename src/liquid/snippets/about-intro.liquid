@@ -1,0 +1,74 @@
+
+
+<div class="image-content red-stripe-right texture-left">
+  <div class="container">
+    <div class="title d-md-block">
+      <h1>{{ page.title }} {% comment %}{{ section.settings.mobile_title }}{% endcomment %}</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <div class="about-image">
+          <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.title }}" />
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-6">
+        <div class="about-content">									
+          <div class="section-title-fourth">
+            <h2>{{ section.settings.title }}</h2>
+          </div>
+          {{ section.settings.content }}
+          {% for block in section.blocks %}
+            {% if block.type == 'social_links' %}
+              <div class="about-social-icons">
+              <ul>
+                {% if block.settings.social_email != blank %}
+                <li>
+                  <a href="mailto:{{ settings.social_email }}" target="_blank">
+                    <img src="{{ 'mail.svg' | asset_url }}" alt="facebook" />
+                  </a>
+                </li>
+                {% endif %}
+                {% if block.settings.social_facebook_link != blank %}
+                <li>
+                  <a href="{{ settings.social_facebook_link }}" target="_blank">
+                    <img src="{{ 'facebook.svg' | asset_url }}" alt="facebook" />
+                  </a>
+                </li>
+                {% endif %}
+                {% if block.settings.social_instagram_link != blank %}
+                <li>
+                  <a href="{{ settings.social_instagram_link }}" target="_blank">
+                    <img src="{{ 'instagram.svg' | asset_url }}" alt="instagram" />
+                  </a>
+                </li>
+                {% endif %}
+                {% if block.settings.social_pinterest_link != blank %}
+                <li>
+                  <a href="{{ settings.social_pinterest_link }}" target="_blank">
+                    <img src="{{ 'pinterest.svg' | asset_url }}" alt="pinterest" />
+                  </a>
+                </li>
+                {% endif %}
+                {% if block.settings.social_twitter_link != blank %}
+                <li>
+                  <a href="{{ settings.social_twitter_link }}" target="_blank">
+                    <img src="{{ 'twitter.svg' | asset_url }}" alt="twitter" />
+                  </a>
+                </li>
+                {% endif %}
+                {% if block.settings.social_youtube_link != blank %}
+                <li>
+                  <a href="{{ settings.social_youtube_link }}" target="_blank">
+                    <img src="{{ 'youtube.svg' | asset_url }}" alt="youtube" />
+                  </a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

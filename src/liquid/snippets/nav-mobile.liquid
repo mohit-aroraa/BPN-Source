@@ -1,0 +1,327 @@
+<div class='mobileDrawer' aria-hidden='true' data-section-type='menuDrawer'>
+  <div class='close-menu-link-container'>
+    <a href='javascript:void(0);' class='mobile--only close-menu-link' title='Close Mobile menu'>
+      {% render 'icon', icon: 'header-close', class: 'js-close-menuDrawer icon--menuClose' %}
+    </a>
+  </div>
+
+  <nav class='mobile__nav' role='navigation'>
+    <ul class='mobile__nav-menu'>
+      {% for block in section.blocks %}
+        {%- liquid
+          assign nav_suffix = block.settings.menu_nav_text | downcase | replace: ' ', '_'
+          assign top_click_id = 'm-nav2_' | append: nav_suffix
+        -%}
+
+        {% if block.type == 'mega_menu' %}
+          <li
+            class='mobile__nav-menu-item js-mega-mobile-menu'
+            data-sl='{{ 'js_mega_mobile_menu' | append: forloop.index }}'
+          >
+            <div
+              class='mobile__nav-menuItemToggle js-menuOpen '
+              role='button'
+              aria-label='{{ block.settings.menu_nav_texturl}}'
+              tabindex='0'
+              data-click-id='{{- top_click_id -}}'
+            >
+              <div class='mobile__nav-menuText-wrapper' data-click-id='{{- top_click_id -}}'>
+                <a
+                  href='javascript:void(0);'
+                  class='mobile__nav-menu-link'
+                  data-click-id='{{- top_click_id -}}'
+                >
+                  {{ block.settings.menu_nav_text }}
+                </a>
+              </div>
+              {% render 'icon',
+                icon: 'arrow-right-redesign',
+                class: 'icon--arrow-right',
+                tag: top_click_id
+              %}
+            </div>
+            <div class='mobile__navInner'>
+              <div
+                class='js-collaposible-back menuDrawer__backWrapper'
+                role='button'
+                tabindex='0'
+                aria-label='Back to main menu'
+              >
+                <div class='menuDrawer__backBtn'>
+                  {%- render 'icon', icon: 'arrow-left', class: 'icon--arrow-left' -%}
+                  <span class='menuDrawer__backBtnText'>
+                    {{ block.settings.menu_nav_text }}
+                  </span>
+                  {% render 'icon',
+                    icon: 'header-close',
+                    class: 'js-close-menuDrawer icon--menuClose'
+                  %}
+                </div>
+              </div>
+
+              <div class='sidebarMenu__navContent'>
+                {%- assign link_count = linklists[block.settings.navigation].links.size -%}
+                {%- for link in linklists[block.settings.navigation].links -%}
+                  {% assign dropdown_click_id_prefix = top_click_id
+                    | replace: 'supplements', 'supps'
+                    | append: '_'
+                    | append: link.title
+                    | downcase
+                    | replace: ' ', '_'
+                  %}
+
+                  {%- if link_count == 1 and link.links != blank -%}
+                    <div class='sidebarMenu__InnerNavContent is--active standalone'>
+                      {%- for child_link in link.links -%}
+                        {% assign sub_click_id = dropdown_click_id_prefix
+                          | append: '_'
+                          | append: child_link.title
+                          | downcase
+                          | replace: ' ', '_'
+                        %}
+                        <a
+                          href='{{ child_link.url }}'
+
+                          class='sidebarMenu-navLinkProduct'
+                          data-sl='{{ child_link.title | downcase | replace: ' ', '_' }}'
+                          data-click-id='{{- sub_click_id -}}'
+                        >
+                          {{- child_link.title -}}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {%- elsif link_count > 1 -%}
+                    <div
+                      class='sidebarMenu-navWrapper js-menuOpen'
+                      data-sl='{{ 'js_menu_open_' | append: link.title | downcase | replace: ' ', '_' | replace: '-', "_" }}'
+                      data-click-id='{{ dropdown_click_id_prefix }}'
+                      data-name='{{ link.title | downcase }}'
+                    >
+                      <a
+                        href='javascript:void(0);'
+                        class='sidebarMenu-navLink'
+                        data-click-id='{{ dropdown_click_id_prefix }}'
+                      >
+                        {{ link.title }}
+                      </a>
+                      {% render 'icon',
+                        icon: 'plus-header',
+                        class: 'icon--plus',
+                        tag: dropdown_click_id_prefix
+                      %}
+                      {% render 'icon',
+                        icon: 'minus-header',
+                        class: 'icon--minus',
+                        tag: dropdown_click_id_prefix
+                      %}
+                    </div>
+                    <div class='sidebarMenu__InnerNavContent is--active'>
+                      {%- for child_link in link.links -%}
+                        {% assign sub_click_id = dropdown_click_id_prefix
+                          | append: '_'
+                          | append: child_link.title
+                          | downcase
+                          | replace: ' ', '_'
+                        %}
+                        <a
+                          href='{{ child_link.url }}'
+
+                          class='sidebarMenu-navLinkProduct'
+                          data-sl='{{ child_link.title | downcase | replace: ' ', '_' }}'
+                          data-click-id='{{- sub_click_id -}}'
+                        >
+                          {{- child_link.title -}}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {%- else -%}
+                    <a
+                      href='{{ link.url }}'
+                      class='sidebarMenu-navLinkProduct'
+                      data-sl='{{ link.title | downcase | replace: ' ', '_' }}'
+                      data-click-id='{{- sub_click_id -}}'
+                    >
+                      {{- link.title -}}
+                    </a>
+                  {%- endif -%}
+                {% endfor %}
+              </div>
+              <div class='header-mobile-dropdown__activity-container  carousel {% unless block.settings.activity_image_first != blank and block.settings.activity_image_second != blank and block.settings.activity_image_third != blank%} full-view {% endunless %}'>
+                {%- liquid
+                  assign mnav_suffix = top_click_id | replace: 'supplements', 'supps' | default: ''
+
+                  if mnav_suffix == 'supps'
+                    assign activity_click_id_one = 'm-nav_' | append: nav_suffix | append: '-promo-1'
+                    assign activity_click_id_two = 'm-nav_' | append: nav_suffix | append: '-promo-2'
+                    assign activity_click_id_three = 'm-nav_' | append: nav_suffix | append: '-promo-3'
+                  else
+                    assign activity_click_id_one = 'm-nav_' | append: nav_suffix | append: '-thumbnail-1'
+                    assign activity_click_id_two = 'm-nav_' | append: nav_suffix | append: '-thumbnail-2'
+                    assign activity_click_id_three = 'm-nav_' | append: nav_suffix | append: '-thumbnail-3'
+                  endif
+                -%}
+
+                {% if block.settings.activity_image_first != blank %}
+                  <div
+                    class='header-dropdown__activity-area'
+                    data-href='{{ block.settings.activity_cta_url_first }}'
+                    data-click-id='{{- activity_click_id_one -}}'
+                  >
+                    <img
+                      class='header-dropdown__activity-img lazyload'
+                      data-src='{{ block.settings.activity_image_first | img_url: '500x' }}'
+                      alt='{{ block.settings.activity_image_first.alt }}'
+                      data-click-id='{{- activity_click_id_one -}}'
+                      width='500'
+                      height='500'
+                    >
+                    <div
+                      class='header-dropdown__activity-content'
+                      data-click-id='{{- activity_click_id_one -}}'
+                    >
+                      <p
+                        class='header-dropdown__activity-title'
+                        data-click-id='{{- activity_click_id_one -}}'
+                      >
+                        {{ block.settings.activity_text_first }}
+                      </p>
+                      <a
+                        href='{{ block.settings.activity_cta_url_first }}'
+                        data-sl='{{ block.settings.activity_cta_text_first | downcase | replace: ' ', '_' }}'
+                        class='button button-small button-primary}'
+                        data-click-id='{{- activity_click_id_one -}}'
+                      >
+                        {{- block.settings.activity_cta_text_first -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.activity_image_second != blank %}
+                  <div
+                    class='header-dropdown__activity-area'
+                    data-href='{{ block.settings.activity_cta_url_second }}'
+                    data-click-id='{{- activity_click_id_two -}}'
+                  >
+                    <img
+                      class='header-dropdown__activity-img lazyload'
+                      data-src='{{ block.settings.activity_image_second | img_url: '500x' }}'
+                      alt='{{ block.settings.activity_image_second.alt }}'
+                      data-click-id='{{- activity_click_id_two -}}'
+                      width='500'
+                      height='500'
+                    >
+                    <div
+                      class='header-dropdown__activity-content'
+                      data-click-id='{{- activity_click_id_two -}}'
+                    >
+                      <p
+                        class='header-dropdown__activity-title'
+                        data-click-id='{{- activity_click_id_two -}}'
+                      >
+                        {{ block.settings.activity_text_second }}
+                      </p>
+                      <a
+                        href='{{ block.settings.activity_cta_url_second }}'
+                        data-sl='{{ block.settings.activity_cta_text_second | downcase | replace: ' ', '_' }}'
+                        class='button button-small button-primary}'
+                        data-click-id='{{- activity_click_id_two -}}'
+                      >
+                        {{- block.settings.activity_cta_text_second -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+                {% if block.settings.activity_image_third != blank %}
+                  <div
+                    class='header-dropdown__activity-area'
+                    data-href='{{ block.settings.activity_cta_url_third }}'
+                    data-click-id='{{- activity_click_id_three -}}'
+                  >
+                    <img
+                      class='header-dropdown__activity-img lazyload'
+                      data-src='{{ block.settings.activity_image_third | img_url: '500x' }}'
+                      alt='{{ block.settings.activity_image_third.alt }}'
+                      data-click-id='{{- activity_click_id_three -}}'
+                      width='500'
+                      height='500'
+                    >
+                    <div
+                      class='header-dropdown__activity-content'
+                      data-click-id='{{- activity_click_id_three -}}'
+                    >
+                      <p
+                        class='header-dropdown__activity-title'
+                        data-click-id='{{- activity_click_id_three -}}'
+                      >
+                        {{ block.settings.activity_text_third }}
+                      </p>
+                      <a
+                        href='{{ block.settings.activity_cta_url_third }}'
+                        data-sl='{{ block.settings.activity_cta_text_third | downcase | replace: ' ', '_' }}'
+                        class='button button-small button-primary}'
+                        data-click-id='{{- activity_click_id_three -}}'
+                      >
+                        {{- block.settings.activity_cta_text_third -}}
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% elsif block.type == 'single_link' %}
+          <li class='mobile__nav-menu-item'>
+            <div class='mobile__nav-menuItemToggle ' data-click-id='{{- top_click_id -}}'>
+              <div class='mobile__nav-menuText-wrapper' data-click-id='{{- top_click_id -}}'>
+                <a
+                  href='{{ block.settings.nav_link_url }}'
+                  class='mobile__nav-menu-link'
+                  data-click-id='{{- top_click_id -}}'
+                >
+                  {{- block.settings.nav_link | remove: 'START HERE:' -}}
+                </a>
+              </div>
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+
+  <div class='mobile__horizontal_nav'>
+    {% for block in section.blocks %}
+      {% if block.type == 'mobiletablink' %}
+        <a
+          class='mobile__horizontal_nav-link'
+          href='{{ block.settings.mobile_nav_url }}'
+          style='background-color: {{ block.settings.mobile_nav_color }};'
+          data-click-id='m-nav2_{{ block.settings.mobile_nav_text | downcase | replace: ' ', '' }}'
+        >
+          {{ block.settings.mobile_nav_text }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class='mobile__SecondaryNav'>
+    <a
+      class='mobile__SecondaryNav-link{% if request.path != '/cart' %} cart-trigger{% endif %}'
+      href='javascript:void(0)'
+      {% if request.path == '/cart' %}
+        style='cursor: default;'
+      {% endif %}
+      data-click-id='m-nav2_my-cart'
+    >
+      {% render 'icon', icon: 'bag', class: 'icon--link', tag: 'm-nav2_my-cart' %}
+      My Cart
+    </a>
+    <a
+      class='mobile__SecondaryNav-link'
+      href='{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}'
+      data-click-id='m-nav2_login'
+    >
+      {% render 'icon', icon: 'account', class: 'icon--link', tag: 'm-nav2_login' %}
+      {%- if customer -%}My Account{%- else -%}Login/Create Account{%- endif -%}
+    </a>
+  </div>
+</div>

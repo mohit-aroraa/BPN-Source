@@ -1,0 +1,131 @@
+.#{$prefix}tile-group {
+  margin: 0 auto;
+  max-width: 1920px;
+  padding: 44px 14px 54px 15px;
+
+  @include above('tablet') {
+    padding: 40px 32px;
+  }
+
+  @include above('tablet-large') {
+    padding: 40px;
+  }
+
+  @include above('desktop') {
+    padding: 96px 64px 79px;
+  }
+}
+
+.#{$prefix}tile-group__container {
+  display: flex;
+  width: 100%;
+  margin-top: 24px;
+  gap: 16px;
+  max-width: unset;
+
+  @include above('tablet') {
+    margin-top: 48px;
+  }
+
+  @include below('tablet') {
+    flex-wrap: wrap;
+  }
+
+  @include above('desktop') {
+    gap: 32px;
+  }
+}
+
+.#{$prefix}tile {
+  position: relative;
+  max-width: 100%;
+}
+
+.#{$prefix}tile--long {
+  @include above('tablet') {
+    width: 50%;
+  }
+}
+
+.#{$prefix}tile--long img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.#{$prefix}tile-group__title {
+  max-width: 346px;
+
+  @include above('tablet') {
+    max-width: 1088px;
+  }
+
+  @include above('desktop') {
+    @include use-text-style('bpn-h2-small');
+  }
+}
+
+.#{$prefix}tile-group__title-highlight {
+  color: color('bpn-red');
+}
+
+.#{$prefix}tile__content {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  padding: 0 15px 20px 16px;
+  gap: 32px;
+  justify-content: space-between;
+
+  @include above('desktop') {
+    gap: 48px;
+    padding: 0 40px 48px;
+  }
+}
+
+.#{$prefix}tile__title {
+  color: color('bpn-white');
+  font-weight: 900;
+
+  @include above('desktop') {
+    font-size: 23px;
+    font-style: normal;
+    line-height: 20px;
+    text-transform: uppercase;
+  }
+}
+
+.#{$prefix}tile__content-wrapper {
+  @include above('desktop') {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.#{$prefix}tile__text {
+  color: color('bpn-white');
+  font-weight: 500 !important;
+
+  @include above('desktop') {
+    @include use-text-style('bpn-body-xlarge');
+    margin-top: 6px;
+  }
+}
+
+.#{$prefix}tile__link-container {
+  align-items: flex-start;
+  align-self: center;
+  display: flex;
+  max-height: 48px;
+  max-width: 48px;
+  min-height: 48px;
+  min-width: 48px;
+
+  @include above('desktop') {
+    max-height: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    min-width: 80px;
+  }
+}

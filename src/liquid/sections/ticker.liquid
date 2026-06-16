@@ -1,0 +1,103 @@
+{%- liquid
+  assign bg_color   = section.settings.bg_color
+  assign text_color = section.settings.text_color
+  assign speed      = section.settings.speed
+  assign blocks     = section.blocks
+-%}
+
+{%- if blocks.size > 0 -%}
+<style>
+  #ticker-{{ section.id }} {
+    background-color: {{ bg_color }};
+    color: {{ text_color }};
+    --ticker-speed: {{ speed }}s;
+  }
+  #ticker-{{ section.id }} .ticker__separator {
+    color: {{ text_color }};
+  }
+</style>
+
+<div id="ticker-{{ section.id }}" class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <ul class="ticker__list">
+      {%- for block in blocks -%}
+        {%- if block.settings.text != blank -%}
+          <li class="ticker__item">
+            <span class="ticker__text">{{ block.settings.text | escape }}</span>
+            <span class="ticker__separator" aria-hidden="true">•</span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    <ul class="ticker__list" aria-hidden="true">
+      {%- for block in blocks -%}
+        {%- if block.settings.text != blank -%}
+          <li class="ticker__item">
+            <span class="ticker__text">{{ block.settings.text | escape }}</span>
+            <span class="ticker__separator" aria-hidden="true">•</span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ticker",
+  "class": "ticker-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#e02826"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed (seconds)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30,
+      "unit": "s"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Ticker item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "STRENGTH COLLECTION"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ticker",
+      "category": "Promotional",
+      "blocks": [
+        { "type": "item", "settings": { "text": "STRENGTH COLLECTION" } },
+        { "type": "item", "settings": { "text": "NO MORE GUESSWORK" } },
+        { "type": "item", "settings": { "text": "SAVE 25%" } },
+        { "type": "item", "settings": { "text": "STRENGTH COLLECTION" } },
+        { "type": "item", "settings": { "text": "NO MORE GUESSWORK" } },
+        { "type": "item", "settings": { "text": "SAVE 25%" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

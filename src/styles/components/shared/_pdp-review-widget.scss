@@ -1,0 +1,27 @@
+.review-list {
+  margin-bottom: 56px;
+  @include above("desktop-med") {
+    margin-bottom: 100px;
+  }
+  .sectionTitle {
+    @include above("tablet-large") {
+      margin-bottom: 56px;
+    }
+  }
+
+  &.red-stripe-left:before {
+    top: -195px;
+  }
+
+  h3 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 93px;
+  }
+
+  .container {
+    max-width: 847px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

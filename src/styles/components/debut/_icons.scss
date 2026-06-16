@@ -1,0 +1,96 @@
+/*================ #Icons ================*/
+.icon {
+  display: inline-block;
+  width: $icon-size;
+  height: $icon-size;
+  vertical-align: middle;
+  fill: currentColor;
+
+  .no-svg & {
+    display: none;
+  }
+}
+
+svg,
+symbol {
+  &.icon:not(.icon--full-color) {
+    circle,
+    ellipse,
+    g,
+    line,
+    path,
+    polygon,
+    polyline,
+    rect {
+      fill: inherit;
+      stroke: inherit;
+    }
+
+    .icon-error__symbol {
+      fill: #ffffff;
+    }
+  }
+}
+
+/*============================================================================
+      A generic way to visually hide content while
+      remaining accessible to screen readers (h5bp.com)
+    ==============================================================================*/
+.icon__fallback-text {
+  @extend .visually-hidden;
+
+  .no-svg & {
+    // sass-lint:disable no-important
+    position: static !important;
+    overflow: inherit;
+    clip: none;
+    height: auto;
+    width: auto;
+    margin: 0;
+  }
+}
+
+/*================ Payment Icons ================*/
+.payment-icons {
+  @include user-select();
+  cursor: default;
+
+  @include mq($small) {
+    line-height: 40px;
+  }
+
+  .icon {
+    width: 38px;
+    height: 24px;
+    fill: inherit;
+  }
+}
+
+/*================ Social Icons ================*/
+.social-icons .icon {
+  width: 23px;
+  height: 23px;
+
+  @include mq($medium-up) {
+    width: 25px;
+    height: 25px;
+  }
+
+  &.icon--wide {
+    width: 40px;
+  }
+}
+
+/*================ Spinner Icon ================*/
+.icon-spinner {
+  @include animation(spin 500ms infinite linear);
+}
+
+/*================ Error Icons ================*/
+.icon-error {
+  fill: $color-error;
+  width: calc(#{$font-size-base} - 2px);
+  height: calc(#{$font-size-base} - 2px);
+  margin-top: 0.1em;
+  flex-shrink: 0;
+}

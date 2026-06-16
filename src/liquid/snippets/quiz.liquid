@@ -1,0 +1,24 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title -%}
+{%- assign subtitle = block.subtitle -%}
+{%- assign text = block.text -%}
+{%- assign button_url = block.button_url -%}
+{%- assign background_image = block.background_image -%}
+
+<section class="quiz quiz--{{ request.page_type | handle }} quiz--{{ id }}"
+         id="quiz_{{ id }}" style="--background-image: url('{{ background_image.url }}')">
+    <h3 class="quiz__subtitle">{{ subtitle }}</h3>
+
+    <div class="quiz__container">
+        <h2 class="quiz__title">{{ title }}</h2>
+
+        <div class="quiz__link-container">
+            <a class="quiz__link" target="_blank" href="{{ button_url.url }}" data-click-id="homepage_lower-quiz_cta">
+                Take the quiz
+            </a>
+        </div>
+    </div>
+
+
+    <p class="quiz__text">{{ text }}</p>
+</section>

@@ -1,0 +1,96 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title -%}
+{%- assign subtitle = block.subtitle -%}
+{%- assign text = block.text -%}
+{%- assign link_text = block.link_text -%}
+{%- assign link_url = block.link_url -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section
+  class='youtube youtube--{{ request.page_type | handle }} youtube--{{ id }} js-bpn-youtube'
+  id='youtube_{{ id }}'
+>
+  <h2 class='youtube__title'>{{ title }}</h2>
+  <h3 class='youtube__subtitle'>{{ subtitle }}</h3>
+
+  <div class='youtube__content'>
+    <p class='youtube__text'>{{ text }}</p>
+    <a
+      class='youtube__link'
+      target='_blank'
+      href='{{ link_url.url }}'
+      data-click-id='homepage_videos_view-channel'
+    >
+      {{- link_text -}}
+    </a>
+  </div>
+
+  <div class='youtube-slider swiper' data-youtube-swiper>
+    <div class='youtube-slider__navigation'>
+      <div class='swiper-button swiper-button-prev' data-click-id='homepage_videos_navigation'>
+        {% render 'icon', icon: 'left-arrow', tag: 'homepage_videos_navigation' %}
+      </div>
+      <div class='swiper-button swiper-button-next' data-click-id='homepage_videos_navigation'>
+        {% render 'icon', icon: 'right-arrow', tag: 'homepage_videos_navigation' %}
+      </div>
+    </div>
+
+    <div class='swiper-wrapper youtube-slider__wrapper'>
+      {% for index in (0..length) %}
+        {% assign video_name = 'video_name_' | append: index %}
+        {% assign video_info = 'video_info_' | append: index %}
+        {% assign iframe = 'iframe_' | append: index %}
+
+        <div class='video-card swiper-slide'>
+          <div class='video-card__iframe-container'>
+            {{ block[iframe] }}
+          </div>
+          <h3 class='video-card__title'>{{ block[video_name] }}</h3>
+          <p class='video-card__text'>{{ block[video_info] }}</p>
+
+          <a
+            class='video-card__link js-bpn-youtube-video-link'
+            data-index='{{ index }}'
+            href=''
+            data-click-id='homepage_videos_shop-supps-{{ forloop.index }}'
+            >SHOP SUPPLEMENTS FROM VIDEO</a
+          >
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class='youtube-slider__controls'>
+      <div class='swiper-pagination youtube-slider__pagination'></div>
+    </div>
+  </div>
+
+  <div class='youtube-drawer hidden js-bpn-youtube-drawer'>
+    <div class='youtube-drawer__content'>
+      <div class='youtube-drawer__content-close-button-container'>
+        <button class='youtube-drawer__content-close-button js-bpn-youtube-drawer-close'>
+          {% render 'icon', icon: 'cross-icon' %}
+        </button>
+      </div>
+
+      <h3 class='youtube-drawer__content-title'>
+        FUEL YOUR <br>
+        PERFORMANCE
+      </h3>
+      <p class='youtube-drawer__content-text'>Shop the BPN products featured in this video</p>
+
+      {% for index in (0..length) %}
+        <div class='product-list js-bpn-youtube-product-list product-list-{{ index }} bpn-youtube__product-list--{{ forloop.index }}'>
+          {% assign products_key = 'products_' | append: index %}
+          {% assign product_handlers = block[products_key] | split: '|' %}
+
+          {% for handler in product_handlers %}
+            {% render 'horizontal-product-card',
+              product: all_products[handler],
+              index: forloop.index
+            %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

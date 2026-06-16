@@ -1,0 +1,40 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+// Design tokens
+@import "./src/design-tokens/index";
+@import "../components/shared/prismic/featured-collection";
+
+.template-article {
+  line-height: normal;
+  font-weight: 400;
+  .btn {
+    font-family: "Blender pro", sans-serif;
+    line-height: normal;
+    font-weight: 700;
+  }
+  .section-header h1,
+  .section-header .h1,
+  #tracktor h1,
+  #tracktor .h1 {
+    line-height: normal;
+    font-weight: 900;
+  }
+}
+.article-image,
+.shogun-image-link img,
+.shogun-image-container img {
+  margin-bottom: 25px;
+}

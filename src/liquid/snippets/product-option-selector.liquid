@@ -1,0 +1,37 @@
+{% assign _title = title %}
+{% assign _options = options %}
+{% assign _size = size %}
+{% assign _index = index %}
+
+<div class="selector-container" data-options="{{ _options | join: ',' }}">
+  <p class="selector-variants-count">
+    {{ _title }} ({{ _size }})
+  </p>
+
+  <div class="selector">
+    {% assign displayed = '=' %}
+    {% for variant in product.variants %}
+      {% assign variant_icon = variant.metafields.custom.product_card_variation_icon | default: blank %}
+      {% assign name = variant.options[_index] %}
+
+      {% assign search_name = '=' | append: name | append: '=' %}
+      <div
+        class="selector__item variation-option{% if variant.id == selected_variation.id %} selected{% endif %}{% if displayed contains search_name %} hidden{% endif %} {% if variant.available == false %} disabled{% endif %}"
+        data-product_id="{{ product.id }}"
+        data-variation_id="{{ variant.id }}"
+        data-product_name="{{ variant.options }}"
+        data-product_price="{{ variant.price }}"
+        data-value="{{ name }}"
+        data-position="{{ _index }}"
+        data-click-id="{{- click_id -}}"
+        {% if variant.available == true %}
+          data-available="true"
+        {% endif %}
+      >
+        {{ variant.options[_index] }}
+      </div>
+
+      {% assign displayed = displayed | append: name | append: '=' %}
+    {% endfor %}
+  </div>
+</div>

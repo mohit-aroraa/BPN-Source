@@ -1,0 +1,116 @@
+{%- comment -%}
+  Renders the Strength Collection Callout from a section block.
+  Accepts: source — a block object (source.settings mirrors the callout schema).
+{%- endcomment -%}
+
+{%- liquid
+  assign featured_product = source.settings.product
+  assign product_image = source.settings.product_image
+  if product_image == blank and featured_product != blank
+    assign product_image = featured_product.featured_image
+  endif
+  assign pdp_url = source.settings.pdp_url
+  if pdp_url == blank and featured_product != blank
+    assign pdp_url = featured_product.url
+  endif
+  assign callout_title = source.settings.title
+  if callout_title == blank and featured_product != blank
+    assign callout_title = featured_product.title
+  endif
+
+  assign current_price = 0
+  assign original_price = 0
+  if featured_product != blank
+    assign current_price = featured_product.price
+    assign component_products = featured_product.metafields.custom.bundle_components.value
+    if component_products.size > 0
+      for cp in component_products
+        assign original_price = original_price | plus: cp.price
+      endfor
+    elsif featured_product.compare_at_price > featured_product.price
+      assign original_price = featured_product.compare_at_price
+    endif
+  endif
+
+  assign okendo_rating = nil
+  if featured_product != blank
+    assign okendo_rating = featured_product.metafields.okendo.StarRatingSnippet
+  endif
+-%}
+
+<div class="scc" {{ source.shopify_attributes }}>
+
+  <div class="scc__image-panel">
+    <div class="scc__promo-banner">
+      <span class="scc__promo-text">{{ source.settings.promo_text | default: 'STRENGTH COLLECTION OUT NOW // SAVE 25% + FREE SHIPPING' }}</span>
+    </div>
+    {%- if product_image != blank -%}
+      <div class="scc__product-image">
+        <img
+          src="{{ product_image | image_url: width: 900 }}"
+          alt="{{ product_image.alt | default: callout_title | escape }}"
+          loading="lazy"
+          width="{{ product_image.width }}"
+          height="{{ product_image.height }}"
+        >
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="scc__buybox">
+
+    {%- if okendo_rating != blank -%}
+      <div class="scc__meta">
+        {{ okendo_rating }}
+      </div>
+    {%- endif -%}
+
+    {%- if callout_title != blank -%}
+      <h2 class="scc__title">{{ callout_title }}</h2>
+    {%- endif -%}
+
+    <div class="scc__sub-price-row">
+      {%- if source.settings.subheading != blank -%}
+        <p class="scc__subheading">{{ source.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if original_price > 0 or current_price > 0 -%}
+        <div class="scc__pricing">
+          {%- if original_price > current_price -%}
+            <s class="scc__compare-price">
+              <span class="sr-only">{{ 'products.product.regular_price' | t }}: </span>
+              {{ original_price | money }}
+            </s>
+          {%- endif -%}
+          {%- if current_price > 0 -%}
+            <span class="scc__current-price">
+              <span class="sr-only">{{ 'products.product.sale_price' | t }}: </span>
+              {{ current_price | money }}
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if source.settings.description != blank -%}
+      <div class="scc__desc">{{ source.settings.description }}</div>
+    {%- endif -%}
+
+    <div class="scc__actions">
+      {%- if source.settings.learn_more_url != blank -%}
+        <a href="{{ source.settings.learn_more_url }}" class="scc__learn-more">
+          {{ source.settings.learn_more_label | default: 'LEARN MORE' }}
+        </a>
+      {%- endif -%}
+      {%- if source.settings.savings_text != blank -%}
+        <p class="scc__savings">{{ source.settings.savings_text }}</p>
+      {%- endif -%}
+      {%- if pdp_url != blank -%}
+        <a href="{{ pdp_url }}" class="scc__cta">
+          {{ source.settings.button_label | default: 'SELECT FLAVORS' }}
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+
+</div>

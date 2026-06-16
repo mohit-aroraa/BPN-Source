@@ -1,0 +1,8 @@
+{%- comment -%}
+    -product : product object
+{%- endcomment -%}
+{%- if product.compare_at_price == blank -%}
+    ${{product.price | money_without_currency}}
+{%- else -%}
+    <span class="structured-text__label-text-red">${{product.price | money_without_currency}}</span> <strike>${{product.compare_at_price | money_without_currency}}</strike>
+{%- endif -%}

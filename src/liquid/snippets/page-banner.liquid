@@ -1,0 +1,68 @@
+{%- assign block = section[module] -%}
+{%- assign banner_title = block.banner_title[0] | default: banner_title -%}
+{%- assign banner_subtitle = block.banner_subtitle | default: banner_subtitle -%}
+{%- assign cta_text = block.cta_text | default: cta_text -%}
+{%- assign cta_url = block.cta_url | default: cta_url -%}
+{%- assign cta_aria_text = block.cta_aria_text | default: cta_aria_text -%}
+{%- if lazy_load_image -%}
+  {%- assign lazy_load_image = lazy_load_image -%}
+{% else %}
+  {%- assign lazy_load_image = block.lazy_load_image -%}
+{%- endif -%}
+{%- assign banner_image_desktop = block.banner_image_desktop | default: banner_image_desktop -%}
+{%- assign banner_image_mobile = block.banner_image_mobile | default: banner_image_mobile -%}
+{%- capture heading_markup -%}
+    {%- if banner_title.type == "heading1" -%}
+        <h1 class="pageBanner__title">{{ banner_title.text }}</h1>
+    {%- elsif banner_title.type == "heading2" -%}
+        <h2 class="pageBanner__title">{{ banner_title.text }}</h2>
+    {%- elsif banner_title.type == "heading3" -%}
+        <h3 class="pageBanner__title">{{ banner_title.text }}</h3>
+    {%- endif -%}
+{%- endcapture -%}
+<section class="pageBanner pageBanner--{{ id }}" id="pageBanner_{{ id }}">
+  <div class="pageBanner__background">
+    <div class="pageBanner__background-wrapper">
+      <img
+        class="pageBanner__image-mobile"
+        src="{{ banner_image_mobile.url }}"
+        alt="{{ banner_image_mobile.alt }}"
+        loading="{% if lazyload_image or template contains 'collection' %}lazy{%else%}eager{% endif %}"
+        width="320"
+        height="280"
+        data-em-optimize
+      >
+      <img
+        class="pageBanner__image-desktop"
+        src="{{ banner_image_desktop.url }}"
+        alt="{{ banner_image_desktop.alt }}"
+        loading="{% if lazyload_image or template contains 'collection' %}lazy{%else%}eager{% endif %}"
+        width="1440"
+        height="565"
+        data-em-optimize
+      >
+    </div>
+  </div>
+  <div class="pageBanner__content-wrapper">
+    <div class="pageBanner__content">
+      {% if template contains 'collection' or template contains 'page.all_prismic_component' %}
+        <h1 class="pageBanner__title">{{ banner_title }}</h1>
+      {%- else -%}
+        {{ heading_markup }}
+      {% endif %}
+      <p class="pageBanner__subtitle">{{ banner_subtitle }}</p>
+      {%- if cta_text != blank -%}
+        <a
+          href="{{- cta_url -}}"
+          class="button button-primary"
+          data-track="primary_cta"
+          {% if cta_aria_text != blank %}
+            aria-label="{{ cta_aria_text }}"
+          {% endif %}
+        >
+          {{- cta_text -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>

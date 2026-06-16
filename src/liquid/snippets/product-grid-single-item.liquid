@@ -1,0 +1,132 @@
+{%- comment -%}
+  -type: index/upsell
+  -collection: collection object
+  -show_products: how many products should be visible. Default:8
+{%- endcomment -%}
+{%- assign product_limit = show_products | default: 4 -%}
+{%- for product in collection.products limit: product_limit -%}
+  {%- assign selected_variant = product.selected_or_first_available_variant -%}
+  {%- assign PID = '' | append: product.id -%}
+  {%- assign product_metafields = pages[PID].metafields -%}
+  {%- assign product_global_fields = product_metafields.global_fileds -%}
+  {%- assign product_serving_text = product_global_fields.servings -%}
+  {%- assign original_price = selected_variant.price | money -%}
+
+  <div class='swiper-slide'>
+    {%- for variant in product.variants -%}
+      {%- capture variant_images -%}
+          {{ variant_images }}
+          {%- assign wrapper_class = "js-variant-image-wrapper" -%}
+          {%- assign wrapper_attributes = "data-variant-id='" | append: variant.id | append: "'" -%}
+          {%- unless selected_variant == variant -%}{%- assign wrapper_class = "js-variant-image-wrapper hide" -%}{%- endunless-%}
+          {% render 'shopify-responsive-image' with image: variant.image, aspect_ratio: 1, image_attributes: 'width="320" height="320"', wrapper_class: wrapper_class, wrapper_attributes: wrapper_attributes %}
+        {%- endcapture -%}
+      {%- capture upsell_select_options -%}
+          {{ upsell_select_options }}
+          <option {% unless variant.available %}disabled="disabled"{% endunless %} value="{{ variant.id }}">
+              {{ variant.title }}
+          </option>
+        {%- endcapture -%}
+      {%- capture upsell_dropdown_markup -%}
+          {{ upsell_dropdown_markup }}
+          <li role="button" data-variant-id="{{variant.id}}" data-upsell-variant-selector data-variant-title="{{variant.title}}" data-variant-price="{{ variant.price | money }}" data-variant-available="{{variant.available}}" class="productVariantDropdown__item {% if variant.id == selected_variant.id %}productVariantDropdown__item--selected js-product-variant-dropdown-item-selected{% endif %} {% unless variant.available %}productVariantDropdown__item--soldOut{% endunless %}">{{variant.title}} {% unless variant.available %} <sup>Sold Out</sup> {% endunless %}</li>
+        {%- endcapture -%}
+    {%- endfor -%}
+    <div class='productGridItem productGridItem--{{ type }}'>
+      <div class='productGridItem__media'>
+        <a
+          href='/products/{{ product.handle }}'
+          class='productGridItem__mediaLink'
+          data-track='product_grid_item_link'
+          data-product-price='{{ selected_variant.price }}'
+        >
+          {{- variant_images -}}
+        </a>
+      </div>
+      <div class='productGridItem__ProductDetails'>
+        <div class='productGridItem__rating'>
+          {% render 'okendo-reviews-product-rating-summary', product: product %}
+        </div>
+        <div class='productGridItem__header'>
+          <div class='productGridItem__titleWrapper'>
+            <p class='productGridItem__ProductTitle'>{{ product.title }}</p>
+            {% if product_serving_text %}
+              <p class='productGridItem__servingText'>{{ product_serving_text }}</p>
+            {% endif %}
+          </div>
+          {%- if product.tags contains 'ssale20' or product.tags contains 'ssale30' -%}
+            <p class='productGridItem__productPrice'>
+              {%- if product.tags contains 'ssale20' -%}
+                {%- assign discount = selected_variant.price | times: 0.2 -%}
+                <span class='discounted'>
+                  {{- selected_variant.price | minus: discount | money -}}
+                </span>
+                <strike class='original'>{{ original_price }}</strike>
+              {%- endif -%}
+              {%- if product.tags contains 'ssale30' -%}
+                {%- assign discount = selected_variant.price | times: 0.3 -%}
+                <span class='discounted'>
+                  {{- selected_variant.price | minus: discount | money -}}
+                </span>
+                <strike class='original'>{{ original_price }}</strike>
+              {%- endif -%}
+            </p>
+          {%- else -%}
+            <p class='productGridItem__productPrice'>{{ original_price }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class='productGridItem__action productGridItem__action--{{ type }}'>
+        <div data-form='AddToCartForm' class='js-upsell-product-form'>
+          <input name='product_name' value='{{ product.title }}' hidden>
+          <select name='quantity' class='hide'>
+            <option value='1' selected>1</option>
+          </select>
+
+          <select class='hide' name='id'>
+            {{ upsell_select_options }}
+          </select>
+          <div class='productVariantDropdown productVariantDropdown--{{ type }} js-productVariantDropdown'>
+            <button
+              type='button'
+              title='Product variant selector'
+              aria-expanded='false'
+              data-sl='upsell_variant_selector_dropdown'
+              data-upsell-variant-dropdown-trigger
+              class='productVariantDropdown__trigger'
+              {% if product.variants.size == 1 %}
+                disabled
+              {% endif %}
+            >
+              <span class='text'>{{ selected_variant.title }}</span>
+              <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6' class='arrow'>
+                <path d="M9.126 1.126 5.222 5.03a.305.305 0 0 1-.444 0L.874 1.126" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+            <ul class='productVariantDropdown__items'>
+              {{ upsell_dropdown_markup }}
+            </ul>
+          </div>
+          <button
+            type='button'
+            title='Add to cart'
+            data-sl='add_to_cart_upsell'
+            style='display: block;'
+            class='button button-primary js-upsell-add-to-cart-btn'
+            data-selected-variant-title='{{ selected_variant.title }}'
+            data-selected-variant-price='{{ selected_variant.price }}'
+            {% if selected_variant.available == false %}
+              disabled
+            {% endif %}
+          >
+            {%- if selected_variant.available -%}ADD TO CART{%- else -%}SOLD OUT{%- endif -%}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- assign upsell_select_options = null -%}
+  {%- assign upsell_dropdown_markup = null -%}
+  {%- assign variant_images = null -%}
+{%- endfor -%}

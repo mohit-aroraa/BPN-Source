@@ -1,0 +1,27 @@
+.sms-subscription__button p {
+  color: inherit;
+
+  // Typography
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 18px;
+  text-transform: uppercase;
+
+
+  @include above('tablet-large') {
+    font-size: 16px;
+    line-height: 16px;
+  }
+}
+
+.template--page .rte p,
+.template-account-login p,
+.template-account p {
+  margin: 0 0 20px;
+}
+
+.template--page .rte p,
+.template--page .rte li {
+  line-height: 2;
+}

@@ -1,0 +1,33 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title %}
+{%- assign subtitle = block.sub_title -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="tile-group">
+    <h2 class="tile-group__title">{{ title }} <span class="highlighted-text">{{ subtitle }}</span></h2>
+
+    <div class="container">
+        {% for index in (0..1) %}
+            {% assign tile_title = 'tile_title_' | append: index %}
+            {% assign tile_text = 'tile_text_' | append: index %}
+            {% assign tile_url = 'tile_url_' | append: index %}
+            {% assign tile_img_url = 'tile_img_url_' | append: index %}
+            {% assign click_id = 'click_id_' | append: index %}
+            {% comment %}<div class="tile{% if index == 0 %} long-tile{% endif %}"{% endcomment %}
+
+            <a class="tile long-tile" href="{{ block[tile_url].url }}" style="--image: url('{{ block[tile_img_url].url }}')" data-click-id="{{ block[click_id] }}">
+                <div class="tile__content">
+                    <div class="tile__content-wrapper">
+                        <h3 class="tile__title" data-click-id="{{ block[click_id] }}">{{ block[tile_title] }}</h3>
+                        <p class="tile__text" data-click-id="{{ block[click_id] }}">{{ block[tile_text] }}</p>
+                    </div>
+                    <div class="tile__link-container">
+                        <span class="tile__link">
+                            {% render 'icon', icon: 'white-left-arrow', tag: block[click_id] %}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</section>

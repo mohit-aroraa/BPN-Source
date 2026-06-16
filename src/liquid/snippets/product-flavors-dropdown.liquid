@@ -1,0 +1,84 @@
+{% assign _title = title %}
+{% assign _options = options %}
+{% assign _index = index %}
+
+{% assign _size = 0 %}
+{% assign _counted_names = '=' %}
+{% for variant in product.variants %}
+    {% assign _variant_availability = variant.metafields.custom.availability | default: 'default' %}
+    {% if _variant_availability == 'hidden' %}{% continue %}{% endif %}
+    {% assign _name = variant.options[_index] %}
+    {% assign _search_name = '=' | append: _name | append: '=' %}
+    {% unless _counted_names contains _search_name %}
+        {% assign _size = _size | plus: 1 %}
+        {% assign _counted_names = _counted_names | append: _name | append: '=' %}
+    {% endunless %}
+{% endfor %}
+
+<div class="selector-container {%if exposed %} exposed {% endif %}{%if hide_selector %} hidden{% endif %}" data-options="{{ _options | join: ',' }}">
+    <p class="product-hero__variants_count">
+        {{ _title }} ({{ _size }})
+    </p>
+    <div class="product-hero__dropdown" data-name="Flavor">
+        <button class="product-hero__dropdown-trigger" data-click-id="{{ click_id }}">
+            <span data-click-id="{{ click_id }}">
+                {% assign variant_icon = selected_variation.metafields.custom.product_card_variation_icon | default: blank %}
+                {% assign product_availability = selected_variation.metafields.custom.availability | default: 'default' %}
+
+                {% if variant_icon != blank %}
+                    {{ variant_icon }}
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                         fill="none" data-click-id="{{ click_id }}">
+                            <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5"/>
+                        </svg>
+                {% endif %}
+                        <span class="name" data-click-id="{{ click_id }}">{{ _options[_index] }}</span>
+                {% if selected_variation.available == false or product_availability == 'oos' %}
+                    <span class="sold-out-label">sold out</span>
+                {% endif %}
+            </span>
+            {% render 'icon', icon: 'buttom-arrow', tag: click_id %}
+        </button>
+
+        <div class="product-hero__dropdown-content {% if exposed %} exposed {% endif %}">
+            {% assign displayed = '=' %}
+            {% for variant in product.variants %}
+                {% assign available = variant.available %}
+                {% assign variant_availability = variant.metafields.custom.availability | default: 'default' %}
+                {% if variant_availability == 'hidden' %}{% continue %}{% endif %}
+                {% assign variant_icon = variant.metafields.custom.product_card_variation_icon | default: blank %}
+                {% assign name = variant.options[_index] %}
+                {% assign search_name = '=' | append: name | append: '=' %}
+                <div class="product-hero__dropdown-item variation-option{% if variant.id == selected_variation.id %} selected{% endif %}{% if displayed contains search_name %} hidden{% endif %} {% if variant.available == false %} disabled{% endif %}"
+                     data-product_id="{{ product.id }}"
+                     data-click-id="{{ click_id }}"
+                     data-variation_id="{{ variant.id }}"
+                     data-product_name="{{ variant.options }}"
+                     data-product_price="{{ variant.price }}"
+                     data-value="{{ name }}"
+                     data-position="{{ _index }}"
+                        {% if variant.available == true %}
+                            data-available="true"
+                        {% endif %}
+                >
+                    {% if variant_icon != blank %}
+                        {{ variant_icon }}
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                             fill="none" data-click-id="{{ click_id }}">
+                            <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5"
+                                    data-click-id="{{ click_id }}"/>
+                        </svg>
+                    {% endif %}
+                    {% assign displayed = displayed | append: name | append: '=' %}
+                    <span class="name" data-click-id="{{ click_id }}">{{ name }}</span>
+
+                    {% if variant.available == false or variant_availability == 'oos' %}
+                        <span class="sold-out-label" data-click-id="{{ click_id }}">sold out</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

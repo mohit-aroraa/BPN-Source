@@ -1,0 +1,73 @@
+
+{% include 'about-intro' %}
+{% schema %}
+  {
+    "name": "Intro",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+		"id": "title",
+        "type": "text",
+        "label": "Title"
+	  },
+	  {
+		"id": "mobile_title",
+        "type": "text",
+        "label": "Mobile Title"
+	  },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Description"
+      }
+	],
+	"blocks": [
+      {
+        "type": "social_links",
+        "name": "Social Links",
+        "settings": [
+          {
+              "id": "social_email",
+              "type": "text",
+              "label": "Email"
+          },
+          {
+              "id": "social_facebook_link",
+              "type": "text",
+              "label": "facebook"
+          },
+          {
+              "id": "social_instagram_link",
+              "type": "text",
+              "label": "Instagram"
+          },
+          {
+              "id": "social_pinterest_link",
+              "type": "text",
+              "label": "Pinterest"
+          },
+          {
+              "id": "social_twitter_link",
+              "type": "text",
+              "label": "Twitter"
+          },
+          {
+              "id": "social_youtube_link",
+              "type": "text",
+              "label": "Youtube"
+          }
+        ]
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

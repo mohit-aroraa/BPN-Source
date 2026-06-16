@@ -1,0 +1,75 @@
+<div class="testing-block">
+  <h3 class=" wow fadeInUp">{{ section.settings.title }}</h3>
+
+  <div class="content-block  wow fadeInUp">
+    <ul>
+      <li>
+        <p>{{ section.settings.description_left }}</p>
+      </li>
+      <li>
+        <p>{{ section.settings.description_right }}</p>
+      </li>
+    </ul>
+  </div>
+
+  <div class="code-block-from  wow fadeInUp">
+    <form action="javascript:void(0)">
+      <input type="text" name="batch_code" placeholder="Enter Batch Code" class="batch-code" required>
+      <div class="pdf-btn-wrap"><a href="" class="batchpdf hide" target="_blank">VIEW CERTIFICATE</a></div>
+      <div class="batch-error-wrap"><span class="batch-error hide"></span></div>
+
+      <button class="btn search-batch-file" type="submit" data-search-form-submit="">
+        FIND YOUR BATCH
+        <img src="{{ 'ajax-loader.gif' | asset_url }}" class="loader" style=" display: none;" loading="lazy">
+      </button>
+    </form>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Title with description",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "description_left",
+      "type": "richtext",
+      "label": "Description Left"
+    },
+    {
+      "id": "description_right",
+      "type": "richtext",
+      "label": "Description Right"
+    },
+    {
+      "id": "batch_code",
+      "type": "text",
+      "label": "Batch Code"
+    },
+    {
+      "id": "batch_code_note",
+      "type": "text",
+      "label": "Batch Code Note"
+    },
+    {
+      "id": "cta_title",
+      "type": "text",
+      "label": "CTA Title"
+    },
+    {
+      "id": "cta_link",
+      "type": "text",
+      "label": "CTA Link"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

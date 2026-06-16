@@ -1,0 +1,178 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+
+// Design tokens
+@import "./src/design-tokens/index";
+@import "./src/styles/components/shared/_blog-flex";
+
+.template--blog {
+  line-height: normal;
+}
+
+.section--blog-feed {
+  position: relative;
+  padding: 0 0 $grid-gutter * 2;
+  z-index: 1;
+
+  .page-width {
+    padding: 0 $grid-gutter;
+  }
+
+  .grid {
+    --animate-100: 15%;
+    overflow: hidden;
+  }
+
+  .grid__item {
+    --img--zoom-rotation: 10deg;
+    --img--zoom-rotation: 0;
+  }
+}
+.article-item {
+  --article-item--image-height: 76%;
+  --article-item--margin: 15px;
+  --article-item--margin-neg: calc((var(--article-item--margin)) * -1);
+  position: relative;
+  overflow: hidden;
+
+  > * {
+    margin-bottom: 0;
+  }
+
+  .grid-view-item__link {
+    margin: 0;
+  }
+
+  > *:not(.article-item__image-with-placeholder-wrapper) {
+    margin-top: calc((var(--article-item--margin)) / 2);
+    margin-top: var(--article-item--margin);
+  }
+
+  .article-item__image-wrapper {
+    .image-content__image-wrapper {
+      padding-top: var(--article-item--image-height) !important;
+
+      img {
+        object-fit: cover;
+        height: 100%;
+      }
+    }
+  }
+
+  .image-content__image-container {
+    overflow: hidden;
+    img {
+      transform: scale(1) rotate(0deg);
+      transition: all 3s ease-in-out;
+      will-change: transform;
+    }
+  }
+
+  a:hover
+    + .article-item__image-with-placeholder-wrapper
+    .image-content__image-container,
+  &[href]:focus .image-content__image-container,
+  &[href]:focus-within .image-content__image-container,
+  &[href]:hover .image-content__image-container {
+    img {
+      transform: scale(1.3) rotate(var(--img--zoom-rotation));
+      transition: all 10s ease-in;
+    }
+  }
+
+  .center-logo & {
+    .article-item__image-with-placeholder-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    .article-item__image-wrapper {
+      &:nth-child(2) {
+        .image-content__image-wrapper {
+          img {
+            object-fit: contain;
+            top: 50%;
+            left: 50%;
+            width: 70%;
+            height: 70%;
+            transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+          }
+        }
+      }
+      &:last-child:not(:nth-child(2)) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+    }
+  }
+
+  .article-item__title {
+    font: {
+      size: 18px;
+      family: var(--font_main_Md);
+      weight: 700;
+    }
+  }
+
+  .article-item__date {
+    font-size: 13px;
+    opacity: 0.46;
+  }
+
+  .article-item__excerpt {
+    font: {
+      size: 16px;
+      weight: 400;
+    }
+
+    a {
+      position: relative;
+      z-index: 10;
+      font: {
+        weight: 600;
+        size: 15px;
+      }
+    }
+  }
+
+  .btn {
+    position: relative;
+    z-index: 10;
+  }
+}
+.page-title--content {
+  .list--inline.pagination {
+    margin: 0 0 var(--base-gutter--double);
+    padding: 0;
+  }
+
+  .current-tag {
+    margin: 0 0 var(--base-gutter);
+    padding: var(--base-gutter) var(--base-gutter)
+      calc((var(--base-gutter)) * 0.75);
+    background: var(--color--brand-dark-blue);
+    color: var(--color--brand-light-blue);
+    font: {
+      family: var(--font--chaletNewYork1960);
+      weight: 600;
+      size: 24px;
+    }
+    line-height: 1.1;
+  }
+}

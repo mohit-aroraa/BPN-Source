@@ -1,0 +1,8 @@
+
+{% if product.metafields.custom_fields["how_to_use_content"] != blank %}
+<div class="tab-pane fade {{ tab_active }}" id="How-To-Use" role="tabpanel" aria-labelledby="How-To-Use-tab">
+  <div class="how-to-use">
+    {{ product.metafields.custom_fields["how_to_use_content"] }}
+  </div>
+</div>
+{% endif %}

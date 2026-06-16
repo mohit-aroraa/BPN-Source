@@ -1,0 +1,313 @@
+{% assign base_class = 'bpn-athletic-feature-row-dropdowns' %}
+
+<div class="{{ base_class }} {{ base_class }}--{{ section.id }} {% if section.settings.reverse_layout == true %}{{ base_class }}--reverse{% endif %}"
+     style="{%- if section.settings.background_color -%}background: {{ section.settings.background_color }};{%- endif -%}">
+  <div class="{{ base_class }}__media-wrapper">
+    {% include 'athletic-media', base_class: base_class %}
+  </div>
+
+  <div class="{{ base_class }}__content-wrapper">
+    <div class="{{ base_class }}__content" style="{% if section.settings.font_color %}color: {{ section.settings.font_color }};{% endif %}">
+
+      {% if section.settings.title != blank %}
+        <div class="{{ base_class }}__title">
+          {{ section.settings.title }}
+        </div>
+      {% endif %}
+
+      <!-- Accordion Wrapper -->
+      <div class="{{ base_class }}__accordion">
+        {% for block in section.blocks %}
+          <div class="{{ base_class }}__accordion-item {% if forloop.first %}is-open{% endif %}">
+            <!-- Accordion Trigger with Icon -->
+            <button class="{{ base_class }}__accordion-trigger"
+                    data-click-id="athlete-lp_routine_{{ block.settings.title | replace: ' ', '-' | downcase }}"
+            >
+              <span class="{{ base_class }}__accordion-icon {{ base_class }}__accordion-icon--plus">
+                {% render 'icons', icon: 'plus' %}
+              </span>
+              <span class="{{ base_class }}__accordion-icon {{ base_class }}__accordion-icon--minus">
+                {% render 'icons', icon: 'minus' %}
+              </span>
+              <span class="{{ base_class }}__accordion-title">
+                <span class="{{ base_class }}__accordion-title__icon">
+                  {% render 'icons', icon: 'eyebrow-background' %}
+                </span>
+                <span class="{{ base_class }}__accordion-title__text">
+                  {{ block.settings.title | default: "Schedule" }}
+                </span>
+              </span>
+            </button>
+            <!-- Accordion Panel: first open by default -->
+            <div class="{{ base_class }}__accordion-panel {% unless forloop.first %}hidden{% endunless %}">
+              <div class="{{ base_class }}__accordion-content">
+                {% for i in (1..3) %}
+                  {% assign time_field = 'time_' | append: i %}
+                  {% assign desc_field = 'desc_' | append: i %}
+                  {% if block.settings[time_field] != blank or block.settings[desc_field] != blank %}
+                    <div class="schedule-line">
+                      <div class="schedule-line__time">
+                        {{ block.settings[time_field] }}
+                      </div>
+                      <div class="schedule-line__desc">
+                        {{ block.settings[desc_field] }}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <!-- End Accordion Wrapper -->
+    </div>
+  </div>
+</div>
+
+<style>
+  {%- if section.settings.margin_bottom_enabled -%}
+    .{{ base_class }}--{{ section.id }} {
+      margin-bottom: 56px;
+    }
+
+    @media (min-width: 991px) {
+      .{{ base_class }}--{{ section.id }} {
+        margin-bottom: 80px;
+      }
+    }
+  {%- endif -%}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const triggers = [...document.querySelectorAll('.{{ base_class }}__accordion-trigger')];
+
+    const openPanel = (trigger) => {
+      const panel = trigger.nextElementSibling;
+      trigger.parentElement.classList.add('is-open');
+      panel.classList.remove('hidden');
+    };
+
+    const closePanel = (trigger) => {
+      const panel = trigger.nextElementSibling;
+      trigger.parentElement.classList.remove('is-open');
+      panel.classList.add('hidden');
+    };
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        if (trigger.parentElement.classList.contains('is-open')) return;
+
+        triggers.forEach(other => {
+          if (other !== trigger) closePanel(other);
+        });
+
+        openPanel(trigger);
+      });
+    });
+  });
+</script>
+
+<style>
+  .bpn-athletic-feature-row-dropdowns--{{ section.id }} .bpn-athletic-two-column__content {
+    color: {{ section.settings.mobile_font_color }};
+  }
+
+  @media (min-width: 768px) {
+    .bpn-athletic-feature-row-dropdowns--{{ section.id }} .bpn-athletic-two-column__content {
+      color: {{ section.settings.desktop_font_color }};
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "FeatureRow: Accordions",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "margin_bottom_enabled",
+        "label": "Add bottom margin",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "reverse_layout",
+        "label": "Reverse layout (media on left, content on right)",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Images"
+      },
+      {
+        "id": "background_color",
+        "type": "color",
+        "label": "Background Color",
+        "default": "#f2f2f2"
+      },
+      {
+        "id": "font_color",
+        "type": "color",
+        "label": "Font Color",
+        "default": "#ffffff"
+      },
+      {
+        "id": "image_desktop",
+        "type": "image_picker",
+        "label": "Desktop Image",
+        "info": "Recommended 2880X1200 Image"
+      },
+      {
+        "id": "image_mobile",
+        "type": "image_picker",
+        "label": "Mobile Image",
+        "info": "Recommended 752X1104 Image"
+      },
+      {
+        "type": "header",
+        "content": "Video"
+      },
+      {
+        "id": "video_desktop_type",
+        "type": "select",
+        "label": "Desktop Video Source",
+        "options": [
+          { "value": "url", "label": "URL" },
+          { "value": "media", "label": "Media Gallery" },
+          { "value": "", "label": "None" }
+        ],
+        "default": "url"
+      },
+      {
+        "type": "video_url",
+        "id": "video_desktop_url",
+        "accept": [
+          "youtube",
+          "vimeo"
+        ],
+        "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+        "label": "Desktop Video URL",
+        "info": "Enter a URL (YouTube or Vimeo) here if Desktop Video Source is set to URL."
+      },
+      {
+        "id": "video_desktop_media",
+        "type": "video",
+        "label": "Video Desktop Media",
+        "info": "Select a video from your Media Gallery if Desktop Video Source is set to Media."
+      },
+      {
+        "id": "video_desktop_poster",
+        "type": "image_picker",
+        "label": "Desktop Video Poster"
+      },
+      {
+        "id": "video_mobile_type",
+        "type": "select",
+        "label": "Mobile Video Source",
+        "options": [
+          { "value": "url", "label": "URL" },
+          { "value": "media", "label": "Media Gallery" },
+          { "value": "", "label": "None" }
+        ],
+        "default": "url"
+      },
+      {
+        "type": "video_url",
+        "id": "video_mobile_url",
+        "accept": [
+          "youtube",
+          "vimeo"
+        ],
+        "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+        "label": "Mobile Video URL",
+        "info": "Enter a URL (YouTube or Vimeo) here if Mobile Video Source is set to URL."
+      },
+      {
+        "id": "video_mobile_media",
+        "type": "video",
+        "label": "Video Mobile Media",
+        "info": "Select a video from your Media Gallery if Mobile Video Source is set to Media."
+      },
+      {
+        "id": "video_mobile_poster",
+        "type": "image_picker",
+        "label": "Mobile Video Poster"
+      },
+      {
+        "id": "title",
+        "type": "richtext",
+        "label": "Title",
+        "default": "<p>Lorem Ipsum is simply dummy text</p>"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Row",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Accordion Title",
+            "default": "Title Goes Here"
+          },
+          {
+            "type": "text",
+            "id": "time_1",
+            "label": "Time 1",
+            "default": "6 am"
+          },
+          {
+            "type": "richtext",
+            "id": "desc_1",
+            "label": "Description 1",
+            "default": "<p>Breakfast description here.</p>"
+          },
+          {
+            "type": "text",
+            "id": "time_2",
+            "label": "Time 2"
+          },
+          {
+            "type": "richtext",
+            "id": "desc_2",
+            "label": "Description 2"
+          },
+          {
+            "type": "text",
+            "id": "time_3",
+            "label": "Time 3"
+          },
+          {
+            "type": "richtext",
+            "id": "desc_3",
+            "label": "Description 3"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "FeatureRow: Accordions",
+        "category": "Athletic Landing Pages",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

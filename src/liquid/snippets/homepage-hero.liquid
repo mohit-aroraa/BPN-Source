@@ -1,0 +1,91 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title %}
+{%- assign text = block.text %}
+
+{%- assign primary_cta_text = block.primary_cta_text %}
+{%- assign primary_cta_link = block.primary_cta_link %}
+
+{%- assign secondary_cta_text = block.secondary_cta_text %}
+{%- assign secondary_cta_url = block.secondary_cta_link %}
+
+{%- assign show_video_background = block.show_video_background %}
+{%- assign mobile_video_id = block.mobile_video_id | default: true %}
+{%- assign video_id = block.video_id | default: true %}
+
+{%- assign hero_image = block.hero_image %}
+{%- assign hero_mobile_image = block.hero_mobile_image %}
+
+{%- assign items = block.blocks -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="homepage-hero" style="--hero-image: url('{{ hero_image.url }}')">
+    {% if show_video_background == true %}
+        <div class="homepage-hero__desktop-video-container">
+            <div class="desktop-cover"></div>
+            <div class="homepage-hero__desktop-video">
+                <iframe src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&loop=1&background=1&muted=1&badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                        frameborder="0" allow="autoplay; fullscreen; loop; picture-in-picture; clipboard-write"
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                        title="BPN Hero section"></iframe>
+                <script src="https://player.vimeo.com/api/player.js"></script>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="homepage-hero__content" style="--mobile-hero-image: url('{{ hero_mobile_image.url }}')">
+        {% if show_video_background == true %}
+            <div class="homepage-hero__mobile-video-container">
+                <div class="cover"></div>
+                <div class="homepage-hero__mobile-video">
+                    <iframe src="https://player.vimeo.com/video/{{ mobile_video_id }}?autoplay=1&loop=1&background=1&muted=1&badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                            frameborder="0" allow="autoplay; fullscreen; loop; picture-in-picture; clipboard-write"
+                            style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                            title="BPN Hero section"></iframe>
+                    <script src="https://player.vimeo.com/api/player.js"></script>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="homepage-hero__content-wrapper">
+            <h1 class="homepage-hero__title">{{ title }}</h1>
+            <p class="homepage-hero__text">{{ text }}</p>
+            <div class="homepage-hero__controls">
+                <a class="homepage-hero__primary_cta cta"
+                   href="{{ primary_cta_link.url }}"
+                   data-click-id="homepage_hero_quiz_cta"
+                >{{ primary_cta_text }}</a>
+                <a class="homepage-hero__secondary_cta cta"
+                   href="{{ secondary_cta_url.url }}"
+                   data-click-id="homepage_hero_shop-supps_cta"
+                >{{ secondary_cta_text }}</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="homepage-hero-categories-list swiper" data-homepage-hero-swiper>
+    <div class="swiper-wrapper">
+        {% for index in (0..length) %}
+            {% assign category_name = 'category_name_' | append: index %}
+            {% assign category_url = 'category_url_' | append: index %}
+            {% assign category_image = 'category_image_' | append: index %}
+            {% assign category_mobile_image = 'category_mobile_image_' | append: index %}
+            {% assign click_id = 'homepage_hero_' | append: block[category_name] | downcase %}
+
+            <a class="homepage-hero-categories-list__category swiper-slide" href="{{ block[category_url] }}"
+               style="--category-image: url('{{ block[category_image].url }}');--category-mobile-image: url('{{ block[category_mobile_image].url }}')"
+               data-click-id="{{ click_id }}"
+            >
+                <h3 class="homepage-hero-categories-list__category-name" data-click-id="{{ click_id }}">{{ block[category_name] }}</h3>
+                <span class="homepage-hero-categories-list__category-link"
+                      href="{{ block[category_url] }}"
+                      data-click-id="{{ click_id }}"
+                    >SHOP NOW</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="homepage-hero-categories-list__controls">
+        <div class="swiper-pagination homepage-hero-categories-list__pagination"></div>
+    </div>
+</div>

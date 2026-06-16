@@ -1,0 +1,193 @@
+// Modules Layer - Button
+// Contains specific UI components using BEM naming
+// This is where most of your work will happen
+
+// Import the design tokens to access the prefix variable
+
+// ========================================
+// Button Custom Properties
+// ========================================
+:root {
+  // Base button properties
+  --#{$prefix}button-border-radius: 5px;
+  --#{$prefix}button-transition: all 0.3s ease;
+  --#{$prefix}button-font-weight: 600;
+}
+
+// ========================================
+// Base Button Styles
+// ========================================
+.#{$prefix}button {
+  position: relative;
+
+  // Layout
+  display: inline-flex;
+  padding: 0.75em 1.5em;
+
+  // Appearance
+  border: none;
+  border-radius: var(--#{$prefix}button-border-radius);
+
+  // Typography
+  font-family: inherit;
+  font-weight: var(--#{$prefix}button-font-weight);
+  line-height: 1;
+  text-transform: uppercase; // Make text uppercase for all buttons
+  cursor: pointer;
+  transition: var(--#{$prefix}button-transition);
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden; // Prevents potential overflow issues with effects
+  text-decoration: none;
+}
+
+// Accessibility - improved focus state
+.#{$prefix}button:focus-visible {
+  outline: 2px solid color('bpn-red');
+  outline-offset: 2px;
+}
+
+// ========================================
+// Button Sizes
+// ========================================
+.#{$prefix}button--xs {
+  height: 28px;
+  padding: 8px 24px;
+  font-size: 13px;
+  min-width: 91px;
+}
+
+.#{$prefix}button--sm {
+  height: 32px;
+  padding: 9px 28px;
+  font-size: 14px;
+  min-width: 106px;
+}
+
+.#{$prefix}button--md {
+  height: 40px;
+  padding: 12px 32px;
+  font-size: 15px;
+  min-width: 121px;
+}
+
+.#{$prefix}button--lg {
+  height: 54px;
+  padding: 18px 56px;
+  font-size: 16px;
+  min-width: 176px;
+}
+
+// ========================================
+// Button Types
+// ========================================
+
+// Primary button base (shared styles)
+.#{$prefix}button--primary {
+  color: color('bpn-white');
+}
+
+// Primary button - Red variant
+.#{$prefix}button--primary-red {
+  background-color: color('bpn-red');
+}
+
+.#{$prefix}button--primary-red:hover,
+.#{$prefix}button--primary-red:active {
+  background-color: color('bpn-red-80');
+}
+
+.#{$prefix}button--primary-red:focus {
+  outline: none;
+}
+
+.#{$prefix}button--primary-red.#{$prefix}button--disabled,
+.#{$prefix}button--primary-red[disabled] {
+  background-color: color('bpn-red-40');
+}
+
+// Primary button - Black variant
+.#{$prefix}button--primary-black {
+  background-color: color('bpn-black');
+}
+
+.#{$prefix}button--primary-black:hover,
+.#{$prefix}button--primary-black:active {
+  background-color: color('bpn-black-600');
+}
+
+.#{$prefix}button--primary-black:focus {
+  outline: none;
+}
+
+.#{$prefix}button--primary-black.#{$prefix}button--disabled,
+.#{$prefix}button--primary-black[disabled] {
+  background-color: color('bpn-black-200');
+}
+
+// Active state for all buttons (shared)
+.#{$prefix}button:active {
+  transform: translateY(1px);
+}
+
+// Secondary button
+.#{$prefix}button--secondary {
+  border: 2px solid color('bpn-black');
+  background-color: transparent;
+  color: color('bpn-black');
+}
+
+.#{$prefix}button--secondary:hover,
+.#{$prefix}button--secondary:active {
+  background-color: color('bpn-black');
+  color: color('bpn-white');
+}
+
+.#{$prefix}button--secondary:focus {
+  outline: none;
+}
+
+.#{$prefix}button--secondary.#{$prefix}button--disabled,
+.#{$prefix}button--secondary[disabled] {
+  background-color: transparent;
+  border-color: color('bpn-grey-40');
+  color: color('bpn-grey-40');
+}
+
+// Secondary button - White variant
+.#{$prefix}button--secondary-white {
+  border: transparent;
+  background-color: color('bpn-white');
+  outline: none;
+}
+
+.#{$prefix}button--secondary-white:hover,
+.#{$prefix}button--secondary-white:active {
+  background-color: color('bpn-white');
+  color: color('bpn-black');
+}
+
+
+// Text button
+.#{$prefix}button--text {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  background-color: transparent;
+  color: color('bpn-red');
+}
+
+.#{$prefix}button--text:hover {
+  text-decoration: underline;
+}
+
+// ========================================
+// Button States
+// ========================================
+
+// Disabled state (shared properties)
+.#{$prefix}button--disabled,
+.#{$prefix}button[disabled] {
+  cursor: not-allowed;
+  pointer-events: none; // Prevents hover/active states when disabled
+}
+

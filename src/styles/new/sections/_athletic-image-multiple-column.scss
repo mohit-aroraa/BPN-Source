@@ -1,0 +1,93 @@
+.#{$athleticPrefix}image-multiple-column {
+  position: relative;
+  width: 100%;
+  margin-bottom: 52px;
+  overflow: hidden;
+  padding: 0 12px;
+
+  @include above('tablet-large') {
+    margin-bottom: 80px;
+    padding: 0 64px;
+  }
+}
+
+.#{$athleticPrefix}image-multiple-column__title {
+  margin-bottom: 40px;
+  color: #000;
+  text-align: center;
+  letter-spacing: -0.64px;
+
+  @include athletic-h4;
+
+  @include above('tablet-large') {
+    @include athletic-h2;
+  }
+}
+
+.#{$athleticPrefix}image-multiple-column__slider {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.#{$athleticPrefix}image-multiple-column__item {
+  position: relative;
+  width: 272px;
+
+  @include above('tablet-large') {
+    width: 328px;
+  }
+}
+
+.#{$athleticPrefix}image-multiple-column__item img {
+  width: 328px;
+  height: 416px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.#{$athleticPrefix}image-multiple-column__caption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  max-width: 248px;
+  color: #fff;
+
+  @include athletic-body-base;
+
+  @include above('tablet-large') {
+    max-width: 296px;
+  }
+}
+
+.#{$athleticPrefix}image-multiple-column .swiper-button-next,
+.#{$athleticPrefix}image-multiple-column .swiper-button-prev {
+  position: absolute;
+  top: 215px;
+  z-index: 10;
+  cursor: pointer;
+  transform: translateY(-50%);
+
+  @include below("tablet-large") {
+    display: none;
+  }
+}
+
+.#{$athleticPrefix}image-multiple-column .swiper-button-next {
+  right: 40px;
+}
+
+.#{$athleticPrefix}image-multiple-column .swiper-button-prev {
+  left: 10px;
+}
+
+.#{$athleticPrefix}image-multiple-column .swiper-button-prev svg {
+  transform: scaleX(-1);
+}
+
+.#{$athleticPrefix}image-multiple-column .swiper-button-disabled {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}

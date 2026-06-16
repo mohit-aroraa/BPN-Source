@@ -1,0 +1,142 @@
+.price--unavailable {
+  visibility: hidden;
+}
+
+.price--compare-price-hidden {
+  .price__compare {
+    display: none;
+  }
+}
+
+.price__pricing-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.price__regular {
+  display: block;
+}
+
+.price__regular,
+.price__sale {
+  margin-right: 0.625rem;
+}
+
+.price--on-sale {
+  .price__regular,
+  .price__availability {
+    display: none;
+  }
+}
+
+.price__availability {
+  display: none;
+  @include product-vendor;
+}
+
+.price--sold-out {
+  .price__availability {
+    display: block;
+  }
+}
+
+.price__sale {
+  display: none;
+
+  .price--on-sale & {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.price__vendor {
+  @include product-vendor;
+  margin: 5px 0 10px;
+  width: 100%;
+  @include flex-basis(100%);
+}
+
+.price__vendor--listing {
+  margin: 0 0 4px;
+}
+
+.price__unit {
+  @include flex-basis(100%);
+  display: none;
+
+  .price--unit-available & {
+    display: block;
+  }
+}
+
+.price-item--regular {
+  .price--on-sale & {
+    text-decoration: line-through;
+  }
+}
+.price-item--red {
+  color: color("warm-red");
+}
+.price-unit-price {
+  color: $color-body-text;
+  font-size: 0.8em;
+}
+
+.price-item__label {
+  display: inline-block;
+  white-space: nowrap;
+  font-weight: $font-weight-body--bolder;
+}
+
+.price__badges {
+  margin-top: 0;
+}
+
+.price__badge {
+  display: none;
+  align-self: center;
+  text-align: center;
+  font-size: 0.5em;
+  line-height: 1em;
+  font-weight: $font-weight-body;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: $color-bg;
+  border: 1px solid $color-text;
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+}
+
+.price__badge--sale {
+  color: $color-bg;
+  border-color: $color-sale-text;
+  background-color: $color-sale-text;
+
+  .price--on-sale & {
+    display: flex;
+  }
+
+  .price--sold-out & {
+    display: none;
+  }
+}
+
+.price__badge--sold-out {
+  color: $color-body-text;
+  border-color: $color-body-text;
+
+  .price--sold-out & {
+    display: flex;
+  }
+}
+
+.price__badges--listing {
+  margin-top: 0.5rem;
+
+  .price__badge {
+    font-size: 0.6em;
+    padding: 0.25rem 0.55rem;
+  }
+}

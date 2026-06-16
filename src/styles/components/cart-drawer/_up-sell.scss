@@ -1,0 +1,183 @@
+@import "tokens";
+
+.up-sell {
+  padding: 12px 0 0 16px;
+  background: #F7F7F7;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  overflow-x: auto;
+  &__heading {
+    margin: 0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 20px;
+    letter-spacing: 0.16px;
+  }
+
+  &__list {
+    margin-top: 12px;
+    padding: 0 16px 24px 0;
+
+    &.swiper {
+      overflow-y: visible;
+      z-index: $z-index-3-level;
+    }
+
+    .swiper-slide {
+      width: 272px;
+    }
+
+    &-item {
+      width: 100%;
+
+      &-badge {
+        text-transform: uppercase;
+        color: black;
+        background: white;
+        top: 8px;
+        left: 0;
+        padding: 4px 12px;
+        position: absolute;
+        font-size: 12px;
+        font-style: italic;
+        font-weight: 701;
+        line-height: 12px; /* 100% */
+        letter-spacing: -0.24px;
+      }
+
+      &-rating {
+        line-height: normal;
+        margin-top: 8px;
+        --oke-stars-foregroundColor: #000;
+
+        @include above('desktop') {
+          height: 16px;
+        }
+
+        .okeReviews {
+          line-height: 12px;
+
+          @include above('desktop') {
+            line-height: 16px;
+          }
+        }
+
+        .oke-sr-stars {
+          margin-left: 0;
+          margin-right: 4px;
+          font-size: 10px;
+          line-height: 10px;
+
+          @include above('desktop') {
+            margin-right: 8px;
+            font-size: 14px;
+            line-height: 18px;
+          }
+
+          .oke-stars {
+            .oke-stars-foreground {
+              width: unset;
+            }
+
+            .oke-stars-foreground,
+            .oke-stars-background {
+              display: flex;
+              width: unset;
+
+              svg {
+                height: 9px;
+
+                @include above('desktop') {
+                  height: 14px;
+                }
+              }
+            }
+          }
+        }
+
+        .oke-sr-count {
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          text-transform: uppercase;
+
+          span {
+            color: #767676;
+          }
+
+          @include above('desktop') {
+            height: 20px;
+            font-size: 14px;
+          }
+
+          .oke-sr-label-text {
+            display: none;
+          }
+        }
+      }
+
+      &-image {
+        border-radius: 5px;
+        width: 100%;
+      }
+
+      &-heading {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 6px;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: 16px;
+        letter-spacing: -0.32px;
+        text-transform: uppercase;
+      }
+
+      &-title {
+        margin: 0;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: 16px;
+        letter-spacing: -0.32px;
+        text-transform: uppercase;
+      }
+
+      &-price {
+        width: fit-content;
+      }
+
+      &-label {
+        margin: 4px 0 0 0;
+        color: color('gray');
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 12px;
+        text-transform: uppercase;
+      }
+
+      &-button {
+        border: none;
+        border-radius: 5px;
+        margin-top: 8px;
+        padding: 12px 24px;
+        width: 100%;
+        background: black;
+        color: white;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 900;
+        line-height: 16px; /* 100% */
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  @import "selector";
+}

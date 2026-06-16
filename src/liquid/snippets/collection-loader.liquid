@@ -1,0 +1,62 @@
+<div class="collectionSection">
+  <div class="collectionGrid">
+    <div class="collectionGrid__left">
+      <div class="collectionFilterDesktop">
+        <div class="filters">
+          <p class="collectionFilterDesktop__heading">Filter Products</p>
+          <div class="collectionFilterSection">
+            {% for index in (0..2) %}
+              <div class="collectionFilterSection__filterWrapper">
+                <div class="collectionFilterSection__filterBlock">
+                  <p class="collectionFilterSection__title animate"></p>
+                  <ul
+                    class="collectionFilterSection__filterItems"
+                  >
+                    {% for index in (0..4) %}
+                      <li
+                        class="collectionFilterSection__filterItem"
+                      >
+                        <div class="collectionFilterSection__check">
+                          <input
+                            type="checkbox"
+                            class="collectionFilterSection__checkbox"
+                            disabled
+                            id="shimmer_checkbox_{{index}}"
+                          >
+                          <label class="collectionFilterSection__label animate" for="shimmer_checkbox_{{index}}">
+                            <span class="visually-hidden ">Label text</span>
+                          </label>
+                        </div>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="collectionGrid__right">
+      <div class="collectionSortDesktop animate"></div>
+      <div class="collectionGrid__products">
+        {% for i in (1..6) %}
+          <div class="productGridItem">
+            <div class="animate productGridItem__media"></div>
+            <div class="productGridItem__ProductDetails">
+              <div class="productGridItem__rating animate"></div>
+              <div class="productGridItem__header">
+                <div class="productGridItem__titleWrapper">
+                  <p class="productGridItem__ProductTitle animate"></p>
+                </div>
+                <p class="productGridItem__productPrice animate"></p>
+              </div>
+              <p class="productGridItem__shortDescription animate"></p>
+            </div>
+            <div class="animate productGridItem__action"></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

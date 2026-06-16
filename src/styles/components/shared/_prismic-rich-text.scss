@@ -1,0 +1,71 @@
+[data-richText-heading] {
+  @include use-text-style("heading");
+  margin-bottom: 1rem;
+}
+.richText {
+  &__heading1 {
+    @include use-text-style("heading-1");
+  }
+  &__heading2 {
+    @include use-text-style("heading-2");
+  }
+  &__heading3 {
+    @include use-text-style("heading-3");
+  }
+  &__heading4 {
+    @include use-text-style("heading-4");
+  }
+  &__heading5 {
+    @include use-text-style("heading-5");
+  }
+  &__heading6 {
+    @include use-text-style("heading-5");
+    font-size: 1rem;
+  }
+  &__text {
+    @include use-text-style("paragraph-body-3");
+    font-weight: 400;
+    color: color("black");
+    margin-bottom: 1rem;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-2");
+    }
+  }
+  &__ol,
+  &__ul {
+    margin-bottom: 0.4rem;
+
+    li {
+      padding-left: 10px;
+      position: relative;
+      @include use-text-style("paragraph-body-3");
+      @include above("tablet-large") {
+        @include use-text-style("paragraph-body-2");
+        padding-left: 18px;
+      }
+      &::before {
+        content: "";
+        width: 4px;
+        height: 4px;
+        background-color: #000;
+        border-radius: 50%;
+        position: absolute;
+        top: 8px;
+        left: 0;
+
+        @include above("tablet-large") {
+          top: 8px;
+          width: 6px;
+          height: 6px;
+          @include use-text-style("paragraph-body-2");
+        }
+      }
+    }
+    &:last-of-type {
+      margin-bottom: 1rem;
+    }
+  }
+  &__link {
+    text-decoration: underline;
+  }
+}

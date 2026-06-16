@@ -1,0 +1,73 @@
+<div class="product-details">
+    {% if section.settings.subtitle != blank %}
+        <p class="product-details__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    {% if section.settings.title != blank %}
+        <h2 class="product-details__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="product-details-slider swiper" data-product-details-swiper>
+        <div class="swiper-wrapper product-details-slider__wrapper">
+            {% for block in section.blocks %}
+                <div class="product-detail-card swiper-slide">
+                    <img class="product-detail-card__image" src="{{ block.settings.image | img_url: '304x304' }}"
+                         alt="{{ block.settings.title }}" loading="lazy">
+                    <h4 class="product-detail-card__title">{{ block.settings.title }}</h4>
+                    <p class="product-detail-card__text">
+                        {{ block.settings.text }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="product-details-slider__controls">
+            <div class="swiper-pagination product-details-slider__pagination"></div>
+        </div>
+    </div>
+</div>
+{% schema %}
+{
+  "name": "Product Details",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Slide",
+      "type": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Details"
+    }
+  ]
+}
+{% endschema %}

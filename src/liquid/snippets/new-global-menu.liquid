@@ -1,0 +1,201 @@
+{%- comment -%}
+  Global Menu Component
+  -------------
+  Main navigation menu used in the header.
+
+  Parameters:
+  - menu: Menu handle for the navigation
+  - blocks: Configuration for mega menus
+{%- endcomment -%}
+
+<div class='bpn-global-menu' role='Navigation' aria-label='Main navigation'>
+  <ul class='bpn-global-menu__list' role='menubar'>
+    {%- comment -%}Iterate through each link in the menu{%- endcomment -%}
+    {% for link in linklists[menu].links %}
+      {%- comment -%}Initialize mega menu variables{%- endcomment -%}
+      {% assign has_megamenu = false %}
+      {% if link.links.size > 0 %}
+          {% assign has_megamenu = true %}
+      {% endif %}
+
+
+      {%- comment -%}Render either mega menu or standard link{%- endcomment -%}
+      {% if has_megamenu %}
+        {%- comment -%}Mega menu link with dropdown{%- endcomment -%}
+        <li class='bpn-global-menu__item bpn-has-megamenu' role='none'>
+            <a href="{{ link.url }}" class='bpn-global-menu__link'>
+              {{ link.title }}
+            </a>
+          <button
+            aria-haspopup='true'
+            aria-expanded='false'
+            class='bpn-global-menu__indicator'
+            aria-controls='mega-menu-{{ forloop.index }}'
+            aria-label='Toggle {{ link.title }} menu'
+          >
+            {% comment %} <span class='bpn-global-menu__indicator'> {% endcomment %}
+              {%- render 'icon', icon: 'chevron-down', class:'' -%}
+            {% comment %} </span> {% endcomment %}
+          </button>
+          {%- comment -%}Render the mega menu dropdown{%- endcomment -%}
+          {% assign menuId = forloop.index | prepend: 'mega-menu-' %}
+          {% render 'new-mega-menu', id: menuId, link:link, blocks: section.blocks %}
+        </li>
+      {% else %}
+        {%- comment -%}Standard navigation link{%- endcomment -%}
+        <li class='bpn-global-menu__item' role='none'>
+          <a href='{{ link.url }}' role='menuitem' tabindex='0' class='bpn-global-menu__link'>
+            {{- link.title -}}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+  const triggers = document.querySelectorAll('.bpn-global-menu__indicator[aria-haspopup="true"]');
+
+  triggers.forEach(trigger => {
+    const menuId = trigger.getAttribute('aria-controls');
+    const menu = document.getElementById(menuId);
+    const menuItem = trigger.closest('.bpn-has-megamenu');
+
+    // Track if menu was opened via keyboard/click (not hover)
+    let openedViaInteraction = false;
+
+    // Helper: open & close functions
+    const openMenu = (viaInteraction = false) => {
+      openedViaInteraction = viaInteraction;
+      trigger.setAttribute('aria-expanded', 'true');
+      if (viaInteraction) {
+        menu.style.opacity = 1;
+        menu.style.visibility = 'visible';
+        menu.style.transform = 'translateY(0)';
+      }
+    };
+
+    const closeMenu = (onlyIfOpenedViaInteraction = false) => {
+      // Only close if it was opened via interaction, or if we're not checking
+      if (onlyIfOpenedViaInteraction && !openedViaInteraction) {
+        return;
+      }
+      trigger.setAttribute('aria-expanded', 'false');
+      // Only set inline styles if menu was opened via interaction
+      // This allows CSS hover to work properly
+      if (openedViaInteraction) {
+        menu.style.opacity = 0;
+        menu.style.visibility = 'hidden';
+        menu.style.transform = 'translateY(-5px)';
+      } else {
+        // Remove inline styles to let CSS hover take over
+        menu.style.opacity = '';
+        menu.style.visibility = '';
+        menu.style.transform = '';
+      }
+      openedViaInteraction = false;
+    };
+
+    // Sync with CSS hover - remove inline styles on hover so CSS can control it
+    if (menuItem) {
+      menuItem.addEventListener('mouseenter', () => {
+        // If menu is visible via hover, clear any inline styles that might block CSS
+        if (!openedViaInteraction) {
+          menu.style.opacity = '';
+          menu.style.visibility = '';
+          menu.style.transform = '';
+        }
+      });
+
+      menuItem.addEventListener('mouseleave', () => {
+        // Only close if it was opened via interaction
+        if (openedViaInteraction) {
+          closeMenu();
+        } else {
+          // Just reset aria-expanded, let CSS handle the visual state
+          trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Toggle on click
+    trigger.addEventListener('click', e => {
+      e.stopPropagation();
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        closeMenu();
+      } else {
+        openMenu(true);
+      }
+    });
+
+    // Close on Esc from anywhere inside the menu or trigger
+    menu.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeMenu();
+        trigger.focus();
+      }
+    });
+
+    trigger.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeMenu();
+        trigger.focus();
+      }
+    });
+
+    // Close when focus leaves both trigger and menu
+    menu.addEventListener('focusout', e => {
+      // Delay a tick so the next focused element can be known
+      setTimeout(() => {
+        const active = document.activeElement;
+        if (!menu.contains(active) && active !== trigger) {
+          closeMenu(true);
+        }
+      }, 0);
+    });
+  });
+
+  // Also close if user clicks anywhere outside (but exclude cart drawer elements)
+  document.addEventListener('click', e => {
+    // Don't close menus if clicking on cart drawer elements
+    const target = e.target;
+    const isCartElement = target.closest('.cart')
+
+    if (isCartElement) {
+      return;
+    }
+
+    triggers.forEach(trigger => {
+      const menuId = trigger.getAttribute('aria-controls');
+      const menu = document.getElementById(menuId);
+      const menuItem = trigger.closest('.bpn-has-megamenu');
+
+      // Only close if clicking outside the menu item (which includes trigger and menu)
+      if (menuItem && !menuItem.contains(target) && target !== trigger) {
+        const expanded = trigger.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+          // Check if menu has inline styles (indicating it was opened via JS interaction)
+          const hasInlineStyles = menu.style.opacity !== '' || menu.style.visibility !== '';
+
+          trigger.setAttribute('aria-expanded', 'false');
+
+          if (hasInlineStyles) {
+            // Menu was opened via interaction, close it with inline styles
+            menu.style.opacity = 0;
+            menu.style.visibility = 'hidden';
+            menu.style.transform = 'translateY(-5px)';
+          } else {
+            // Menu was opened via hover, just remove any inline styles to let CSS handle it
+            menu.style.opacity = '';
+            menu.style.visibility = '';
+            menu.style.transform = '';
+          }
+        }
+      }
+    });
+  });
+});
+
+</script>

@@ -1,0 +1,39 @@
+
+{% include 'media-common-section', modal_blog:true %}
+{% schema %}
+   {
+    "name": "Watch Section",
+    "class": "Watch Section",
+    "settings": [
+			{
+                "id": "title",
+                "type": "text",
+                "label": "Title"
+            },
+			{
+                "id": "link",
+                "type": "url",
+                "label": "View More Link"
+            }
+	],
+    "blocks": [
+      {
+        "type": "section",
+        "name": "Watch Section",
+        "settings": [
+            {
+                "id": "blog_ref",
+                "type": "article",
+                "label": "Blog"
+            }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,29 @@
+{%- assign block = section[module] -%}
+{%- assign banner_title = block.banner_title -%}
+{%- assign banner_subtitle = block.banner_subtitle -%}
+{%- assign text_color_desktop = block.text_color_desktop | default: '#ffffff' -%}
+{%- assign text_color_mobile = block.text_color_mobile | default: '#000000' -%}
+{%- assign primary_cta_text = block.primary_cta_text -%}
+{%- assign primary_cta_link = block.primary_cta_link -%}
+{%- assign primary_cta_style_desktop = block.primary_cta_style_desktop | default: 'primary' -%}
+{%- assign primary_cta_style_mobile = block.primary_cta_style_mobile | default: 'secondary' -%}
+{%- assign second_cta_text = block.second_cta_text -%}
+{%- assign second_cta_link = block.second_cta_link -%}
+{%- assign second_cta_style_desktop = block.second_cta_style_desktop | default: 'primary-outline' -%}
+{%- assign second_cta_style_mobile = block.second_cta_style_mobile | default: 'secondary-outline' -%}
+{%- assign image_desktop = block.image_desk -%}
+{%- assign lazyload_image = block.lazyload_image -%}
+{%- assign image_mobile = block.image_mob | default: image_desktop -%}
+{%- assign height_desktop = block.height_desktop | default: 600 -%}
+{%- assign height_mobile = block.height_mobile | default: 280 -%}
+{%- assign banner_img_alt = image_desktop.alt | default: 'Banner image' -%}
+{%- assign overlay_color = block.overlay_color | default: '#000000' -%}
+{%- assign overlay_opacity = block.overlay_opacity | default: 0 -%}
+{% render 'page-banner',
+  banner_title: banner_title,
+  banner_subtitle: banner_subtitle,
+  banner_image_desktop: image_desktop,
+  banner_image_mobile: image_mobile,
+  cta_url: primary_cta_link,
+  cta_text: primary_cta_text
+%}

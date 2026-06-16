@@ -1,0 +1,28 @@
+{%- assign pair_product = product.metafields.custom.pair_product.value -%}
+{%- assign pair_product_title = product.metafields.custom.pair_product_title.value | default: "OFTEN PAIRED BY RUNNERS" -%}
+
+<style>
+    .pair-product__container {
+        display: none;
+    }
+    .pair-product__container.show-variant {
+        display: block;
+    }
+</style>
+
+{% if pair_product != blank %}
+<div class="pair-product__container">
+    <h2>{{pair_product_title}}</h2>
+    <div class="pair-product__container-product">
+        <div>
+            <img src="{{ pair_product.featured_image | image_url: width: '100px' }}"
+                width="auto" height="auto" alt="">
+            <h4>{{ pair_product.title }} <span>{{ pair_product.price | money }}</span></h4>
+        </div>
+        <div>
+            <input type="checkbox" name="" id="pair-product-checkbox" data-variant_id="{{ pair_product.first_available_variant.id }}"
+                data-product_id="">
+        </div>
+    </div>
+</div>
+{% endif %}

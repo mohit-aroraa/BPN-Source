@@ -1,0 +1,204 @@
+<!-- snippets/master--custom-collection -->
+
+{% comment %}
+
+    BEWARE!!! 
+    =========
+
+    This file creates the views for BOTH the Classic and Dynamic collections. It can switch between grid and list views.
+                                    ====
+
+    Classic = products directly loaded from collection
+    Dynamic = block based "sub" collection
+
+{% endcomment %}
+
+{% liquid
+  assign s = section.settings
+  assign total_collections = section.blocks.size | plus: 0
+  assign grid_item_width = 'medium-up--one-quarter'
+  if s.grid
+    case s.grid
+      when 2
+        assign max_height = 530
+        assign grid_item_width = 'medium-up--one-half'
+      when 3
+        assign max_height = 345
+        assign grid_item_width = 'medium--one-half large-up--one-third'
+      when 4
+        assign max_height = 250
+        assign grid_item_width = 'medium--one-half large-up--one-quarter'
+      when 5
+        assign max_height = 195
+        assign grid_item_width = 'medium--one-half large-up--one-fifth'
+    endcase
+  endif
+  assign limit = s.grid | times: s.rows
+  assign grid = grid_item_width
+  assign other = ''
+  assign grid_active = 'active'
+  assign sliders = true
+  assign useAnchors = false
+%}
+
+{% paginate collection.products by limit %}
+  <div class="all-product-page" data-section-id="{{ section.id }}" data-section-type="collection-template">
+    <div class="page-width" id="Collection">
+      {% comment %}<div class="product-title text-center">
+        <h1>{{ collection.title }}</h1>
+      </div>  {% endcomment %}
+      
+      {% if total_collections > 0 and useAnchors == true %}
+        <div class="tabs-container">
+          {% for block in section.blocks %}
+            {% assign b = block.settings %}
+            {% comment %} Create Text for Option/Tab{% endcomment %}
+            {% capture txt %}
+              {% if b.anchor != blank %}
+                {{b.anchor}}
+              {% else %}
+                {{b.title}}
+              {% endif %}
+            {% endcapture %}
+            {% comment %} Build Tabs {% endcomment %}
+            {% capture tabs %}
+              {{tabs}}
+              <a href="#collection{{block.id}}">
+                {{txt}}
+              </a>
+            {% endcapture %}
+            {% comment %} Build Options {% endcomment %}
+            {% capture opts %}
+              {{opts}}
+              <option value="#collection{{block.id}}">
+                {{txt}}
+              </option>
+            {% endcapture %}
+          {% endfor %}
+          <div class="tabs as-links">
+              {{tabs}}
+          </div>
+          <label for="tabs-select" class="visually-hidden">Select Collection</label>
+          <select id="tabs-select" class="tabs as-select">
+            <option>- Select Collection</option>
+            {{opts}}
+          </select>
+        </div>
+      {% endif %}
+      
+      {% comment %}
+        Blocks/Dynamic Setup
+        - This will init if there are blocks present.
+      {% endcomment %}
+      {% if total_collections > 0 %}
+       
+        {% liquid
+          
+          comment
+            Sorry, this cannot be any higher. Shopify imposed limit. 
+          endcomment 
+          assign max_products = 50
+          
+          comment 
+            This prevents one collection taking up too many 
+            of the maximum 50 products shopify allows per page
+          endcomment 
+          assign limit_per_collection = max_products | divided_by: total_collections 
+          
+          comment
+            Still allow limit to control final number
+          endcomment 
+          if limit_per_collection > limit 
+            assign limit_per_collection = limit 
+          endif 
+        %}
+
+        {% for block in section.blocks %}
+          {% assign b = block.settings %}
+          {% assign collection = collections[b.collection] %}
+          <div class="product-title text-center" id="collection{{block.id}}">
+            <h3 class="h1"><a href="{{collection.url}}">{{b.title}}</a></h3>
+            {% comment %}<a href="{{collection.url}}">View All</a>{% endcomment %}
+          </div>
+          <div class="slider-container">
+            <div class="grid grid_margin_bottom text-center" id="slider{{block.id}}">
+              {% for product in collection.products limit: limit_per_collection %}
+                <div class="grid__item {{grid}} {{other}}">
+                  {% include 'product-card-grid' %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% unless forloop.last %}
+            <hr />
+          {% endunless %}
+
+          <script type="text/javascript">
+            // console.log('TURN SLIDERS BACK ON YO!!!')
+            $(document).ready(function () {                            
+              {% if sliders == true %}
+                var defSlides = {{s.grid}},
+                    slidesCount = $('#slider{{block.id}} .grid__item').length,
+                    slidesTabMax = ( 2 >= +slidesCount ? +slidesCount : 2 );
+                    slidesDeskMax = ( defSlides >= +slidesCount ? +slidesCount : defSlides );
+                $('#slider{{block.id}}').slick({
+                  dots: false,
+                  rows: 0,
+                  infinite: false,
+                  speed: 300,
+                  slidesToShow: slidesDeskMax,
+                  responsive: [
+                    {
+                      breakpoint: 991,
+                      settings: {
+                        slidesToShow: slidesTabMax
+                      }
+                    },
+                    {
+                      breakpoint: 751,
+                      settings: "unslick"
+                    }
+                  ]
+                });
+              {% endif %}
+            })
+          </script>
+        {% endfor %}
+      {% endif %}
+      
+      {% comment %}
+          Default/Classic Setup 
+          - This will init when there are NO blocks present.
+      {% endcomment %}
+      {% if total_collections == 0 %}
+        <div class="product-title text-center">
+          <h1>{{collection.title}}</h1>
+        </div>
+        <div class="grid grid_margin_bottom main-collection">
+          {% for product in collection.products %}
+            <div class="grid__item {{grid}} {{other}}">
+              {% include 'product-card-grid' %}
+            </div>
+          {% else %}
+            {%- assign is_empty_collection = true -%}
+          {% endfor %}
+        </div>
+        {% if paginate.pages > 1 %}
+          {% include 'pagination-no-filter', paginate: paginate %}
+        {% endif %}
+      {% endif %}
+      
+      {% if is_empty_collection %}
+        <div class="grid__item small--text-center">
+          <p class="text-center">{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endpaginate %}
+
+
+
+
+

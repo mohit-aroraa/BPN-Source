@@ -1,0 +1,90 @@
+{% assign blocks_count = section.blocks | size %}
+
+<div class="media-carousel">
+    <div class="media-carousel__videos-container">
+        {% for block in section.blocks %}
+            <div class="iframe-container{% unless forloop.first %} hidden{% endunless %}">{% if block.settings.iframe != blank %}{{ block.settings.iframe }}{% elsif block.settings.image != blank %}<img src="{{ block.settings.image | img_url: 'master' }}" alt="{{  block.settings.title }}"/>{% endif %}</div>
+        {% endfor %}
+    </div>
+    <div class="media-carousel-slider swiper" data-media-carousel-swiper>
+        <div class="swiper-wrapper media-carousel-slider__wrapper{% if blocks_count == 1 %} single-card {% endif %}">
+            {% for block in section.blocks %}
+                <div class="media-carousel-card swiper-slide{% if blocks_count == 1 %} single-card {% endif %}">
+                    <div class="media-carousel-card__title-container">
+                      {% if block.settings.icon %}
+                        <img class="media-carousel-card__image" src="{{ block.settings.icon | img_url: '84x84' }}"
+                             alt="{{ block.settings.icon.alt }}">
+                      {% endif %}
+                        <h4 class="media-carousel-card__title">
+                            {{ block.settings.title }}
+                        </h4>
+                    </div>
+                    <p class="media-carousel-card__text">
+                        {{ block.settings.text }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+      {% if blocks_count != 1 %}
+        <div class="media-carousel-slider__controls">
+          <div class="swiper-pagination media-carousel-slider__pagination"></div>
+
+          <div class="media-carousel-slider__navigation">
+            <div class="swiper-button swiper-button-prev" data-click-id="pdp_bare-standard_nav_buttons">
+              {% render 'icon', icon: 'left-arrow', tag: 'pdp_bare-standard_nav_buttons' %}
+            </div>
+            <div class="media-carousel-slider__navigation-container"><span
+                class="current_step">1</span>/{{ section.blocks | size }}</div>
+            <div class="swiper-button swiper-button-next" data-click-id="pdp_bare-standard_nav_buttons">
+              {% render 'icon', icon: 'right-arrow', tag: 'pdp_bare-standard_nav_buttons' %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Media Carousel",
+  "blocks": [
+    {
+      "name": "Slide",
+      "type": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "textarea",
+          "id": "iframe",
+          "label": "Iframe"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "image"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Media Carousel"
+    }
+  ]
+}
+{% endschema %}

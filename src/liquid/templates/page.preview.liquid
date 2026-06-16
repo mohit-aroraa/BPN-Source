@@ -1,0 +1,38 @@
+{%- comment -%}
+    Metafields for Cart and Gwp from prismic. It's used in everywhere
+{%- endcomment -%}
+{% assign metafields = page.metafields %}
+
+{% comment %} *** Controller *** {% endcomment %}
+{% for priorities in metafields['meta_field_priority'] %}
+    {% for p in priorities %}
+        {%- assign snippet_names = '' -%}
+        {% for module in p %}
+            {% assign snippet_name = module | replace: '_', '-' %}
+            {%- assign enable = metafields[module].enable -%}
+            {%- assign min = 1200 -%}
+            {%- assign max = 2300 -%}
+            {%- assign diff = max | minus: min -%}
+            {%- assign random_id = "now" | date: "%N" | modulo: diff | plus: min -%}
+            {%- if module != 'priority' and enable == true -%}
+                {%- capture slice_data -%}
+                    <!-- {{ snippet_name }} -->
+                    {% include snippet_name, id: random_id %}
+                {%- endcapture -%}
+                {%- if slice_data contains 'Liquid error:' -%}
+                    {%- assign allSlices = snippet_names | split: ',' -%}
+                    {% for slice_name in allSlices %}
+                        {% if snippet_name contains slice_name -%}
+                            <!-- {{ snippet_name }} -->
+                            {% include slice_name, id: random_id %}
+                            {% break %}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- else -%}
+                    {%- assign snippet_names = snippet_names | append: snippet_name | append: ',' -%}
+                    {{ slice_data }}
+                {%- endif -%}
+            {%- endif -%}
+        {% endfor %}
+    {% endfor %}
+{% endfor %} 

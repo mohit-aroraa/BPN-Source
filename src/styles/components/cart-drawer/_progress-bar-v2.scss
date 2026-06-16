@@ -1,0 +1,83 @@
+.progress-bar-v2 {
+  // padding: 12px 48px 10px 16px;
+  padding: 10px 16px;
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    padding-right: 32px;
+  }
+
+  &__wrapper {
+    margin: 16px 0 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  &__container {
+    border-radius: 10px;
+    background: #eee;
+    width: 100%;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  &__pointer {
+    max-width: 100%;
+    background: #1b1a17;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease, opacity 0.3s ease;
+  }
+
+  &__bullet {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    background: black;
+    border: 3px solid #eeeeee;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-sizing: border-box;
+
+    &--active {
+      background: white;
+      border-color: #1b1a17;
+    }
+  }
+
+  &__thresholds {
+    position: relative;
+  }
+
+  &__threshold {
+    position: absolute;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 14px;
+    min-width: 60px;
+    text-align: center;
+    transform: translateX(-50%);
+  }
+
+  &__message {
+    margin-top: 24px;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: 400;
+
+    b {
+      font-weight: 900;
+    }
+  }
+}

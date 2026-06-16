@@ -1,0 +1,49 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-scss", "stylelint-order"],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true,
+    "media-feature-range-notation": "prefix",
+    "selector-class-pattern": [
+      "^([a-z][a-z0-9]*)(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      {
+        "message": "Expected class selector to match BEM pattern"
+      }
+    ],
+    "order/order": ["custom-properties", "declarations"],
+    "no-descending-specificity": null,
+    "scss/dollar-variable-pattern": "^[a-z][a-zA-Z0-9]+$",
+    "scss/selector-no-redundant-nesting-selector": true,
+    "max-nesting-depth": [
+      6,
+      {
+        "ignore": ["pseudo-classes", "blockless-at-rules"],
+        "message": "Nesting too deep. Consider using a flat BEM structure instead of nesting with & selectors."
+      }
+    ],
+    "declaration-empty-line-before": null,
+    "block-no-empty": true,
+    "color-hex-length": "short",
+    "color-named": "never",
+    "declaration-block-no-duplicate-properties": true,
+    "function-url-quotes": "always",
+    "media-feature-name-no-vendor-prefix": true,
+    "no-duplicate-selectors": true,
+    "property-no-vendor-prefix": true,
+    "rule-empty-line-before": [
+      "always",
+      {
+        "except": ["first-nested"],
+        "ignore": ["after-comment"]
+      }
+    ],
+    "selector-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true,
+    "alpha-value-notation": "number",
+    "color-function-notation": "legacy",
+    "scss/operator-no-newline-after": null,
+    "scss/operator-no-unspaced": null,
+    "scss/comment-no-empty": null
+  }
+}

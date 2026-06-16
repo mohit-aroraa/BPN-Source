@@ -1,0 +1,233 @@
+.drawer {
+  // sass-lint:disable no-misspelled-properties
+  display: none;
+  position: fixed;
+  -webkit-overflow-scrolling: touch;
+  z-index: $z-index-drawer;
+
+  .js-drawer-open-top & {
+    display: block;
+  }
+}
+
+.js-drawer-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+.drawer--top {
+  width: 100%;
+  @include transform(translateY(-100%));
+
+  .js-drawer-open-top & {
+    @include transform(translateY(0%));
+    display: flex;
+    max-height: 100vh;
+  }
+}
+
+.drawer-page-content {
+  &::after {
+    @include visible(false);
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $color-drawer-background;
+    z-index: $z-index-drawer - 1;
+    transition: $transition-drawer;
+  }
+
+  .js-drawer-open &::after {
+    @include visible;
+  }
+}
+
+.drawer__title,
+.drawer__close {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.drawer__close-button {
+  background: none;
+  border: 0 none;
+  position: relative;
+  right: -15px;
+  height: 100%;
+  width: 60px;
+  padding: 0 $icon-size;
+  color: inherit;
+  font-size: calc(18);
+
+  &:active,
+  &:focus {
+    background-color: darken($color-drawer-background, 5%);
+  }
+}
+
+.grid--view-items {
+  overflow: auto;
+  margin-bottom: -$section-spacing-small;
+}
+
+.grid-view-item {
+  margin: 0 auto $section-spacing-small;
+
+  .custom__item & {
+    margin-bottom: 0;
+  }
+}
+
+.grid-view-item__title {
+  margin-bottom: 0;
+  color: $color-text;
+}
+
+.grid-view-item__meta {
+  margin-top: 8px;
+}
+
+@include mq($small) {
+  .grid-view-item__title,
+  .grid-view-item__meta {
+    font-size: calc(#{$font-size-base} - 1px);
+  }
+}
+
+.grid-view-item__link {
+  display: block;
+}
+
+.grid-view-item__vendor {
+  margin-top: 4px;
+  color: $color-body-text;
+  font-size: calc(#{$font-size-base} - 2px);
+  text-transform: uppercase;
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-base} - 3px);
+  }
+}
+
+.grid-view-item__image-wrapper {
+  margin: 0 auto $grid-gutter / 2;
+  position: relative;
+  width: 100%;
+}
+
+.grid-view-item__image {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+
+  .grid-view-item__image-wrapper & {
+    position: absolute;
+    top: 0;
+  }
+
+  &.lazyload {
+    opacity: 0;
+  }
+}
+
+.list-view-item {
+  margin-bottom: $gutter-site-mobile;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @include mq($medium-up) {
+    border-bottom: 1px solid $color-border;
+    padding-bottom: $gutter-site-mobile;
+
+    &:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+  }
+}
+
+.list-view-item__link {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.list-view-item__image {
+  max-height: 95px;
+}
+
+.list-view-item__image-column {
+  display: table-cell;
+  vertical-align: middle;
+  width: 130px;
+  min-height: 44px;
+
+  @include mq($small) {
+    width: 85px;
+  }
+}
+
+.list-view-item__image-wrapper {
+  position: relative;
+  margin-right: $section-spacing-small;
+
+  @include mq($small) {
+    margin-right: $section-spacing-small / 2;
+  }
+}
+
+.list-view-item__title-column {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.list-view-item__title {
+  color: $color-text;
+  min-width: 100px;
+  /*font-family: $font-stack-header;*/
+  font-style: $font-style-header;
+  font-weight: $font-weight-header;
+  font-size: calc(#{$font-size-base} + 2px);
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-base} - 1px);
+  }
+}
+
+.list-view-item__vendor {
+  @include product-vendor;
+}
+
+.list-view-item__price-column {
+  display: table-cell;
+  text-align: right;
+  vertical-align: middle;
+  width: 20%;
+  font-size: calc(#{$font-size-base} + 1px);
+
+  @include mq($small) {
+    font-size: calc(#{$font-size-base} - 1px);
+  }
+
+  .price {
+    align-items: flex-end;
+
+    dd {
+      margin: 0 0 0 0.5em;
+    }
+  }
+
+  .price__regular,
+  .price__sale {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    margin-right: 0;
+  }
+}

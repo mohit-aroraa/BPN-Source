@@ -1,0 +1,54 @@
+$max-height-disclosure: 300px;
+$min-height-disclosure: 92px;
+
+.disclosure {
+  position: relative;
+}
+
+.disclosure__toggle {
+  @extend select;
+  white-space: nowrap;
+}
+
+.disclosure-list {
+  background-color: $color-text-field;
+  border: 1px solid $color-border-form;
+  bottom: 115%;
+  padding: 11px 0px;
+  position: absolute;
+  display: none;
+  min-height: $min-height-disclosure;
+  max-height: $max-height-disclosure;
+  overflow-y: auto;
+  border-radius: $border-radius;
+}
+
+.disclosure-list--visible {
+  display: block;
+}
+
+.disclosure-list__item {
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+  padding: 5px 45px 4px 15px;
+  text-align: left;
+
+  &:active {
+    background-color: rgba(var(--color_button_rgba), 0.8);
+  }
+}
+
+.disclosure-list__option {
+  color: $color-text-field-text;
+
+  &:focus,
+  &:hover {
+    // !important needed to override link styles
+    color: $color-text-field-text !important;
+    border-bottom: 1px solid $color-text-field-text;
+  }
+}
+
+.disclosure-list__item--current .disclosure-list__option {
+  border-bottom: 1px solid $color-text-field-text;
+}

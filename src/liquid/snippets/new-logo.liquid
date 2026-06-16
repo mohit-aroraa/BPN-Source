@@ -1,0 +1,15 @@
+{%- comment -%}
+  Logo Snippet
+  ------------
+  Renders the site logo with a link to the homepage.
+
+  Components:
+  - Logo link: Links to homepage
+  - Site logo: SVG icon rendered through icon snippet
+{%- endcomment -%}
+
+<div class='bpn-logo' role="none">
+  <a href='/'   class='bpn-logo__link' aria-label="BPN Logo linking to homepage">
+    {% render 'icon', icon: 'site-logo' %}
+  </a>
+</div>

@@ -1,0 +1,25 @@
+<div class='account'>
+  {% render 'account-side-nav' %}
+
+  <div class='account__main-content'>
+    <div class='account__top-wrapper'>
+      {% render 'account-recent-history' %}
+
+      <div class='divider'></div>
+
+      {% render 'account-dashboard-subscriptions' %}
+    </div>
+
+    <section class='account__recommended'>
+      <h2 class='account__heading heading'>{{ 'Recommended for you' | upcase }}</h2>
+
+      <p class='account__description'>
+        Based on your order history and purchase preferences, we recommend the following products.
+      </p>
+
+      <div data-rebuy-id='94598'></div>
+    </section>
+  </div>
+</div>
+
+{% render 'free-shipping-promo-script' %}

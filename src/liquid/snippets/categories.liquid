@@ -1,0 +1,48 @@
+{%- assign block = section[module] -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="categories categories--{{ request.page_type | handle }} categories--{{id}}" id="categories_{{ id }}">
+  <div class="categories__wrapper swiper" data-categories-swiper>
+    <div class="swiper-wrapper categories__wrapperSwiper">
+      {% for index in (0..length) limit: 4 %}
+        {% assign image_key = 'image_' | append: index %}
+        {% assign image_on_mobile_key = 'image_on_mobile_' | append: index %}
+        {% assign cta_text_key = 'cta_text_' | append: index %}
+        {% assign cta_link_key = 'cta_link_' | append: index %}
+        {%- capture datalayerItems -%}
+          {%- comment -%}Datalayer object{%- endcomment -%}
+          {{ datalayerItems }}
+          {
+            promotion_id: '{{ index }}',
+            promotion_name: '{{ block[cta_text_key] | strip | escape }}',
+            creative_name: '{{ block[cta_text_key] | strip | escape }}',
+            creative_slot: '{{ index }}'
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endcapture -%}
+        <div class="categoryBlock swiper-slide">
+          <a href="{{block[cta_link_key] | strip}}" class="categoryBlock__link" data-track="category_cta">
+            <div class="categoryBlock__media">
+              <img
+                class="categoryBlock__image categoryBlock__image--mobile swiper-lazy"
+                src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                data-src="{{block[image_on_mobile_key].url}}"
+                alt="{{block[image_on_mobile_key].alt}}"
+                width="200"
+                height="200"
+              >
+              {%- assign foorloop_index = id | plus: forloop.index -%}
+              {% render 'prismic-responsive-image' with image: block[image_key] max_width: 640, max_height: 520, aspect_ratio: 1.23, image_class: "categoryBlock__image" wrapper_class:"categoryBlock__image--desktop", image_attributes: 'width="418" height="380"' random_id: foorloop_index %}
+              <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
+            </div>
+            <div class="categoryBlock__action">
+              <span class="text">{{ block[cta_text_key] | strip }}</span>
+              <svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 14">
+                <g stroke="#000" stroke-width="2" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h10.71M7.286 13l6-6-6-6"/></g>
+              </svg>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

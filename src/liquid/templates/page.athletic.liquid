@@ -1,0 +1,12 @@
+{%- comment -%}
+  Template for athletic landing page
+{%- endcomment -%}
+{% layout 'athletic_landing_page' %}
+
+<div class="pageHeader">
+  {%- assign page_metafields = page.metafields -%}
+  {% render 'announcement', metafields: page_metafields %}
+  {% render 'landing-header', metafields: page_metafields %}
+</div>
+
+{% include 'prismic-dynamic-slices', section: page_metafields, skip_snippets: 'announcement landing-header' %}

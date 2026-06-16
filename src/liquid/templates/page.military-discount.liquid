@@ -1,0 +1,7 @@
+{% layout 'anatta_theme' %}
+{%- assign metafields = pages['military-discount-lp'].metafields -%}
+<div class="military-discount">
+  {% include 'prismic-dynamic-slices', section: metafields %}
+</div>
+{{ 'idme-checkout-style.css' | asset_url | stylesheet_tag }}
+{{ 'idme-checkout-template.js' | asset_url | script_tag }}

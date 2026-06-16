@@ -1,0 +1,386 @@
+{%- comment -%}
+  Purpose: We will create product json object.
+  Requirements: Product object is required. Since we will use this on product template no need to pass product object when we will render it.
+{%- endcomment -%}
+{%- assign page_metafields = pages['product-global'].metafields -%}
+{%- assign global_data_section = page_metafields.global_data -%}
+{%- assign copy_below_cta = global_data_section.copy_below_cta -%}
+
+{%- comment -%}
+  Fetch data which is in Prismic
+{%- endcomment -%}
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+
+{%- comment -%}
+  Global fields data
+{%- endcomment -%}
+{%- assign global_fields_section = metafields.global_fileds -%}
+{%- assign product_title = global_fields_section.product_title -%}
+{%- assign serving_text = global_fields_section.servings -%}
+{%- assign excerpt = global_fields_section.excerpt -%}
+{%- assign product_description = global_fields_section.product_description -%}
+{%- assign show_nutrition_tab = global_fields_section.show_nutrition_tab | default: false -%}
+{%- assign show_ingredients_tab = global_fields_section.show_ingredients_tab | default: false -%}
+{%- assign show_how_to_use_tab = global_fields_section.show_how_to_use_tab | default: false -%}
+{%- assign product_subtitle = global_fields_section.product_subtitle -%}
+{%- assign ingredients_short_text = global_fields_section.ingredients_short_text -%}
+{%- assign ingredients_modal_text = global_fields_section.ingredients_modal_text -%}
+{%- assign nutrition_accordion_title = global_fields_section.nutrition_accordion_title | default: 'Supplement Facts' -%}
+{%- assign how_to_use_title = global_fields_section.how_to_use_title -%}
+{%- assign how_to_use = global_fields_section.how_to_use -%}
+{%- assign show_size_guide_tab = global_fields_section.show_size_guide_tab | default: false -%}
+{%- assign global_fields_section_length = global_fields_section.count | minus: 1 -%}
+{%- assign serving_type_section = metafields.serving_type -%}
+{%- assign serving_type_enable = serving_type_section.enable | default: false -%}
+{%- assign combo_products_section = metafields.combo_products -%}
+{%- assign combo_products_enable = combo_products_section.enable | default: false -%}
+{%- assign original_pdp_label = serving_type_section.original_pdp_label -%}
+{%- assign serving_type_section_length = serving_type_section.count | minus: 1 -%}
+{%- assign combo_products_section_length = combo_products_section.count | minus: 1 -%}
+{%- capture okendo_reviews -%}{{ product.metafields.okendo.StarRatingSnippet }}{%- endcapture -%}
+{%- comment -%}
+  Product badge info
+{%- endcomment -%}
+{%- assign product_filter_section = metafields.filters -%}
+{%- assign has_badge = product_filter_section.has_badge -%}
+{%- assign badge_title = product_filter_section.badge_title -%}
+{%- assign badge_background_color = product_filter_section.badge_background_color -%}
+{%- assign badge_text_color = product_filter_section.badge_text_color -%}
+{%- comment -%}
+  Nutrition data fetch
+  Get total count of variant slices
+{%- endcomment -%}
+{%- assign variant_slice_count = 0 -%}
+{%- for slice in metafields.meta_field_priority.priority -%}
+  {%- assign slice_name_downcase = slice | downcase -%}
+  {%- if slice_name_downcase contains 'variant' -%}
+    {%- assign variant_slice_count = variant_slice_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign variant_slice_loop_count = variant_slice_count | minus: 1 -%}
+{%- capture nutrition_data -%}
+  [
+    {{ nutrition_data }}
+    {%- for index in (0..variant_slice_loop_count) -%}
+      {%- if index == 0 -%}
+        {%- assign variant_slice_namespace = 'variant' -%}
+      {%- else -%}
+        {%- assign variant_slice_namespace = 'variant_' | append: index -%}
+      {%- endif -%}
+      {%- assign variant_section = metafields[variant_slice_namespace] -%}
+      {%- assign variant_name = variant_section.variant_name -%}
+      {%- assign variant_id = variant_section.variant_id -%}
+      {%- assign short_content = variant_section.short_content -%}
+      {%- assign nutrition_above_text = variant_section.nutrition_above_text -%}
+      {%- assign nutrition_below_text = variant_section.nutrition_below_text -%}
+      {%- assign variant_section_count = variant_section.count | minus: 1 -%}
+      {
+        {%- capture nutrition_short_content_markup -%}
+          {% render 'prismic-rich-text', rich_text: short_content %}
+        {%- endcapture -%}
+        {%- capture nutrition_modal_markup -%}
+            <div class="productNutritionContent__modalAboveText">
+              {% render 'prismic-rich-text', rich_text: nutrition_above_text %}
+            </div>
+            <div class="productNutritionContent__modalTable">
+              <table summary="Supplement facts for {{ product.title | escape }}">
+                <thead>
+                  <tr>
+                    <th width="60%">&nbsp;</th>
+                    <th>Amount Per Serving</th>
+                    <th>% Daily Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index in (0..variant_section_count) %}
+                    {% assign nutrition_title_key = 'nutrition_title_' | append: index %}
+                    {% assign amount_per_serving_key = 'amount_per_serving_' | append: index %}
+                    {% assign percentage_daily_value = 'percentage_daily_value_'
+                      | append: index
+                    %}
+                    <tr>
+                      <td>{{ variant_section[nutrition_title_key] }}</td>
+                      <td>{{ variant_section[amount_per_serving_key] }}</td>
+                      <td>{{ variant_section[percentage_daily_value] }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="productNutritionContent__modalBelowText">
+              {% render 'prismic-rich-text', rich_text: nutrition_below_text %}
+            </div>
+        {%- endcapture -%}
+        "variant_id": {{variant_id}},
+        "variant_name": "{{ variant_name }}",
+        "nutrition_short_content": {{ nutrition_short_content_markup | json }},
+        "nutrition_modal_markup": {{ nutrition_modal_markup | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+{%- endcapture -%}
+
+{%- comment -%} Ingredients Content {%- endcomment -%}
+{%- capture ingredients_modal_text_markup -%}
+  {% render 'prismic-rich-text', rich_text: ingredients_modal_text %}
+{%- endcapture -%}
+
+{%- comment -%} How To Use Content {%- endcomment -%}
+{%- capture how_to_use_markup -%}{% render 'prismic-rich-text', rich_text: how_to_use %}{%- endcapture -%}
+
+{%- comment -%} Measurements {%- endcomment -%}
+{%- assign measurements = metafields.measurements -%}
+{%- assign measurements_enable = measurements.enable -%}
+{%- assign measurements_title = measurements.title -%}
+{%- assign measurements_count = measurements.count | minus: 1 -%}
+{%- capture measurement_markup -%}
+  {%- if measurements_title != blank -%}
+    <p class="sizingChartSection__text">{{ measurements_title }}</p>
+  {%- endif -%}
+  {%- if measurements_count >= 0 -%}
+    <div class="responsiveTable">
+      <table class="tableFirstColumnBg">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Body Length</th>
+            <th>Chest Width</th>
+            <th>Neck Width</th>
+            <th>Sleeve Length</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for index in (0..measurements_count) -%}
+            {%- assign measurements_size_key = 'size_' | append: index -%}
+            {%- assign measurements_body_length_key = 'body_length_' | append: index -%}
+            {%- assign measurements_chest_width_key = 'chest_width_' | append: index -%}
+            {%- assign measurements_neck_width_key = 'neck_width_' | append: index -%}
+            {%- assign measurements_sleeve_length_key = 'sleeve_length_' | append: index -%}
+            <tr>
+              <td>{{ measurements[measurements_size_key] }}</td>
+              <td>{{ measurements[measurements_body_length_key] }}</td>
+              <td>{{ measurements[measurements_chest_width_key] }}</td>
+              <td>{{ measurements[measurements_neck_width_key] }}</td>
+              <td>{{ measurements[measurements_sleeve_length_key] }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- comment -%}Fetch the measurement data{%- endcomment -%}
+{%- assign unisex_sizing_conversion_chart = metafields.unisex_sizing_conversion_chart -%}
+{%- assign unisex_sizing_conversion_chart_enable = unisex_sizing_conversion_chart.enable -%}
+{%- assign unisex_sizing_conversion_chart_title = unisex_sizing_conversion_chart.title -%}
+{%- assign unisex_sizing_conversion_chart_count = unisex_sizing_conversion_chart.count | minus: 1 -%}
+{%- capture unisex_sizing_conversion_chart_markup -%}
+  {%- if unisex_sizing_conversion_chart_title != blank -%}
+    <p class="sizingChartSection__text">{{ unisex_sizing_conversion_chart_title }}</p>
+  {%- endif -%}
+  {%- if unisex_sizing_conversion_chart_count >= 0 -%}
+    {%- for index in (0..unisex_sizing_conversion_chart_count) -%}
+      {%- assign unisex_sizing_conversion_chart_men_size_key = 'men_size_' | append: index -%}
+      {%- assign unisex_sizing_conversion_chart_women_body_length_key = 'women_size_' | append: index -%}
+      {%- capture unisex_men_size -%}
+        {{ unisex_men_size }}
+          <td> {{ unisex_sizing_conversion_chart[unisex_sizing_conversion_chart_men_size_key] }} </td>
+        {%- endcapture -%}
+      {%- capture unisex_women_size -%}
+        {{ unisex_women_size }}
+            <td> {{ unisex_sizing_conversion_chart[unisex_sizing_conversion_chart_women_body_length_key] }} </td>
+        {%- endcapture -%}
+    {%- endfor -%}
+    <div class="responsiveTable">
+      <table class="tableFirstColumnBg">
+        <tbody>
+          <tr>
+            <td>Womens</td>
+            {{ unisex_women_size }}
+          </tr>
+          <tr>
+            <td>Mens</td>
+            {{ unisex_men_size }}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      {%- endif -%}
+{%- endcapture -%}
+
+{%- capture produtc_data -%}
+  {
+    "id":{{ product.id }},
+    "title": "{{ product_title | escape |  default: product.title | escape }}",
+    {%- liquid
+      assign bigTtl           = product.title
+      assign smlTtl           = ''
+      assign ttlSplt          = '/'
+      if bigTtl contains ttlSplt
+        assign var            = bigTtl | split: ttlSplt
+        assign bigTtl         = var | first | strip
+        assign smlTtl         = var | last | strip
+      endif
+    -%}
+    "shopify_title": "{{ bigTtl }} {{ smlTtl }}",
+    "shopify_raw_title": "{{ product.title | escape | strip }}",
+    "url": "{{ product.url }}",
+    "available": {{ product.available }},
+    {%- if product.compare_at_price -%}
+      "compare_at_price": {{ product.compare_at_price }},
+    {%- endif -%}
+    {%- if has_badge -%}
+      "product_badge_data": { "has_badge": {{ has_badge }}, "badge_title": "{{ badge_title | escape }}",
+      "badge_background_color": "{{ badge_background_color }}", "badge_text_color": "{{ badge_text_color }}" },
+    {%- endif -%}
+    "featured_image": {{ product.featured_image | json }},
+    "subscription_sub_title": "{{ product.metafields.custom._old_pdp_subscription_sub_title | default: 'Easy and flexible subscription.' }}",
+    "handle": "{{ product.handle }}",
+    "enable_stack_and_save": {{ product.metafields.custom.enable_stack_and_save | default: false }},
+    "has_only_default_variant": {{ product.has_only_default_variant }},
+    "images": {{ product.images | json }},
+    "media": {{ product.media | json }},
+    "options": {{ product.options | json }},
+    "options_with_values": {{ product.options_with_values | json }},
+    "price": "{{ product.price }}",
+    "requires_selling_plan": {{ product.requires_selling_plan }},
+    "selected_or_first_available_variant": {{ product.selected_or_first_available_variant | json }},
+    "tags" : {{ product.tags | json }},
+    "type": "{{ product.type }}",
+    "copy_below_cta": "{{ copy_below_cta }}",
+    "reviews_markup": {{ okendo_reviews | json }},
+    {%- if serving_type_enable -%}
+      "additional_pdp_data":{
+      "original_pdp_label": "{{ original_pdp_label }}",
+      "additional_pdp": [
+        {%- for index in (0..serving_type_section_length) -%}
+          {
+            {%- assign label_key = "label_" | append: index -%}
+            {%- assign product_handle_key = "product_handle_" | append: index -%}
+            "label": "{{ serving_type_section[label_key] }}",
+            "product_handle": "{{ serving_type_section[product_handle_key] }}"
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+      },
+    {%- endif -%}
+    {%- if combo_products_enable -%}
+      combo_product_data:{
+        "original_pdp_label": "{{ combo_products_section.original_pdp_label }}",
+        "original_variants": "{{ combo_products_section.variants }}",
+        "combo_products":[
+          {%- for index in (0..combo_products_section_length) -%}
+            {
+              {%- assign label_key = "label_" | append: index -%}
+              {%- assign product_handle_key = "product_handle_" | append: index -%}
+              {%- assign variant_id_key = "variant_id_" | append: index -%}
+              "label": "{{ combo_products_section[label_key] }}",
+              "product_handle": "{{ combo_products_section[product_handle_key] }}",
+              "variant_id": "{{ combo_products_section[variant_id_key] }}"
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      },
+    {%- endif -%}
+    "variants": [
+      {%- for variant in product.variants -%}
+        {
+          "available": {{ variant.available }},
+          "id": {{ variant.id }},
+          "title": {{ variant.title | json }},
+          "price": {{ variant.price }},
+          "type": "{{ product.type }}",
+          "options": {{ variant.options | json }},
+          "featured_image": {{ variant.featured_image | json }},
+          "option1" : "{{ variant.option1 }}",
+          "option2" : "{{ variant.option2 }}",
+          "option3" : "{{ variant.option3 }}",
+          "inventory_quantity":{{ variant.inventory_quantity }},
+          "sku": "{{ variant.sku }}",
+          {% if variant.metafields.custom.external_link != blank %}
+            "external_link": {{ variant.metafields.custom.external_link }},
+          {% else %}
+            "external_link": undefined,
+          {% endif %}
+          "availability": "{{ variant.metafields.custom.availability | default: "default" }}",
+          "default_frequency": {{ variant.metafields.custom.set_default_frequency | json | downcase}},
+          "serving_size_or_count": {{ variant.metafields.custom.serving_size_or_count | json }},
+          "has_selling_plan": {% if variant.selling_plan_allocations.size > 0 %}true{% else %}false{% endif %}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+      ],
+    {%- capture _spg_json -%}[{%- assign _is_first = true -%}{%- for spg in product.selling_plan_groups -%}{%- if settings.subscription_platform == 'skio' and spg.app_id != 'SKIO' -%}{%- continue -%}{%- endif -%}{%- if settings.subscription_platform != 'skio' and spg.app_id == 'SKIO' -%}{%- continue -%}{%- endif -%}{%- unless _is_first -%},{%- endunless -%}{%- assign _is_first = false -%}{{ spg | json }}{%- endfor -%}]{%- endcapture -%}
+    "selling_plan_groups": {{ _spg_json }},
+    "default_frequency": {{ product.metafields.custom.set_default_frequency | json | downcase}},
+    {%- if product.selling_plan_groups.size > 0 -%}
+      {%- liquid
+      assign subscription_plans = product.selling_plan_groups
+      assign default_subscription_plan = null
+      for group in subscription_plans
+        if settings.subscription_platform == 'skio' and group.app_id == 'SKIO'
+          assign default_subscription_plan = group
+          break
+        elsif settings.subscription_platform != 'skio' and group.app_id != 'SKIO'
+          assign default_subscription_plan = group
+          break
+        endif
+      endfor
+      assign default_price_adjustment = default_subscription_plan.selling_plans | first
+      assign _price_adjustment = default_price_adjustment.price_adjustments | first
+      assign subscription_discount_type = _price_adjustment.value_type
+      assign discount_percentage = _price_adjustment.value | times: 1
+      -%}
+    "discount_type": "{{ subscription_discount_type }}",
+    "discount_value": "{{ discount_percentage }}",
+    {%- endif -%}
+    "serving_text": "{{ serving_text | escape }}",
+    "excerpt": {{ excerpt | json }},
+    "product_description": "{{ product_description | escape }}",
+    "show_nutrition_tab": {{ show_nutrition_tab }},
+    "show_how_to_use_tab": {{ show_how_to_use_tab }},
+    "show_ingredients_tab": {{ show_ingredients_tab }},
+    "product_subtitle": "{{ product_subtitle }}",
+    "ingredients_short_text": {{ ingredients_short_text | json }},
+    "nutrition_accordion_title": "{{ nutrition_accordion_title | escape }}",
+    "how_to_use_title": "{{ how_to_use_title }}",
+    "show_size_guide_tab": {{ show_size_guide_tab }},
+    {%- if show_size_guide_tab -%}
+      {%- assign measurements = metafields.measurements -%}
+      {%- assign measurements_enable = measurements.enable -%}
+      {%- assign measurements_title = measurements.title -%}
+      {%- assign measurements_count = measurements.count | minus: 1 -%}
+      {%- if measurements and measurements_enable -%}
+        "measurements":{{ measurement_markup | json }},
+      {%- endif -%}
+      {%- if unisex_sizing_conversion_chart and unisex_sizing_conversion_chart_enable -%}
+        "unisex_sizing_conversion_chart": {{ unisex_sizing_conversion_chart_markup | json }},
+      {%- endif -%}
+    {%- endif -%}
+    {%- if show_nutrition_tab -%}
+      "nutrition_data": {{ nutrition_data }},
+    {%- endif -%}
+    {%- if show_ingredients_tab -%}
+      "ingredients_modal_text_markup": {{ ingredients_modal_text_markup | json }},
+    {%- endif -%}
+    {%- if show_how_to_use_tab -%}
+      "how_to_use_markup": {{ how_to_use_markup | json }},
+    {%- endif -%}
+    "breadcrumb": {% render 'breadcrumb-slice', metafields: metafields %},
+    "primary_benefits": [
+        {% for index in (0..global_fields_section_length) %}
+            {
+                {% assign primary_benefits_icon_key = 'primary_benefits_icon_' | append: index %}
+                {% assign heading_key = 'heading_' | append: index %}
+                {% assign primary_title_key = 'primary_title_' | append: index %}
+                "icon": {{ global_fields_section[primary_benefits_icon_key] | json }},
+                "heading": "{{ global_fields_section[heading_key] | escape }}",
+                "primary_title": "{{ global_fields_section[primary_title_key] | escape }}"
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+    ]
+  }
+{%- endcapture -%}
+{{- produtc_data -}}

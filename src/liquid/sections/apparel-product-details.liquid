@@ -1,0 +1,57 @@
+<section class="apparel-product-details">
+    {% if section.settings.title != blank %}
+        <h2 class="apparel-product-details__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+        <p class="apparel-product-details__text">{{ section.settings.text }}</p>
+    {% endif %}
+
+    <div class="container">
+        {% assign size = section.blocks | size %}
+        {% for block in section.blocks %}
+            <div class="tile{% unless forloop.first == false %} long-tile{% endunless %}">
+                <img
+                        src="{{ block.settings.image | img_url: 'master' }}"
+                        alt="{{ lock.settings.image.alt }}"
+                />
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% schema %}
+{
+  "name": "Apparel Product Details",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Slide",
+      "type": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Apparel Product Details"
+    }
+  ]
+}
+{% endschema %}

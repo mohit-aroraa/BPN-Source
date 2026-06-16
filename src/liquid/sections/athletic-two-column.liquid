@@ -1,0 +1,350 @@
+{% assign base_class = 'bpn-athletic-two-column' %}
+{% assign button_click_id = 'athlete-lp_shop-all_cta' %}
+
+<div class="{{ base_class }} {{ base_class }}--{{ section.id }}{% if section.settings.reverse_layout == true %} {{ base_class }}--reverse{% endif %}"
+     style="{%- if section.settings.background_color -%} background: {{ section.settings.background_color }};{%- endif -%}">
+  <div class="{{ base_class }}__content-wrapper">
+    {% include 'athletic-shared-content',
+      base_class: base_class,
+      include_buttons: true,
+      button_click_id: button_click_id,
+      mobile_text_align: section.settings.mobile_text_align,
+      desktop_text_align: section.settings.desktop_text_align
+    %}
+  </div>
+  <div class="{{ base_class }}__media-wrapper">
+    {% include 'athletic-media', base_class: base_class %}
+  </div>
+</div>
+
+<style>
+  .{{ base_class }}--{{ section.id }} .{{ base_class }}__content {
+    color: {{ section.settings.mobile_font_color }};
+  }
+
+  @media (min-width: 991px) {
+    .{{ base_class }}--{{ section.id }} .{{ base_class }}__content {
+      color: {{ section.settings.desktop_font_color }};
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Athletic Two Column",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_layout",
+      "label": "Reverse layout (media on left, content on right)",
+      "default": false
+    },
+    {
+      "id": "background_color",
+      "type": "color",
+      "label": "Section Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "id": "mobile_font_color",
+      "type": "color",
+      "label": "Mobile Font Color",
+      "default": "#000000"
+    },
+    {
+      "id": "desktop_font_color",
+      "type": "color",
+      "label": "Desktop Font Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "id": "image_desktop",
+      "type": "image_picker",
+      "label": "Desktop Image",
+      "info": "Recommended 2880x1200"
+    },
+    {
+      "id": "image_mobile",
+      "type": "image_picker",
+      "label": "Mobile Image",
+      "info": "Recommended 752x1104"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "id": "video_desktop_type",
+      "type": "select",
+      "label": "Desktop Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_desktop_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Desktop Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Desktop Video Source is set to URL."
+    },
+    {
+      "id": "video_desktop_media",
+      "type": "video",
+      "label": "Video Desktop Media",
+      "info": "Select a video from your Media Gallery if Desktop Video Source is set to Media."
+    },
+    {
+      "id": "video_desktop_poster",
+      "type": "image_picker",
+      "label": "Desktop Video Poster"
+    },
+    {
+      "id": "video_mobile_type",
+      "type": "select",
+      "label": "Mobile Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_mobile_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Mobile Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Mobile Video Source is set to URL."
+    },
+    {
+      "id": "video_mobile_media",
+      "type": "video",
+      "label": "Video Mobile Media",
+      "info": "Select a video from your Media Gallery if Mobile Video Source is set to Media."
+    },
+    {
+      "id": "video_mobile_poster",
+      "type": "image_picker",
+      "label": "Mobile Video Poster"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Alignment"
+    },
+    {
+      "id": "desktop-h-a",
+      "type": "select",
+      "label": "Horizontal Alignment",
+      "options": [
+        {
+          "value": "d-left",
+          "label": "Left"
+        },
+        {
+          "value": "d-center",
+          "label": "Center"
+        },
+        {
+          "value": "d-right",
+          "label": "Right"
+        }
+      ],
+      "default": "d-left"
+    },
+    {
+      "id": "desktop-v-a",
+      "type": "select",
+      "label": "Vertical Alignment",
+      "options": [
+        {
+          "value": "d-top",
+          "label": "Top"
+        },
+        {
+          "value": "d-v-center",
+          "label": "Center"
+        },
+        {
+          "value": "d-bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "d-top"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Alignment"
+    },
+    {
+      "id": "mobile-h-a",
+      "type": "select",
+      "label": "Horizontal Alignment",
+      "options": [
+        {
+          "value": "m-left",
+          "label": "Left"
+        },
+        {
+          "value": "m-center",
+          "label": "Center"
+        },
+        {
+          "value": "m-right",
+          "label": "Right"
+        }
+      ],
+      "default": "m-left"
+    },
+    {
+      "id": "mobile-v-a",
+      "type": "select",
+      "label": "Vertical Alignment",
+      "options": [
+        {
+          "value": "m-top",
+          "label": "Top"
+        },
+        {
+          "value": "m-v-center",
+          "label": "Center"
+        },
+        {
+          "value": "m-bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "m-top"
+    },
+    {
+      "type": "header",
+      "content": "Text Alignment"
+    },
+    {
+      "id": "mobile_text_align",
+      "type": "select",
+      "label": "Mobile Text Alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-left"
+    },
+    {
+      "id": "desktop_text_align",
+      "type": "select",
+      "label": "Desktop Text Alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "id": "title",
+      "type": "richtext",
+      "label": "Title",
+      "default": "<p>Two Column Title</p>"
+    },
+    {
+      "id": "hide_title_on_mobile",
+      "type": "checkbox",
+      "label": "Hide Title on Mobile",
+      "default": false
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "Description",
+      "default": "<p>Description goes here.</p>"
+    },
+    {
+      "id": "hide_description_on_mobile",
+      "type": "checkbox",
+      "label": "Hide Description on Mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Buttons - Mobile"
+    },
+    {
+      "id": "mobile_button_option",
+      "type": "select",
+      "label": "Mobile Button Option",
+      "options": [
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "primary", "label": "Primary" }
+      ],
+      "default": "primary"
+    },
+    {
+      "id": "mobile_button_text",
+      "type": "text",
+      "label": "Mobile Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "id": "mobile_button_url",
+      "type": "url",
+      "label": "Mobile Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Buttons - Desktop"
+    },
+    {
+      "id": "desktop_button_option",
+      "type": "select",
+      "label": "Desktop Button Option",
+      "options": [
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "primary", "label": "Primary" }
+      ],
+      "default": "primary"
+    },
+    {
+      "id": "desktop_button_text",
+      "type": "text",
+      "label": "Desktop Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "id": "desktop_button_url",
+      "type": "url",
+      "label": "Desktop Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Athletic Two Column",
+      "category": "Athletic Landing Pages"
+    }
+  ]
+}
+{% endschema %}

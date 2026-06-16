@@ -1,0 +1,155 @@
+<div class='buy-box-container'>
+  {% assign availability = selected_variation.metafields.custom.availability | default: 'default' %}
+
+  {% assign external_link = selected_variation.metafields.custom.external_link.value.url
+    | default: ''
+  %}
+  {% assign external_link_text = selected_variation.metafields.custom.external_link.value.text
+    | default: ''
+  %}
+
+  {% assign subscription_plans = product.selling_plan_groups %}
+  {% assign default_subscription_plan = null %}
+  {% if product.metafields.custom.allow_subscriptions != false %}
+    {% for group in subscription_plans %}
+      {% if settings.subscription_platform == 'skio' and group.app_id == 'SKIO' %}
+        {% assign default_subscription_plan = group %}
+        {% break %}
+      {% elsif settings.subscription_platform != 'skio' and group.app_id != 'SKIO' %}
+        {% assign default_subscription_plan = group %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {% assign default_price_adjustment = default_subscription_plan.selling_plans | first %}
+
+  {% if product.metafields.custom.enable_stack_and_save %}
+    {% assign hide_subscription_product_gel = true %}
+    {%- assign default_subscription_plan = false -%}
+  {% endif %}
+
+  {% assign default_selling_plan = selected_variation.selling_plan_allocations | first %}
+
+  {% liquid
+    assign default_to_otp = false
+    for tag in product.tags
+      assign tag_downcase = tag | downcase | strip
+      if tag_downcase == 'pdp-default-to-otp'
+        assign default_to_otp = true
+        break
+      endif
+    endfor
+  %}
+
+  {% if default_subscription_plan != blank and product.metafields.custom.enable_stack_and_save != true and selected_variation.selling_plan_allocations.size > 0%}
+    {% render 'subscription-selector',
+      default_subscription_plan: default_subscription_plan,
+      hide_subscription: hide_subscription_product_gel,
+      subscription_plans: subscription_plans,
+      selected_variation: selected_variation,
+      tooltip_text: tooltip_text,
+      tag_discount: tag_discount,
+      subsribed_click_id: 'pdp_buyblock_subscribe-sms-why',
+      not_subsribed_click_id: 'pdp_buyblock_subscribe-sms',
+      default_to_otp: default_to_otp
+    %}
+  {% endif %}
+
+  {% assign show_notify = false %}
+
+  {% if selected_variation.available == false %}
+    {% assign show_notify = true %}
+  {% endif %}
+
+  {% if availability == 'oos' %}
+    {% assign show_notify = true %}
+  {% endif %}
+
+  {% if availability == 'external' %}
+    {% assign show_notify = false %}
+  {% endif %}
+
+  {% render 'pair-product' %}
+
+  {% if product.metafields.custom.enable_stack_and_save %}
+    {% render 'buy-more-save-more' %}
+  {% endif %}
+
+  {% if section.settings.show_order_by %}
+    {% render 'order-by' %}
+  {% endif %}
+
+
+  <div class='buy-box__control-wrapper'>
+    <div class='buy-box__add-button-container'>
+      {% if show_quantity_selector == true %}
+        {% render 'quantity-selector', availability: availability %}
+      {% endif %}
+      <button
+        class='buy-box__add-button{% if selected_variation.available != true or availability != 'default' %} hidden{% endif %}'
+        {% if default_subscription_plan != blank and selected_variation.selling_plan_allocations.size > 0 %}
+          data-selling_plan='{{ default_price_adjustment.id }}'
+        {% endif %}
+        {% if show_quantity_selector == true %}
+          style='min-width: unset; width: 100%'
+        {% endif %}
+        data-variation_id='{{ product.selected_or_first_available_variant.id }}'
+        data-product_id='{{ product.id }}'
+        data-quantity='1'
+      >
+        ADD TO CART -
+        {% if tag_discount != blank %}
+          <span class='compare-price'>{% render 'price-value', price: selected_variation.price %}</span>
+          {% render 'price-value', price: tag_final_price %}
+        {% elsif default_to_otp %}
+          {% render 'price-value', price: selected_variation.price %}
+        {% elsif product.metafields.custom.enable_stack_and_save %}
+          {% render 'price-value', price: selected_variation.price %}
+        {% elsif default_selling_plan != blank %}
+          {% if default_selling_plan.compare_at_price %}
+            <span class='compare-price'>
+              {% render 'price-value', price: default_selling_plan.compare_at_price %}
+            </span>
+          {% endif %}
+          <span>{% render 'price-value', price: default_selling_plan.price %}</span>
+        {% else %}
+          {% render 'price-value', price: selected_variation.price %}
+        {% endif %}
+      </button>
+
+      <a
+        href='{{ external_link }}'
+        target='_blank'
+        class='buy-box__add-button external_link {% if availability != 'external' %} hidden{% endif %}'
+        {% if show_quantity_selector == true %}
+          style='min-width: unset; width: 100%'
+        {% endif %}
+      >
+        {{ external_link_text }}
+      </a>
+
+      <a
+        id='BIS_trigger'
+        href='#'
+        class='buy-box__bis-button {% unless show_notify %} hidden{% endunless %}'
+        {% if show_quantity_selector == true %}
+          style='min-width: unset; width: 100%'
+        {% endif %}
+      >
+        Notify me via email
+      </a>
+    </div>
+  </div>
+
+  {% if section.settings.show_copy_text %}
+    <p class='buy-box__copy-text'>
+      {{ section.settings.copy_text }}
+    </p>
+  {% endif %}
+  {% comment %}
+    {% if settings.bfcm_timer_enabled %}
+      {% render 'bfcm-offer-banner-pdp' %}
+    {% endif %}
+  {% endcomment %}
+</div>

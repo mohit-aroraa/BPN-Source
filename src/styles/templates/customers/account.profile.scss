@@ -1,0 +1,78 @@
+.account-profile {
+  .account__top-wrapper {
+    display: block;
+  }
+
+  .account-breadcrumbs {
+    @include above('tablet-large') {
+      display: none !important;
+    }
+  }
+
+  .account__logout-btn,
+  .account__customer-name {
+    display: none;
+
+    @include above('tablet-large') {
+      display: block;
+    }
+  }
+
+  .account__main-content {
+    padding-top: 20px;
+
+    @include above('tablet-large') {
+      padding-top: 105px;
+    }
+  }
+
+  &__heading {
+    margin-top: 4px;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 32px; /* 100% */
+    letter-spacing: -0.64px;
+
+    @include above('tablet-large') {
+      font-size: 24px;
+      line-height: 20px; /* 83.333% */
+      letter-spacing: -0.48px;
+    }
+
+  }
+
+  &__user-information {
+    margin-top: 12px;
+
+    @include above('tablet-large') {
+      margin-top: 20px;
+    }
+
+    &-item {
+      margin: 0;
+      font-size: 16px;
+      font-style: normal;
+      line-height: 20px;
+      font-weight: 700;
+
+      @include above('tablet-large') {
+        font-size: 18px;
+        line-height: 22px;
+      }
+
+      &:nth-child(2n) {
+        font-weight: 500;
+        margin-bottom: 12px;
+
+        @include above('tablet-large') {
+          margin-bottom: 16px;
+        }
+      }
+    }
+  }
+
+  &__edit-button {
+    max-width: 343px;
+  }
+}

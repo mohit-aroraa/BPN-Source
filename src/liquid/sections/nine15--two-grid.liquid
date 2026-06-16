@@ -1,0 +1,157 @@
+<!-- sections/nine15--two-grid -->
+
+{% include 'master--two-grid' %}
+
+{% schema %}
+{
+	"name": "Two Grid",
+	"settings": [
+		{
+            "type":"checkbox",
+            "id":"reverse",
+            "label": "Reverse"
+        },
+		{
+			"type":"header",
+			"content": "Custom CSS Rules"
+		},
+		{
+			"type":"paragraph",
+			"content": "Explanation of Custom CSS rules below input."
+		},
+		{
+			"type": "html",
+			"id": "custom_css",
+			"label": "Custom CSS"
+		},
+		{
+			"type":"paragraph",
+			"content": "Use '==' to reference this block's parent container, that way the css you use only applies to this container. The example below applies font size to only the h2 element in the current block's container."
+		},
+		{
+			"type":"paragraph",
+			"content": "Ex: '== h2 { font-size: 20px; }'"
+		},
+		{
+			"type":"paragraph",
+			"content": "Use '/MEDIA_QUERY/' to create media queries that match css defaults. The example below would output '@media screen and (max-width: 749px)' before the css."
+		},
+		{
+			"type":"paragraph",
+			"content": "Ex: '/small/ { == h2 { font-size: 20px; } }'"
+		},
+		{
+			"type":"paragraph",
+			"content": "Media Queries: narrow, not-narrow, small, medium, medium-up, medium-down, large, large-up, large-down, ex-large, ex-large-up, ex-large-down, widescreen"
+		}
+	],
+	"blocks": [
+		{
+            "type":"block",
+            "name":"Block",
+            "settings":[
+            	{
+                    "type":"image_picker",
+                    "id":"image",
+                    "label":"Image"
+                },
+                {
+                    "type":"text",
+                    "id":"title",
+                    "label":"Title"
+                },
+                {
+                    "type":"text",
+                    "id":"top_title",
+                    "label":"Top Title"
+                },
+                {
+                    "type":"richtext",
+                    "id":"text",
+                    "label":"Text"
+                },
+                {
+                    "type":"text",
+                    "id":"lnk_txt",
+                    "label": "Link Text"
+                },
+                {
+                    "type":"url",
+                    "id":"lnk_url",
+                    "label": "Link Url"
+                },
+                {
+                    "type":"color",
+                    "id":"color_txt",
+                    "label":"Text Color",
+                    "default": "#4D4D4F"
+                },
+                {
+                    "type":"color",
+                    "id":"color_bg",
+                    "label":"Background Color",
+                    "default": "#ffffff"
+                },
+                {
+			      	"type": "header",
+			      	"content": "Video Settings"
+			    },
+			    {
+			      	"type": "video_url",
+			      	"id": "video_url",
+			      	"label": "Video url",
+			      	"accept": [
+			        	"youtube",
+			        	"vimeo"
+			      	]
+			    },
+			    {
+			      	"type": "text",
+			      	"id": "video_hosted",
+			      	"label": "Video url if hosted"
+			    },
+				{
+					"type":"header",
+					"content": "Custom CSS Rules"
+				},
+				{
+					"type":"paragraph",
+					"content": "Explanation of Custom CSS rules below input."
+				},
+				{
+					"type": "html",
+					"id": "custom_css",
+					"label": "Custom CSS"
+				},
+				{
+					"type":"paragraph",
+					"content": "Use '==' to reference this block's parent container, that way the css you use only applies to this container. The example below applies font size to only the h2 element in the current block's container."
+				},
+				{
+					"type":"paragraph",
+					"content": "Ex: '== h2 { font-size: 20px; }'"
+				},
+				{
+					"type":"paragraph",
+					"content": "Use '/MEDIA_QUERY/' to create media queries that match css defaults. The example below would output '@media screen and (max-width: 749px)' before the css."
+				},
+				{
+					"type":"paragraph",
+					"content": "Ex: '/small/ { == h2 { font-size: 20px; } }'"
+				},
+				{
+					"type":"paragraph",
+					"content": "Media Queries: narrow, not-narrow, small, medium, medium-up, medium-down, large, large-up, large-down, ex-large, ex-large-up, ex-large-down, widescreen"
+				}
+            ]
+        }
+	],
+	"presets": [
+		{
+			"name": "Two Grid",
+			"category": "1 - NINE15"
+		}
+	]	
+}
+{% endschema %}
+

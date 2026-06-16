@@ -1,0 +1,21 @@
+{%- comment -%}
+  address - Required
+  Returns address without name
+{%- endcomment -%}
+{%- assign send_address = '' -%}
+{%- if address.address1 != blank -%}
+  {%- assign send_address = send_address | append: address.address1 | append: ', ' -%}
+{%- endif -%}
+{%- if address.address2 != blank -%}
+  {%- assign send_address = send_address | append: address.address2 | append: ', ' -%}
+{%- endif -%}
+{%- if address.city != blank -%}
+  {%- assign send_address = send_address | append: address.city | append: ', ' -%}
+{%- endif -%}
+{%- if address.province != blank -%}
+  {%- assign send_address = send_address | append: address.province | append: ', ' -%}
+{%- endif -%}
+{%- if address.country != blank -%}
+  {%- assign send_address = send_address | append: address.country -%}
+{%- endif -%}
+{{- send_address | escape -}}

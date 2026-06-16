@@ -1,0 +1,28 @@
+<div class="og-card og-total-card">
+  <div class="og-cost-breakdown">
+    <dl>
+      <div>
+        <dt>{{ 'shipment_sent_price_autosave' | t }}</dt>
+        <dd class="og-text-align-right">
+          {{ "-" if not (order.discount_total == 0) -}}
+          {{- order.discount_total | currency(order.currency_code) }}
+        </dd>
+      </div>
+      <div>
+        <dt>{{ 'shipment_sent_price_subtotal' | t }}</dt>
+        <dd class="og-text-align-right">{{ order.sub_total | currency(order.currency_code) }}</dd>
+      </div>
+      <div>
+        <dt>{{ 'shipment_sent_price_shipping' | t }}</dt>
+        <dd class="og-text-align-right">{{ order.shipping_total | currency(order.currency_code) }}</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="og-text-align-right og-total-display">
+    <p class="og-total">
+      {{ 'shipment_sent_price_total' | t }}*
+      {{ order.total | currency(order.currency_code) }}
+    </p>
+    <p class="og-disclaimer">{{ 'total_box_disclaimer' | t }}</p>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+{% form 'localization' %}
+  <input
+    type='hidden'
+    id='hidden-country'
+    name='country_code'
+    value='{{ localization.country.iso_code }}'
+  >
+  <details class='bpn-country-selector'>
+    <summary class='bpn-country-selector__selected'>
+      <span class='bpn-localization__image'>
+        {{
+          localization.country
+          | image_url: width: '28px', height: '28px'
+          | image_tag: alt: localization.country.name, class: 'bpn-country-selector__flag-icon'
+        }}
+      </span>
+      <span class='bpn-footer__country-name'>{{ localization.country.name }}</span>
+      {% render 'icon', icon: 'arrow-icon', class: 'bpn-icon-caret' %}
+    </summary>
+    <div class='bpn-country-selector__item-wrapper'>
+      <ul class='bpn-country-selector__list' role='listbox'>
+        {%- for country in localization.available_countries -%}
+          <li
+            id='option-{{ country.iso_code }}'
+            role='option'
+            class='bpn-country-selector__item-wrap js-localization-item'
+            data-country-code='{{ country.iso_code }}'
+            tabindex='0'
+            aria-selected='{% if country.iso_code == localization.country.iso_code %}true{% else %}false{% endif %}'
+          >
+            <div
+              class='bpn-country-selector__single-wrap'
+              data-bww-id='selected_country_{{ country.iso_code }}'
+            >
+              <div>
+                {{
+                  country
+                  | image_url: width: '28px', height: '28px'
+                  | image_tag: alt: country.name, class: 'bpn-country-selector__flag-icon'
+                }}
+              </div>
+              <span>
+                {{ country.name }} - {{ country.currency.iso_code }}
+                {{ country.currency.symbol }}
+              </span>
+            </div>
+            {%- if country.iso_code == localization.country.iso_code -%}
+              {% render 'icon', icon: 'icon-tick', class: 'bpn-footer__country-tick' %}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </details>
+{% endform %}

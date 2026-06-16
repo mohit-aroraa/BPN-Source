@@ -1,0 +1,181 @@
+{%- liquid
+  assign featured_product = block.settings.product
+  assign product_image = block.settings.product_image
+  if product_image == blank and featured_product != blank
+    assign product_image = featured_product.featured_image
+  endif
+  assign pdp_url = block.settings.pdp_url
+  if pdp_url == blank and featured_product != blank
+    assign pdp_url = featured_product.url
+  endif
+  assign callout_title = block.settings.title
+  if callout_title == blank and featured_product != blank
+    assign callout_title = featured_product.title
+  endif
+
+  assign current_price = 0
+  assign original_price = 0
+  if featured_product != blank
+    assign current_price = featured_product.price
+    assign component_products = featured_product.metafields.custom.bundle_components.value
+    if component_products.size > 0
+      for cp in component_products
+        assign original_price = original_price | plus: cp.price
+      endfor
+    elsif featured_product.compare_at_price > featured_product.price
+      assign original_price = featured_product.compare_at_price
+    endif
+  endif
+
+  assign okendo_rating = nil
+  if featured_product != blank
+    assign okendo_rating = featured_product.metafields.okendo.StarRatingSnippet
+  endif
+-%}
+
+<div class="scc" {{ block.shopify_attributes }}>
+
+  <div class="scc__image-panel">
+    <div class="scc__promo-banner">
+      <span class="scc__promo-text">{{ block.settings.promo_text | default: 'STRENGTH COLLECTION OUT NOW // SAVE 25% + FREE SHIPPING' }}</span>
+    </div>
+    {%- if product_image != blank -%}
+      <div class="scc__product-image">
+        <img
+          src="{{ product_image | image_url: width: 900 }}"
+          alt="{{ product_image.alt | default: callout_title | escape }}"
+          loading="lazy"
+          width="{{ product_image.width }}"
+          height="{{ product_image.height }}"
+        >
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="scc__buybox">
+
+    {%- if okendo_rating != blank -%}
+      <div class="scc__meta">
+        {{ okendo_rating }}
+      </div>
+    {%- endif -%}
+
+    {%- if callout_title != blank -%}
+      <h2 class="scc__title">{{ callout_title }}</h2>
+    {%- endif -%}
+
+    <div class="scc__sub-price-row">
+      {%- if block.settings.subheading != blank -%}
+        <p class="scc__subheading">{{ block.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if original_price > 0 or current_price > 0 -%}
+        <div class="scc__pricing">
+          {%- if original_price > current_price -%}
+            <s class="scc__compare-price">
+              <span class="sr-only">{{ 'products.product.regular_price' | t }}: </span>
+              {{ original_price | money }}
+            </s>
+          {%- endif -%}
+          {%- if current_price > 0 -%}
+            <span class="scc__current-price">
+              <span class="sr-only">{{ 'products.product.sale_price' | t }}: </span>
+              {{ current_price | money }}
+            </span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if block.settings.description != blank -%}
+      <div class="scc__desc">{{ block.settings.description }}</div>
+    {%- endif -%}
+
+    <div class="scc__actions">
+      {%- if block.settings.learn_more_url != blank -%}
+        <a href="{{ block.settings.learn_more_url }}" class="scc__learn-more">
+          {{ block.settings.learn_more_label | default: 'LEARN MORE' }}
+        </a>
+      {%- endif -%}
+      {%- if block.settings.savings_text != blank -%}
+        <p class="scc__savings">{{ block.settings.savings_text }}</p>
+      {%- endif -%}
+      {%- if pdp_url != blank -%}
+        <a href="{{ pdp_url }}" class="scc__cta">
+          {{ block.settings.button_label | default: 'SELECT FLAVORS' }}
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Collection Callout",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image (overrides product image)"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title (overrides product title)",
+      "default": "STRENGTH COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "PRE + PUMP + POST"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Promo banner text",
+      "default": "STRENGTH COLLECTION OUT NOW // SAVE 25% + FREE SHIPPING"
+    },
+    {
+      "type": "url",
+      "id": "learn_more_url",
+      "label": "Learn more URL"
+    },
+    {
+      "type": "text",
+      "id": "learn_more_label",
+      "label": "Learn more label",
+      "default": "LEARN MORE"
+    },
+    {
+      "type": "url",
+      "id": "pdp_url",
+      "label": "SELECT FLAVORS URL",
+      "info": "Leave blank to use the selected product's URL"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SELECT FLAVORS"
+    },
+    {
+      "type": "text",
+      "id": "savings_text",
+      "label": "Savings callout text",
+      "default": "SAVE 25% + FREE Shipping (US)"
+    }
+  ]
+}
+{% endschema %}

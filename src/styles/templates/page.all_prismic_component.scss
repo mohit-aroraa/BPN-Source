@@ -1,0 +1,45 @@
+@import "./src/design-tokens/index";
+@import "./src/styles/components/shared/prismic/categories.scss";
+@import "./src/styles/components/shared/prismic/combo-product-area.scss";
+@import "./src/styles/components/shared/prismic/community-block.scss";
+@import "./src/styles/components/shared/prismic/copy-block.scss";
+@import "./src/styles/components/shared/prismic/curated-reviews.scss";
+@import "./src/styles/components/shared/prismic/page-banner.scss";
+@import "./src/styles/components/shared/prismic/featured-collection.scss";
+@import "./src/styles/components/shared/prismic/featured-in.scss";
+@import "./src/styles/components/shared/prismic/featured-page.scss";
+@import "./src/styles/components/shared/prismic/heading-text.scss";
+@import "./src/styles/components/shared/prismic/image-and-text.scss";
+@import "./src/styles/components/shared/prismic/ingredients.scss";
+@import "./src/styles/components/shared/prismic/landing-page-banner.scss";
+@import "./src/styles/components/shared/prismic/primary-benefits-icons.scss";
+@import "./src/styles/components/shared/prismic/site-accordion.scss";
+@import "./src/styles/components/shared/prismic/site-banner.scss";
+@import "./src/styles/components/shared/prismic/tested-block.scss";
+@import "./src/styles/components/shared/prismic/text-block.scss";
+@import "./src/styles/components/shared/prismic/textual-hero.scss";
+@import "./src/styles/components/shared/prismic/two-column-grid";
+@import "./src/styles/components/shared/prismic-rich-text.scss";
+@import "./src/styles/components/shared/micromodal.scss";
+@import "./src/styles/components/shared/prismic/video-embed";
+.imageAndText {
+  &__entry {
+    p {
+      margin-bottom: 10px;
+      @include above("tablet-large") {
+        margin-bottom: 14px;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    ul {
+      list-style: disc;
+      padding-left: 10px;
+    }
+    ol {
+      list-style: decimal;
+      padding-left: 10px;
+    }
+  }
+}

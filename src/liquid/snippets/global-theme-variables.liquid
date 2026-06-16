@@ -1,0 +1,102 @@
+{% assign gwp_settings = shop.metaobjects.gwp['settings'] %}
+{% if gwp_settings.free_gift_variant and gwp_settings.free_gift_variant.value %}
+  {% assign free_product = gwp_settings.free_gift_variant.value %}
+  {% assign is_variant_picked = true %}
+  {% assign free_product_title = free_product.product.title %}
+{% elsif gwp_settings.free_gift and gwp_settings.free_gift.value %}
+  {% assign free_product = gwp_settings.free_gift.value %}
+  {% assign is_variant_picked = false %}
+  {% assign free_product_title = free_product.title %}
+{% endif %}
+<script>
+    const CACHE_TTL = 24 * 60 * 1000; // cache for 24 hours
+    const sessionCache = {
+      set(key, value) {
+        try {
+          sessionStorage.setItem(key, JSON.stringify({
+            value,
+            timestamp: Date.now()
+          }));
+        } catch (e) {
+          // storage full — clear and retry
+          sessionStorage.clear();
+        }
+      },
+
+      get(key) {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+
+        try {
+          const item = JSON.parse(raw);
+          if (Date.now() - item.timestamp > CACHE_TTL) {
+            sessionStorage.removeItem(key);
+            return null;
+          }
+          return item.value;
+        } catch (e) {
+          sessionStorage.removeItem(key);
+          return null;
+        }
+      },
+
+      remove(key) {
+        sessionStorage.removeItem(key);
+      }
+    };
+    const themeVariables = sessionCache.get('themeVariables');
+    if(!!themeVariables && themeVariables.bfcm?.freeGift?.title == {{ free_product_title | json  }} ) {
+      window.theme = themeVariables;
+    } else {
+      window.theme = window.theme || {};
+      window.theme.settings = window.theme.settings || {};
+      window.theme.discountBanner = {
+      couponCode: {{ settings.coupon_code | json }},
+      showInCart: {{ settings.cart_enable_coupon_code_banner | json }},
+      couponCodeInfo: {{ settings.cart_coupon_code_info | json }}
+      },
+      window.theme.announcementBanner = {
+        bannerText: {{ settings.cart_announcement_banner_text | json }},
+        showInCart: {{ settings.enable_cart_announcement_banner | json }}
+      },
+      window.theme.settings.message = {{ settings.urgencyCalloutMessage | json }},
+      window.theme.bfcm = {
+        enableGwp: {{ gwp_settings.enable_gwp | default: false }},
+        enableTimer: {{ gwp_settings.enable_timer | default: false }},
+        saleActive: false,
+        saleStartDate: {{ gwp_settings.sale_start_date_time.value | json }},
+        saleEndDate: {{ gwp_settings.sale_end_date_time.value | json }},
+        preSaleText: {{ gwp_settings.pre_sale_text | json }},
+        duringSaleText: {{ gwp_settings.during_sale_text | json }},
+        shippingLabelBefore: {{ gwp_settings.free_shipping_message_before | json }},
+        shippingLabelAfter: {{ gwp_settings.free_shipping_message_after | json }},
+        lineItemMessageWhenAdded: {{ gwp_settings.line_item_message_added_to_cart | json }},
+        lineItemMessageWhenNotAdded: {{ gwp_settings.line_item_message_not_add_to_cart | json }},
+        restrictVariantSelection: {{ is_variant_picked | default: false }},
+        freeGift: {% if free_product %}{
+          id: {% if is_variant_picked %}{{ free_product.product.id | json }}{% else %}{{ free_product.id | json }}{% endif %},
+          variantId: {% if is_variant_picked %}{{ free_product.id | json }}{% else %}{{ free_product.first_available_variant.id | json }}{% endif %},
+          title: {{ free_product_title | json }},
+          price: {% if is_variant_picked %} {{ free_product.price | json }} {% else %} {{ free_product.first_available_variant.price | json }} {% endif %},
+          image: {% if is_variant_picked %}{% if free_product.featured_image %}{{ free_product.featured_image | image_url: width:300 | json }}{% else %} {{ free_product.product.featured_image | image_url: width:300 | json }}{% endif %}{% else %}{% if free_product.featured_image %}{{ free_product.featured_image | image_url: width:300 | json }}{% else %}null{% endif %}{% endif %},
+          url: {{ free_product.url | json }},
+          comparePrice: {% if is_variant_picked %}{{ free_product.compare_at_price | json }}{% else %}{{ free_product.compare_at_price | json }}{% endif %},
+          options: {% if is_variant_picked %}{{ free_product.product.options_with_values | json }}{% else %}{{ free_product.options_with_values | json }}{% endif %},
+          variants: {% if is_variant_picked %}{{ free_product.product.variants | json }}{% else %}{{ free_product.variants | json }}{% endif %}
+        }{% else %}{
+          id: null,
+          variantId: null,
+          title: null,
+          price: null,
+          image: null,
+          url: null,
+          comparePrice: null,
+          options: null,
+          variants: null
+        }{% endif %}
+      };
+      }
+
+  sessionCache.set('themeVariables', window.theme);
+      // sessionStorage.setItem('themeVariables', JSON.stringify(window.theme));
+</script>

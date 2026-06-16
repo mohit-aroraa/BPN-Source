@@ -1,0 +1,77 @@
+.pair-product__container {
+    background-color: #F7F7F7;
+    margin-top: 20px;
+    padding: 10px 20px;
+
+    h2 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    &-product {
+        background-color: #fff;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        
+        > div:first-child { 
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        h4 {
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        span {
+            display: block;
+        }
+
+        img {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+        }
+
+        input[type=checkbox] {
+            width: 18px;
+            height: 18px;
+        }
+
+        input[type=checkbox]:checked {
+            position: relative;
+        }
+
+        input[type=checkbox]:checked::after {
+            content: "";
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6' fill='none'><path d='M2.78442 4.36026L6.86787 0.20184C6.9999 0.067278 7.15555 0 7.33478 0C7.51406 0 7.66978 0.067278 7.80181 0.20184C7.93396 0.336312 8 0.495744 8 0.68013C8 0.864516 7.93396 1.02398 7.80181 1.15855L3.25146 5.79816C3.11933 5.93274 2.96365 6 2.78442 6C2.60518 6 2.4495 5.93274 2.31737 5.79816L0.195498 3.63726C0.063372 3.50268 -0.0017834 3.3432 0.0000371133 3.15882C0.00185762 2.97445 0.0688335 2.81503 0.200965 2.68055C0.333008 2.54599 0.48956 2.47871 0.670615 2.47871C0.851671 2.47871 1.00826 2.54599 1.14039 2.68055L2.78442 4.36026Z' fill='white'/></svg>");
+            position: absolute;
+            background-repeat: no-repeat;
+            top: 5px;
+            right: 0;
+            bottom: 0;
+            left: 4px;
+        }
+
+        @media screen and (max-width: 768px) {
+            justify-content: space-between;
+            gap: 0;
+
+            > div:first-child {
+                gap: 10px;
+            }
+
+            img {
+                width: 55px;
+                height: 55px;
+            }
+            
+        }
+    }
+}

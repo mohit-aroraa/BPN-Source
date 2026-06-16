@@ -1,0 +1,114 @@
+.promoBar {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: color("black");
+  justify-content: space-between;
+  align-items: center;
+  color: color("white");
+  position: relative;
+  &:hover,
+  &:focus {
+    color: color("white") !important;
+  }
+  @include above("mobile-large") {
+    flex-wrap: nowrap;
+    padding: 12px;
+  }
+  @include above("desktop-med") {
+    padding: 12px 30px 12px 32px;
+  }
+  &__saleText {
+    font-size: 14px;
+    letter-spacing: normal;
+    text-transform: uppercase;
+    line-height: 1.143;
+    font-weight: 700;
+    padding: 10px 16px 10px 16px;
+    @include above("mobile-large") {
+      order: 2;
+      padding: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    @include above("desktop-med") {
+      font-size: 16px;
+      letter-spacing: 0.2px;
+      line-height: 1.438;
+    }
+    p {
+      color: color("white");
+      margin-bottom: 0;
+    }
+  }
+  &__cta {
+    --btn-gap: 7px 17px 6px 17px;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: normal;
+    border-color: color("white");
+    color: color("white");
+    margin-right: 7px;
+    background-color: color("black");
+    &:hover,
+    &:focus {
+      background-color: color("white");
+      color: color("black");
+    }
+    @include above("mobile-large") {
+      order: 3;
+      margin-right: 0;
+    }
+    @include above("desktop-med") {
+      --btn-gap: 9px 61px;
+      font-size: 16px;
+      letter-spacing: 0.2px;
+      line-height: 1.25;
+    }
+  }
+  &__timer {
+    flex: 0 0 100%;
+    border-top: 1px solid #424242;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: uppercase;
+    @include above("mobile-large") {
+      order: 1;
+      flex: 0 0 auto;
+      border-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    @include above("desktop-med") {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      line-height: 1.438;
+    }
+  }
+  &__timerText {
+    margin-right: 9.5px;
+    margin-bottom: 0;
+    color: color("white");
+    @include above("desktop-med") {
+      margin-right: 17px;
+    }
+  }
+  &__timerCountdown {
+    @include above("desktop-med") {
+      font-size: 26px;
+      .separator {
+        font-size: 28px;
+      }
+    }
+  }
+}

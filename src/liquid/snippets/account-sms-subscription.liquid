@@ -1,0 +1,37 @@
+{% liquid
+  assign settings = shop.metaobjects.sms_subscription_settings['global_sms_subscription_settings']
+  assign enabled = settings.enabled | default: false
+  assign background_color = settings.background_color
+  assign text_color = settings.text_color
+  assign popup_id = settings.desktop_popup_id
+  assign mobile_popup_id = settings.mobile_popup_id
+
+  if customer.tags contains 'PS-Accepts-SMS'
+    assign sms_marketing_consent = true
+  else
+    assign sms_marketing_consent = false
+  endif
+%}
+
+{% if enabled == true %}
+  <div class="account-sms-subscription-banner">
+    <section
+      class="sms-subscription-not-subscribed sms-subscription {% if sms_marketing_consent == true %} hidden {% endif %}"
+      style="--background-color: {{ background_color }}; --text-color: {{ text_color }};">
+      <button class="sms-subscription__button"
+              data-action="subscribe"
+              data-click-id="account_sms">{{ settings.not_subscribed_customer_account_button_text | metafield_tag }}</button>
+      <div class="sms-subscription__text">{{ settings.not_subscribed_customer_account_text | metafield_tag }}</div>
+    </section>
+
+    <section
+      class="sms-subscription-subscribed sms-subscription {% if sms_marketing_consent == false %} hidden {% endif %}"
+      style="--background-color: {{ background_color }}; --text-color: {{ text_color }}; flex-direction: row-reverse">
+      <div class="sms-subscription__text">{{ settings.subscribed_customer_account_text | metafield_tag }}</div>
+      <button class="sms-subscription__button"
+              data-action="information"
+              data-click-id="account_sms-why">{{ settings.subscribed_customer_account_button_text | metafield_tag }}</button>
+    </section>
+
+  </div>
+{% endif %}

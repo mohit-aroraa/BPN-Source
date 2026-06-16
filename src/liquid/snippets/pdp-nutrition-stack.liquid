@@ -1,0 +1,22 @@
+
+
+
+  {% assign separator = "|###|" %}
+  {% assign image_array = product.metafields.custom_fields["image"] | split: separator %}
+  {% assign nutrition_title_stack_array = product.metafields.custom_fields["nutrition_title_stack"] | split: separator %}
+  {% assign nutrition_description_stack_array = product.metafields.custom_fields["nutrition_description_stack"] | split: separator %}
+  {% assign fc_keys = product.metafields.custom_fields["tab_nutrition_stack"] | split: "," %}
+  {% for i in fc_keys %}
+  {% assign index = i | plus: 0 %}
+  <div class="row justify-content-center">
+    <div class="col-md-3">
+      <div class="nutrition-img">
+        <img src="{{ image_array[index] }}" alt="product-img">
+      </div>
+    </div>
+    <div class="col-md-9 right-side">
+      <h4>{{ nutrition_title_stack_array[index] }}</h4>
+      {{ nutrition_description_stack_array[index] }}
+    </div>
+  </div>
+  {% endfor %}

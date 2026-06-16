@@ -1,0 +1,35 @@
+
+{% include 'about-intro' %}
+{% schema %}
+  {
+    "name": "Intro",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+		"id": "title",
+        "type": "text",
+        "label": "Title"
+	  },
+	  {
+		"id": "mobile_title",
+        "type": "text",
+        "label": "Mobile Title"
+	  },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "Description"
+      }
+	]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

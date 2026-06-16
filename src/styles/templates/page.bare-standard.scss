@@ -1,0 +1,78 @@
+// Design tokens
+@import "./src/design-tokens/index";
+body.the-bare-standard {
+  .video-link-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .modal {
+    z-index: 9999;
+    padding-right: 0px !important;
+
+    &.show {
+      .modal-dialog {
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  .modal-dialog {
+    width: 100%;
+    max-width: 100%;
+    width: clamp(300px, 90%, 1000px);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -40%);
+
+    video {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
+  .modal-body {
+    padding: 0px;
+
+    button.close {
+      background-color: #000;
+      color: #fff;
+      border: 0;
+      position: absolute;
+      z-index: 9999;
+      right: 15px;
+      top: 10px;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .sim-slider-slide {
+      width: 100%;
+      line-height: 0;
+
+      video {
+        width: 100%;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .sim-slider-slide .modal.fade.show {
+      background: rgba(0, 0, 0, 0.9);
+      min-height: calc(100vh + 47px);
+    }
+
+    .modal .modal-content {
+      border: none;
+      background: #000;
+    }
+  }
+
+  @media (max-width: 575px) {
+    .modal .modal-content {
+      border: none;
+      background: #000;
+    }
+  }
+}

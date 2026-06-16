@@ -1,0 +1,52 @@
+<!-- snippets/master--review-carousel -->
+{% liquid 
+  assign pCF          = product.metafields.custom_fields
+  assign revCarousel  = pCF["reviews_carousel"]
+%}
+{% if revCarousel != blank %}
+  <div class="product--reviews-slider">
+    {% for item in revCarousel %}
+      {% liquid 
+        assign qte    = item["quote"]
+        assign nme    = item["name"]
+        assign inf    = item["other_info"]
+        assign img    = item["image"]
+      %}  
+      {% if img != blank and qte != blank %}
+        <div class="review-slide">
+          {% include 'snippet--image', 
+            img:  img, 
+            cf: true,
+            useBG: true 
+          %}
+          <div class="page-width">
+            <div class="review-content">
+              {% if nme != blank %}
+                <h3>{{nme}}</h3>
+              {% endif %}
+              {% if inf != blank %}
+                <h4>{{inf}}</h4>
+              {% endif %}
+              <div class="quote rte">{{qte}}</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if revCarousel.size > 1 %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+          $('.product--reviews-slider').slick({
+            infinite: true,
+            rows: 0,
+            arrows: true,
+            apaptiveHeight: true,
+            dots: false
+          });
+        })
+      waitFor_jQuery(function () {
+      })
+    </script>
+  {% endif %}
+{% endif %}

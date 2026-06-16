@@ -1,0 +1,176 @@
+// =============================================================================
+// Testimonials + Image
+// =============================================================================
+
+$tBp: 991px;
+
+.testi {
+  display: flex;
+  align-items: stretch;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--testi-pt, 64px) 48px var(--testi-pb, 64px);
+  gap: 48px;
+
+  @media (max-width: #{$tBp - 1px}) {
+    flex-direction: column;
+    padding: 20px 16px;
+    gap: 0;
+  }
+}
+
+// ── Image column ──────────────────────────────────────────────────────────────
+
+.testi__media {
+  flex: 0 0 42%;
+  min-width: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  align-self: flex-start;
+  position: sticky;
+  top: 80px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: #{$tBp - 1px}) {
+    position: static;
+    flex: none;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto 24px;
+  }
+}
+
+.testi__media-inner {
+  overflow: hidden;
+
+  @media (max-width: #{$tBp - 1px}) {
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  }
+}
+
+// ── Reviews column ────────────────────────────────────────────────────────────
+
+.testi__reviews {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.testi--none .testi__reviews {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+// Desktop: right — push image after the reviews column
+@media (min-width: $tBp) {
+  .testi--right .testi__media { order: 2; }
+
+  .testi--none  .testi__media { display: none; }
+}
+
+// Mobile image position (admin setting)
+@media (max-width: #{$tBp - 1px}) {
+  .testi--mob-top .testi__media    { order: -1; max-width: unset; }
+
+  .testi--mob-bottom .testi__media { order: 1; max-width: unset; }
+
+  .testi--mob-hidden .testi__media { display: none; }
+}
+
+// ── Individual testimonial ────────────────────────────────────────────────────
+
+.testi__item {
+  text-align: center;
+  padding: 32px 20px;
+  border-top: 1px solid #e0e0e0;
+
+  // &:last-child {
+  //   border-bottom: 1px solid #e0e0e0;
+  // }
+
+  @media (max-width: #{$tBp - 1px}) {
+    padding: 28px 0;
+  }
+}
+
+// Stars
+.testi__stars {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.testi__star {
+  font-size: 22px;
+  line-height: 1;
+  color: #d0d0d0;
+
+ @media (max-width: #{$tBp - 1px}) {
+    font-size: 15px;
+  }
+
+  &.is-filled {
+    color: #e02826;
+  }
+}
+
+// Quote
+.testi__quote {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0 0 10px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: #{$tBp - 1px}) {
+    font-size: 12px;
+  }
+}
+
+// Rule between quote and author
+.testi__rule {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  width: 120px;
+  margin: 0 auto 16px;
+}
+
+// Author
+.testi__author {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 4px;
+
+  @media (max-width: #{$tBp - 1px}) {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+}
+
+.testi__role {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+
+  @media (max-width: #{$tBp - 1px}) {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+}

@@ -1,0 +1,27 @@
+.headingTextSection {
+  margin-bottom: 56px;
+  padding-left: 12px;
+  padding-right: 12px;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  @include above("desktop-med") {
+    max-width: 1110px;
+    margin-bottom: 128px;
+  }
+  &__header {
+    .richText__heading2 {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+      line-height: 1.167;
+      margin-bottom: 0;
+      @include above("desktop-med") {
+        font-size: 60px;
+        letter-spacing: -2px;
+        line-height: 0.9;
+      }
+    }
+  }
+}

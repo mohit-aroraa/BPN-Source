@@ -1,0 +1,11 @@
+{% if customer %}
+    <div class="og-subscription-manager">
+        <div id="og-msi" ng-jq=""></div>
+    </div>
+    <script type="text/javascript" src="https://static.ordergroove.com/2f3b9be654c811efbf32765d125a3a02/msi.js"></script>
+{% else %}
+    <script>
+      window.location.href = '/account/login';
+    </script>
+{% endif %}
+

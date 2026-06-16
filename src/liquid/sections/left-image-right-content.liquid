@@ -1,0 +1,51 @@
+<div class="sectiontype1 space-bottom services-standard right-bottom-strip index9 animation-img">
+  <div class="mobile-view fancy-text3  wow fadeInUp">
+    <h2>{{ section.settings.title }}</h2>
+  </div>
+  <div class="img-block texture-wrap  wow fadeInUp">
+    <div class="anim__image-swipe anim__image-swipe--left">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        loading="lazy"
+        width="320"
+        height="343"
+        alt="{{ section.settings.image.alt | escape }}"
+      >
+    </div>
+  </div>
+  <div class="content-block wow fadeInUp">
+    <div class="desktop-view fancy-text3">
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+
+    {{ section.settings.content }}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Image with content",
+  "settings": [
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "Content"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

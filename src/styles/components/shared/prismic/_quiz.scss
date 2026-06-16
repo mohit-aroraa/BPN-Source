@@ -1,0 +1,128 @@
+.quiz {
+  padding: 205px 0 237px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.65) 100%), var(--background-image) lightgray -684.561px -29px / 465.099% 107.046% no-repeat;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  @include above('tablet') {
+    background-size: cover;
+    background-position: center;
+  }
+
+  @include above('desktop') {
+    padding: 288px 0 360px;
+  }
+
+  &__container {
+    @include above('desktop') {
+      margin-top: 46px;
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+    }
+  }
+
+  &__subtitle {
+    color: #EB1000;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+
+    @include above('desktop') {
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 20px; /* 83.333% */
+      letter-spacing: -0.48px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__title {
+    color: white;
+    font-size: 64px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 64px;
+    letter-spacing: -1.92px;
+
+    @include above('desktop') {
+      min-width: 571px;
+      font-size: 144px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 112px;
+      letter-spacing: -4.32px;
+    }
+  }
+
+  &__link-container {
+    margin-top: 8px;
+    text-align: center;
+
+    @include above('desktop') {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  &__link {
+    display: inline-block;
+    min-width: 258px;
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+    color: #eeeeee;
+    padding: 17px 24px;
+    font-size: 18px;
+    font-style: normal;
+    text-align: center;
+    font-weight: 900;
+    line-height: 18px;
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
+
+    &:hover {
+      border: 1px solid white;
+      color: white;
+    }
+
+    @include above('desktop') {
+      margin-top: 3px;
+      width: 458px;
+      padding: 27px 34px;
+      font-size: 48px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 40px; /* 83.333% */
+      letter-spacing: -1.44px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__text {
+    width: 282px;
+    color: white;
+    margin: 20px auto 0;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0;
+
+    @include above('desktop') {
+      margin: 32px auto 0;
+      width: 640px;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 26px
+    }
+  }
+}

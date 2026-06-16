@@ -1,0 +1,71 @@
+<!-- template/page.influencer -->
+
+{% assign pCF = page.metafields.custom_fields %}
+
+{% include 'snippet--image', 
+  img: pCF['hero_image'], 
+  useBG: true,
+  cf: true,
+  customStyle: 'background-position:center;background-size:cover;width:100%;padding-top:clamp(250px,25%,50vh);margin: 0 auto 30px;'
+%}
+
+
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% include 'master--two-grid' %}
+
+
+
+
+{% assign prds = pCF["featured_products"] | split: "|" %}
+
+{% case prds.size %}
+  {% when 2 %}
+    {%- assign max_height = 530 -%}
+    {%- assign grid_item_width = 'narrow--one-whole one-half medium-up--one-half' -%}
+  {% when 3 %}
+    {%- assign max_height = 345 -%}
+    {%- assign grid_item_width = 'narrow--one-whole one-half medium-up--one-third' -%}
+  {% when 4 %}
+    {%- assign max_height = 250 -%}
+    {%- assign grid_item_width = 'narrow--one-whole one-half medium-up--one-quarter' -%}
+  {% when 5 %}
+    {%- assign max_height = 195 -%}
+    {%- assign grid_item_width = 'narrow--one-whole one-half medium-up--one-fifth' -%}
+{% endcase %}
+
+{% if prds.size > 0 %}
+  <div class="section--influencer-products">
+    <div class="page-width">
+      <div class="section-title text-center">
+        <h2>{{ pCF["featured_products_title"] | default: 'Favorite <span>Supplements</span>' }}</h2>
+      </div>
+      <div class="grid grid_margin_bottom vert-top">
+        
+        {% for p in prds %}
+          {% assign prd = all_products[p] %}
+          {% if prd.title != blank %}
+            <div class="grid__item {{ grid_item_width }} {{product.type}}">
+              {% include 'product-card-grid', max_height: max_height, product: prd, show_vendor: false %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% section 'nine15--inline-cta' %}

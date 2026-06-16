@@ -1,0 +1,18 @@
+{# Intended use:
+{% set dialog_header_text = 'Header text' %}
+{% include 'dialog-header' %}
+#}
+
+<div class="og-dialog-header">
+  <h1 id="dialog-header-text">{{ dialog_header_text }}</h1>
+  <button
+    class="og-dialog-close"
+    type="button"
+    aria-label="{{ 'modal_close' | t }}"
+    @click="{{ 'SMDialog.close' | js }}"
+  >
+    <svg width="18" height="18">
+      <use href="#dialog-close"></use>
+    </svg>
+  </button>
+</div>

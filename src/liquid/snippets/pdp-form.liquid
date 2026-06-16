@@ -1,0 +1,95 @@
+{%- comment -%}
+    Product form
+    Need the current_variant
+{%- endcomment -%}
+
+<!-- product form -->
+<div data-form="AddToCartForm" data-productid="{{product.id}}" id="AddToCartForm">
+    <div class="productOptions">
+        <div class="productOptionSelectors">
+            <!-- product qty select -->
+            <div class="product-box hide">
+                <div class="form-group select-dropdown">
+                    <select class="product-box-selectbox" name="quantity">
+                        <option selected value="1">1</option>
+                    </select>
+                </div>
+            </div>
+            {%- comment -%}Make variant dropdown using list item {%- endcomment -%}
+            {%- comment -%}Get variant count{%- endcomment -%}
+            {% assign variant_count = 0 %}
+            {% for variant in product.variants %}
+                {% assign variant_count = variant_count | plus: 1  %}
+                {% capture variant_select_markup %}
+                    {{variant_select_markup}}
+                    <option {% if variant == current_variant %} selected="selected" {% endif %} {% unless variant.available %} disabled="disabled" {% endunless %} value="{{ variant.id }}" data-id="{{ variant.id }}">
+                        {{ variant.title }}
+                    </option>
+                {% endcapture %}
+
+                {% capture dropdown_markup %}
+                    {{dropdown_markup}}
+                    <li role="button" tabindex="0" title="{{ variant.title }}" {% if variant.id == current_variant.id %}data-product-variant-selected="true"{% endif %} class="variantDropdown__item js-variant-dropdown-item {% if variant.id == current_variant.id %}variantDropdown__item--selected{% endif %} {% unless variant.available %} variantDropdown__item--soldOut {% endunless %}" data-product-variant="{{ variant.id }}" data-variant-title="{{variant.title}}" data-product-variant-price="{{ variant.price | money_without_currency }}">
+                        {{ variant.title }} {% unless variant.available %} <sup>Sold out</sup> {% endunless %}
+                    </li>
+                {% endcapture %}
+            {% endfor %}
+            <!-- product flavor select -->
+            <select name="id" id="productSelect-option-0" class="product-variant-selector hide js-product-variant-selector" data-option="option1" data-product-select data-selected-variant-price="{{current_variant.price | money_without_currency}}">
+                {{ variant_select_markup }}
+            </select>
+
+            {% if product.options.size == 1 %}
+                {% for product_option in product.options_with_values %}
+                    {% if product_option.values.size == 1 %}
+                        {% assign first_variant_name = product_option.values | first %}
+                        <p class="chooseVariant__label chooseVariant__label--largeMargin"> {{ product_option.name }}:</p>
+                    {% else %}
+                        <p class="chooseVariant__label"> Choose {{ product_option.name }}:</span></p>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p class="chooseVariant__label">Choose:</p>
+            {% endif %}
+
+            <div class="variantDropdown">
+                <button type="button" title="Product Variant selector button" class="variantDropdown__trigger js-variant-dropdown-trigger" {% if variant_count == 1 %}disabled {%elsif current_variant.available != true%} disabled {% endif %} data-sl="variant_dropdown_trigger" data-selected-variant="{{ current_variant.id }}">
+                    <span class="text">{{ current_variant.title }}</span>
+                    <svg class="arrow" viewbox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.126 1.126 5.222 5.03a.305.305 0 0 1-.444 0L.874 1.126" fill-rule="evenodd" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" stroke="#000"></path>
+                    </svg>
+                </button>
+                <ul class="variantDropdown__items">
+                    {{ dropdown_markup }}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Recharge Code -->
+    {% if product.available %}
+        <div class="productPurchaseType">
+            {% render 'product-subscription-options', current_variant: current_variant, main_sale_running: main_sale_running, flash_sale_running: flash_sale_running, main_discount_price: main_discount_price, original_price: original_price, main_sale_discount: main_sale_discount %}
+        </div>
+    {% endif %}
+    <!-- End Recharge Code -->
+    <input name="product_name" value="{{ product.title }}" hidden />
+    {% if main_sale_running or flash_sale_running %}
+        <input type="hidden" name="on_sale_price" value="{{ main_discount_price | round: 2 }}" >
+    {% endif %}
+    <!-- product cart btn -->
+    <div class="add-to-cart-btn">
+        {% if product.tags contains 'SEARCHANISE_IGNORE' %}
+            <button type="button" disabled class="button button-primary">
+                Not For Sale
+            </button>
+        {% else %}
+            <button type="button" name="add" {% if current_variant.available %} onclick="window.openCartDrawer && window.openCartDrawer()" {% endif %} {% unless current_variant.available %} aria-disabled="true" disabled {% endunless %} aria-label="{% unless current_variant.available %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endunless %}" class="button button-primary" data-product-add-to-cart>
+                {% unless current_variant.available %}
+                    {{ 'products.product.sold_out' | t }}
+                {% else %}
+                    {% if main_sale_running or flash_sale_running %}Add to cart <span class="price_on_cta">- ${{ main_discount_price | round: 2 }}</span>{% else %}Add to cart <span class="price_on_cta">- ${{current_variant.price | money_without_currency}}</span>{% endif %}
+                {% endunless %}
+            </button>
+        {% endif %}
+    </div>
+</div>

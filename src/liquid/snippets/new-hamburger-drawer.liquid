@@ -1,0 +1,131 @@
+<div class='bpn-hamburger-overlay js-hamburger-close'></div>
+
+<div class='bpn-hamburger-drawer'>
+  <div class='bpn-hamburger-drawer__inner'>
+    <div class='bpn-hamburger-drawer__header'>
+      <button class='bpn-hamburger-drawer__close js-hamburger-close' aria-label='Close menu'>
+        {% render 'icon', icon: 'hamburger-close' %}
+      </button>
+    </div>
+    <div class='bpn-hamburger-drawer__content'>
+      <div class='bpn-hamburger-menu'>
+        {% render 'new-hamburger-offer-image' %}
+        {% for link in menu.links %}
+          {%- liquid
+            assign has_megamenu = false
+            assign mega_menu_block = null
+
+            if link.links.size > 0
+              assign has_megamenu = true
+            endif
+          -%}
+          <div class='bpn-hamburger-menu__item {% if has_megamenu %} has-submenu {% endif %}'>
+            <a href='{{ link.url }}' class='bpn-hamburger-menu__link'>
+              {{ link.title }}
+            </a>
+
+            {% if has_megamenu %}
+              <div class='bpn-hamburger-menu__item-submenu'>
+                {% comment %} Render the first submenu {% endcomment %}
+                {% for link_level_2 in link.links %}
+                  {% if link_level_2.links.size > 0 %}
+                    <div class='bpn-hamburger-menu__item-submenu-section'>
+                      <div class='bpn-hamburger-menu__item-submenu-title'>
+                        {{ link_level_2.title }}
+                      </div>
+                      {% for link_level_3 in link_level_2.links %}
+                        <a href='{{ link_level_3.url }}' class='bpn-hamburger-menu__submenu-link'>
+                          {{ link_level_3.title }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <a href='{{ link_level_2.url }}' class='bpn-hamburger-menu__submenu-link'>
+                      {{ link_level_2.title }}
+                    </a>
+                  {% endif %}
+                {% endfor %}
+                {% assign link_lowercase = link.title | strip | downcase %}
+                <div class='bpn-hamburger-menu__featured-images'>
+                  {% for block in blocks %}
+                    {% assign block_link_lowercase = block.settings.parent_link | strip | downcase %}
+                    {% if block.type == 'featured_media_mobile'
+                      and block_link_lowercase == link_lowercase
+                    %}
+                      {% if block.settings.featured_mobile_image != blank %}
+                        <div class='bpn-hamburger-menu__featured-image'>
+                          {% if block.settings.image_overlay_color != blank %}
+                            <div class="bpn-hamburger-menu__featured-image-overlay" style='--overlay-color: {{ block.settings.image_overlay_color }};'></div>
+                          {% endif %}
+                          {% assign mobile_image_link = block.settings.featured_mobile_image_link %}
+                          <a
+                            href='{{ mobile_image_link | default: '#' }}'
+                            class='bpn-hamburger-menu__image-link'
+                          {% if mobile_image_link == blank %} tabindex='-1' aria-hidden='true' {% endif %}
+                          >
+                            {{
+                              block.settings.featured_mobile_image
+                              | image_url: width: 300
+                              | image_tag:
+                                loading: 'lazy',
+                                width: 300,
+                                height: 300,
+                                sizes: '100vw',
+                                class: 'bpn-hamburger-menu__image-img'
+                            }}
+                          </a>
+                          {% if block.settings.featured_mobile_image_title != blank %}
+                            <div class='bpn-hamburger-menu__image-content'>
+                              <div class='bpn-hamburger-menu__image-title'>
+                                {{ block.settings.featured_mobile_image_title }}
+                              </div>
+                              <a
+                                href='{{ mobile_image_link }}'
+                                class='bpn-hamburger-menu__image-button'
+                              >
+                                {{
+                                  block.settings.featured_mobile_image_cta_text
+                                  | default: 'Shop Now'
+                                }}
+                              </a>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        {% render 'new-hamburger-cta' %}
+      </div>
+    </div>
+
+    <div class='bpn-hamburger-drawer__footer'>
+      <div class='bpn-hamburger-utility'>
+        <a
+          href='javascript:void(0);'
+          class='bpn-hamburger-utility__link'
+          onclick='window.openCartDrawer && window.openCartDrawer()'
+        >
+          <span class='bpn-hamburger-utility__icon'>
+            {% render 'icon', icon: 'bag' %}
+          </span>
+          My Cart
+        </a>
+        <a href='/account' class='bpn-hamburger-utility__link'>
+          <span class='bpn-hamburger-utility__icon'>
+            {% render 'icon', icon: 'account' %}
+          </span>
+          {%- if customer -%}
+            My Account
+          {%- else -%}
+            Login/Create Account
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

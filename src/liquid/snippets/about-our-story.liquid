@@ -1,0 +1,20 @@
+
+<div class="image-content texture-right">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-6">
+        <div class="about-content">									
+          <div class="section-title-secondary">
+            <h2>{{ block.settings.title1 }}</h2>
+          </div>
+          {{ block.settings.description }}
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-6">
+        <div class="about-image">
+          <img src="{{ block.settings.image | img_url: 'master'}}" alt="About Me" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

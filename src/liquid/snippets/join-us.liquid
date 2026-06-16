@@ -1,0 +1,80 @@
+{% liquid
+  assign settings = shop.metaobjects.sms_subscription_settings['global_sms_subscription_settings']
+  assign enabled = settings.enabled | default: false
+
+  assign block = section[module]
+  assign text = block.text
+  assign mobile_title = block.mobile_title
+  assign title = block.title
+
+  if enabled == false
+    assign background_color = '#eb1000'
+    assign title_text_color = '#fff'
+    assign text_color = '#000'
+
+    assign input_background_color = "rgba(3, 3, 3, 0.60);"
+    assign input_text_color = '#fff'
+
+    assign button_background_color = '#fff'
+    assign button_text_color = '#000'
+
+    assign small_text_color = '#fff'
+  else
+    assign background_color = settings.join_us_background_color
+    assign title_color = settings.title_color
+    assign text_color = settings.text_color
+
+    assign input_background_color = settings.join_us_input_background_color
+    assign input_text_color = settings.join_us_input_text_color
+
+    assign button_background_color = settings.join_us_button_background_color
+    assign button_text_color = settings.join_us_button_text_color
+
+    assign small_text_color = settings.text_color
+  endif
+
+%}
+
+<section class="join-us"
+         style="--background-color: {{ background_color }}; --text-color: {{ text_color }}; --title-color: {{ title_color }}; --button-background-color: {{ button_background_color }}; --button-text-color: {{ button_text_color }}; --input-background-color: {{ input_background_color }}; --input-text-color: {{ input_text_color }}; --small-text-color: {{ small_text_color }};">
+  <div class="join-us__content">
+    <div class="join-us__content-info">
+      <h3 class="join-us__title mobile--only-anatta">
+        {{ mobile_title }}
+        {% comment %}JOIN the bpn <br/> sms squad!{% endcomment %}
+      </h3>
+      <h3 class="join-us__title desktop--only-anatta">
+        {{ title }}
+        {% comment %}JOIN the bpn <br/> sms squad!{% endcomment %}
+      </h3>
+      <p class="join-us__text">
+        {{ text }}
+        {% comment %}Fuel your fitness regime with exclusive access to products, releases and offers!{% endcomment %}
+      </p>
+    </div>
+
+    <div>
+      <form class="join-us__form">
+        <div class="join-us__input-message hidden">
+          <h3>Thank you for subscribing!</h3>
+          <p>Check your phone for a confirmation message. </p>
+        </div>
+        <input class="join-us__input" type="tel" placeholder="Mobile xxx.xxx.xxxx" />
+        <div class="join-us__input-error hidden">error</div>
+        <input class="join-us__button" type="submit" value="TEXT ME" data-click-id="footer_sms"/>
+      </form>
+
+      <p class="join-us__small-text">
+        I agree to receive recurring automated marketing text messages (e.g. cart reminders) at the phone number
+        provided.
+        Consent is not a condition to purchase. Msg & data rates may apply. Msg frequency varies. <br
+          class="mobile--only"/>
+        Reply <b>HELP</b> for help and <b>STOP</b> to cancel. <br/>
+
+        View our <a href="/pages/terms-and-conditions">Terms of Service</a> and <a
+          href="/pages/privacy-policy">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+</section>
+

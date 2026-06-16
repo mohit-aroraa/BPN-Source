@@ -1,0 +1,143 @@
+.account-orders-history {
+  .account__logout-btn {
+    display: none;
+
+    @include above('tablet-large') {
+      display: block;
+    }
+  }
+
+  .account__customer-name {
+    display: none;
+
+    @include above('tablet-large') {
+      display: block;
+    }
+  }
+
+  .account__main-content {
+    padding-top: 20px;
+  }
+
+  &__heading {
+    margin-top: 4px;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 32px;
+    letter-spacing: -0.84px;
+    margin-bottom: 32px;
+
+    @include above('tablet-large') {
+      margin-top: 132px;
+      font-size: 24px;
+      line-height: 20px;
+    }
+  }
+
+  .account__top-wrapper {
+    display: block;
+
+    @include above('tablet-large') {
+      .account-breadcrumbs {
+        display: none;
+      }
+    }
+
+  }
+
+  &__no-order-info {
+    .btn.primary-button {
+      max-width: 220px;
+      color: white;
+
+      &:focus,
+      &:hover {
+        color: black !important;
+      }
+    }
+  }
+
+  .account__section {
+    .order-summary {
+      color: black;
+      max-width: 448px;
+      margin-bottom: 20px;
+
+      &:hover {
+        color: #000 !important;
+      }
+
+      @include above('tablet-large') {
+        max-width: 808px;
+        margin-bottom: 32px;
+        padding: 15px;
+      }
+
+      &__information {
+        @include above('tablet-large') {
+          display: flex;
+          gap: 60px;
+        }
+      }
+
+      &__item {
+        @include above('tablet-large') {
+          display: flex;
+          flex-direction: column;
+          gap: 0 !important;
+        }
+      }
+
+      &__label {
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      &__value {
+        font-weight: 500 !important;
+        letter-spacing: 0 !important;
+        text-transform: capitalize;
+
+        @include above('tablet-large') {
+          font-size: 18px !important;
+          line-height: 22px !important;
+        }
+
+        &.price {
+          font-weight: 700 !important;
+        }
+      }
+
+      &__image {
+        border-radius: 5px;
+        overflow: hidden;
+        min-width: 104px;
+        min-height: 104px;
+        width: 104px;
+        height: 104px;
+      }
+
+      &__container {
+        @include above('tablet-large') {
+          display: flex;
+          gap: 32px;
+        }
+      }
+
+      &__controls {
+        display: none;
+        width: 192px;
+        align-items: end;
+
+        @include above('tablet-large') {
+          display: flex;
+        }
+
+        @include above('tablet-large') {
+          min-width: 192px;
+        }
+      }
+    }
+  }
+}

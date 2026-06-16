@@ -1,0 +1,12 @@
+{%- comment -%}
+    productId: Product id
+{%- endcomment -%}
+{%- assign PID = '' | append: productId -%}
+{%- assign namespace = 'upsell_products' -%}
+{% assign section = pages[PID].metafields %}
+{% assign block_content = section[namespace] %}
+{%- assign length = block_content.count | minus: 1 -%}
+
+
+
+

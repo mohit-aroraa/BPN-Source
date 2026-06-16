@@ -1,0 +1,62 @@
+
+// Styles for ReBuy
+
+
+// Hide the "Powerd by ReBuy"
+div.powered-by-rebuy { display: none; visibility: hidden;  }
+
+// Fixes a theme style that makes the checkbox too big
+.checkbox-input.rebuy-checkbox { height: 18px; width: 18px; padding: 0; }
+
+
+.rebuy-button { font-family: "Blender pro,Arial,sans-serif"; font-weight: 700; }
+
+//
+// Rebuy product grid styling
+
+.PDP__container .rebuy-widget .primary-title { margin-bottom: 10px; }
+
+.rebuy-product-info,.rebuy-product-price { line-height: 1.2; }
+
+.PDP__container .rebuy-widget.widget-type-product { padding-bottom: 0px; }
+
+#MainContent .rebuy-widget .rebuy-product-block .rebuy-product-actions { margin-top: 10px; 
+    .subscription-checkbox { margin-bottom: 10px; }
+}// end .rebuy-product-actions
+
+
+
+//
+// Cart flyout
+
+.rebuy-cart__flyout {
+    button.rebuy-cart__flyout-item-remove { color: #555; }
+
+    .rebuy-button.rebuy-cart__checkout-button { background-color: #eb1000; border-color: #eb1000; font-weight: 900;
+        &:hover { background-color: #000; border-color: #000; }
+    }// end .rebuy-button.rebuy-cart__checkout-button
+
+    .rebuy-button.rebuy-cart__shop-pay-button { background-color: #fff !important; border-color: #5a31f4;
+        svg path { fill: #5a31f4; }
+
+        &:hover { background-color: #5a31f4 !important; border-color: #fff;
+            svg path { fill: #fff; }
+        }// end &:hover
+    }// end .rebuy-button.rebuy-cart__shop-pay-button
+
+    .rebuy-cart__flyout-footer {
+        .rebuy-cart__flyout-subtotal {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .rebuy-cart__flyout-empty-cart>* {
+        margin-bottom: 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}// end .rebuy-cart__flyout
+
+.dynamic-checkout__content ul li,.dynamic-checkout__content ul li iframe { min-height: 54px !important; }

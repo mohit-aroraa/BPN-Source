@@ -1,0 +1,143 @@
+.collectionProductCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+  .product-box {
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    max-width: 375px;
+    padding: 0 15px;
+    margin: 0 auto 15px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+
+    .standalone-bottomline.star-clickable,
+    .standalone-bottomline .star-clickable {
+      display: block;
+    }
+
+    .product-box__meta {
+      --min-price: 120px;
+      text-align: left;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .product-box__prices {
+      text-align: right;
+      margin-bottom: 5px;
+
+      * {
+        font-size: 20px;
+        line-height: 1.3;
+        font-weight: 500;
+        font-family: var(--font_main_BoldEx);
+      }
+      s {
+        font-size: 13px;
+        opacity: 0.7;
+        display: block;
+        margin: -1rem 0 1rem;
+      }
+    }
+
+    .product-form {
+      padding: 0;
+      .product-box-selectbox {
+        min-height: 37px;
+      }
+    }
+
+    .product-box-select {
+      --min-qty: 70px;
+      margin-top: 0;
+      margin-left: -10px;
+      flex-wrap: wrap;
+
+      > div {
+        margin: 0 0 0 10px;
+        background-position: calc(100% - 20px) center !important;
+      }
+
+      .select-dropdown {
+        flex: 1 0 var(--min-qty);
+      }
+
+      .select-dropdown + div {
+        flex: 1 1 calc((100% - 20px) - var(--min-qty));
+        min-width: 200px;
+      }
+    }
+
+    .product-box__buttons {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row-reverse;
+      align-items: center;
+      margin-bottom: 15px;
+
+      .cart-button {
+        flex: 1 1 60%;
+        margin: 0;
+
+        .btn {
+          font-size: 14px;
+          margin: 0;
+          padding: 20px 28px;
+          width: 100%;
+          &[disabled] {
+            background-color: color("black");
+          }
+        }
+      }
+
+      .text-link {
+        text-align: center;
+        flex: 1 1 40%;
+        margin: 0;
+        min-width: 110px;
+
+        a {
+          padding: 0;
+          text-decoration: underline;
+          text-transform: initial;
+
+          &:after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.product-title-split {
+  text-transform: initial;
+  letter-spacing: 0;
+  display: block;
+
+  span {
+    display: block;
+
+    &:first-child {
+      font-size: 20px;
+    }
+
+    &:last-child {
+      // margin-top: 5px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font_main_Md);
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+}

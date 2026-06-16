@@ -1,0 +1,263 @@
+{%- liquid
+  assign is_flannel_page = false
+  if template contains 'page.flannels' or template contains 'product.flannels'
+    assign is_flannel_page = true
+  endif
+-%}
+
+<div class='siteHeader' id='site-header'>
+  <div class='header__wrapper'>
+    <div class='header__wrapper-inner' data-click-id='m-nav_nav-toggle'>
+      <a
+        href='javascript:void(0);'
+        class='mobile--only header__menu-link'
+        data-sl='mobile_menu_toggle'
+        title='Toggle Mobile menu'
+        data-click-id='m-nav_nav-toggle'
+      >
+        {% render 'icon',
+          icon: 'menu',
+          class: 'js-open-menuDrawer icon--menu',
+          tag: 'm-nav_nav-toggle'
+        %}
+      </a>
+
+      <div class='drawer_backDrop js-backDrop' data-sl='drawer_backDrop'></div>
+      {% render 'nav-mobile' %}
+    </div>
+
+    <div class='header__logo'>
+      <a
+        href='{% if is_flannel_page %}/pages/flannels-lp{% else %}/{% endif %}'
+        class='header__logo-link'
+        data-sl='header_logo'
+        title='Bare Performance Nutrition logo'
+        aria-label='Bare Performance Nutrition logo'
+      >
+        {% if section.settings['site-logo'] != blank %}
+          {{ section.settings['site-logo'] }}
+        {% else %}
+          {% render 'icon', icon: 'site-logo', class: 'header__logo-image', tag: 'nav_top-logo' %}
+        {% endif %}
+      </a>
+    </div>
+
+    {% render 'nav-desktop' %}
+
+    <div class='header-extra'>
+      <div class='header__search-wrapper search-icon'>
+        <a
+          class='header-extra__item js-search'
+          href='javascript:void(0);'
+          data-sl='search_trigger'
+          title='Open searchbar'
+        >
+          {% render 'icon',
+            icon: 'header-search',
+            class: 'icon-search--desktop header-extra__icon',
+            tag: 'nav_top-search'
+          %}
+          {% render 'icon',
+            icon: 'header-close',
+            class: 'js-closeSearch-icon icon--closeSearch--mobile header-extra__icon'
+          %}
+        </a>
+        {% render 'search-drawer' %}
+      </div>
+
+      <div class='header__customerWrapper'>
+        <div class='header-extra__item'>
+          <a
+            href='{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}'
+            class='header__icon js-user-icon'
+            data-sl='user_account'
+            title='{%- if customer -%}My Account{%- else -%}Login/Create Account{%- endif -%}'
+          >
+            {% render 'icon', icon: 'account', tag: 'nav_top-account' %}
+          </a>
+        </div>
+      </div>
+
+      {% if request.path != '/cart' %}
+        <div class='header-extra__cart' data-click-id='nav_top-cart'>
+          <a
+            id='cart-trigger'
+            class='header-extra__cartAnchor'
+            data-sl='home-cart-item-count'
+            title='Open cart drawer'
+            data-click-id='nav_top-cart'
+            onclick='window.openCartDrawer && window.openCartDrawer()'
+            style='cursor: default;'
+          >
+            {% render 'icon', icon: 'bag', tag: 'nav_top-cart' %}
+            <span class='cart-count' data-click-id='nav_top-cart'>
+              {{ cart.item_count }}
+            </span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class='megamenuOverlay'></div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "site-logo",
+      "label": "Site Logo (Svg)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_menu",
+      "name": "Mega Menu Nav",
+      "settings": [
+        {
+          "id": "menu_nav_text",
+          "type": "text",
+          "label": "Nav Link Text"
+        },
+        {
+          "id": "menu_nav_url",
+          "type": "url",
+          "label": "Nav Link Url"
+        },
+        {
+          "id": "navigation",
+          "type": "link_list",
+          "label": "Navigation"
+        },
+        {
+          "type": "header",
+          "content": "Button Area"
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "btn_url",
+          "label": "Button Url"
+        },
+        {
+          "type": "header",
+          "content": "Activity Section First"
+        },
+        {
+          "type": "image_picker",
+          "id": "activity_image_first",
+          "label": "Activity Image"
+        },
+        {
+          "type": "text",
+          "id": "activity_text_first",
+          "label": "Activity Text"
+        },
+        {
+          "type": "text",
+          "id": "activity_cta_text_first",
+          "label": "Activity CTA Text"
+        },
+        {
+          "type": "url",
+          "id": "activity_cta_url_first",
+          "label": "Activity CTA Url"
+        },
+        {
+          "type": "header",
+          "content": "Activity Section Second"
+        },
+        {
+          "type": "image_picker",
+          "id": "activity_image_second",
+          "label": "Activity Image"
+        },
+        {
+          "type": "text",
+          "id": "activity_text_second",
+          "label": "Activity Text"
+        },
+        {
+          "type": "text",
+          "id": "activity_cta_text_second",
+          "label": "Activity CTA Text"
+        },
+        {
+          "type": "url",
+          "id": "activity_cta_url_second",
+          "label": "Activity CTA Url"
+        },
+        {
+          "type": "header",
+          "content": "Activity Section Third"
+        },
+        {
+          "type": "image_picker",
+          "id": "activity_image_third",
+          "label": "Activity Image"
+        },
+        {
+          "type": "text",
+          "id": "activity_text_third",
+          "label": "Activity Text"
+        },
+        {
+          "type": "text",
+          "id": "activity_cta_text_third",
+          "label": "Activity CTA Text"
+        },
+        {
+          "type": "url",
+          "id": "activity_cta_url_third",
+          "label": "Activity CTA Url"
+        }
+      ]
+    },
+    {
+      "type": "single_link",
+      "name": "Single Link",
+      "settings": [
+        {
+          "id": "nav_link",
+          "type": "text",
+          "label": "Nav Link"
+        },
+        {
+          "id": "nav_link_url",
+          "type": "url",
+          "label": "Nav Link Url"
+        }
+      ]
+    },
+    {
+      "type": "mobiletablink",
+      "name": "Mobile Tab Links",
+      "settings": [
+        {
+          "id": "mobile_nav_text",
+          "type": "text",
+          "label": "Nav Link Text"
+        },
+        {
+          "id": "mobile_nav_url",
+          "type": "url",
+          "label": "Nav Link Url"
+        },
+        {
+          "id": "mobile_nav_color",
+          "type": "color",
+          "label": "Nav Link Background",
+          "default": "#dcff00"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

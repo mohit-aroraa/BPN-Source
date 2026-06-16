@@ -1,0 +1,60 @@
+/*============================================================================
+    Refactoring Debut theme's theme.scss 
+==============================================================================*/
+
+@import "./helper-functions";
+@import "./mixins";
+@import "./variables";
+@import "./normalize";
+@import "./grid";
+@import "./helper-class";
+@import "./basic-style";
+@import "./typography";
+@import "./animations";
+@import "./icons";
+@import "./lists";
+@import "./rich-text-editor";
+@import "./utilities";
+@import "./buttons";
+@import "./tables";
+@import "./iframe";
+@import "./form";
+@import "./input-groups";
+@import "./site-nav";
+@import "./container";
+@import "./grid-table";
+@import "./drawer";
+// Adding slick as debut theme dependency
+@import "./slick";
+@import "./index-section";
+
+// Templates
+@import "./templates/password";
+
+@import "./product-image";
+@import "./add-to-cart";
+
+@import "./templates/collection";
+@import "./templates/customers/account";
+@import "./templates/customers/order";
+
+@import "./article";
+@import "./cart-popup";
+@import "./components";
+@import "./common-search";
+@import "./predictive-search";
+@import "./modal";
+@import "./hero_slider";
+@import "./product-price";
+@import "./filter";
+@import "./feature-row";
+@import "./hero";
+@import "./quote-slider";
+@import "./logo-bar";
+@import "./map-section";
+@import "./img-bar";
+@import "./collection-grid";
+@import "./video";
+@import "./product-recommendation";
+@import "./disclosure";
+@import "./selectors-form";

@@ -1,0 +1,17 @@
+{%- comment -%}
+  - Need article
+  - tag: Tag of the article tag
+{%- endcomment -%}
+<div class="swiper-slide">
+  <div class="featuredCard">
+    <div class="featuredCard__image">
+      <a href="{{ article.url }}" title="{{ article.title }}">
+        {% render 'shopify-responsive-image' with image: article.image, image_attributes:'width="240px" height="218px"' %}
+      </a>
+    </div>
+    <div class="featuredCard__content">
+      <p class="featuredCard__type">{{ tag }}</p>
+      <p class="featuredCard__description">{{ article.title }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+set -e
+
+echo "🚀 Setting up BPN Storefront..."
+echo ""
+
+# Check for Node.js
+if ! command -v node &> /dev/null; then
+  echo "❌ Node.js is not installed."
+  echo ""
+  echo "Install Node.js v23.6.0 using one of these methods:"
+  echo ""
+  echo "  Using asdf (recommended):"
+  echo "    asdf plugin add nodejs"
+  echo "    asdf install"
+  echo ""
+  echo "  Using nvm:"
+  echo "    nvm install"
+  echo "    nvm use"
+  echo ""
+  exit 1
+fi
+
+# Check Node.js version
+REQUIRED_VERSION="23.6.0"
+CURRENT_VERSION=$(node -v | sed 's/v//')
+
+if [ "$CURRENT_VERSION" != "$REQUIRED_VERSION" ]; then
+  echo "⚠️  Node.js version mismatch"
+  echo "   Required: v$REQUIRED_VERSION"
+  echo "   Current:  v$CURRENT_VERSION"
+  echo ""
+  echo "   Run 'asdf install' or 'nvm use' to switch versions."
+  exit 1
+fi
+
+echo "✓ Node.js v$CURRENT_VERSION"
+
+# Check for yarn
+if ! command -v yarn &> /dev/null; then
+  echo ""
+  echo "📦 Installing yarn globally..."
+  npm install -g yarn
+
+  # Reshim if using asdf
+  if command -v asdf &> /dev/null; then
+    asdf reshim nodejs
+  fi
+fi
+
+echo "✓ Yarn $(yarn -v)"
+
+# Check for Shopify CLI
+if ! command -v shopify &> /dev/null; then
+  echo ""
+  echo "📦 Installing Shopify CLI..."
+  npm install -g @shopify/cli@latest
+
+  # Reshim if using asdf
+  if command -v asdf &> /dev/null; then
+    asdf reshim nodejs
+  fi
+fi
+
+echo "✓ Shopify CLI installed"
+
+# Install dependencies
+echo ""
+echo "📦 Installing dependencies..."
+yarn install
+
+# Set up .env file
+if [ ! -f .env ]; then
+  echo ""
+  echo "📝 Creating .env file from env.sample..."
+  cp env.sample .env
+  echo ""
+  echo "⚠️  Set up your development theme:"
+  echo ""
+  echo "   Run: yarn create-dev-theme"
+  echo ""
+  echo "   This creates a personal dev theme on Shopify and updates your .env."
+  echo "   See docs/DEPLOYMENT.md for more details."
+else
+  echo ""
+  echo "✓ .env file already exists"
+fi
+
+echo ""
+echo "✅ Setup complete!"
+echo ""
+echo "Next steps:"
+echo "  1. Run 'yarn create-dev-theme' to create your personal dev theme"
+echo "  2. Run 'yarn dev' to begin development"
+echo "  3. Read docs/DEPLOYMENT.md for the full deployment workflow"
+echo ""

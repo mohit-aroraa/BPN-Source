@@ -1,0 +1,352 @@
+.homepage-hero {
+  position: relative;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  @include above('desktop') {
+    padding-bottom: 88px;
+    background-image: var(--hero-image);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__title {
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 80px;
+    letter-spacing: -2.88px;
+    text-transform: uppercase;
+    color: white;
+    max-width: 374px;
+
+    @include above('desktop') {
+      max-width: 640px;
+      font-size: 144px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 112px;
+      letter-spacing: -4.32px;
+    }
+  }
+
+  &__text {
+    max-width: 310px;
+    margin-top: 28px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: white;
+
+    @include above('desktop') {
+      margin-top: 20px;
+      max-width: 420px;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 26px;
+    }
+  }
+
+  &__content {
+    position: relative;
+    padding: 94px 16px 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: var(--mobile-hero-image);
+
+    @include above('desktop') {
+      padding: 63px 63px 172px;
+      background-image: none;
+    }
+  }
+
+  .desktop-cover {
+    display: none;
+
+    @include above('desktop') {
+      display: block;
+    }
+  }
+
+  .desktop-cover,
+  .cover {
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.40);
+  }
+
+  &__desktop-video-container {
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+
+    @include above('desktop') {
+      display: block;
+    }
+  }
+
+  &__desktop-video {
+    z-index: 50;
+    position: relative;
+    padding: 71% 0 0 0;
+  }
+
+  &__mobile-video-container {
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    @include above('desktop') {
+      display: none;
+    }
+  }
+
+  &__mobile-video {
+    z-index: 50;
+    position: relative;
+    padding: 174% 0 1px;
+  }
+
+  &__content-wrapper {
+    z-index: 100;
+    position: relative;
+  }
+
+  &__controls {
+    margin-top: 40px;
+    max-width: 353px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @include above('desktop') {
+      margin-top: 40px;
+      margin-left: 0.75px;
+      max-width: 600px;
+      width: 600px;
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+
+  .cta {
+    text-align: center;
+    padding: 17px 0;
+    border-radius: 5px;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 18px; /* 100% */
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  &__primary_cta {
+    color: white;
+    background: #EB1000;
+    border: 1px solid #EB1000;
+
+    &:focus {
+      color: white;
+      border: 1px solid #5A130E;
+    }
+
+    &:hover {
+      color: white;
+      background: #FF4438;
+    }
+
+    @include above('desktop') {
+      max-width: 315px;
+    }
+  }
+
+  &__secondary_cta {
+    color: white;
+    border: 1px solid #CCCCCC;
+
+    &:focus {
+      color: white;
+      border: 1px solid white;
+    }
+
+    &:hover {
+      color: black;
+      background: white;
+    }
+
+    @include above('desktop') {
+      max-width: 260px;
+    }
+  }
+}
+
+.homepage-hero-categories-list {
+  max-width: 1920px;
+  margin: 0 auto;
+  background: #eee;
+  padding: 16px;
+
+  @media (min-width: 959px) {
+    padding: 32px 16px 0;
+
+    .swiper-wrapper {
+      gap: 32px;
+      justify-content: center;
+    }
+  }
+
+  @include above('desktop') {
+    padding: 32px 64px 0;
+  }
+
+  &__category {
+    border-radius: 5px;
+    width: 220px;
+    height: 275px;
+    background-image: var(--category-mobile-image);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+
+    @include above('tablet') {
+      height: unset;
+      max-width: 424px;
+      aspect-ratio: 1 / 1;
+
+      max-height: 424px;
+      flex-grow: 1;
+      background-image: var(--category-image);
+    }
+
+    @include above('desktop') {
+      min-width: 304px;
+      border-radius: 5px;
+      gap: 7px;
+
+      &:hover {
+        transform: scale(1.025);
+      }
+    }
+  }
+
+  &__category-name {
+    color: white;
+    font-style: normal;
+    text-transform: uppercase;
+    margin-top: 1px;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 20px; /* 83.333% */
+    letter-spacing: -0.48px;
+
+    @include above('desktop') {
+      margin-top: 8px;
+      font-size: 32px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 32px; /* 100% */
+      letter-spacing: -0.64px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__category-link {
+    color: #eeeeee;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 18px;
+    letter-spacing: -0.36px;
+    text-transform: uppercase;
+
+    @include above('desktop') {
+      padding-bottom: 8px;
+    }
+
+    &:hover {
+      color: white;
+    }
+
+    &:after {
+      margin-top: 2px;
+      display: block;
+      content: ' ';
+      height: 5px;
+      width: 100%;
+      background-color: #EB1000;
+
+      @include above('desktop') {
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &__controls {
+    margin: 24px auto 0;
+    display: flex;
+    column-gap: 16px;
+    justify-content: center;
+
+    @media (min-width: 959px) {
+      display: none;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    @include above('desktop') {
+      display: none;
+    }
+
+    .swiper-pagination-bullet {
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      background-color: #767676;
+
+      &:hover {
+        background: black;
+        cursor: pointer;
+      }
+
+      &:last-of-type:not(.swiper-pagination-bullet-active) {
+        width: 8px;
+        height: 8px;
+      }
+
+      &.swiper-pagination-bullet-active {
+        width: 48px;
+        border-radius: 18px;
+        background: black;
+      }
+    }
+  }
+}

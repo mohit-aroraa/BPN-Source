@@ -1,0 +1,121 @@
+{%- assign _section = section.settings -%}
+<section
+  class='bpn-quiz'
+  {% if _section.background_image != blank %}
+    style="--background-image: url('{{ _section.background_image | img_url: '1440x' }}')"
+  {% endif %}
+>
+  {% if _section.title != blank %}
+    <h3 class='bpn-quiz__subtitle' style='color: {{ _section.subtitle_color }}'>
+      {{ _section.subtitle }}
+    </h3>
+  {% endif %}
+  <div class='bpn-quiz__container'>
+    {% if _section.title != blank %}
+      <h2 class='bpn-quiz__title' style='color: {{ _section.title_color }}'>
+        {{ _section.title }}
+      </h2>
+    {% endif %}
+    {% if _section.button_text != blank %}
+      <div class='bpn-quiz__link-container'>
+        <a
+          class='bpn-quiz__link bpn-text-callout-base'
+          target='_blank'
+          href='{{ _section.button_url }}'
+          data-click-id='homepage_lower-quiz_cta'
+          style='color: {{ _section.button_text_color }}'
+        >
+          {{ _section.button_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  {% if _section.text != blank %}
+    <p class='bpn-quiz__text' style='color: {{ _section.text_color }}'>{{ _section.text }}</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Quiz",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title Text"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle Settings"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle Text"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color"
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Content Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Content Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    }
+  ],
+
+  "presets": [
+    {
+      "name": "Quiz",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

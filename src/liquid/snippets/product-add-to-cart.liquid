@@ -1,0 +1,163 @@
+{%- comment -%} add-to-cart-sticky-footer.liquid {%- endcomment -%}
+
+{% assign subscription_plans = product.selling_plan_groups %}
+{% assign default_subscription_plan = null %}
+{% if product.metafields.custom.allow_subscriptions != false and subscription_plans != blank %}
+  {% for group in subscription_plans %}
+    {% if settings.subscription_platform == 'skio' and group.app_id == 'SKIO' %}
+      {% assign default_subscription_plan = group %}
+      {% break %}
+    {% elsif settings.subscription_platform != 'skio' and group.app_id != 'SKIO' %}
+      {% assign default_subscription_plan = group %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign option = null %}
+{% if default_subscription_plan and default_subscription_plan.options != blank %}
+  {% assign option = default_subscription_plan.options[0] %}
+{% endif %}
+
+{% assign flavor_option_index = null %}
+{% assign flavor_options = null %}
+
+{% for value in product.options_with_values %}
+  {% if value.name == 'Flavor' %}
+    {% assign flavor_option_index = value.position | minus: 1 %}
+    {% assign flavor_options = value.values %}
+  {% endif %}
+{% endfor %}
+
+{% assign flavor_options_size = flavor_options | size | default: 0 %}
+{% assign variants_count = product.variants | size | default: 0 %}
+
+{% liquid
+    assign default_to_otp = false
+    for tag in product.tags
+      assign tag_downcase = tag | downcase | strip
+      if tag_downcase == 'pdp-default-to-otp'
+        assign default_to_otp = true
+        break
+      endif
+    endfor
+  %}
+
+<div class='add-to-cart pdp-sticky-footer hidden' id='add-to-cart-sticky-footer'>
+  <div class="pdp-sticky-footer__product-image-wrapper">
+    <img
+      class='pdp-sticky-footer__product-image'
+      src='{{ product.featured_image | image_url: width:160 }}'
+      width='80'
+      height='80'
+      alt='Product Image'
+    >
+  </div>
+  <div class='pdp-sticky-footer__product-info'>
+    <div>
+      <h3 class='pdp-sticky-footer__title'>{{ product.title }}</h3>
+      <div class='pdp-sticky-footer__variant-info'>
+        {% if flavor_options_size != 0 %}
+          <span class='flavor-option'>
+            {{ flavor_options[flavor_option_index] }}
+          </span>
+        {% endif %}
+
+        {% if flavor_options_size != 0 and option != blank and selected_variation.selling_plan_allocations.size > 0 %}
+          <span class='bullet {%if default_to_otp == true %} hidden {% endif %}'>•</span>
+        {% endif %}
+
+        {% if option != blank and selected_variation.selling_plan_allocations.size > 0 %}
+          <span id='delivery-frequency' class='delivery-frequency {%if default_to_otp == true %} hidden {% endif %}'>
+              {{ option.values[0] }}
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    <div class='product-options-exposed'>
+        {% if variants_count != 0 %}
+          {% render 'product-variation-selectors',
+            selected_variation: selected_variation,
+            exposed: true
+          %}
+        {% endif %}
+      </div>
+    <span
+    class='pdp-sticky-footer__change-options'
+    data-click-id='pdp_sticky-atc_change-options'
+    >EDIT
+    {% render 'icon-chevron-down' %}
+    </span>
+  {% render 'pdp-sticky-footer-cta',
+          product: product,
+          selected_variation: selected_variation,
+          default_subscription_plan: default_subscription_plan,
+          option: option,
+          tag_discount: tag_discount,
+          show_quantity_selector: show_quantity_selector,
+          default_to_otp:default_to_otp
+        %}
+  </div>
+  <div class="pdp-sticky-footer__desktop-actions">
+    {% if default_subscription_plan != nil and product.metafields.custom.enable_stack_and_save != true and selected_variation.selling_plan_allocations.size > 0 %}
+      <span class="pdp-sticky-footer__options-toggle">
+        <span
+          class='pdp-sticky-footer__change-options'
+          data-click-id='pdp_sticky-atc_change-options'
+        >PURCHASE OPTIONS</span>
+        {% render 'icon-chevron-down' %}
+      </span>
+    {% endif %}
+    {% render 'pdp-sticky-footer-cta',
+          product: product,
+          selected_variation: selected_variation,
+          default_subscription_plan: default_subscription_plan,
+          option: option,
+          tag_discount: tag_discount,
+          show_quantity_selector: show_quantity_selector,
+          default_to_otp:default_to_otp
+        %}
+
+  </div>
+
+  <div id='add-to-cart-buy-box' class='add-to-cart__buy-box hidden'>
+      <div class='add-to-cart__buy-box-container'>
+        <div class='close-add-to-cart'>
+          {% render 'icon', icon: 'header-close' %}
+        </div>
+        {% if variants_count != 0 %}
+          <div class="product-variant-selctor">
+            {% render 'product-variation-selectors',
+              selected_variation: selected_variation
+            %}
+          </div>
+        {% endif %}
+
+        {% if default_subscription_plan != blank and product.metafields.custom.enable_stack_and_save != true and selected_variation.selling_plan_allocations.size > 0 %}
+          {% if buybox_v2_added == true %}
+            {% render 'subscription-selector-v2',
+              default_subscription_plan: default_subscription_plan,
+              subscription_plans: subscription_plans,
+              selected_variation: selected_variation,
+              tooltip_text: tooltip_text,
+              tag_discount: tag_discount,
+              subscribed_click_id: 'pdp_buyblock_subscribe-sms-why',
+              not_subscribed_click_id: 'pdp_buyblock_subscribe-sms',
+              default_to_otp: default_to_otp
+            %}
+            {% else %}
+            {% render 'subscription-selector',
+              default_subscription_plan: default_subscription_plan,
+              subscription_plans: subscription_plans,
+              selected_variation: selected_variation,
+              tooltip_text: tooltip_text,
+              tag_discount: tag_discount,
+              subscribed_click_id: 'pdp_buyblock_subscribe-sms-why',
+              not_subscribed_click_id: 'pdp_buyblock_subscribe-sms',
+              default_to_otp: default_to_otp
+            %}
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+</div>

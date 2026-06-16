@@ -1,0 +1,73 @@
+{%- comment -%}
+  Need the two-column-grid.scss file for style
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign video_url = block.video_url -%}
+{%- assign block_title = block.block_title -%}
+{%- assign text = block.text -%}
+{%- assign poster = block.poster -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+{% comment %}
+  Fetch the background texture
+{% endcomment %}
+{%- assign global_section = pages['site-global-data'].metafields.global_data -%}
+{%- assign background_texture = global_section.gray_block_bg_portrait -%}
+
+<section class="twoColumnGrid {{snippet_name}} twoColumnGrid--{{id}} twoColumnGrid--{{ request.page_type | handle }} twoColumnGrid--videoBlock">
+  <div class="twoColumnGrid__container">
+    <div class="twoColumnGrid__mediaBlock twoColumnGrid__mediaBlock--videoBlock">
+      <div class="twoColumnGrid__videoPlayer">
+        {% if video_url != blank %}
+          {% if video_url contains '<iframe' %}
+            {{ video_url }}
+          {% else %}
+            <video
+              data-video-player
+              playsinline
+              controls
+              poster="{{poster.url}}"
+              width="320"
+              height="180"
+              preload="none"
+              title="{{ block_title }}"
+            >
+              <source src="{{video_url}}" type="video/mp4">
+            </video>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="twoColumnGrid__textBlock twoColumnGrid__textBlock--videoBlock">
+      <div class="twoColumnGrid__textBlockContent">
+        {% if block_title != blank %}
+          <h2 class="twoColumnGrid__title twoColumnGrid__title--videoBlock">{{ block_title }}</h2>
+        {% endif %}
+        <div class="twoColumnGrid__richText">
+          {% render 'prismic-rich-text', rich_text: text %}
+        </div>
+        {% if cta_link != blank and cta_text != blank %}
+          <div class="twoColumnGrid__cta">
+            <a
+              href="{% if cta_link != blank %}{{cta_link}}{% else %}javascript:void(0);{% endif %}"
+              class="button-link video-block-cta"
+            >
+              {{- cta_text -}}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      {%- if background_texture != blank -%}
+        <img
+          class="twoColumnGrid__textBlockBg lazyload"
+          data-src="{{ background_texture.url }}"
+          src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/u3zfwAJrQPhbkYXzAAAAABJRU5ErkJggg=="
+          alt=""
+          role="presentation"
+          width="300"
+          height="200"
+        >
+      {%- endif -%}
+    </div>
+  </div>
+</section>

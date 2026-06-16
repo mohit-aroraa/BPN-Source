@@ -1,0 +1,50 @@
+<div class="hero-section animation-img">
+  <div class="anim__image-swipe anim__image-swipe--up">
+    <div class="hero-bg"></div>
+  </div>
+  <div class="container text-center wow fadeInUp">
+    <div class="bare-standerd-logo">
+      <img src="{{ 'bpn-logo.svg'| asset_url }}" loading="eager" width="128" height="147" role="presentation">
+    </div>
+    {% assign title1 = section.settings.title | slice: 0, 4 %}
+    {% assign title2 = section.settings.title | slice: 4, 5 %}
+    {% assign title3 = section.settings.title | slice: 8, 12 %}
+    <h2>
+      {{ title1 }}
+      <span>{{ title2 }}</span> <span> {{ title3 }} </span>
+    </h2>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Integrity Banner",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "banner_image",
+      "type": "image_picker",
+      "label": "Banner Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+<style>
+  .hero-bg {
+    background-image: url({{ section.settings.banner_image | image_url: width: 750 }});
+  }
+  @media only screen and (min-width: 750px) {
+    .hero-bg {
+      background-image: url({{ section.settings.banner_image | image_url: width: 1500 }});
+    }
+  }
+</style>

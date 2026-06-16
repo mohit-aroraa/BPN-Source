@@ -1,0 +1,101 @@
+{% assign _address = address %}
+
+<div id="update-address-modal-container-{{ _address.id }}"
+     class="account-modal-container hidden update-address-modal-container">
+  <section class="account-modal address-account-modal update-account-modal">
+    <a class="account-modal__back-link">< Back to Addresses</a>
+
+    {% form 'customer_address', address, class: 'account-form', data-form_id: form.id %}
+      <h3 class="account-modal__title">Edit Address</h3>
+
+      <input type="hidden" name="form_type" value="customer"/>
+      <input type="hidden" name="utf8" value="✓"/>
+
+      <div>
+        <label class="account-form__label" for="first_name">First Name *</label>
+        <input class="account-form__input" name="address[first_name]" id="first_name" placeholder="First Name"
+               value="{{ form.first_name }}" type="text" autocomplete="given-name"
+               required>
+      </div>
+
+      <div>
+        <label class="account-form__label" for="last_name">Last Name *</label>
+        <input class="account-form__input" name="address[last_name]" id="last_name" placeholder="Last Name"
+               value="{{ form.last_name }}" type="text" autocomplete="family-name"
+               required>
+      </div>
+
+      <div>
+        <label class="account-form__label" for="address1">Address Line 1 *</label>
+        <input class="account-form__input" id="address1" name="address[address1]" value="{{ form.address1 }}"
+               placeholder="Address Line 1*"
+               type="text" autocomplete="street-address address-line1"
+               required>
+      </div>
+
+      <div>
+        <label class="account-form__label" for="city">Address Line 2</label>
+        <input class="account-form__input" id="address2" name="address[address2]" value="{{ form.address2 }}"
+               placeholder="Address Line 2 (Optional)"
+               type="text" autocomplete="street-address address-line2">
+      </div>
+
+      <div>
+        <label class="account-form__label" for="city">City *</label>
+        <input class="account-form__input" id="city" name="address[city]" value="{{ form.city }}"
+               type="text" autocomplete="address-level2" placeholder="City"
+               required>
+      </div>
+
+
+      <div>
+        <label class="account-form__label" for="AddressCountry_{{ form.id }}">Country *</label>
+        <select
+          id="AddressCountry_{{ form.id }}"
+          class="account-form__select city"
+          data-form-id="{{ form.id }}"
+          name="address[country]"
+          data-default="{{ form.country }}"
+          autocomplete="country"
+        >
+          {{ all_country_option_tags }}
+        </select>
+      </div>
+
+
+      <div id="AddressProvinceContainer_{{ form.id }}">
+        <label class="account-form__label" for="AddressProvince_{{ form.id }}">State/Province*</label>
+        <select
+          class="account-form__select"
+          id="AddressProvince_{{ form.id }}"
+          name="address[province]"
+          autocomplete="address-level1"
+          data-default="{{ form.province }}"
+        >
+        </select>
+      </div>
+
+      <div>
+        <label class="account-form__label" for="zip">ZIP Code *</label>
+        <input class="account-form__input zip" id="zip" name="address[zip]" value="{{ form.zip }}"
+               type="text" autocomplete="postal-code" placeholder="ZIP CODE"
+               required>
+      </div>
+
+      <div>
+        <label class="account-form__label" for="phone">Phone number (optional)</label>
+        <input class="account-form__input" id="phone" name="address[phone]" value="{{ form.phone }}" type="tel"
+               oninput="this.value = this.value.replace(/[^0-9+]/g, '').replace(/(?!^)\+/g, '')">
+      </div>
+
+      <input class="btn primary-button" type="submit"
+             value="Update Address">
+
+      <div class="update-account-modal__delete-control" style="text-align: center">
+        <a class="delete-address-button" data-id="{{ address.id }}"
+           data-target="{{ _address.url }}">Delete address</a>
+      </div>
+
+    {% endform %}
+  </section>
+</div>

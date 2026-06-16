@@ -1,0 +1,7 @@
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+// Design tokens
+@import "./src/design-tokens/index";
+
+@import "../components/shared/custom-tab";

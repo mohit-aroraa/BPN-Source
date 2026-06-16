@@ -1,0 +1,71 @@
+<div class="account account-addresses">
+  {% render 'account-side-nav' %}
+
+  <div class="account__main-content">
+    <div class="account__top-wrapper">
+
+      <div id="delete-address-modal-container" class="account-modal-container delete-modal-container hidden">
+        <section class="account-modal delete-modal">
+          <h4 class="delete-modal__heading">Are you sure you want to delete this address?</h4>
+          <p class="delete-modal__address">REPLACE IT</p>
+          <div class="delete-modal__controls">
+            <a id="close-delete-modal" class="close-delete-address-button">CANCEL</a>
+
+            <input id="delete-address" class="btn primary-button"
+                   value="DELETE ADDRESS" type="button">
+          </div>
+        </section>
+      </div>
+
+      {% render 'add-address-modal' %}
+
+      {% for address in customer.addresses %}
+        {% render 'update-address-modal', address: address %}
+      {% endfor %}
+
+      <div class="account__page-content">
+        <div class="account-breadcrumbs">
+          <a href="/">Home</a>/
+          <a href="/account">Account</a>/
+          <a href="/account/addresses">Addresses</a>
+        </div>
+
+        <section class="account__section">
+          <h2 class="account-addresses__heading">
+            {{ 'Addresses' | upcase }}
+            <a class="account-addresses__heading-button" id="add-new-address">+Add new address</a>
+          </h2>
+
+          <div class="account-addresses__list">
+            {% for address in customer.addresses %}
+              <div id="address-cart-{{ address.id }}"
+                   class="address-card{% if address == customer.default_address %} active{% endif %}"
+                   data-id="{{ address.id }}">
+
+                <div class="address-card__default-label">
+                  Default
+                </div>
+
+                <form class="default-button-container" method="POST" action="/account/addresses/{{ address.id }}">
+                  <input type="hidden" name="_method" value="put">
+                  <input type="hidden" name="address[default]" value="true">
+                  <button class="address-card__button" type="submit">Set as Default</button>
+                </form>
+
+                <div class="address-card__text">
+                  <p>{{ address | format_address }}</p>
+                </div>
+                <div class="address-card__controls">
+                  <input class="btn secondary-button edit-address-button" data-id="{{ address.id }}"
+                         value="Edit address" type="button">
+                  <a class="address-card__button delete-address-button" data-id="{{ address.id }}"
+                     data-target="{{ address.url }}">DELETE</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+{%- comment -%} fetch metafields based on namespace(slice_test) {%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign iframe = block.iframe -%}
+{%- assign background_texture = block.background_texture -%}
+{%- assign background_color = block.background_color -%}
+{%- assign background_on_mob = block.background_on_mob -%}
+{%- assign split_frame = iframe | split: '"' -%}
+
+{%- for text in split_frame -%}
+  {% if text contains 'https:' %}
+    {% assign src = text %}
+    {% break %}
+  {% endif %}
+{%- endfor -%}
+
+{%- if src != blank -%}
+  {%- comment -%}Only get the base URL{%- endcomment -%}
+  {%- assign url_parts = src | split: '?' -%}
+  {%- assign base_url = url_parts[0] -%}
+  {%- assign src_with_param = base_url | append: '?rel=0' -%}
+  {%- capture capture_frame -%}
+		<iframe frameborder="0"
+			class="lazyload"
+			allowfullscreen=""
+			width="600"
+			height="400"
+			data-src="{{ src_with_param }}" 
+			title="Youtube video embed {% if template contains 'product' %}about {{ product.title | escape }}{% endif %}"
+		>
+		</iframe>
+	{%- endcapture -%}
+{%- else -%}
+  {%- assign capture_frame = iframe -%}
+{%- endif -%}
+
+<div class="videoEmbed videoEmbed--{{ id }}">
+  <div class="videoEmbed__iframe">
+    {{ capture_frame }}
+  </div>
+</div>
+
+<style>
+  .videoEmbed--{{id}}::after {
+     	content: "";
+     	position: absolute;
+     	left: 0;
+     	top: 0;
+     	height: 100%;
+     	width: 100%;
+     	{%- if background_texture -%}
+     		background-image: url({{'texture.svg' | asset_url}});
+     		background-repeat: repeat-x;
+     	{%- elsif background_color -%}
+     		background-color: {{background_color}}
+   		{%- endif -%}
+     }
+
+     {%- if background_on_mob -%}
+     	@media screen and (max-width: 640px) {
+     		.videoEmbed--{{id}}::after {
+     			width: 50%;
+     		}
+     	}
+    {%- endif -%}
+</style>

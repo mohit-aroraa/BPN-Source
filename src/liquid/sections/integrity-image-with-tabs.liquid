@@ -1,0 +1,84 @@
+<div class="sectiontype1 space-bottom swip-section code-of-ethics animation-img">
+  <div class="img-block texture-wrap">
+    <div class="anim__image-swipe anim__image-swipe--left">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        loading="lazy"
+        width="320"
+        height="343"
+        alt="{{ section.settings.image.alt | escape }}"
+      >
+    </div>
+  </div>
+  <div class="content-block ">
+    <!-- <h2 class="text-center">Code of <span> Ethics </span></h2> -->
+    <h2 class="text-center  wow fadeInUp">{{ section.settings.title }}</h2>
+
+    <div id="accordion" class="custom-accordian-new  wow fadeInUp">
+      {% for block in section.blocks %}
+        <div class="card">
+          <div class="card-header" id="heading{{ forloop.index }}">
+            <a
+              class="collapsed"
+              data-toggle="collapse"
+              data-target="#collapse{{ forloop.index }}"
+            >
+              {{ block.settings.code }}
+            </a>
+          </div>
+          <div
+            id="collapse{{ forloop.index }}"
+            class="collapse"
+            aria-labelledby="heading{{ forloop.index }}"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              {{ block.settings.description }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Image with tabs",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "code-description",
+      "name": "Code description",
+      "settings": [
+        {
+          "id": "code",
+          "type": "text",
+          "label": "Code"
+        },
+        {
+          "id": "description",
+          "type": "richtext",
+          "label": "Description"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,172 @@
+{% assign base_class = 'bpn-athletic-tabbed-stack' %}
+{% assign nav_prefix = 'athlete-lp_products_img-navigation' %}
+{% assign product_thumbnail_click_id = 'athlete-lp_products_thumbnail' %}
+{% assign product_cta_click_id = 'athlete-lp_products_cta' %}
+
+<div id="athlete-stack-section" class="{{ base_class }} {{ base_class }}--{{ section.id }}">
+  <!-- Section Heading -->
+  {% if section.settings.heading != blank %}
+    <h2 class="{{ base_class }}__heading">
+      {{ section.settings.heading }}
+    </h2>
+  {% endif %}
+
+  <!-- Tab List -->
+  <ul class="{{ base_class }}__tabs">
+    {% for block in section.blocks %}
+      <li
+        class="{{ base_class }}__tab {% if forloop.first %}is-active{% endif %}"
+        data-tab-target="{{ block.id }}"
+        data-click-id="athlete-lp_tab_{{ block.settings.tab_label | replace: ' ', '-' | downcase }}"
+      >
+        {{ block.settings.tab_label }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Tab Panels -->
+  <div class="{{ base_class }}__panels">
+    {% for block in section.blocks %}
+      <div
+        class="{{ base_class }}__panel {% unless forloop.first %}is-hidden{% endunless %}"
+        data-tab-content="{{ block.id }}"
+      >
+        <!-- Left: Media -->
+        <div class="{{ base_class }}__media-wrapper">
+          {% include 'athletic-media', base_class: base_class, block_settings: block.settings %}
+        </div>
+        <!-- Right: Products Grid -->
+        <div class="{{ base_class }}__products swiper" data-tabbed-product-swiper>
+          {% if block.settings.collection != blank %}
+            {% assign collection_handle = block.settings.collection %}
+            {% assign product_collection = collections[collection_handle] %}
+            {% if product_collection and product_collection.products.size > 0 %}
+            <div class="product-grid swiper-wrapper">
+              {% for product in product_collection.products limit: 10 %}
+                {% render 'product-grid',
+                  product: product,
+                  index: forloop.index,
+                  nav_click_id: nav_prefix,
+                  product_thumbnail_click_id: product_thumbnail_click_id,
+                  product_cta_click_id: product_cta_click_id
+                %}
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="swiper-button-prev" data-click-id="athlete-lp_products_navigation">
+              {% render 'icons', icon: 'swiper-button' %}
+            </div>
+            <div class="swiper-button-next" data-click-id="athlete-lp_products_navigation">
+              {% render 'icons', icon: 'swiper-button' %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.{{ base_class }}__tab');
+    const panels = document.querySelectorAll('.{{ base_class }}__panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-tab-target');
+        tabs.forEach(otherTab => otherTab.classList.remove('is-active'));
+        panels.forEach(panel => panel.classList.add('is-hidden'));
+        tab.classList.add('is-active');
+
+        const matchingPanel = document.querySelector(`[data-tab-content="${targetId}"]`);
+        if (matchingPanel) {
+          matchingPanel.classList.remove('is-hidden');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Athletic Tabbed Stack",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Lucy's Super Stack"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_block",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "Tab Label",
+          "default": "Performance"
+        },
+        {
+          "id": "image_desktop",
+          "type": "image_picker",
+          "label": "Desktop Image",
+          "info": "Recommended 2880X1200 Image"
+        },
+        {
+          "type": "header",
+          "content": "Desktop Video"
+        },
+        {
+          "id": "video_desktop_type",
+          "type": "select",
+          "label": "Desktop Video Source",
+          "options": [
+            { "value": "url", "label": "URL" },
+            { "value": "media", "label": "Media Gallery" },
+            { "value": "", "label": "None" }
+          ],
+          "default": "url"
+        },
+        {
+          "type": "video_url",
+          "id": "video_desktop_url",
+          "accept": [
+            "youtube",
+            "vimeo"
+          ],
+          "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+          "label": "Desktop Video URL",
+          "info": "Enter a URL (YouTube or Vimeo) here if Desktop Video Source is set to URL."
+        },
+        {
+          "id": "video_desktop_media",
+          "type": "video",
+          "label": "Video Desktop Media",
+          "info": "Select a video from your Media Gallery if Desktop Video Source is set to Media."
+        },
+        {
+          "id": "video_desktop_poster",
+          "type": "image_picker",
+          "label": "Desktop Video Poster"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Athletic Tabbed Stack",
+      "category": "Athletic Landing Pages"
+    }
+  ]
+}
+{% endschema %}

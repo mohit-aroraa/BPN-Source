@@ -1,0 +1,442 @@
+{%- liquid
+  assign selected_variation = product.selected_or_first_available_variant
+  assign option_count       = product.options.size
+  assign unit_letters       = 'A,B,C,D,E,F,G,H' | split: ','
+  assign component_products = product.metafields.custom.bundle_components.value
+  assign total_components   = component_products.size | default: option_count
+
+  assign compare_price = 0
+  for cp in component_products
+    assign compare_price = compare_price | plus: cp.price
+  endfor
+-%}
+
+{{- '<!-- bundle product data -->' -}}
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.bundleProduct = {
+    id: {{ product.id }},
+    price: {{ product.price }},
+    compareAtPrice: {{ compare_price }},
+    variants: [
+      {%- for v in product.variants -%}
+        {
+          id: {{ v.id }},
+          available: {{ v.available }},
+          options: {{ v.options | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  };
+</script>
+
+<div class="strength-bundle-pdp" id="strength-bundle-pdp-{{ product.id }}">
+
+  {%- comment -%} ── Gallery ── {%- endcomment -%}
+  <div class="strength-bundle-pdp__gallery">
+
+    <div class="strength-bundle-pdp__gallery-thumbnail swiper">
+      <div class="swiper-wrapper">
+        {%- for media in product.media -%}
+          <div class="swiper-slide strength-bundle-pdp__gallery-thumbnail-item">
+            <img
+              src="{{ media.preview_image | image_url: width: 160 }}"
+              alt="{{ media.alt | escape }}"
+              loading="lazy"
+              width="80"
+              height="80"
+            >
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="strength-bundle-pdp__gallery-main swiper">
+      <div class="swiper-wrapper">
+        {%- for media in product.media -%}
+          <div class="swiper-slide strength-bundle-pdp__gallery-main-item">
+            {%- if media.media_type == 'video' -%}
+              {{ media | video_tag: autoplay: false, loop: false, controls: true, muted: true, loading: 'lazy' }}
+            {%- else -%}
+              <img
+                src="{{ media | image_url: width: 900 }}"
+                alt="{{ media.alt | escape }}"
+                {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}
+                width="{{ media.width }}"
+                height="{{ media.height }}"
+              >
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      <div class="strength-bundle-pdp__gallery-pagination swiper-pagination"></div>
+
+      <div class='swiper-button swiper-button-prev' data-click-id='pdp_gallery_nav_buttons'>
+        {% render 'icon', icon: 'swiper-button-prev', tag: 'pdp_gallery_nav_buttons' %}
+      </div>
+
+      <div class='swiper-button swiper-button-next' data-click-id='pdp_gallery_nav_buttons'>
+        {% render 'icon', icon: 'swiper-button-next', tag: 'pdp_gallery_nav_buttons' %}
+      </div>
+    </div>
+
+  </div>
+
+  {%- comment -%} ── Buy Box ── {%- endcomment -%}
+  <div class="strength-bundle-buybox sbb">
+
+    <nav class="sbb__breadcrumb" aria-label="Breadcrumb">
+      <a href="/collections/supplements" class="sbb__breadcrumb-link">Supplements</a>
+      <span class="sbb__breadcrumb-sep" aria-hidden="true">/</span>
+      <span class="sbb__breadcrumb-current">{{ product.title }}</span>
+    </nav>
+
+    {%- comment -%} Title {%- endcomment -%}
+    <h1 class="sbb__title">{{ product.title }}</h1>
+
+    {%- comment -%} Rating + Price {%- endcomment -%}
+    <div class="sbb__meta-row">
+      <div class="sbb__rating">{{ product.metafields.okendo.StarRatingSnippet }}</div>
+      <div class="sbb__prices">
+        {%- if compare_price > product.price -%}
+          <s class="sbb__price-compare">{%- render 'price-value', price: compare_price -%}</s>
+        {%- endif -%}
+        <span class="sbb__price-current">{%- render 'price-value', price: product.price -%}</span>
+      </div>
+    </div>
+
+    {%- comment -%} USP checkmarks from product metafield (rich text) {%- endcomment -%}
+    {%- if product.metafields.custom.description_bullet_points != blank -%}
+      <div class="sbb__usps">{{ product.metafields.custom.description_bullet_points | metafield_tag }}</div>
+    {%- endif -%}
+
+    <div class="sbb__components">
+      {%- for component_product in component_products -%}
+        {%- liquid
+          assign comp_idx    = forloop.index0
+          assign comp_pos    = forloop.index
+          assign unit_letter = unit_letters[comp_idx]
+          assign unit_label  = 'UNIT ' | append: unit_letter
+
+          if comp_idx < option_count
+            assign matched_option = product.options_with_values[comp_idx]
+          else
+            assign matched_option = nil
+          endif
+
+          if matched_option != nil
+            assign comp_label = matched_option.name
+          else
+            assign comp_label = component_product.title
+          endif
+        -%}
+
+        <div class="sbb__component{% unless matched_option %} is-fixed{% endunless %}"
+             {% if matched_option %}data-option-index="{{ matched_option.position | minus: 1 }}" data-option-name="{{ matched_option.name | escape }}"{% endif %}>
+
+          <div class="sbb__component-header">
+            <div class="sbb__component-header-left">
+              <span class="sbb__component-label">{{ comp_label }}</span>
+            </div>
+            <div class="sbb__component-header-right">
+              <div class="sbb__progress" aria-hidden="true">
+                {%- for j in (1..total_components) -%}
+                  <span class="sbb__progress-sq{% if j <= comp_pos %} is-filled{% endif %}"></span>
+                {%- endfor -%}
+              </div>
+              <span class="sbb__component-unit">{{ unit_label }}</span>
+            </div>
+          </div>
+
+          {%- if matched_option != nil -%}
+            {%- liquid
+              assign opt_idx   = matched_option.position | minus: 1
+              assign pre_value = selected_variation.options[opt_idx]
+            -%}
+            <div class="sbb__flavors" role="radiogroup" aria-label="{{ matched_option.name | escape }}">
+              {%- for value in matched_option.values -%}
+                {%- liquid
+                  assign swatch_svg   = nil
+                  assign flavor_color = nil
+                  for comp_variant in component_product.variants
+                    if comp_variant.title == value
+                      assign swatch_svg   = comp_variant.metafields.custom.product_card_variation_icon.value
+                      assign flavor_color = swatch_svg | split: 'fill="' | last | split: '"' | first
+                      break
+                    endif
+                  endfor
+                  assign is_selected = false
+                  if value == pre_value
+                    assign is_selected = true
+                  endif
+                -%}
+                <button
+                  type="button"
+                  role="radio"
+                  class="sbb__flavor{% if is_selected %} is-selected{% endif %}"
+                  data-option-index="{{ opt_idx }}"
+                  data-value="{{ value | escape }}"
+                  aria-checked="{% if is_selected %}true{% else %}false{% endif %}"
+                  aria-label="{{ value | escape }}"
+                >
+                  <span class="sbb__flavor-check" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="11" cy="11" r="11" fill="white"/>
+                      <path d="M6 11.5L9.5 15L16 8" stroke="#1b5bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <span class="sbb__flavor-swatch">
+                    {%- if swatch_svg != blank -%}{{ swatch_svg }}{%- endif -%}
+                  </span>
+                  <span class="sbb__flavor-name" aria-hidden="true">{{ value }}</span>
+                  <span class="sbb__flavor-badge" aria-hidden="true">Selected</span>
+                </button>
+              {%- endfor -%}
+            </div>
+
+          {%- else -%}
+            {%- liquid
+              assign fixed_variant      = component_product.variants | first
+              assign fixed_swatch_svg   = fixed_variant.metafields.custom.product_card_variation_icon.value
+            -%}
+            <div class="sbb__flavors" role="radiogroup" aria-label="{{ component_product.title | escape }}">
+              <button type="button" role="radio"
+                class="sbb__flavor is-selected is-fixed"
+                aria-checked="true"
+                aria-label="{{ fixed_variant.title | escape }}"
+              >
+                <span class="sbb__flavor-check" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="11" fill="white"/>
+                    <path d="M6 11.5L9.5 15L16 8" stroke="#1b5bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                <span class="sbb__flavor-swatch">
+                  {%- if fixed_swatch_svg != blank -%}{{ fixed_swatch_svg }}{%- endif -%}
+                </span>
+                <span class="sbb__flavor-name" aria-hidden="true">{{ fixed_variant.title }}</span>
+                <span class="sbb__flavor-badge" aria-hidden="true">Selected</span>
+              </button>
+            </div>
+          {%- endif -%}
+
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Qty + ATC {%- endcomment -%}
+    <div class="sbb__atc-area">
+      <div class="sbb__qty">
+        <button class="sbb__qty-btn is-disabled" type="button" data-dir="prev" disabled aria-label="Decrease quantity">
+          <svg width="14" height="2" viewBox="0 0 14 2" fill="none" aria-hidden="true">
+            <path d="M1 1H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <span class="sbb__qty-value">1</span>
+        <button class="sbb__qty-btn" type="button" data-dir="next" aria-label="Increase quantity">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M7 1V13M1 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <button
+        class="sbb__atc-btn"
+        type="button"
+        data-variant-id="{{ selected_variation.id }}"
+        data-option-count="{{ option_count }}"
+      >
+        <span class="sbb__atc-label">ADD TO CART</span>
+        <span class="sbb__atc-prices">
+          {%- if compare_price > product.price -%}
+            <s class="sbb__atc-compare">{%- render 'price-value', price: compare_price -%}</s>
+          {%- endif -%}
+          <span class="sbb__atc-price">{%- render 'price-value', price: product.price -%}</span>
+        </span>
+      </button>
+    </div>
+
+    {%- comment -%} ── Product info accordions ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="sbb__accordions">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'lightlabs_widget' or block.type == 'trust_badge' -%}{%- continue -%}{%- endif -%}
+          <div class="sbb__accordion" data-sbb-accordion {{ block.shopify_attributes }}>
+
+            <button class="sbb__accordion-trigger" type="button" aria-expanded="false">
+              <span class="sbb__accordion-title">{{ block.settings.title }}</span>
+              <span class="sbb__accordion-chevron" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="sbb__accordion-body">
+              <div class="sbb__accordion-body-inner">
+
+                {%- if block.type == 'supplement_facts' -%}
+                  {%- assign supp_img = product.metafields.custom.supplement_facts -%}
+                  {%- if supp_img != blank -%}
+                    <img
+                      class="sbb__accordion-img"
+                      src="{{ supp_img | image_url: width: 800 }}"
+                      alt="Supplement Facts"
+                      loading="lazy"
+                    >
+                  {%- endif -%}
+
+                {%- elsif block.type == 'ingredients' -%}
+                  {%- if product.metafields.custom.ingredients != blank -%}
+                    <div class="sbb__accordion-richtext">
+                      {{ product.metafields.custom.ingredients | metafield_tag }}
+                    </div>
+                  {%- endif -%}
+
+                {%- elsif block.type == 'how_to_use' -%}
+                  {%- if product.metafields.custom.how_to_use != blank -%}
+                    <div class="sbb__accordion-richtext">
+                      {{ product.metafields.custom.how_to_use | metafield_tag }}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+
+              </div>
+            </div>
+
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} ── LightLabs widget (not inside accordion) ── {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'lightlabs_widget' -%}
+          <div class="sbb__lightlabs" {{ block.shopify_attributes }}>
+            <lightlabs-widget company-id="{{ block.settings.company_id | default: '404' }}"></lightlabs-widget>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} ── Trust badges ── {%- endcomment -%}
+      {%- assign has_trust_badges = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'trust_badge' -%}{%- assign has_trust_badges = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if has_trust_badges -%}
+        <div class="sbb__trust-badges">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'trust_badge' -%}
+              <div class="sbb__trust-badge" {{ block.shopify_attributes }}>
+                {%- if block.settings.icon != blank -%}
+                  <div class="sbb__trust-badge-icon">
+                    <img
+                      src="{{ block.settings.icon | image_url: width: 80 }}"
+                      alt="{{ block.settings.label | escape }}"
+                      loading="lazy"
+                      width="40"
+                      height="40"
+                    >
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.label != blank -%}
+                  <span class="sbb__trust-badge-label">{{ block.settings.label }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Strength Bundle PDP",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "supplement_facts",
+      "name": "Supplement Facts",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "SUPPLEMENT FACTS"
+        }
+      ]
+    },
+    {
+      "type": "ingredients",
+      "name": "Ingredients",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "INGREDIENTS"
+        }
+      ]
+    },
+    {
+      "type": "how_to_use",
+      "name": "How to Use",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "HOW TO USE"
+        }
+      ]
+    },
+    {
+      "type": "lightlabs_widget",
+      "name": "LightLabs Widget",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "company_id",
+          "label": "Company ID",
+          "default": "404"
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "Trust Badge",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "THIRD-PARTY CERTIFIED"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Strength Bundle PDP",
+      "category": "Product",
+      "blocks": [
+        { "type": "supplement_facts" },
+        { "type": "ingredients" },
+        { "type": "how_to_use" }
+      ]
+    }
+  ]
+}
+{% endschema %}

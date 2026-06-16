@@ -1,0 +1,124 @@
+<!-- snippets/product-card-grid -->
+{% liquid
+  assign img_id = 'ProductCardImage-' | append: section.id | append: '-' | append: product.id
+  assign wrapper_id = 'ProductCardImageWrapper-' | append: section.id | append: '-' | append: product.id
+  assign preview_image = product.featured_media.preview_image
+  assign img_url = product.featured_image | img_url: '338x412', crop: 'center'
+
+  assign current_variant = product.selected_or_first_available_variant
+  assign variant = product.selected_or_first_available_variant
+  assign compare_at_price = variant.compare_at_price
+  assign price = variant.price
+  assign available = variant.available
+%}
+
+<div class="collectionProductCard">
+  <div class="product-box">
+    <div class="image">
+      <a href="{{ product.url }}"><img class="" src="{{ img_url }}" alt="img"></a>
+    </div>
+    {% unless preview_image == blank %}
+      {% include 'image-style', image: preview_image, height: max_height, wrapper_id: wrapper_id, img_id: img_id %}
+    {% endunless %}
+    <noscript>
+      {% capture image_size %}{{ max_height }}x{{ max_height }}{% endcapture %}
+      <img
+        class="grid-view-item__image"
+        src="{{ preview_image | img_url: image_size, scale: 2 }}"
+        alt="{{ preview_image.alt }}"
+        style="max-width: {{ max_height | times: preview_image.aspect_ratio }}px;"
+      >
+    </noscript>
+
+    <div class="product-box__meta">
+      <h2>
+        <a href="{{ product.url }}">
+          {% render 'product-title', product: product %}
+        </a>
+      </h2>
+
+      {% render 'okendo-reviews-product-rating-summary', product: product %}
+
+      <div class="product-box__prices ">
+        {% if product.available %}
+          {% if bold_variant_price != blank %}
+            <p class="card-text money">{{ bold_price_max | money }}</p>
+            {% if bold_selected_or_first_available_variant.compare_at_price > bold_variant_price %}
+              <s class="card-text strike money">
+                {{- bold_selected_or_first_available_variant.compare_at_price | money -}}
+              </s>
+            {% endif %}
+          {% else %}
+            <p class="card-text money">{{ price | money }}</p>
+            {% if compare_at_price > price %}
+              <s class="card-text strike money">{{ compare_at_price | money }}</s>
+            {% endif %}
+          {% endif %}
+        {% else %}
+          <p class="card-text money">Sold Out</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <form method="post" action="/cart/add">
+      <div class="product-box-select">
+        <input name="product_name" value="{{ product.title }}" hidden>
+        {% if product.has_only_default_variant %}
+          <input type="hidden" name="id" id="sected-product-varient" value="{{ current_variant.id }}">
+        {% else %}
+          <div class="select-dropdown">
+            <select class="product-box-selectbox" name="quantity">
+              {% for i in (1..5) %}
+                <option>{{ i }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="select-dropdown-flavor">
+            <select class="product-box-selectbox flavor" name="id">
+              {% for variant in product.variants %}
+                {% unless variant.metafields.secomapp.freegifts %}
+                  {% unless variant.title contains '(Freegifts)' %}
+                    <option
+                      {% unless variant.available %}
+                        disabled="disabled"
+                      {% endunless %}
+                      value="{{ variant.id }}"
+                    >
+                      {{ variant.title }}
+                    </option>
+                  {% endunless %}
+                {% endunless %}
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-box__buttons">
+        {% if product.available %}
+          <div class="cart-button">
+            {% if product.type == 'Stacks' %}
+              <a href="{{ product.url }}" class="btn">Shop Now</a>
+            {% else %}
+              <input
+                name="add"
+                type="submit"
+                class="btn"
+                value="Add to cart"
+                onclick="window.openCartDrawer && window.openCartDrawer()"
+              >
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="sold-out cart-button">
+            <input name="add" type="button" class="btn" value="Sold Out" disabled value="Sold Out">
+          </div>
+        {% endif %}
+
+        <div class="text-link">
+          <a href="{{ product.url }}">Learn More</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

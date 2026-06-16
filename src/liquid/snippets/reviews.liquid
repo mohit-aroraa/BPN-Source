@@ -1,0 +1,56 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title %}
+{%- assign subtitle = block.subtitle -%}
+{%- assign items = block.blocks -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="reviews reviews--{{ request.page_type | handle }} reviews--{{ id }}" id="reviews_{{ id }}">
+    <div class="reviews__content">
+        <div class="stars-red-container">
+            {% render 'icon', icon: 'stars-red' %}
+        </div>
+        <h3 class="reviews__subtitle">{{ subtitle }}</h3>
+        <h2 class="reviews__title">{{ title }}</h2>
+    </div>
+
+    <div class="reviews-slider swiper" data-reviews-swiper>
+        <div class="reviews-slider__navigation">
+            <div class="swiper-button swiper-button-prev" data-click-id="homepage_reviews_navigation">
+                {% render 'icon', icon: 'left-arrow', tag: 'homepage_reviews_navigation' %}
+            </div>
+            <div class="swiper-button swiper-button-next" data-click-id="homepage_reviews_navigation">
+                {% render 'icon', icon: 'right-arrow', tag: 'homepage_reviews_navigation' %}
+            </div>
+        </div>
+
+        <div class="swiper-wrapper reviews-slider__wrapper">
+            {% for index in (0..length) %}
+                {% assign product_name = 'product_name_' | append: index %}
+                {% assign author_name = 'author_name_' | append: index %}
+                {% assign author_role = 'author_role_' | append: index %}
+                {% assign author_comment = 'author_comment_' | append: index %}
+
+                <div class="review-card swiper-slide">
+                    <div class="review-card__rating">
+                        {% render 'icon', icon: 'black-stars' %}
+                    </div>
+
+                    <h4 class="review-card__title">{{ block[product_name] }}</h4>
+
+                    <p class="review-card__author">
+                        {{ block[author_name] }} {% render 'icon', icon: 'verivied' %}
+                        <span class="review-card__author-title">{{ block[author_role] }}</span>
+                    </p>
+
+                    <p class="review-card__text">
+                        {{ block[author_comment] }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="reviews-slider__controls">
+            <div class="swiper-pagination reviews-slider__pagination"></div>
+        </div>
+    </div>
+</section>

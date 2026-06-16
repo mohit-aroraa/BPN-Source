@@ -1,0 +1,219 @@
+{%- comment -%}
+  Header Section
+  -------------
+  Main navigation header for the BPN store.
+
+  Components:
+  - Logo (left): Links to homepage (rendered via new-logo snippet)
+  - Global menu (center): Primary navigation links from selected menu (rendered via new-global-menu snippet)
+  - Utility nav (right): Search, account and cart links (rendered via new-utility-nav snippet)
+  - Mobile menu: Hamburger menu for small screens (rendered via new-hamburger snippet)
+
+  Rendered Snippets:
+  - new-hamburger: Mobile navigation system with drawer and mega menus
+  - new-logo: Site logo and homepage link
+  - new-global-menu: Desktop navigation menu with mega menu dropdowns
+  - new-utility-nav: Right-side utility navigation icons
+
+  Variables:
+  - section.settings.menu: Menu handle for primary navigation
+  - section.blocks: Configuration for mega menus
+{%- endcomment -%}
+
+{%- liquid
+  assign is_flannel_page = false
+  if template contains 'page.flannels' or template contains 'product.flannels'
+    assign is_flannel_page = true
+  endif
+  assign is_athletic = page.metafields.custom.is_athletic_landing_page
+  assign athletic_cta = page.metafields.custom.athletic_cta.value
+-%}
+
+<div class='bpn-header' id='site-header'>
+  <div class='bpn-header__container'>
+    <div class='bpn-header__left'>
+      {%- unless is_athletic == true -%}
+        {%- render 'new-hamburger', menu: section.settings.mobile_menu, blocks: section.blocks -%}
+      {%- endunless -%}
+      {%- render 'new-logo' -%}
+    </div>
+
+    {%- if is_athletic == true
+    and athletic_cta
+    and athletic_cta.label
+    and athletic_cta.label != "" -%}
+
+      {%- assign button_link = athletic_cta.link -%}
+
+      <div class="bpn-header__center bpn-header__athlete-content">
+        <a
+          href="{% if button_link and button_link != "" %}
+              {{ button_link | escape }}
+            {% else %}
+              #athlete-stack-section
+            {% endif %}"
+          class="bpn-button bpn-button--primary bpn-button--primary-red bpn-header__athlete-button"
+          data-click-id="athlete-lp_nav_stack-cta"
+        >
+          {{ athletic_cta.label }}
+        </a>
+      </div>
+
+    {%- else %}
+
+      <div class="bpn-header__center">
+        {%- render 'new-global-menu', menu: section.settings.menu, blocks: section.blocks -%}
+      </div>
+
+    {%- endif -%}
+
+    <div class='bpn-header__right'>
+      {%- render 'new-utility-nav', is_athletic: is_athletic -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Main Menu",
+      "default": "main-menu",
+      "info": "Select the menu to display in the header navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "mobile_menu",
+      "label": "Mobile Menu",
+      "default": "main-menu",
+      "info": "Select the menu to display in the header navigation on Mobile"
+    },
+    {
+      "type": "header",
+      "content": "Main CTA Desktop"
+    },
+    {
+      "type": "text",
+      "label": "CTA Text",
+      "id": "main_cta_text"
+    },
+    {
+      "type": "url",
+      "label": "CTA Link",
+      "id": "main_cta_link"
+    },
+    {
+      "type": "header",
+      "content": "Mobile CTA (Displayed in Hamburger Menu)"
+    },
+    {
+      "type": "text",
+      "label": "Copy Above CTA",
+      "id": "mobile_cta_copy"
+    },
+    {
+      "type": "text",
+      "label": "CTA Label",
+      "id": "mobile_cta_text"
+    },
+    {
+      "type": "url",
+      "label": "CTA url",
+      "id": "mobile_cta_link"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Rotational Offer"
+    },
+    {
+      "type": "image_picker",
+      "label": "Offer Image",
+      "id": "rotational_offer_image"
+    }, {
+      "type": "url",
+      "label": "Offer Link",
+      "id": "rotational_offer_link"
+    }
+
+  ],
+  "blocks": [
+    {
+      "type": "featured_media_mobile",
+      "name": "Featured Media Mobile",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Featured Image",
+          "id": "featured_mobile_image"
+        },
+        {
+          "type": "url",
+          "label": "Image Link",
+          "id": "featured_mobile_image_link"
+        },
+        {
+          "type": "color_background",
+          "label": "Image Background Overlay Color",
+          "id": "image_overlay_color"
+        },
+        {
+          "type": "text",
+          "label": "Image title",
+          "id": "featured_mobile_image_title"
+        },
+        {
+          "type": "text",
+          "label": "Image CTA text",
+          "id": "featured_mobile_image_cta_text"
+        },
+        {
+          "type": "text",
+          "id": "parent_link",
+          "label": "Display Under",
+          "info": "Enter the title of the Menu that has a submenu where this featured media will be displayed"
+        }
+      ]
+    },
+    {
+      "type": "featured_media_desktop",
+      "name": "Featured Media Desktop",
+      "settings": [
+        {
+          "type": "image_picker",
+          "label": "Featured Image",
+          "id": "featured_desktop_image"
+        },
+        {
+          "type": "url",
+          "label": "Image Link",
+          "id": "featured_desktop_image_link"
+        },
+        {
+          "type": "color_background",
+          "label": "Image Background Overlay Color",
+          "id": "image_overlay_color"
+        },
+        {
+          "type": "text",
+          "label": "Image title",
+          "id": "featured_desktop_image_title"
+        },
+        {
+          "type": "text",
+          "label": "Image CTA text",
+          "id": "featured_desktop_image_cta_text"
+        },
+        {
+          "type": "text",
+          "id": "parent_link",
+          "label": "Display Under",
+          "info": "Enter the title of the Menu that has a submenu where this featured media will be displayed"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

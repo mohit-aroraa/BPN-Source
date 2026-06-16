@@ -1,0 +1,266 @@
+{%- assign _section = section.settings -%}
+<section
+  class='bpn-youtube js-bpn-youtube'
+  id='bpn_youtube_{{ id }}' role="region" aria-labelledby="bpn-youtube-title-{{ section.id }}"
+>
+<a href="#bpn-youtube-end-{{ section.id }}" class="visually-hidden skip-link in-page-link">Skip all videos</a>
+  {% if _section.title != blank %}
+    <h2 id="bpn-youtube-title-{{ section.id }}" class='bpn-youtube__title bpn-text-h3' style='color: {{ _section.title_color }}'>
+      {{ _section.title }}
+    </h2>
+  {% endif %}
+  {% if _section.subtitle != blank %}
+    <h3 class='bpn-youtube__subtitle bpn-text-h3' style='color: {{ _section.subtitle_color }}'>
+      {{ _section.subtitle }}
+    </h3>
+  {% endif %}
+  <div class='bpn-youtube__content'>
+    {% if _section.text != blank %}
+      <p class='bpn-youtube__text bpn-text-title-1-large' style='color: {{ _section.text_color }}'>
+        {{ _section.text }}
+      </p>
+    {% endif %}
+    {% if _section.link_text != blank %}
+      <a
+        class='bpn-youtube__link bpn-text-callout-base'
+        target='_blank'
+        href='{{ _section.link_url }}'
+        data-click-id='homepage_videos_view-channel'
+        style='color: {{ _section.link_text_color }}'
+      >
+        {{- _section.link_text -}}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class='bpn-youtube__slider swiper' data-youtube-swiper>
+    <div class='bpn-youtube__slider-navigation'>
+      <div class='swiper-button swiper-button-prev' data-click-id='homepage_videos_navigation'>
+        {% render 'icon', icon: 'left-arrow', tag: 'homepage_videos_navigation' %}
+      </div>
+      <div class='swiper-button swiper-button-next' data-click-id='homepage_videos_navigation'>
+        {% render 'icon', icon: 'right-arrow', tag: 'homepage_videos_navigation' %}
+      </div>
+    </div>
+
+    <div class='swiper-wrapper bpn-youtube__slider-wrapper'>
+      {% for block in section.blocks %}
+        {%- assign _block = block.settings -%}
+        <div class='bpn-youtube__video-card swiper-slide'>
+          {% if _block.iframe != blank %}
+            <div class='bpn-youtube__video-card-iframe'>
+              {{ _block.iframe }}
+            </div>
+          {% endif %}
+          {% if _block.video_name != blank %}
+            <h3 class='bpn-youtube__video-card-title bpn-text-title-1-large'>
+              {{ _block.video_name }}
+            </h3>
+          {% endif %}
+          {% if _block.video_info != blank %}
+            <p class='bpn-youtube__video-card-text bpn-text-body-xs'>{{ _block.video_info }}</p>
+          {% endif %}
+          <a
+            class='bpn-youtube__video-card-link js-bpn-youtube-video-link'
+            data-index='{{ forloop.index }}'
+            href=''
+            data-click-id='homepage_videos_shop-supps-{{ forloop.index }}'
+            >SHOP SUPPLEMENTS FROM VIDEO</a
+          >
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class='bpn-youtube__slider-controls'>
+      <div class='swiper-pagination bpn-youtube__slider-pagination'></div>
+    </div>
+  </div>
+
+  <div class='bpn-youtube__drawer hidden js-bpn-youtube-drawer'>
+    <div class='bpn-youtube__drawer-content'>
+      <div class='bpn-youtube__drawer-close'>
+        <button class='bpn-youtube__drawer-close-button js-bpn-youtube-drawer-close'>
+          {% render 'icon', icon: 'cross-icon' %}
+        </button>
+      </div>
+      {% if _section.drawer_title != blank %}
+        <h3 class='bpn-youtube__drawer-title' style='color: {{ _section.drawer_title_color }}'>
+          {{ _section.drawer_title }}
+        </h3>
+      {% endif %}
+      {% if _section.drawer_text != blank %}
+        <p class='bpn-youtube__drawer-text' style='color: {{ _section.drawer_text_color }}'>
+          {{ _section.drawer_text }}
+        </p>
+      {% endif %}
+      {% for block in section.blocks %}
+        <div class='bpn-youtube__product-list js-bpn-youtube-product-list bpn-youtube__product-list--{{ forloop.index }}'>
+          {%- assign _block = block.settings -%}
+          {% for product in _block.products %}
+            {% render 'horizontal-product-card', product: product, index: forloop.index %}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="visually-hidden" id="bpn-youtube-end-{{ section.id }}"></div>
+
+{% schema %}
+{
+  "name": "BPN Youtube Video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Section Subtitle"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Content Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Link Settings"
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Link Text"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "color",
+      "id": "link_text_color",
+      "label": "Link Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Drawer Settings"
+    },
+    {
+      "type": "text",
+      "id": "drawer_title",
+      "label": "Drawer Title"
+    },
+    {
+      "type": "color",
+      "id": "drawer_title_color",
+      "label": "Drawer Title Color"
+    },
+    {
+      "type": "text",
+      "id": "drawer_text",
+      "label": "Drawer Text"
+    },
+    {
+      "type": "color",
+      "id": "drawer_text_color",
+      "label": "Drawer Text Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "text",
+          "id": "video_name",
+          "label": "Video Name"
+        },
+        {
+          "type": "text",
+          "id": "video_info",
+          "label": "Video Info"
+        },
+        {
+          "type": "textarea",
+          "id": "iframe",
+          "label": "iframe"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "Products",
+          "limit": 10
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "Button",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Button label",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "default": "primary",
+          "label": "Button Style"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BPN Youtube Video",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,115 @@
+{%- comment -%}
+  Snippet: athletic-shared-content.liquid
+  Description: Outputs the common content markup for athletic sections.
+  Parameters:
+    base_class: The base class for the section (e.g., "bpn-athletic-hero-banner" or "bpn-athletic-two-column")
+    include_buttons: (optional, boolean) If true, outputs mobile and desktop buttons.
+    mobile_text_align: (optional) Mobile text alignment value
+    desktop_text_align: (optional) Desktop text alignment value
+{%- endcomment -%}
+
+<div class="{{ base_class }}__content
+{% if section.settings.mobile_text_align %} {{ base_class }}__content--mobile-{{ section.settings.mobile_text_align }}{% endif %}
+{% if section.settings.desktop_text_align %} {{ base_class }}__content--desktop-{{ section.settings.desktop_text_align }}{% endif %}
+{{ base_class }}__content--{{ section.settings.mobile-h-a }}
+{{ base_class }}__content--{{ section.settings.mobile-v-a }}
+{{ base_class }}__content--{{ section.settings.desktop-h-a }}
+{{ base_class }}__content--{{ section.settings.desktop-v-a }}"
+     style="{% if section.settings.font_color %}color: {{ section.settings.font_color }};{% endif %}">
+  <div>
+    {% if section.settings.eyebrow != blank %}
+      <div class="{{ base_class }}__eyebrow">
+        <span class="{{ base_class }}__eyebrow__icon">
+           {% render 'icons', icon: 'eyebrow-background' %}
+
+        </span>
+        <span class="{{ base_class }}__eyebrow__text">
+            {{ section.settings.eyebrow }}
+        </span>
+
+      </div>
+    {% endif %}
+
+    {% if section.settings.title != blank %}
+      <div class="{{ base_class }}__title {% if section.settings.hide_title_on_mobile %}hide-on-mobile{% endif %}">
+        {{ section.settings.title }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.description != blank %}
+      <div class="{{ base_class }}__description {% if section.settings.hide_description_on_mobile %}hide-on-mobile{% endif %}">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+
+    {% if include_buttons %}
+      <!-- Mobile Button -->
+      <div class="{{ base_class }}__buttons {{ base_class }}__buttons--mobile hide-on-desktop
+            {% if section.settings.mobile_text_align %} {{ base_class }}__buttons--mobile-{{ section.settings.mobile_text_align }}{% endif %}"
+      >
+        {% if section.settings.mobile_button_text != blank %}
+          <a href="{{ section.settings.mobile_button_url }}"
+             class="bpn-button {% if section.settings.mobile_button_option == 'primary' %}bpn-button--primary bpn-button--primary-black
+                                 {% else %}bpn-button--secondary bpn-button--secondary-white{% endif %}"
+            {%- if button_click_id %} data-click-id="{{ button_click_id }}"{% endif -%}
+          >
+            {{ section.settings.mobile_button_text }}
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Desktop Button -->
+      <div class="{{ base_class }}__buttons {{ base_class }}__buttons--desktop hide-on-mobile {{ base_class }}__buttons--{{ section.settings.desktop-h-a }}
+                 {% if section.settings.desktop_text_align %} {{ base_class }}__buttons--desktop-{{ section.settings.desktop_text_align }}{% endif %}"
+    >
+        {% if section.settings.desktop_button_text != blank %}
+          <a href="{{ section.settings.desktop_button_url }}"
+             class="bpn-button {% if section.settings.desktop_button_option == 'primary' %}bpn-button--primary bpn-button--primary-black
+                                {% else %}bpn-button--secondary bpn-button--secondary-white{% endif %}"
+            {%- if button_click_id %} data-click-id="{{ button_click_id }}"{% endif -%}
+          >
+            {{ section.settings.desktop_button_text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if include_author_block %}
+      <section class="author-block-section">
+        <div class="author-block">
+          {% if section.settings.author_image != blank %}
+            <div class="author-block__image">
+              <img
+                src="{{ section.settings.author_image | img_url: '200x200' }}"
+                alt="{{ section.settings.author_name | escape }}"
+              >
+            </div>
+          {% endif %}
+
+          <div class="author-block__info">
+            {% if section.settings.author_name != blank %}
+              <h4 class="author-block__name">{{ section.settings.author_name }}</h4>
+            {% endif %}
+            {% if section.settings.author_title != blank %}
+              <p class="author-block__title">{{ section.settings.author_title }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  @media (max-width: 990px) {
+    .hide-on-mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: 991px) {
+    .hide-on-desktop {
+      display: none;
+    }
+  }
+</style>

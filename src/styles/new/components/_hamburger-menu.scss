@@ -1,0 +1,716 @@
+// ==========================================================================
+// Hamburger Menu Component
+// ==========================================================================
+//
+// Contains styles for the hamburger menu toggle button, overlay and drawer
+
+// Toggle Button
+// ==========================================================================
+
+.#{$prefix}hamburger-button {
+  // Box Model
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Media Queries
+  @include below("tablet-large") {
+    display: flex;
+  }
+
+  @include above("tablet-large") {
+    display: none;
+  }
+}
+
+.#{$prefix}hamburger-button__group {
+  // Positioning
+  position: relative;
+
+  // Box Model
+  display: flex;
+  width: 24px;
+  height: 18px;
+  padding: 0;
+  border: none;
+
+  // Visual
+  background: transparent;
+  cursor: pointer;
+
+  // Misc
+  transition: all 0.3s ease;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.#{$prefix}hamburger-button__line {
+  // Box Model
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 1px;
+
+  // Visual
+  background-color: color('bpn-black');
+
+  // Misc
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+
+  &:nth-child(1) {
+    transform-origin: top left;
+  }
+
+  &:nth-child(3) {
+    transform-origin: bottom left;
+  }
+}
+
+// Open state styles
+.#{$prefix}hamburger-button.is-open {
+  .#{$prefix}hamburger-button__line {
+    &:nth-child(1) {
+      transform: rotate(45deg) translate(1px, -1px);
+    }
+
+    &:nth-child(2) {
+      opacity: 0;
+    }
+
+    &:nth-child(3) {
+      transform: rotate(-45deg) translate(1px, 1px);
+    }
+  }
+}
+
+// Overlay
+// ==========================================================================
+
+.#{$prefix}hamburger-overlay {
+  // Positioning
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+
+  // Box Model
+  width: 100%;
+  height: 100%;
+
+  // Visual
+  background-color: rgba(0, 0, 0, 0.5);
+
+  // State
+  opacity: 0;
+  visibility: hidden;
+
+  // Misc
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  &.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Drawer
+// ==========================================================================
+
+.#{$prefix}hamburger-drawer {
+  // Positioning
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 85%;
+  height: 100%;
+
+  // Visual
+  background-color: #000;
+
+  // Misc
+  transition: transform 0.3s ease;
+
+  // State
+  transform: translateX(-100%);
+
+  // Box Model
+  overflow: hidden;
+  max-width: 375px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  @include above("tablet") {
+    max-width: 400px;
+  }
+
+  &.is-open {
+    transform: translateX(0);
+    overflow: visible
+  }
+}
+
+
+// Drawer Inner
+// ==========================================================================
+
+.#{$prefix}hamburger-drawer__inner {
+  // Visual
+  position: relative;
+
+  // Box Model
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+// Drawer Header
+// ==========================================================================
+
+.#{$prefix}hamburger-drawer__header {
+  // Box Model
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+
+  // Visual
+  border-bottom: 1px solid color('bpn-black-10');
+}
+
+.#{$prefix}hamburger-drawer__close {
+  // Box Model
+  display: flex;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+
+  // Visual
+  background: transparent;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+}
+
+// Drawer Content
+// ==========================================================================
+
+.#{$prefix}hamburger-drawer__content {
+  // Misc
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.#{$prefix}hamburger-drawer__footer {
+  // Positioning
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  background-color: color('bpn-black-950');
+}
+
+// Navigation
+// ==========================================================================
+
+.#{$prefix}hamburger-menu {
+  // Box Model
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 24px;
+  padding: 16px;
+
+  // Misc
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.#{$prefix}hamburger-drawer-cta-container {
+  color: #fff;
+  text-align: center;
+  width: 100%;
+
+  &__copy {
+    margin: 10px 0;
+  }
+
+  &__cta {
+    color: inherit;
+    text-transform: uppercase;
+    border: 1px solid #fff;
+    padding: 8px 30px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 18px;
+  }
+}
+
+.#{$prefix}hamburger-drawer__rotational-offer-image {
+  margin-bottom: 12px;
+  height: 80px;
+  object-position: left;
+  object-fit: contain;
+}
+
+// Menu Items
+// ==========================================================================
+
+.#{$prefix}hamburger-menu__item {
+  margin-bottom: 8px;
+
+  // Box Model
+  padding: 0;
+  cursor: pointer; // Make the entire item clickable
+
+  &.has-submenu {
+    .#{$prefix}hamburger-menu__link {
+      position: relative;
+
+      // Add arrow indicator to links with submenus
+      &::after {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        width: 20px;
+        height: 20px;
+        background-image: url("data:image/svg+xml,%3Csvg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 13L7 7L1 1' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        transition: transform 0.2s ease;
+        transform: translateY(-50%);
+        content: '';
+      }
+
+      &:focus::after {
+        outline: -webkit-focus-ring-color auto 5px;
+      }
+    }
+
+    &.is-active {
+      .#{$prefix}hamburger-menu__link::after {
+        transform: translateY(-50%) rotate(135deg);
+      }
+    }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.#{$prefix}hamburger-menu__link {
+  // Box Model
+  display: block;
+  padding: 12px 0;
+  padding-right: 24px; // Space for the arrow
+
+  // Typography
+  @include use-text-style('bpn-h5');
+  color: color('bpn-white');
+
+  // Misc
+  transition: color 0.2s ease;
+
+  &:hover, &:focus {
+    color: color('bpn-grey-60');
+
+    @include below("tablet") {
+      color: color('bpn-white');
+    }
+  }
+}
+
+// Submenu Panel
+// ==========================================================================
+
+.#{$prefix}hamburger-menu__item-submenu {
+  // Positioning
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+
+  // Box Model
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+
+  // Visual
+  background-color: #000;
+  opacity: 0;
+  pointer-events: none;
+
+  // Misc
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+
+  // State
+  transform: translateX(100%);
+  min-height: 500px;
+  overflow-y: auto;
+
+  &.is-active {
+    z-index: 20;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+}
+
+.#{$prefix}hamburger-menu__item-submenu-header {
+  // Box Model
+  display: flex;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+
+  // Visual
+  border-bottom: 1px solid color('bpn-black-10');
+  align-items: center;
+  justify-content: space-between;
+
+  // Close button should be similar to the main drawer close button
+  .#{$prefix}hamburger-drawer__close {
+    margin-left: auto;
+    color: color('bpn-white');
+
+    &:hover {
+      color: color('bpn-red');
+    }
+  }
+}
+
+.#{$prefix}hamburger-menu__submenu-title {
+  // Typography
+  @include use-text-style("bpn-body-xs");
+
+  // Box Model
+  position: relative;
+  padding-left: 24px;
+
+  // Visual
+  color: color('bpn-white');
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  // Misc
+  transition: color 0.2s ease;
+
+  &.js-submenu-back {
+    // Add back arrow icon
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 15px;
+      height: 15px;
+      border-top: 2px solid currentcolor;
+      border-left: 2px solid currentcolor;
+      transition: border-color 0.2s ease;
+      transform: translateY(-50%) rotate(-45deg);
+      content: '';
+    }
+  }
+}
+
+// Accordion Sections
+// ==========================================================================
+
+.#{$prefix}hamburger-menu__item-submenu-section {
+  // Visual
+  border-bottom: 1px solid color('bpn-black');
+
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  &.is-active {
+    padding-bottom: 20px;
+  }
+}
+
+.#{$prefix}hamburger-menu__item-submenu-title {
+  position: relative;
+
+  // Box Model
+  padding: 15px 0;
+
+  // Visual
+  color: color('bpn-white');
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  // Typography
+  @include use-text-style("bpn-body-base");
+
+  &.is-accordion-toggle {
+    padding-right: 24px;
+
+    // Add plus/minus indicator
+    &::after {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      font-size: 26px;
+      font-weight: 400;
+      transition: transform 0.2s ease;
+      transform: translateY(-50%);
+      content: '+';
+    }
+
+    &.is-expanded::after {
+      content: '−'; // Use minus sign when expanded
+    }
+
+    &:hover {
+      color: color('bpn-white');
+
+      @include below("tablet") {
+        color: color('bpn-white');
+      }
+    }
+  }
+}
+
+.#{$prefix}hamburger-menu__item-submenu-links {
+  // Misc
+  transition: height 0.3s ease;
+}
+
+.#{$prefix}hamburger-menu__submenu-link {
+  // Box Model
+  display: block;
+  padding: 5px 0 15px;
+
+  // Visual
+  color: color('bpn-grey-40');
+  font-weight: normal;
+  text-transform: uppercase;
+
+  // Misc
+  transition: color 0.2s ease;
+
+  // Typography
+  @include use-text-style("bpn-h6");
+
+  &:hover, &:focus {
+    color: color('bpn-white');
+  }
+}
+
+// Featured Items
+// ==========================================================================
+
+.#{$prefix}hamburger-menu__featured {
+  display: flex;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+}
+
+.#{$prefix}hamburger-menu__featured-images {
+  // Box Model
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+
+
+  // Misc
+  transition: opacity 0.3s ease;
+  overflow: auto hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+
+  // Hide scrollbar but keep functionality
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  max-height: 288px;
+  min-height: 288px;
+}
+
+.#{$prefix}hamburger-menu__featured-image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--overlay-color);
+  border-radius: 8px;
+}
+
+.#{$prefix}hamburger-menu__featured-image {
+  position: relative;
+
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  flex: 0 0 100%; // Default width for single image
+  scroll-snap-align: start;
+}
+
+// When there are multiple images, set width to 80%
+.#{$prefix}hamburger-menu__featured-images:has(> :nth-child(2)) .#{$prefix}hamburger-menu__featured-image {
+  flex: 0 0 80%;
+}
+
+// Full view styles for single featured image
+.#{$prefix}hamburger-menu__featured.full-view {
+  .#{$prefix}hamburger-menu__featured-image {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.#{$prefix}hamburger-menu__image-link {
+  // Box Model
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  // Visual
+  text-decoration: none;
+}
+
+.#{$prefix}hamburger-menu__image-img {
+  // Misc
+  display: block;
+
+  // Box Model
+  width: 100%;
+
+  // Visual
+  border-radius: 8px;
+  overflow: hidden;
+  object-fit: cover;
+  height: 100%;
+}
+
+.#{$prefix}hamburger-menu__image-content {
+  // Positioning
+  position: absolute;
+  inset: 0;
+
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.#{$prefix}hamburger-menu__image-title {
+  // Box Model
+  margin-bottom: 12px;
+
+  // Visual
+  color: color('bpn-white');
+  text-align: center;
+
+  // Typography
+  @include use-text-style("bpn-h5");
+}
+
+.#{$prefix}hamburger-menu__image-button {
+  // Positioning
+  position: relative;
+
+  // Visual
+  color: color('bpn-white');
+
+  &:hover {
+    color: color('bpn-white');
+  }
+
+  // Typography
+  @include use-text-style('bpn-callout-base');
+
+  &::after {
+  // Positioning
+  position: absolute;
+  inset: auto auto -10px 0;
+
+  // Box Model
+  width: 100%;
+  height: 5px;
+
+  // Visual
+  background-color: color('bpn-red');
+  content: '';
+  }
+}
+
+// Utility
+// ==========================================================================
+
+.#{$prefix}hamburger-utility {
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  bottom: 0;
+  padding: 0 0 14px;
+  width: 100%;
+}
+
+.#{$prefix}hamburger-utility__link {
+  // Box Model
+  display: flex;
+  align-items: center;
+
+  // Typography
+  @include use-text-style('bpn-body-xs');
+  color: color('bpn-white');
+
+  border-top: color('bpn-black-700') solid 1px;
+  padding: 19px 16px 20px;
+
+  // Visual
+  text-decoration: none;
+
+  // Misc
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: color('bpn-white');
+  }
+}
+
+.#{$prefix}hamburger-utility__icon {
+  // Box Model
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Visual
+  color: currentcolor;
+
+  // Misc
+  transition: color 0.2s ease;
+}
+
+.#{$prefix}hamburger-utility__icon svg {
+  margin-right: 12px;
+  width: 16px;
+  height: 16px;
+}
+
+.#{$prefix}hamburger-utility__icon svg path {
+  fill: color('bpn-white');
+}

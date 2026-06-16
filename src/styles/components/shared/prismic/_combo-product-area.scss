@@ -1,0 +1,206 @@
+.comboProductArea {
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-bottom: 56px;
+
+  @include above("tablet-large") {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @include above("desktop-med") {
+    padding-left: 64px;
+    padding-right: 64px;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 128px;
+  }
+
+  &__grid {
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 40px;
+    @include above("tablet") {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding-top: 24px;
+    }
+    @include above("desktop-med") {
+      gap: 32px;
+      padding-top: 40px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 22px;
+    text-align: center;
+    @include above("desktop-med") {
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 44px;
+    }
+    .richText__text {
+      font-size: 24px;
+      letter-spacing: -0.7px;
+      line-height: 1.167;
+      font-weight: 900;
+      margin-bottom: 0;
+      text-transform: uppercase;
+      @include above("desktop-med") {
+        font-size: 40px;
+        letter-spacing: -1px;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+.landingPageProductCard {
+  @include above("tablet") {
+    margin-bottom: 0;
+  }
+  &__combo {
+    @include above("tablet") {
+      margin-top: -24px;
+    }
+    @include above("desktop-med") {
+      margin-top: -40px;
+    }
+  }
+  &__featuredText {
+    background-color: #d9c79c;
+    @include use-text-style("paragraph-body-3");
+    font-weight: 700;
+    text-align: center;
+    padding: 4px;
+    text-transform: uppercase;
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-2");
+      padding: 10px;
+    }
+  }
+  &__cta {
+    --btn-gap: 0.85rem;
+    width: 100%;
+  }
+  &__image {
+    .responsive-image {
+      &__wrapper {
+        height: 100%;
+      }
+      &__image {
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+  }
+  &__details {
+    padding: 16px 12px 16px 12px;
+    border: 1px solid #e9e9e9;
+    border-top: 0;
+    @include above("desktop-med") {
+      padding-left: 32px;
+      padding-right: 32px;
+      padding-bottom: 40px;
+    }
+  }
+  &__title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.45px;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 4px;
+    @include above("desktop-med") {
+      font-size: 24px;
+      letter-spacing: normal;
+      line-height: 0.958;
+    }
+  }
+  &__priceWrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  &__price {
+    @include use-text-style("paragraph-body-2");
+    font-weight: 700;
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-1");
+    }
+    strike {
+      font-weight: 500;
+    }
+  }
+  .discount-tag {
+    @include use-text-style("paragraph-body-4");
+    font-weight: 700;
+    padding: 1px 4px;
+    background-color: #d9c79c;
+    margin-left: 8px;
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-3");
+      padding: 2px 4px;
+    }
+  }
+  &__description {
+    margin-bottom: 21px;
+    @include above("desktop-med") {
+      margin-bottom: 24px;
+    }
+    .richText__text {
+      @include use-text-style("paragraph-body-3");
+      margin-bottom: 4px;
+      @include above("desktop-med") {
+        @include use-text-style("paragraph-body-2");
+      }
+    }
+    .richText__ul {
+      padding-left: 16px;
+      margin-bottom: 4px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      li {
+        @include use-text-style("paragraph-body-2");
+        position: relative;
+        padding-left: 0;
+        &::before {
+          content: "";
+          position: absolute;
+          left: -16px;
+          top: 8px;
+          width: 6px;
+          height: 6px;
+          background-color: #000000;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  &__dropdownLabel {
+    @include use-text-style("paragraph-body-2");
+    font-weight: 700;
+    margin-bottom: 8px;
+
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-3");
+      margin-bottom: 10px;
+    }
+    &--uppercase {
+      @include above("desktop-med") {
+        text-transform: uppercase;
+      }
+    }
+  }
+  &__dropdownLabelVariant {
+    font-weight: 400;
+  }
+  &__error {
+    @include use-text-style("paragraph-body-3");
+    color: color("warm-red");
+    font-weight: 700;
+  }
+}

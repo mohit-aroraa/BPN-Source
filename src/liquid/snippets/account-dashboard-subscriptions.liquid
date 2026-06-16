@@ -1,0 +1,69 @@
+{% assign is_inactive_og_subscriber = false %}
+{% assign is_active_og_subscriber = false %}
+
+{% for tag in customer.tags %}
+  {% if tag == 'Inactive Ordergroove Subscriber' %}
+    {% assign is_inactive_og_subscriber = true %}
+  {% endif %}
+
+  {% if tag == 'Active Ordergroove Subscriber' %}
+    {% assign is_active_og_subscriber = true %}
+  {% endif %}
+{% endfor %}
+
+<div class="account__top-sections">
+  <section class="account__section account__subscriptions">
+    <h2 class="account__heading">{{ 'Subscriptions' | upcase }}</h2>
+
+    <div class="account__customer-subscriptions">
+      {% assign secret_key = shop.metafields.ordergroove.themeHashKey.value %}
+      {% assign customer_id = customer.id %}
+      {% assign timestamp = "now" | date: "%s" %}
+      {% assign signature = customer_id | append: "|" | append: timestamp | hmac_sha256: secret_key %}
+
+      {% if is_active_og_subscriber == true %}
+        <p class="account__customer-subscriptions-text">Active BPN Subscriber</p>
+        <a class="btn secondary-button"
+           data-click-id="account_dashboard_subscriptions-cta"
+           href="/apps/subscriptions/manage/?customer={{ customer.id }}&customer_signature={{ signature }}&customer_timestamp={{ timestamp }}">
+          View Subscriptions
+        </a>
+      {% elsif is_inactive_og_subscriber == true %}
+        <p class="account__customer-subscriptions-text">Inactive BPN Subscriber</p>
+        <a class="btn secondary-button"
+           data-click-id="account_dashboard_subscriptions-cta"
+           href="/apps/subscriptions/manage/?customer={{ customer.id }}&customer_signature={{ signature }}&customer_timestamp={{ timestamp }}">
+          View Subscriptions
+        </a>
+      {% else %}
+        <div class="empty-customer-subscriptions">
+          <p class="account__description">You have no active subscriptions.</p>
+          <p class="account__description information"><b>SAVE 15%</b> with easy and flexible subscriptions.</p>
+          <ul>
+            <li>Modify or cancel anytime.</li>
+            <li>Priority to July 4 and Black Friday sales.</li>
+            <li>Automatically delivered on your schedule.</li>
+          </ul>
+          <a class="btn primary-button" href="/collections/performance-nutrition">Shop Supplements</a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="account__section account-profile">
+    <h2 class="account__heading account-profile__heading">{{ 'My Profile' | upcase }}</h2>
+
+    <div class="account-profile__information-container">
+      <p class="account-profile__information-item">Email: <span>{{ customer.email }}</span></p>
+      <p class="account-profile__information-item">Phone: <span>{{ customer.phone }}</span></p>
+    </div>
+
+    <a class="btn secondary-button" href="/account?view=profile" data-click-id="account_dashboard_view-full-profile">
+      View Full Profile
+    </a>
+  </section>
+
+  <div class="divider"></div>
+</div>

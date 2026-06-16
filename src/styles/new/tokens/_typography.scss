@@ -1,0 +1,267 @@
+/// @access private
+/// @link https://www.oddbird.net/accoutrement/docs/type.html
+/// @group typography
+/// @author BPN Design Team
+
+// Import all local fonts
+@include import-webfonts;
+
+/// Typography Scale
+/// This is the new typography system with standardized sizes and line heights
+/// Format: size/line-height in pixels
+/// All tokens use the 'bpn-' prefix to avoid conflicts with the old system
+/// and to represent the BarePerformanceNutrition brand
+///
+/// @type Map
+/// @group typography
+$typography: (
+  'bpn-h1': (
+    'size': 144px,
+    'height': 112px,
+    'weight': 900,
+    'space': -0.5px,
+  ),
+  'bpn-h1-small': (
+    'size': 128px,
+    'height': 104px,
+    'weight': 900,
+    'space': -0.5px,
+  ),
+  'bpn-h2': (
+    'size': 96px,
+    'height': 80px,
+    'weight': 900,
+    'space': -0.25px,
+  ),
+  'bpn-h2-small': (
+    'size': 80px,
+    'height': 64px,
+    'weight': 900,
+    'space': -0.25px,
+  ),
+  'bpn-h3': (
+    'size': 48px,
+    'height': 40px,
+    'weight': 900,
+    'space': -0.25px,
+  ),
+  'bpn-h4': (
+    'size': 40px,
+    'height': 40px,
+    'weight': 900,
+    'space': -0.25px,
+  ),
+  'bpn-h5': (
+    'size': 32px,
+    'height': 32px,
+    'weight': 900,
+    'space': -0.25px,
+  ),
+  'bpn-h6': (
+    'size': 24px,
+    'height': 20px,
+    'weight': 900,
+    'space': 0,
+  ),
+  'bpn-body-xlarge': (
+    'size': 20px,
+    'height': 26px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-body-large': (
+    'size': 18px,
+    'height': 22px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-body-base': (
+    'size': 16px,
+    'height': 20px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-body-sm': (
+    'size': 14px,
+    'height': 18px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-body-xs': (
+    'size': 12px,
+    'height': 14px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-body-xxs': (
+    'size': 10px,
+    'height': 12px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'bpn-title-1-large': (
+    'size': 16px,
+    'height': 20px,
+    'weight': 700,
+    'space': 0,
+  ),
+  'bpn-title-1-small': (
+    'size': 12px,
+    'height': 14px,
+    'weight': 700,
+    'space': 0,
+  ),
+  'bpn-title-2': (
+    'size': 12px,
+    'height': 14px,
+    'weight': 700,
+    'space': 0,
+  ),
+  'bpn-callout-base': (
+    'size': 18px,
+    'height': 18px,
+    'weight': 700,
+    'space': 0.5px,
+    'transform': uppercase,
+  ),
+  'bpn-callout-small': (
+    'size': 16px,
+    'height': 16px,
+    'weight': 700,
+    'space': 0.5px,
+    'transform': uppercase,
+  ),
+  'bpn-callout-xs': (
+    'size': 12px,
+    'height': 12px,
+    'weight': 700,
+    'space': 0.5px,
+    'transform': uppercase,
+  ),
+  'body': (
+    'size': 16px,
+    'height': 20px,
+    'weight': 400,
+    'space': 0,
+  ),
+  'heading': (
+    'weight': 900,
+  ),
+  'heading-1': (
+    'size': 144px,
+    'weight': 900,
+    'height': 112px,
+    'space': -0.5px,
+  ),
+  'heading-2': (
+    'size': 48px,
+    'height': 40px,
+    'space': -0.25px,
+  ),
+  'heading-3': (
+    'size': 40px,
+    'height': 40px,
+    'space': -0.25px,
+  ),
+  'heading-4': (
+    'size': 32px,
+    'height': 32px,
+    'space': -0.25px,
+  ),
+  'heading-5': (
+    'size': 24px,
+    'height': 20px,
+    'space': 0,
+  ),
+  'paragraph': (
+    'weight': 400,
+  ),
+  'paragraph-strong': (
+    'weight': 700,
+  ),
+  'button': (
+    'size': 16px,
+    'weight': 700,
+    'height': 20px,
+    'space': 0.5px,
+  ),
+  'button-small': (
+    'size': 14px,
+    'height': 18px,
+    'weight': 700,
+    'space': 0.5px,
+  ),
+  'button-link': (
+    'size': 16px,
+    'weight': 700,
+    'height': 20px,
+    'space': 0.5px,
+  ),
+);
+
+/// Set text style.
+/// Applies all typography properties of a token to an element.
+///
+/// @param {String} $token - One of keys of $typography map above.
+/// @example scss
+///   .heading {
+///     @include use-text-style("bpn-h1");
+///   }
+/// @group typography
+@mixin use-text-style($token: 'body') {
+  $type: get-token($typography, $token);
+
+  @if get-token($type, 'font') != 'font' {
+    font-family: font-family(get-token($type, 'font'));
+  }
+
+  @if get-token($type, 'size') != 'size' {
+    font-size: get-token($type, 'size');
+  }
+
+  @if get-token($type, 'weight') != 'weight' {
+    font-weight: get-token($type, 'weight');
+  }
+
+  @if get-token($type, 'height') != 'height' {
+    line-height: get-token($type, 'height');
+  }
+
+  @if get-token($type, 'space') != 'space' {
+    letter-spacing: get-token($type, 'space');
+  }
+
+  @if get-token($type, 'padding') != 'padding' {
+    padding: get-token($type, 'padding');
+  }
+
+  @if get-token($type, 'transform') != 'transform' {
+    text-transform: get-token($type, 'transform');
+  }
+}
+
+/// Text style update - only font size and line height
+/// Updates only the font-size, line-height, and letter-spacing of an element.
+///
+/// @param {String} $token - One of keys of $typography map above.
+/// @example scss
+///   .responsive-text {
+///     @include update-text-style("bpn-body-large");
+///   }
+/// @group typography
+@mixin update-text-style($token: 'body') {
+  $type: get-token($typography, $token);
+
+  font-size: get-token($type, 'size');
+  line-height: get-token($type, 'height');
+  letter-spacing: get-token($type, 'space');
+}
+
+/// Example usage:
+/// .heading-example {
+///   @include use-text-style("bpn-h1");
+/// }
+///
+/// .body-example {
+///   @include use-text-style("bpn-body-xlarge");
+/// }

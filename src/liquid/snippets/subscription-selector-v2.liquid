@@ -1,0 +1,228 @@
+{% liquid
+  assign section_settings = shop.metaobjects.sms_subscription_settings.global_sms_subscription_settings
+  assign enabled = section_settings.enabled | default: false
+  assign default_to_otp = default_to_otp | default: false
+  assign otp_only_sale = false
+
+  for tag in product.tags
+    assign tag_downcase = tag | downcase | strip
+    if tag_downcase == 'otp-only-sale'
+      assign otp_only_sale = true
+      break
+    endif
+  endfor
+  if customer.tags contains 'PS-Accepts-SMS'
+    assign sms_marketing_consent = true
+  else
+    assign sms_marketing_consent = false
+  endif
+%}
+
+{% assign _default_subscription_plan = default_subscription_plan %}
+
+{%- liquid
+  assign default_price_adjustment = _default_subscription_plan.selling_plans | first
+  assign _price_adjustment = default_price_adjustment.price_adjustments | first
+  assign subscription_discount_type = _price_adjustment.value_type
+  assign discount_percentage = _price_adjustment.value | divided_by: 100.00
+
+  assign option = _default_subscription_plan.options[0]
+-%}
+
+{% assign discounted_price = selected_variation.price | times: discount_percentage %}
+{% assign final_price = selected_variation.price | minus: discounted_price %}
+
+{% assign _tag_discount = tag_discount %}
+{% assign _tag_discount_adjusted = _tag_discount | divided_by: 100.00 %}
+{% assign tag_discounted_price = selected_variation.price | times: _tag_discount_adjusted %}
+{% assign tag_final_price = selected_variation.price | minus: tag_discounted_price %}
+
+{% assign hide_subscription = false %}
+
+{% assign availability = product.selected_or_first_available_variant.metafields.custom.availability
+  | default: 'default'
+%}
+
+{% if product.available == false or availability == 'oos' or availability == 'external' %}
+  {% assign hide_subscription = true %}
+{% endif %}
+
+{% assign num_tag_discount = _tag_discount | plus: 0 %}
+{% assign num_price_adjustment = _price_adjustment.value | plus: 0 %}
+
+
+{% liquid
+    for block in section.blocks
+      if block.type == 'buybox'
+        assign benefit_1 = block.settings.benefit_1
+        assign benefit_2 = block.settings.benefit_2
+        assign benefit_3 = block.settings.benefit_3
+        assign benefit_4 = block.settings.benefit_4
+        assign subscription_usp = block.settings.subscription_usp
+        assign switch_to_subscription_text = block.settings.switch_to_subscription_text
+      endif
+    endfor
+%}
+
+<div class='subscription-selector {% if hide_subscription == true %}opacity-hidden{% endif %}'>
+  <div class='buy-box v2'>
+    <div class='buy-box__selector'>
+      <div
+        class='buy-box__purchase-type buy-box__subscription {% if default_to_otp == false %} selected {% else %} order-2 {% endif %}'
+        data-click-id='pdp_buyblock_subscribe'
+        data-selling_plan='{{ default_price_adjustment.id }}'
+      >
+        <div class='subscription-usp'>
+            {{ subscription_usp }}
+        </div>
+        <div class='new-buy-box-wrapper'>
+          <div class='title-and-price-container'>
+            <div class='' data-click-id='pdp_buyblock_subscribe'>
+              <span class='selected-circle' data-click-id='pdp_buyblock_subscribe'>
+                {%- render 'icon', icon: 'filled-circle', tag: 'pdp_buyblock_subscribe' -%}
+              </span>
+              <span class='empty-circle' data-click-id='pdp_buyblock_subscribe'>
+                {%- render 'icon', icon: 'empty-circle', tag: 'pdp_buyblock_subscribe' -%}
+              </span>
+            </div>
+            <h3 class='purchase-type-title' data-click-id='pdp_buyblock_subscribe'>
+              {{- section.settings.subscription_title -}}
+              {% if num_tag_discount != num_price_adjustment or otp_only_sale %}
+                <span
+                  class='discount-value {% if _tag_discount != blank and otp_only_sale != true %}sale{% endif %}'
+                  data-click-id='pdp_buyblock_subscribe'>
+                  {{- _price_adjustment.value -}}%
+                </span>
+              {% endif %}
+
+              {% if _tag_discount != blank and otp_only_sale != true %}
+                <span class='discount-info'>
+                    <span class='has-red-color' data-click-id='pdp_buyblock_subscribe'>
+                      {{- _tag_discount }}%
+                    </span>
+                  {% if section.settings.subscription_discount_text != blank %}
+                    <span class='has-red-color'>
+                      {{- section.settings.subscription_discount_text -}}
+                    </span>
+                  {% endif %}
+                </span>
+              {% endif %}
+            </h3>
+            <div class='price-and-discount-container'>
+              <span class='has-line-through original-price'>
+                {%- render 'price-value', price: selected_variation.price -%}
+              </span>
+              <span
+                class='buy-box__purchase-type-price subscription-price'
+                data-discount='{{ _price_adjustment.value }}'
+              >
+                {% if _tag_discount != blank and otp_only_sale != true %}
+                  {% render 'price-value', price: tag_final_price %}
+                {% else %}
+                  {% render 'price-value', price: final_price %}
+                {% endif %}
+              </span>
+              <div>
+                <span
+                  class='buy-box__purchase-type-discount'
+                  data-click-id='pdp_buyblock_subscribe'
+                >
+                  {% if _tag_discount != blank and otp_only_sale != true %}
+                    Save {{ _tag_discount }}%
+                  {% else %}
+                    Save {% render 'price-value', price: discounted_price %}
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class='buy-box__purchase-type-delivery' data-click-id='pdp_buyblock_subscribe'>
+            <div class='delivery-type-dropdown'>
+              <button
+                class='delivery-type-dropdown__trigger'
+                data-click-id='pdp_buyblock_subscribe-delivery'
+              >
+                <span data-click-id='pdp_buyblock_subscribe-delivery'>
+                  {{- option.name }}
+                  {{ option.values[0] -}}
+                </span>
+                {% render 'icon', icon: 'buttom-arrow', tag: 'pdp_buyblock_subscribe-delivery' %}
+              </button>
+              <div class='delivery-type-dropdown__dropdown-content'>
+                {% for plan in _default_subscription_plan.selling_plans %}
+                  {% assign option = plan.options[0] %}
+                  <div
+                    class='delivery-type-dropdown__dropdown-item{% if forloop.index == 1 %} selected{% endif %}'
+                    data-selling_plan='{{ plan.id }}'
+                    data-click-id='pdp_buyblock_subscribe-delivery'
+                  >
+                    {{ option.name }}
+                    {{ option.value }}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class='subscription-benefits-grid'>
+            {% assign benefits = benefit_1 | append: '|' | append: benefit_2 | append: '|' | append: benefit_3 | append: '|' | append: benefit_4 | split: '|' %}
+              {% for benefit in benefits %}
+                {% if benefit != '' %}
+                  {% render 'subscription-selector-v2-benefits', benefit: benefit %}
+                {% endif %}
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div
+        class='buy-box__purchase-type buy-box__one-time-purchase {% if default_to_otp == true %} order-1 selected {% endif %}'
+        data-click-id='pdp_buyblock_otp'
+      >
+        <div class='new-buy-box-wrapper'>
+          <div class='title-and-price-container'>
+            <div class='' data-click-id='pdp_buyblock_otp'>
+              <span class='selected-circle' data-click-id='pdp_buyblock_otp'>
+                {%- render 'icon', icon: 'filled-circle', tag: 'pdp_buyblock_otp' -%}
+              </span>
+              <span class='empty-circle' data-click-id='pdp_buyblock_otp'>
+                {%- render 'icon', icon: 'empty-circle', tag: 'pdp_buyblock_otp' -%}
+              </span>
+            </div>
+            {% assign num_tag_discount = _tag_discount | plus: 0 %}
+            {% assign num_price_adjustment = _price_adjustment.value | plus: 0 %}
+            <div>
+              <h3 class='purchase-type-title' data-click-id='pdp_buyblock_otp'>
+                {{ section.settings.otp_title }}
+              </h3>
+              <div class='switch-to-subscription'>
+                {{ switch_to_subscription_text }}
+              </div>
+            </div>
+            <div class='price-and-discount-container'>
+              <span class='buy-box__purchase-type-price' data-click-id='pdp_buyblock_otp'>
+                {% if _tag_discount != blank %}
+                  {% render 'price-value', price: tag_final_price %}
+                {% else %}
+                  {% render 'price-value', price: selected_variation.price %}
+                {% endif %}
+              </span>
+              <div>
+                {% if _tag_discount != blank %}
+                  <p
+                    class='buy-box__purchase-type-text'
+                    style='justify-content: flex-end'
+                    data-click-id='pdp_buyblock_otp'
+                  >
+                    <span class='buy-box__purchase-type-discount' data-click-id='pdp_buyblock_otp'>
+                      Save {{ _tag_discount }}%
+                    </span>
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

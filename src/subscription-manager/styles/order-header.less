@@ -1,0 +1,131 @@
+.og-order-header {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: @size-3-5;
+  padding: @size-5;
+  position: relative;
+
+  h3 {
+    color: @color-secondary;
+    font-size: @size-4;
+    font-weight: 400;
+
+    @media (min-width: @mobile-width) {
+      margin-bottom: @size-1;
+      font-size: @size-4-5;
+    }
+  }
+
+  .og-order-date {
+    font-size: @size-4-5;
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    svg {
+      margin-left: @size-2;
+    }
+
+    @media (min-width: @mobile-width) {
+      font-size: @size-5;
+    }
+  }
+
+  .og-order-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @size-3;
+  }
+
+  @media (min-width: @mobile-width) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .og-order-toggle-trigger {
+    @media (max-width: @mobile-width) {
+      position: absolute;
+      top: @size-3-5;
+      right: @size-5;
+
+      --og-button-padding: @size-0-5 @size-1-5;
+      --og-button-border-radius: @size-1;
+    }
+  }
+
+  // highlight which order is being modified
+  &:has(dialog[open]) {
+    background-color: @color-order-highlight;
+  }
+}
+
+.og-order-product-summary {
+  display: flex;
+
+  > * {
+    margin: 0;
+    border: 1px solid #ececec;
+
+    // reverse stacking order so the first item is on top
+    &:nth-child(1) {
+      z-index: 3;
+    }
+
+    &:nth-child(2) {
+      z-index: 2;
+    }
+
+    &:nth-child(3) {
+      z-index: 1;
+    }
+
+    &:not(:first-child) {
+      margin-left: calc(-1 * @size-10);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: margin 200ms;
+    }
+  }
+
+  @media (min-width: 950px) {
+    // if the screen is too small, increasing the margin on hover will cause an infinite loop since the content will attempt wrap to the next line
+    &:hover > *:not(:first-child) {
+      margin-left: @size-1;
+    }
+  }
+}
+
+.og-order-header-summary {
+  display: flex;
+  align-items: center;
+  gap: @size-3;
+  opacity: 1;
+  transition: opacity 400ms;
+
+  // this should be last in the flex container on mobile
+  order: 1;
+
+  @media (min-width: @mobile-width) {
+    margin-left: auto;
+    order: 0;
+  }
+}
+
+.og-order-toggle[data-open] {
+  .og-order-header-summary {
+    display: none;
+    opacity: 0;
+
+    @media (min-width: @mobile-width) {
+      height: auto;
+      display: flex;
+      // still take up space in the DOM to avoid layout shift
+      visibility: hidden;
+    }
+  }
+}

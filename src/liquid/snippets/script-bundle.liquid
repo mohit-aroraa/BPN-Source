@@ -1,0 +1,28 @@
+<!-- Vendor Modules -->
+{% capture vendor_bundle %}bundle.vendors.min.js{% endcapture %}
+<script src="{{ vendor_bundle | asset_url }}" async defer></script>
+
+<!-- Common Modules -->
+{% capture common_bundle %}bundle.common.min.js{% endcapture %}
+<script src="{{ common_bundle | asset_url }}" async defer></script>
+
+<!-- Layout Modules -->
+{% capture layout_bundle_js %}bundle.{{- layout -}}.min.js{% endcapture %}
+<script src="{{ layout_bundle_js | asset_url }}" async defer></script>
+
+{% capture new_layout_bundle_js %}bundle.new-{{- layout -}}.min.js{% endcapture %}
+<script src="{{ new_layout_bundle_js | asset_url }}" async defer></script>
+
+<!-- Template Modules -->
+{% if template %}
+    {% capture script_bundle %}bundle.{{- template | remove: 'customers/' -}}.min.js{% endcapture %}
+    <script src="{{ script_bundle | asset_url }}" async defer></script>
+
+    {% capture new_script_bundle %}bundle.new-{{- template | remove: 'customers/' -}}.min.js{% endcapture %}
+    <script src="{{ new_script_bundle | asset_url }}" async defer></script>
+{% endif %}
+
+{% if template contains 'redesign' %}
+    {% capture script_bundle %}bundle.product.redesign.min.js{% endcapture %}
+    <script src="{{ script_bundle | asset_url }}" async defer></script>
+{% endif %}

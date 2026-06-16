@@ -1,0 +1,8 @@
+<script>
+  window.BPN = window.BPN || {};
+  const interstitialGlobalConfig = {{ shop.metaobjects.interstitial['global-settings'] | json }};
+  window.BPN.interstitial = interstitialGlobalConfig;
+  window.BPN.subscriptionPlatform = window.BPN.subscriptionPlatform || {{ settings.subscription_platform | json }};
+  const interstitial_open_count = sessionStorage.getItem('interstitial_open_count') || 0;
+  sessionStorage.setItem('interstitial_open_count' , interstitial_open_count)
+</script>

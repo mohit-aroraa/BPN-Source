@@ -1,0 +1,64 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title -%}
+{%- assign subtitle = block.subtitle -%}
+
+{%- assign items = block.blocks -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="testimonials testimonials--{{ request.page_type | handle }} testimonials--{{ id }}"
+         id="testimonials_{{ id }}">
+    <div class="testimonials__title-container">
+        <h2 class="testimonials__title">{{ title }}</h2>
+        <h3 class="testimonials__subtitle">{{ subtitle }}</h3>
+    </div>
+
+    <div class="testimonials-slider swiper" data-testimonials-swiper data-slides-count="{{ length }}">
+        <div class="testimonials-slider__navigation">
+            <div class="swiper-button swiper-button-prev" data-click-id="homepage_endorsement_navigation">
+                {% render 'icon', icon: 'left-arrow', tag: 'homepage_endorsement_navigation' %}
+            </div>
+            <div class="swiper-button swiper-button-next" data-click-id="homepage_endorsement_navigation">
+                {% render 'icon', icon: 'right-arrow', tag: 'homepage_endorsement_navigation' %}
+            </div>
+        </div>
+
+        <div class="swiper-wrapper testimonials-slider__wrapper">
+            {% for index in (0..length) %}
+                {% assign name = 'name_' | append: index %}
+                {% assign text = 'text_' | append: index %}
+                {% assign role = 'role_' | append: index %}
+                {% assign image = 'image_' | append: index %}
+
+                <div class="swiper-slide testimonial-slide">
+                    <img class="testimonial-slide__image" src="{{ block[image].url }}" alt="{{ block[name] }}">
+
+                    <div class="testimonial-slide__content">
+                        <div class="stars-red-container">
+                            {% render 'icon', icon: 'small-stars-red' %}
+                        </div>
+                        <p class="testimonial-slide__text">{{ block[text] }}</p>
+                        <h3 class="testimonial-slide__name">{{ block[name] }}</h3>
+                        <p class="testimonial-slide__role">{{ block[role] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="testimonials-thumbs-slider swiper" data-testimonials-thumbs-swiper>
+        <div class="swiper-wrapper testimonials-thumbs-slider__wrapper">
+            {% for index in (0..length) %}
+                {% assign name = 'name_' | append: index %}
+                {% assign image = 'image_' | append: index %}
+
+                <div class="swiper-slide testimonials-thumbs-slide">
+                    <img src="{{ block[image].url }}" alt="{{ block[name] }}">
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="testimonials-thumbs-slider__controls">
+            <div class="swiper-pagination testimonials-thumbs-slider__pagination"></div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,45 @@
+{%- comment -%}
+    tested-block.js (Required)
+    tested-block.scss (Required)
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign use_global_data = block.use_global_data -%}
+{%- comment -%}
+    If 'use_global_data' is enable then we will fetch data from 'Site Global Data' document in Prismic
+{%- endcomment -%}
+{%- if use_global_data -%}
+    {%- assign block = pages['site-global-data'].metafields.tested_block -%}
+{%- endif -%}
+
+{%- assign title = block.title -%}
+{%- assign background_color = block.background_color -%}
+{%- assign repeatable_block_count = block.count | minus: 1 -%}
+
+<section class="testedBlock testedBlock--{{id}} testedBlock--{{ request.page_type | handle }} testedBlock--desktopOnly">
+    {% if title != blank  %}
+        <h2 class="sectionTitle">{{title}}</h2>
+    {% endif %}
+    <div class="testedBlock__container">
+        <div class="swiper testedBlock__swiper" data-bare-standard-slider>
+            <div class="swiper-wrapper testedBlock__swiperWrapper">
+                {% for index in (0..repeatable_block_count) limit: 3 %}
+                    {% assign icon_key = 'icon_' | append: index %}
+                    {% assign description_key = 'description_' | append: index %}
+                    {% assign block_title_key = 'block_title_' | append: index %}
+                    <div class="swiper-slide testedBlock__swipperSlide">
+                        <div class="testedBlock__card">
+                            <div class="testedBlock__iconWrapper">
+                                <img class="testedBlock__icon lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{block[icon_key].url}}" alt="{% if block[icon_key].alt != blank %}{{block[icon_key].alt}}{% else %}{{title}}{% endif %}" width="72" height="87">
+                            </div>
+                            <div class="testedBlock__description">
+                                <p class="testedBlock__title">{{block[block_title_key]}}</p>
+                                <p class="testedBlock__text">{{block[description_key]}}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-scrollbar swiper-scrollbar--common"></div>
+        </div>
+    </div>
+</section>

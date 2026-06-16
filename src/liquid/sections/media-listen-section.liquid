@@ -1,0 +1,35 @@
+
+{% include 'media-common-section', audio_flag: true, modal_blog: true %}
+
+{% schema %}
+   {
+    "name": "Listen Section",
+    "class": "Listen Section",
+    "settings": [
+		{
+            "id": "title",
+            "type": "text",
+            "label": "Title"
+        },
+		{
+            "id": "link",
+            "type": "url",
+            "label": "View More Link"
+        }
+	],
+    "blocks": [
+      {
+        "type": "section",
+        "name": "Listen Section",
+        "settings": [
+            {
+                "id": "blog_ref",
+                "type": "article",
+                "label": "Blog"
+            }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+

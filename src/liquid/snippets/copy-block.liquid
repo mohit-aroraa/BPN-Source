@@ -1,0 +1,28 @@
+{%- assign block = section[module] -%}
+{%- assign heading_type = block.heading_type -%}
+{%- assign section_heading = block.section_heading -%}
+{%- assign text = block.text -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+
+<section class="copyBlock {{ snippet_name }} copyBlock--{{ id }} {% if heading_type %}copyBlock--headingBig{% endif %}">
+  {% if section_heading != blank %}
+    <div
+      class="{% if heading_type %}heading-2{% else %}sectionTitle{% endif %}"
+      aria-label="{{ section_heading }}"
+    >
+      {{ section_heading }}
+    </div>
+  {% endif %}
+  {% if text != blank %}
+    <p class="copyBlock__text">{{ text }}</p>
+  {% endif %}
+  {% if cta_link != blank and cta_text != blank %}
+    <a
+      href="{{cta_link | strip }}"
+      class="button-link {% if heading_type %}copy-block-big-btn{% else %}copy-block-regular-btn{% endif %}"
+    >
+      {{- cta_text -}}
+    </a>
+  {% endif %}
+</section>

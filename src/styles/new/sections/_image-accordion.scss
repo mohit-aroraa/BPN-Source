@@ -1,0 +1,368 @@
+// =============================================================================
+// Image Accordion
+// =============================================================================
+
+$iaBp: 991px;
+
+.img-acc {
+  display: flex;
+  height: var(--ia-h, 620px);
+  overflow: hidden;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    flex-direction: column;
+    height: auto;
+  }
+}
+
+// ── Panel ─────────────────────────────────────────────────────────────────────
+
+.img-acc__panel {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  flex: 1 1 0;
+  min-width: 80px;
+  outline: none;
+  transition: flex-grow 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.is-active {
+    flex-grow: 3.4;
+    cursor: default;
+  }
+
+  // Full dark overlay on inactive panels, fades out when active
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  &.is-active::after {
+    opacity: 0;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: -3px;
+    z-index: 1;
+  }
+
+  @media (max-width: #{$iaBp - 1px}) {
+    flex: none;
+    min-width: 0;
+    height: var(--ia-mob-coll, 90px);
+    cursor: pointer;
+    transition: height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.is-active {
+      height: var(--ia-mob-exp, 520px);
+    }
+  }
+}
+
+// ── Background image ──────────────────────────────────────────────────────────
+
+.img-acc__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.55s ease;
+
+  .img-acc__panel:hover & {
+    transform: scale(1.04);
+  }
+
+  .img-acc__panel.is-active & {
+    transform: scale(1);
+  }
+}
+
+// ── Overlay ───────────────────────────────────────────────────────────────────
+
+.img-acc__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 50px 80px 50px 50px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+
+  // Background lives on ::before so it can fade without affecting size/padding
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    opacity: 0;
+    transition: none;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .img-acc__panel.is-active &::before {
+    opacity: 1;
+    transition: opacity 0.4s ease 0.15s;
+  }
+
+  @media (max-width: #{$iaBp - 1px}) {
+    padding: 16px;
+  }
+}
+
+// ── Mobile header bar ─────────────────────────────────────────────────────────
+
+.img-acc__mob-header {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  display: none;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 40px;
+    margin-bottom: 8px;
+
+    .img-acc__panel.is-active & {
+      display: none;
+    }
+  }
+}
+
+.img-acc__mob-title {
+  font-family: Shuttleblock, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.30px;
+  line-height: normal;
+  color: #fff;
+}
+
+.img-acc__toggle {
+  display: none;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    flex-shrink: 0;
+    transition: border-color 0.2s;
+
+    &:hover { border-color: rgba(255, 255, 255, 0.9); }
+  }
+}
+
+.img-acc__toggle-v {
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  .img-acc__panel.is-active & {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+// ── Content (meta + details) ──────────────────────────────────────────────────
+
+.img-acc__content {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.45s ease, opacity 0.35s ease;
+
+    .img-acc__panel.is-active & {
+      max-height: 200px;
+      opacity: 1;
+    }
+  }
+}
+
+.img-acc__meta {
+  flex-shrink: 0;
+}
+
+.img-acc__title {
+  font-family: Shuttleblock, sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.72px;
+  line-height: normal;
+  color: #fff;
+  margin: 0 0 8px;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    display: none;
+    font-size: 14px;
+    letter-spacing: -0.30px;
+    margin: 0 0 4px;
+
+    .img-acc__panel.is-active & {
+      display: block;
+    }
+  }
+}
+
+.img-acc__unit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.img-acc__unit-label {
+  font-family: Shuttleblock, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #e02826;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    font-size: 6px;
+  }
+}
+
+.img-acc__squares {
+  display: flex;
+  gap: 4px;
+}
+
+.img-acc__sq {
+  width: 12px;
+  height: 12px;
+  border-radius: 1px;
+  border: 1.5px solid #e02826;
+  flex-shrink: 0;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    width: 6px;
+    height: 6px;
+  }
+
+  &.is-filled {
+    background: #e02826;
+  }
+}
+
+// ── Details (description + CTA): slides in on desktop ─────────────────────────
+
+.img-acc__details {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  // Desktop: animate width in when active
+  @media (min-width: #{$iaBp}) {
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease 0.15s;
+
+    .img-acc__panel.is-active & {
+      max-width: max-content;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  @media (max-width: #{$iaBp - 1px}) {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.img-acc__desc {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+
+  @media (min-width: #{$iaBp}) {
+    font-size: 20px;
+  }
+}
+
+.img-acc__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 22px;
+  background: #e02826;
+  color: #fff;
+  font-family: 'Blender Pro', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (max-width: #{$iaBp - 1px}) {
+    padding: 13px 16px;
+    font-size: 10px;
+    border-radius: 4px;
+  }
+}
+
+// ── Accessibility ─────────────────────────────────────────────────────────────
+
+.img-acc__mob-header:focus-visible,
+.img-acc__cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-acc__panel,
+  .img-acc__panel::after,
+  .img-acc__overlay::before,
+  .img-acc__content,
+  .img-acc__mob-header,
+  .img-acc__toggle-v,
+  .img-acc__chevron {
+    transition: none !important;
+  }
+}

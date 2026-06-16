@@ -1,0 +1,46 @@
+<aside class="account__side-nav">
+  <h1 class="account__customer-name">Welcome {{ customer.first_name }}</h1>
+
+  {% render 'account-sms-subscription' %}
+
+  <nav class="navigation-container">
+    <div class="account__side-nav__item-list">
+      <a class="account__side-nav__item {% if request.path == '/account' %}account__side-nav__item--active{% endif %}"
+         data-click-id="account_side-nav_dashboard"
+         href="/account">
+        Dashboard
+      </a>
+      {% if customer %}
+        {% assign secret_key = shop.metafields.ordergroove.themeHashKey.value %}
+        {% assign customer_id = customer.id %}
+        {% assign timestamp = "now" | date: "%s" %}
+        {% assign signature = customer_id | append: "|" | append: timestamp | hmac_sha256: secret_key %}
+        <a
+          class="account__side-nav__item {% if request.path contains '/subscriptions' %}account__side-nav__item--active{% endif %}"
+          data-click-id="account_side-nav_subscriptions"
+          href="/apps/subscriptions/manage/?customer={{ customer.id }}&customer_signature={{ signature }}&customer_timestamp={{ timestamp }}">Subscriptions - Pre 6/9</a>
+        <a
+          class="account__side-nav__item"
+          href="{% if customer %}/a/account/shopify-login{% else %}/a/account/login{% endif %}">Subscriptions - Post 6/9</a>
+      {% endif %}
+      <a class="account__side-nav__item" href='/account?view=orders_history' data-click-id="account_side-nav_my-orders">
+        My Orders
+      </a>
+      <a href='/account?view=profile' data-click-id="account_side-nav_my-profile" class="account__side-nav__item">
+        My Profile
+      </a>
+      <a
+        href='/account/addresses' data-click-id="account_side-nav_addresses"
+        class="account__side-nav__item {% if request.path == '/account/addresses' %}account__side-nav__item--active{% endif %}">
+        Addresses
+      </a>
+      <a class="account__side-nav__item" href='/pages/return-policy' data-click-id="account_side-nav_returns">
+        Returns
+      </a>
+    </div>
+  </nav>
+
+  <a href="/account/logout/" data-click-id="account_side-nav_log-out" class="account__logout-btn">
+    {{ 'layout.customer.log_out' | t | upcase }}
+  </a>
+</aside>

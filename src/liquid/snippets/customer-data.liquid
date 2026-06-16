@@ -1,0 +1,47 @@
+{% liquid
+  assign has_subscription_product = false
+
+  for item in cart.items
+    if item.selling_plan_allocation != blank
+      assign has_subscription_product = true
+    endif
+  endfor
+
+  if customer.tags contains 'PS-Accepts-SMS'
+    assign sms_marketing_consent = true
+  else
+    assign sms_marketing_consent = false
+  endif
+%}
+
+<script id="customer-data">
+  window.BPN = window.BPN || {};
+
+  {% if customer == blank %}
+
+  window.BPN.customer = {
+    isLogged: false,
+    phone: sessionStorage.getItem('GUEST_PHONE_KEY'),
+    email: undefined,
+    smsMarketingConsent: {{ sms_marketing_consent }},
+    hasSubscriptionProduct: {{ has_subscription_product }},
+    hasOrder: false,
+    isSMSSubscribed: false,
+  }
+  {% else %}
+  const phone = '{{ customer.phone }}'
+
+  window.BPN.customer = {
+    isLogged: true,
+    phone: phone === '' ? sessionStorage.getItem('GUEST_PHONE_KEY') : phone,
+    email: '{{ customer.email }}',
+    id: '{{ customer.id }}',
+    smsMarketingConsent: {{ sms_marketing_consent }},
+    hasSubscriptionProduct: {{ has_subscription_product }},
+    hasOrder: {% if customer.last_order == blank %}false{% else %}true{% endif %},
+    firstName: "{{ customer.first_name }}",
+    lastName: "{{ customer.last_name }}",
+    isSMSSubscribed: false,
+  }
+  {% endif %}
+</script>

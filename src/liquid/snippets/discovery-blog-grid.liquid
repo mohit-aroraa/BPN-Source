@@ -1,0 +1,17 @@
+
+<div class="col-md-12 col-lg-6">
+  <div class="essential-box">
+    <div class="essential-img">
+      <a href="{{ article.url }}"><img src="{{ article.image | img_url: '412x353' }}" alt="{{ article.title }}" /></a>
+    </div>
+    <h4>{{ article.title }}</h4>
+    {% if article.excerpt.size > 0 %}
+    <p>{{ article.excerpt }}</p>
+    {% else %}
+    <p>{{ article.content | strip_html | truncate: 150 }}</p>
+    {% endif %}
+    <div class="text-link">
+      <a href="{{ article.url }}">Read more</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,195 @@
+{%- liquid
+  assign img_pos     = section.settings.image_position
+  assign mob_img_pos = section.settings.mobile_image_position | default: 'top'
+  assign has_img = false
+  if section.settings.image != blank
+    assign has_img = true
+  endif
+-%}
+
+<section
+  class="testi testi--{{ img_pos }} testi--mob-{{ mob_img_pos }}"
+  id="testi-{{ section.id }}"
+  style="
+    --testi-pt: {{ section.settings.section_padding_top | default: 64 }}px;
+    --testi-pb: {{ section.settings.section_padding_bottom | default: 64 }}px;
+  "
+>
+
+  {%- comment -%} Image — always rendered when set; CSS controls desktop/mobile visibility and order {%- endcomment -%}
+  {%- if has_img -%}
+    <div class="testi__media" id="testi-media-{{ section.id }}">
+      <div class="testi__media-inner">
+        <img
+          src="{{ section.settings.image | image_url: width: 900 }}"
+          alt="{{ section.settings.image.alt | escape }}"
+          loading="lazy"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
+        >
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Reviews column {%- endcomment -%}
+  <div class="testi__reviews">
+
+    {%- for block in section.blocks -%}
+      {%- assign star_count = block.settings.stars | default: 5 -%}
+      <div class="testi__item" {{ block.shopify_attributes }}>
+
+        <div class="testi__stars" aria-label="{{ star_count }} out of 5 stars">
+          {%- for i in (1..5) -%}
+            <span class="testi__star{% if i <= star_count %} is-filled{% endif %}" aria-hidden="true">★</span>
+          {%- endfor -%}
+        </div>
+
+        {%- if block.settings.quote != blank -%}
+          <blockquote class="testi__quote">
+            <p>"{{ block.settings.quote }}"</p>
+            {%- if block.settings.author_name != blank or block.settings.author_title != blank -%}
+              <footer>
+                {%- if block.settings.author_name != blank -%}
+                  <cite class="testi__author">{{ block.settings.author_name }}</cite>
+                {%- endif -%}
+                {%- if block.settings.author_title != blank -%}
+                  <p class="testi__role">{{ block.settings.author_title }}</p>
+                {%- endif -%}
+              </footer>
+            {%- endif -%}
+          </blockquote>
+        {%- endif -%}
+
+        <hr class="testi__rule" role="presentation" aria-hidden="true">
+
+      </div>
+    {%- endfor -%}
+  </div>
+
+
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials + Image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position (desktop)",
+      "options": [
+        { "value": "left",  "label": "Left" },
+        { "value": "right", "label": "Right" },
+        { "value": "none",  "label": "Hidden" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_position",
+      "label": "Image position (mobile)",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "hidden", "label": "Hidden" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 64,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 64,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Star rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "Best pre-workout I've ever had, I take it every day. My favorite ever, very good, great flavor."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author name",
+          "default": "Russel Orhii"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author title / credential",
+          "default": "World Record Holding Powerlifter"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials + Image",
+      "category": "Social proof",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "quote": "Best pre-workout I've ever had, I take it every day. My favorite ever, very good, great flavor.",
+            "author_name": "Russel Orhii",
+            "author_title": "World Record Holding Powerlifter"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "quote": "Best pre-workout I've ever had, I take it every day. My favorite ever, very good, great flavor.",
+            "author_name": "Russel Orhii",
+            "author_title": "World Record Holding Powerlifter"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "quote": "Best pre-workout I've ever had, I take it every day. My favorite ever, very good, great flavor.",
+            "author_name": "Russel Orhii",
+            "author_title": "World Record Holding Powerlifter"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

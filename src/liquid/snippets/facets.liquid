@@ -1,0 +1,148 @@
+{%- comment -%}
+  Facets (Filters and Sorting) snippet
+  =======================
+  This snippet generates the filter and sort options for collection pages
+
+  Parameters:
+  - results: The collection object
+  - enable_filtering: Boolean to enable/disable filtering
+  - filter_type: String indicating filter layout ('vertical', 'horizontal', etc.)
+  - show_count: Boolean to show/hide product counts
+  - open_by_default: Boolean to expand filter groups by default
+{%- endcomment -%}
+
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign total_active_values_count = 0
+  if results.url
+    assign results_url = results.url
+  else
+    assign terms = results.terms | escape
+    assign results_url = '?q=' | append: terms | append: '&type=product'
+  endif
+
+  assign show_count = true
+  assign open_by_default = true
+-%}
+
+{%- capture filter_data_url -%}{{ results_url }}{%- endcapture -%}
+
+<div class='bpn-facets'>
+  <form id='FacetFiltersForm' class='bpn-facets__form'>
+    {%- comment -%}Active filters{%- endcomment -%}
+    {%- if false -%}
+      <div class='bpn-facets__active-filters'>
+        {%- assign has_active_filters = false -%}
+
+        {%- comment -%}Check for metafield filters{%- endcomment -%}
+        {%- for param in request.params -%}
+          {%- if param[0] contains 'filter.p.m.custom._filter_' -%}
+            {%- assign has_active_filters = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if false -%}
+          <div class='bpn-facets__clear'>
+            <a href='{{ results_url }}' class='bpn-facets__clear-all'>
+              {{- 'collections.filters.clear_all' | t -}}
+            </a>
+          </div>
+
+          <div class='bpn-facets__active-values'>
+            {%- comment -%}Handle metafield-based filters{%- endcomment -%}
+            {%- for param in request.params -%}
+              {%- if param[0] contains 'filter.p.m.custom._filter_' -%}
+                {%- assign filter_name = param[0]
+                  | replace: 'filter.p.m.custom._filter_', ''
+                  | capitalize
+                -%}
+                <div class='bpn-facets__active-filter'>
+                  <a
+                    href='{{ results_url }}'
+                    class='bpn-facets__active-filter-button'
+                    data-param-name='{{ param[0] }}'
+                  >
+                    {{ filter_name }}: {{ param[1] }}
+                  </a>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}Filter Sidebar - Only show custom filters{%- endcomment -%}
+    {%- if filter_type == 'vertical' -%}
+      <div class='bpn-facets__filters'>
+        {%- comment -%}Include only metafield-based filters{%- endcomment -%}
+        {%- for filter in results.filters -%}
+          {%- if filter.param_name contains '_filter_' -%}
+            {%- assign total_active_values_count = total_active_values_count
+              | plus: filter.active_values.size
+            -%}
+
+            {%- if filter.values.size > 0 -%}
+              <details
+                class='bpn-facets__details'
+                data-filter-name='{{ filter.label }}'
+                {% if open_by_default %}
+                  open
+                {% endif %}
+              >
+                <summary class='bpn-facets__summary'>
+                  <div>
+                    <span class="bpn-facets__summary-label">{{ filter.label }}</span>
+                    {% if show_count %}
+                      <span class='bpn-facets__count'>
+                        {%- if filter.active_values.size > 0 -%}
+                          ({{ filter.active_values.size }})
+                        {%- endif -%}
+                      </span>
+                    {% endif %}
+                  </div>
+                  <div class="bpn-facets__summary-icon"></div>
+                </summary>
+                <div class='bpn-facets__values'>
+                  {%- for value in filter.values -%}
+                    {%- assign active_value = false -%}
+                    {%- for active_filter in filter.active_values -%}
+                      {%- if value.handle == active_filter.handle -%}
+                        {%- assign active_value = true -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    <label
+                      class='bpn-facets__checkbox{% if active_value %} active{% endif %}'
+                      data-value='{{ value.handle }}'
+                    >
+                      <input
+                        type='checkbox'
+                        name='{{ value.param_name }}'
+                        value='{{ value.value }}'
+                        id='Filter-{{ filter.label | escape }}-{{ forloop.index }}'
+                        {% if active_value %}
+                          checked
+                        {% endif %}
+                        class='bpn-facets__checkbox-input'
+                      >
+                      <span class='bpn-facets__checkbox-icon'></span>
+                      <span>
+                        {{ value.label }}
+                        {% if show_count %}
+                          {% unless value.count == 0 and active_value == false %}
+                            <span class='bpn-facets__count'>({{ value.count }})</span>
+                          {% endunless %}
+                        {% endif %}
+                      </span>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              </details>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </form>
+</div>

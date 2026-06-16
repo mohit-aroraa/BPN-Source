@@ -1,0 +1,208 @@
+.reviews {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 40px 16px 48px;
+
+  @include above('tablet') {
+    padding: 40px 32px;
+  }
+
+  @include above('tablet-large') {
+    padding: 40px;
+  }
+
+  @include above('desktop') {
+    padding: 64px 64px 118px;
+    display: flex;
+    column-gap: 87px;
+
+    &__content {
+      width: 360px;
+      min-width: 360px;
+    }
+  }
+
+  &__subtitle {
+    margin-top: 16px;
+    font-style: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #777777;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+
+    @include above('desktop') {
+      margin-top: 21px;
+      font-size: 24px;
+      letter-spacing: -0.48px;
+    }
+  }
+
+  &__title {
+    margin: 16px 0 32px;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 900;
+    letter-spacing: -1.44px;
+    text-transform: uppercase;
+    line-height: 40px;
+
+    @include above('desktop') {
+      margin: 33px 0 34px;
+    }
+  }
+}
+
+.review-card {
+  padding: 37px 23px 55px;
+  max-width: 264px;
+  border: 1px solid color("gray");
+  border-radius: 5px;
+
+  @include above('desktop') {
+    max-width: 267px;
+    padding: 37px 23px 63px;
+  }
+
+  &__rating {
+    margin-bottom: 20px;
+
+    @include above('desktop') {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+
+
+    @include above('desktop') {
+      margin-bottom: -3px;
+    }
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0.11px;
+
+    @include above('desktop') {
+      margin-top: 3px;
+    }
+
+    svg {
+      margin: 0 6px 0 12px;
+    }
+
+    &-title {
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 20px;
+      color: #9A9A9A
+    }
+  }
+
+  &__text {
+    max-width: 343px;
+    margin-top: 12px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.0px;
+
+    @include above('desktop') {
+      margin-top: 14px;
+    }
+  }
+}
+
+.reviews-slider {
+  display: flex;
+  flex-direction: column;
+
+  &__navigation {
+    display: none;
+
+    @include above('desktop') {
+      max-width: calc(100% - 176px);
+      margin-top: 60px;
+      display: flex;
+      justify-content: flex-end;
+      margin-left: auto;
+      margin-bottom: 32px;
+      gap: 16px;
+    }
+
+    .swiper-button {
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.swiper-button-disabled {
+        color: black;
+
+        svg {
+          path {
+            stroke: #CCCCCC !important;
+          }
+        }
+      }
+    }
+  }
+
+  &__controls {
+    margin: 40px auto 0;
+    display: flex;
+    column-gap: 16px;
+
+    @include above('desktop') {
+      display: none;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    @include above('desktop') {
+      display: none;
+    }
+
+    .swiper-pagination-bullet {
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      background-color: #767676;
+
+      &:hover {
+        background: black;
+        cursor: pointer;
+      }
+
+      &:last-of-type:not(.swiper-pagination-bullet-active) {
+        width: 8px;
+        height: 8px;
+      }
+
+      &.swiper-pagination-bullet-active {
+        width: 48px;
+        border-radius: 18px;
+        background: black;
+      }
+    }
+  }
+}

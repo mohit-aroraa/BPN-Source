@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -e
+
+# Create a personal development theme by duplicating the live theme
+#
+# Usage:
+#   ./bin/create-dev-theme           # Uses your git name
+#   ./bin/create-dev-theme "Pierce"  # Custom name
+
+# Load store URL from .env if available
+if [ -f .env ]; then
+  source .env
+fi
+
+STORE="${STORE_URL:-dev-bare-performance-nutrition.myshopify.com}"
+
+# Get developer name from argument, git config, or prompt
+if [ -n "$1" ]; then
+  DEV_NAME="$1"
+elif command -v git &> /dev/null && git config user.name &> /dev/null; then
+  DEV_NAME=$(git config user.name | cut -d' ' -f1)
+else
+  read -p "Enter your name for the theme: " DEV_NAME
+fi
+
+THEME_NAME="Dev - ${DEV_NAME}"
+TEMP_DIR=$(mktemp -d)
+
+cleanup() {
+  rm -rf "$TEMP_DIR"
+}
+trap cleanup EXIT
+
+echo ""
+echo "🎨 Creating development theme..."
+echo "   Store: ${STORE}"
+echo "   Theme: ${THEME_NAME}"
+echo ""
+
+# Get the live theme ID
+echo "🔍 Finding live theme..."
+LIVE_THEME_ID=$(shopify theme list --store "${STORE}" --json 2>/dev/null | grep -B5 '"role": "live"' | grep '"id":' | head -1 | grep -o '[0-9]*')
+
+if [ -z "$LIVE_THEME_ID" ]; then
+  echo "❌ Could not find the live theme"
+  echo "   Make sure you're authenticated: shopify auth login --store ${STORE}"
+  exit 1
+fi
+
+echo "   Live theme ID: ${LIVE_THEME_ID}"
+echo ""
+
+# Pull the live theme to temp directory
+echo "📥 Pulling live theme..."
+shopify theme pull --store "${STORE}" --theme "${LIVE_THEME_ID}" --path "${TEMP_DIR}" --force
+
+echo ""
+echo "🚀 Creating your dev theme..."
+
+# Push as a new unpublished theme
+OUTPUT=$(shopify theme push --path "${TEMP_DIR}" --unpublished --theme "${THEME_NAME}" --store "${STORE}" --json 2>&1) || true
+
+# Extract theme ID from JSON output
+THEME_ID=$(echo "$OUTPUT" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
+
+if [ -n "$THEME_ID" ]; then
+  echo ""
+  echo "✅ Theme created successfully!"
+  echo "   Theme ID: ${THEME_ID}"
+  echo "   Theme Name: ${THEME_NAME}"
+  echo ""
+
+  # Auto-update .env if it exists and THEME_ID is empty or placeholder
+  if [ -f .env ]; then
+    CURRENT_THEME_ID=$(grep "^THEME_ID=" .env | cut -d'=' -f2)
+    if [ -z "$CURRENT_THEME_ID" ]; then
+      sed "s/^THEME_ID=.*/THEME_ID=${THEME_ID}/" .env > .env.tmp && mv .env.tmp .env
+      echo "✅ Updated .env with THEME_ID=${THEME_ID}"
+    else
+      echo "ℹ️  .env already has THEME_ID=${CURRENT_THEME_ID}"
+      read -p "   Overwrite with new theme ID? (y/n) " -n 1 -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sed "s/^THEME_ID=.*/THEME_ID=${THEME_ID}/" .env > .env.tmp && mv .env.tmp .env
+        echo "✅ Updated .env with THEME_ID=${THEME_ID}"
+      fi
+    fi
+  else
+    echo "Add this to your .env file:"
+    echo "   THEME_ID=${THEME_ID}"
+  fi
+
+  echo ""
+  echo "🎉 You're all set! Run 'yarn dev' to begin development."
+else
+  echo ""
+  echo "❌ Failed to create theme or extract ID"
+  echo ""
+  echo "Output:"
+  echo "$OUTPUT"
+  exit 1
+fi

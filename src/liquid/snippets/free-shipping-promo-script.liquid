@@ -1,0 +1,40 @@
+{% assign promotion_settings = shop.metaobjects.free_shipping_promo_settings['global-free-shipping-promo-settings'] %}
+
+{% assign enabled = promotion_settings.enabled | default: false %}
+
+{% if enabled == true %}
+  {% assign FREE_SHIPPING_DISCOUNT_CODE = promotion_settings.discount_code %}
+  
+  {% assign has_free_shipping_discount = false %}
+
+  {% comment %} check if user has applied discount code {% endcomment %}
+  {% for discount in cart.discount_applications %}
+    {% if discount.title == FREE_SHIPPING_DISCOUNT_CODE %}
+      {% assign has_free_shipping_discount = true %}
+    {% endif %}
+  {% endfor %}
+
+  {% if has_free_shipping_discount == false %}
+    <script>
+      try {
+        const KEY_HAS_ATTEMPT_TO_ADD_DISCOUNT = 'KEY_HAS_ATTEMPT_TO_ADD_DISCOUNT'
+        const FREE_SHIPPING_DISCOUNT_CODE = "{{ FREE_SHIPPING_DISCOUNT_CODE }}";
+
+        const applyDiscount = () => {
+          const currentUrl = window.location.pathname + window.location.search;
+          window.location.href = `/discount/${FREE_SHIPPING_DISCOUNT_CODE}?redirect=${currentUrl}`;
+        }
+
+        const isApplied = sessionStorage.getItem(KEY_HAS_ATTEMPT_TO_ADD_DISCOUNT)
+
+        if (!isApplied) {
+          sessionStorage.setItem(KEY_HAS_ATTEMPT_TO_ADD_DISCOUNT, 'true');
+
+          applyDiscount();
+        }
+      } catch (e) {
+        console.log('error: ', e);
+      }
+    </script>
+  {% endif %}
+{% endif %}

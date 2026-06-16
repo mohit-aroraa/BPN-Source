@@ -1,0 +1,95 @@
+<div class='stack-recommendations'>
+  {% assign total_price = 0 %}
+  {% if section.settings.title != blan %}
+    <h2 class='stack-recommendations__title'>{{ section.settings.title }}</h2>
+  {% endif %}
+
+  {% if section.settings.text != blan %}
+    <p class='stack-recommendations__text'>{{ section.settings.text }}</p>
+  {% endif %}
+
+  <div class='stack-recommendations-slider swiper' data-stack-recommendations-swiper>
+    <div class='swiper-wrapper stack-recommendations-slider__wrapper'>
+      {% assign _z_index = section.blocks | size | plus: 1 %}
+
+      {% for block in section.blocks %}
+        {% assign _selected_product = all_products[block.settings.product] %}
+
+        {% assign tag_discount = blank %}
+
+        {% for tag in _selected_product.tags %}
+          {% if tag contains 'ssale' %}
+            {% assign tag_discount = tag | remove: 'ssale' %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        {% assign _tag_discount_adjusted = tag_discount | divided_by: 100.00 %}
+        {% assign tag_discounted_price = _selected_product.price | times: _tag_discount_adjusted %}
+        {% assign tag_final_price = _selected_product.price | minus: tag_discounted_price %}
+
+        {% if tag_discount != blank %}
+          {% assign total_price = total_price | plus: tag_final_price %}
+        {% else %}
+          {% assign total_price = total_price | plus: _selected_product.price %}
+        {% endif %}
+
+        {% assign _z_index = _z_index | minus: 1 %}
+
+        {% render 'stack-recommendations-product-card',
+          selected_product: _selected_product,
+          z_index: _z_index,
+          tag_discount: tag_discount,
+          tag_final_price: tag_final_price
+        %}
+      {% endfor %}
+    </div>
+    <div class='stack-recommendations-slider__controls'>
+      <div class='swiper-pagination media-carousel-slider__pagination'></div>
+    </div>
+
+    <div class='stack-recommendations-slider__add-button-container'>
+      <button class='stack-recommendations-slider__add-button' data-click-id='pdp_cys_stack_cta'>
+        ADD {{ section.blocks | size }} items TO CART —
+        {% render 'price-value', price: total_price %}
+      </button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Stack Recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Product",
+      "type": "product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Stack Recommendations"
+    }
+  ]
+}
+{% endschema %}

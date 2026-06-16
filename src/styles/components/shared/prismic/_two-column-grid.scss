@@ -1,0 +1,286 @@
+.twoColumnGrid {
+  $parent: &;
+  margin-bottom: 56px;
+  @include above("desktop-med") {
+    margin-bottom: 104px;
+  }
+  &--videoBlock {
+    @include above("desktop-med") {
+      margin-bottom: 112px;
+    }
+    #{$parent}__videoPlayer {
+      position: relative;
+      height: 260px;
+      @include above("mobile-large") {
+        height: 100%;
+      }
+      @include above("desktop-med") {
+        min-height: 580px;
+      }
+      iframe,
+      video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    #{$parent}__richText {
+      margin-bottom: 20px;
+      @include above("desktop-med") {
+        margin-bottom: 24px;
+      }
+      .richText__text {
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: 0.23px;
+        line-height: 1.125;
+        color: color("black");
+        margin-bottom: 10px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        @include above("desktop-med") {
+          margin-bottom: 12px;
+          @include use-text-style("paragraph-body-1");
+        }
+      }
+    }
+    #{$parent}__textBlockContent {
+      @include above("desktop-med") {
+        max-width: 488px;
+      }
+    }
+    #{$parent}__mediaBlock {
+      @include above("desktop-med") {
+        flex: 0 0 51.66%;
+      }
+    }
+  }
+  &__container {
+    width: 100%;
+    @include above("tablet-large") {
+      display: flex;
+      & > * {
+        flex: 0 0 50%;
+      }
+    }
+    &--details {
+      align-items: flex-start;
+    }
+  }
+  &__mediaBlock {
+    &--review {
+      height: 234px;
+      position: relative;
+      @include above("tablet-large") {
+        height: 380px;
+        flex: 0 0 48.88%;
+      }
+      @include above("desktop-med") {
+        height: 592px;
+      }
+    }
+    &--details {
+      padding-left: 12px;
+      padding-right: 12px;
+      margin-bottom: 24px;
+      @include above("tablet-large") {
+        order: 2;
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 0;
+        flex: 1 0 auto;
+        padding-right: 10%;
+      }
+    }
+    &--videoBlock {
+      @include above("tablet-large") {
+        flex: 0 0 51.66%;
+      }
+    }
+    .responsive-image {
+      &__wrapper {
+        height: 100%;
+      }
+      &__image {
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+  }
+  &__textBlock {
+    position: relative;
+    &--review {
+      background-color: #f8f7f7;
+      padding: 32px 20px;
+      @include above("tablet-large") {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        padding-left: 7.7%;
+        padding-right: 10%;
+      }
+    }
+    &--details {
+      padding-left: 12px;
+      padding-right: 12px;
+      @include above("tablet-large") {
+        order: 1;
+        flex: 0 0 51.11%;
+        padding-left: 12.22%;
+        padding-right: 7.7%;
+      }
+    }
+    &--videoBlock {
+      padding: 24px 12px 40px 12px;
+      background-color: #f6f4f3;
+      @include above("tablet-large") {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        padding: 32px 9.33% 32px 5.33%;
+      }
+      @include above("desktop-med") {
+      }
+    }
+  }
+  &__textBlockBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  &__videoEmbed {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    @include above("desktop-med") {
+      min-height: 419px;
+    }
+    &::before {
+      content: "";
+      display: block;
+      padding-top: 56.25%;
+    }
+    & > * {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      z-index: 1;
+    }
+  }
+  &__topTitle {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-left: 15px;
+    padding-right: 15px;
+    @include above("tablet-large") {
+      display: none;
+    }
+    h2 {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+      line-height: 1.167;
+      margin-bottom: 0;
+    }
+  }
+  &__title {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    @include above("desktop-med") {
+      font-size: 40px;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 40px;
+    }
+    &--review {
+      display: none;
+      @include above("tablet-large") {
+        display: block;
+        @include above("desktop-med") {
+          margin-bottom: 48px;
+        }
+      }
+    }
+    &--videoBlock {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+      line-height: 1.167;
+      margin-bottom: 12px;
+      @include above("desktop-med") {
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -1px;
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+    }
+  }
+  &__textBlockContent {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__subTitle {
+    @include use-text-style("paragraph-body-2");
+    color: color("black");
+    font-weight: 400;
+    margin-bottom: 0;
+    @include above("tablet-large") {
+      @include use-text-style("heading-5");
+      font-weight: 700;
+    }
+  }
+  &__richText {
+    .richText {
+      &__heading3 {
+        font-size: 16px;
+        line-height: 1.125;
+        text-transform: uppercase;
+        letter-spacing: normal;
+        margin-bottom: 8px;
+        @include above("desktop-med") {
+          margin-bottom: 4px;
+        }
+      }
+      &__text {
+        margin-bottom: 16px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        @include above("desktop-med") {
+          @include use-text-style("paragraph-body-1");
+          margin-bottom: 20px;
+        }
+      }
+    }
+    @include above("tablet-large") {
+      margin-bottom: 20px;
+    }
+  }
+  &__cta {
+    line-height: normal;
+    .button-link {
+      padding-bottom: 3.5px;
+      @include above("tablet-large") {
+        padding-bottom: 4px;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+
+{% if product.metafields.custom_fields["tab_primary_benefits"] != blank %}
+<div class="tab-pane fade {{ tab_active }}" id="Primary-Benefits" role="tabpanel" aria-labelledby="Primary-Benefits-tab">
+  <div class="primary-benefits">
+    <div class="row">
+      {% assign separator = "|###|" %}
+      {% assign icon_array = product.metafields.custom_fields["icon"] | split: separator %}
+      {% assign title_array = product.metafields.custom_fields["title"] | split: separator %}
+      {% assign fc_keys = product.metafields.custom_fields["tab_primary_benefits"] | split: "," %}
+      {% for i in fc_keys %}
+      {% assign index = i | plus: 0 %}
+      <div class="col-md-3">
+        <div class="benefits-img">
+          <img src="{{ icon_array[index] }}" alt="Icon" />
+        </div>
+        <p>{{ title_array[index] }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}

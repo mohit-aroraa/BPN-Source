@@ -1,0 +1,76 @@
+<section class="faq">
+    {% if section.settings.subtitle != blank %}
+        <p class="faq__subtitle">{{ section.settings.subtitle }}</p>
+    {% endif %}
+
+    {% if section.settings.title != blank %}
+        <h2 class="faq__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="faq-slider swiper" data-faq-swiper>
+        <div class="faq-slider__navigation">
+            <div class="swiper-button swiper-button-prev" data-click-id="pdp_questions_nav_buttons">
+                {% render 'icon', icon: 'left-arrow', tag: 'pdp_questions_nav_buttons' %}
+            </div>
+            <div class="swiper-button swiper-button-next" data-click-id="pdp_questions_nav_buttons">
+                {% render 'icon', icon: 'right-arrow', tag: 'pdp_questions_nav_buttons' %}
+            </div>
+        </div>
+
+        <div class="swiper-wrapper faq-slider__wrapper">
+            {% for block in section.blocks %}
+                <div class="faq-card swiper-slide">
+                    <h4 class="faq-card__title">{{ block.settings.title }}</h4>
+
+                    <p class="faq-card__text">
+                        {{ block.settings.text }}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="faq-slider__controls">
+            <div class="swiper-pagination faq-slider__pagination"></div>
+        </div>
+    </div>
+</section>
+{% schema %}
+{
+  "name": "Product FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Slide",
+      "type": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product FAQ"
+    }
+  ]
+}
+{% endschema %}

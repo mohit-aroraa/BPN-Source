@@ -1,0 +1,68 @@
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign product_filter_section = metafields.filters -%}
+
+{%- capture okendo_reviews -%}{{ product.metafields.okendo.StarRatingSnippet }}{%- endcapture -%}
+
+{%- layout none -%}
+
+{%- capture variants -%}
+  [
+  {%- for variant in product.variants -%}
+    {
+    "id": "{{ variant.id }}",
+    "title": "{{ variant.title }}",
+    "available": {{ variant.available }},
+    "price": {{ variant.price }},
+    {% if variant.available == false %}
+      "availability": "oos",
+    {% else %}
+      "availability": "{{ variant.metafields.custom.availability | default: 'default' }}",
+    {% endif %}
+    "variant_icon": {{ variant.metafields.custom.product_card_variation_icon | json }},
+    "external_link_url": "{{ variant.metafields.custom.external_link.value.url | default: '' }}",
+    "external_link_text": "{{ variant.metafields.custom.external_link.value.text | default: '' }}"
+    }{%- if forloop.last == false -%},{%- endif -%}
+  {%- endfor -%}
+  ]
+{%- endcapture -%}
+
+{%- capture jsonExample -%}
+  {
+  "id": {{ product.id }},
+  "title": "{{ product.title }}",
+  "images": [
+  {% for image in product.images %}
+    {
+    "src": "{{ image.src | img_url: 'original' }}",
+    "alt": "{{ image.alt | default: '' }}"
+    }{%- if forloop.last == false -%},{%- endif -%}
+  {% endfor %}
+  ],
+  "handle": "{{ product.handle }}",
+  "url": "{{ product.url }}",
+  "price": {{ product.price }},
+  "has_badge": "{{ product_filter_section.has_badge | default: false }}",
+  "badge_title": "{{ product_filter_section.badge_title }}",
+  "badge_background_color": "{{ product_filter_section.badge_background_color | default: '#D9C79C' }}",
+  "badge_text_color": "{{ product_filter_section.badge_text_color | default: '#ffffff' }}",
+  "product_card_description": "{{ product.metafields.custom.product_card_description | default: '' }}",
+  "tags": {{ product.tags | json }},
+  "reviews_markup": {{ okendo_reviews | json }},
+  "variants": {{ variants | strip }},
+  "information_list": [
+  {% for entry in product.metafields.custom.information_list.value %}
+    {
+    "name": {{ entry.name | json }},
+    "title": {{ entry.title | json }},
+    {% if entry.image != blank %}
+      "image": "{{ entry.image | img_url: 'original' }}",
+    {% endif %}
+    "text": {{ entry.text.value | json }}
+    }{%- if forloop.last == false -%},{%- endif -%}
+  {% endfor %}
+  ]
+  }
+{% endcapture %}
+
+{{ jsonExample | strip }}

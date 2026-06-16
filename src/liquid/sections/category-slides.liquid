@@ -1,0 +1,41 @@
+<div class="category-slides">
+  {% for block in section.blocks %}
+    <div>
+      <a href="{{ block.settings.link }}">
+        <span>{{ block.settings.label }}</span>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Category Slides",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Slide Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Category Slides",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

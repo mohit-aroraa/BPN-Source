@@ -1,0 +1,26 @@
+{%- assign metafields = metafields | default: pages['nick-bare-landing-page'].metafields -%}
+{%- assign block = metafields.landing_header -%}
+{%- assign enable = block.enable -%}
+{%- assign text = block.text -%}
+{%- assign cta_text = block.cta_text -%}
+
+{% if enable %}
+  <header class="landingPageHeader" id="site-header">
+    <div class="landingPageHeader__top">
+      {% render 'icon' with 'site-logo', class: 'header__logo-image' %}
+    </div>
+    <div class="landingPageHeader__bottom">
+      <div class="landingPageHeader__logo">
+        {% render 'icon' with 'site-logo', class: 'header__logo-image' %}
+      </div>
+      {% if text != blank %}
+        <p class="landingPageHeader__text">{{ text }}</p>
+      {% endif %}
+      {% if cta_text != blank %}
+        <a class="button button-primary landingPageHeader__cta js-scroll-to-section" href="javascript:void(0);">
+          {{- cta_text -}}
+        </a>
+      {% endif %}
+    </div>
+  </header>
+{% endif %}

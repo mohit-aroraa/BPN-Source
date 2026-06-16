@@ -1,0 +1,35 @@
+{%- assign lazy_image_url = image.url | append: '&w={width}' -%}
+{%- assign default_image_url = image.url | append: '&w=10' -%}
+{%- assign noscript_image_url = image.url | append: '&w=2048' -%}
+{% comment %}Need to add a crop parameter to the image urls to fit the aspect{% endcomment %}
+{%- if aspect_ratio != blank -%}
+  {%- assign lazy_image_url = lazy_image_url | append: '&h={height}&fit=crop' -%}
+  {%- assign default_image_url = default_image_url | append: '&h={height}&fit=crop' -%}
+  {%- assign noscript_image_url = noscript_image_url | append: '&h={height}&fit=crop' -%}
+{%- endif -%}
+{%- if crop_parameters != blank -%}
+  {%- assign lazy_image_url = lazy_image_url | append: '&crop=' | append: crop_parameters -%}
+  {%- assign default_image_url = default_image_url | append: '&crop=' | append: crop_parameters -%}
+  {%- assign noscript_image_url = noscript_image_url | append: '&crop=' | append: crop_parameters -%}
+{%- endif -%}
+{%- assign height_float = image.dimensions.height | times: 1.0 -%}
+{%- assign image_aspect_ratio = image.dimensions.width | divided_by: height_float -%}
+{%- assign aspect_ratio = aspect_ratio | default: image_aspect_ratio -%}
+{%- assign image_alt = alternate_text | default: image.alt -%}
+{% render 'responsive-image',
+  max_width: max_width,
+  max_height: max_height,
+  image_id: image.id,
+  lazy_image_url: lazy_image_url,
+  default_image_url: default_image_url,
+  noscript_image_url: noscript_image_url,
+  image_aspect_ratio: aspect_ratio,
+  image_width: image.dimensions.width,
+  image_height: image.dimensions.height,
+  image_alt: image_alt,
+  image_class: image_class,
+  image_attributes: image_attributes,
+  wrapper_class: wrapper_class,
+  wrapper_attributes: wrapper_attributes,
+  random_id: random_id
+%}

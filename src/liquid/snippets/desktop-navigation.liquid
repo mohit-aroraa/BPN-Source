@@ -1,0 +1,46 @@
+{%- assign length = navigation.count | minus: 1 -%}
+
+<nav class="desktopNav" role="navigation" aria-label="{{ aria_label }}">
+  <ul class="nav__menu">
+    {% for index in (0..length) %}
+      {%- assign _enable = 'enable_' | append: index -%}
+      {%- assign _title = 'title_' | append: index -%}
+      {%- assign _link = 'link_' | append: index -%}
+      {%- assign _text_color = 'text_color_' | append: index -%}
+      {%- assign _hover_color = 'hover_color_' | append: index -%}
+      {%- assign _is_mobile = 'is_mobile_' | append: index -%}
+      {%- assign _is_megamenu = 'is_megamenu_' | append: index -%}
+      {% unless !navigation[_is_mobile] %}
+        {% if navigation[_enable] %}
+          {% assign click_id_suffix = navigation[_title] | downcase | replace: 'apparel & ', '' %}
+          {% assign click_id_suffix = click_id_suffix | replace: 'start here: take the quiz', 'quiz' %}
+          <li
+            class="nav__menu-item {% if navigation[_is_megamenu] %}js-mega-menu{% endif %}"
+            data-sl="{{navigation[_title] | downcase | replace: ' ', '_'}}"
+            style="--nav-text-color: {{navigation[_text_color]}}; --nav-hover-color: {{navigation[_hover_color]}}"
+          >
+            <a
+              href="{{ navigation[_link] }}"
+              class="nav__menu-link link--bold"
+              data-click-id="nav_top-{{- click_id_suffix -}}"
+            >
+              {{- navigation[_title] -}}
+            </a>
+            {% for index in (0..length) %}
+              {% if index == 0 %}
+                {%- assign _nav_dropdown = 'nav_dropdown' -%}
+              {% else %}
+                {%- assign _nav_dropdown = 'nav_dropdown_' | append: index -%}
+              {% endif %}
+              {% assign nav_dropdown = metafields[_nav_dropdown] %}
+              {% if nav_dropdown.parent_id == navigation[_title] %}
+                {% assign dropdown_click_id_prefix = 'nav_' | append: click_id_suffix | append: '_' %}
+                {% render 'header-dropdown-menu', dropdownData: nav_dropdown, click_id_prefix: dropdown_click_id_prefix %}
+              {% endif %}
+            {% endfor %}
+          </li>
+        {% endif %}
+      {% endunless %}
+    {% endfor %}
+  </ul>
+</nav>

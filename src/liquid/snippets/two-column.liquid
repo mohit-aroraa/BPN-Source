@@ -1,0 +1,68 @@
+{%- assign block = section[module] -%}
+{%- assign bock_type = block.block_type -%}
+{%- assign image = block.image -%}
+{%- assign video_iframe = block.video_iframe -%}
+{%- assign title = block.title -%}
+{%- assign subtitle = block.subtitle -%}
+{%- assign text = block.text -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+{% comment %}
+  Fetch the background texture
+{% endcomment %}
+{%- assign global_section = pages['site-global-data'].metafields.global_data -%}
+{%- assign background_texture = global_section.gray_block_bg_portrait -%}
+
+<section class="twoColumnGrid twoColumnGrid--{{id}} twoColumnGrid--{{ request.page_type | handle }} {% if bock_type == "review" %}twoColumnGrid--review{% else %}twoColumnGrid--details{% endif %}">
+  {% unless bock_type == 'review' %}
+    <div class="twoColumnGrid__topTitle">
+      <h2>{{ title }}</h2>
+    </div>
+  {% endunless %}
+
+  <div class="twoColumnGrid__container twoColumnGrid__container--pdp {% if bock_type == "review" %}twoColumnGrid__container--review{% else %}twoColumnGrid__container--details{% endif %}">
+    <div class="twoColumnGrid__mediaBlock {% if bock_type == "review" %}twoColumnGrid__mediaBlock--review{% else %}twoColumnGrid__mediaBlock--details{% endif %}">
+      {% if image.size > 0 %}
+        {% render 'prismic-responsive-image' with image: image image_attributes: image_attributes image_attributes: 'width="640" height="640"', random_id: id %}
+      {% endif %}
+      {% if video_iframe %}
+        <div class="twoColumnGrid__videoEmbed">
+          {{ video_iframe }}
+        </div>
+      {% endif %}
+    </div>
+    <div class="twoColumnGrid__textBlock {% if bock_type == "review" %}twoColumnGrid__textBlock--review{% else %}twoColumnGrid__textBlock--details{% endif %}">
+      <div class="twoColumnGrid__textBlockContent">
+        {% if title != blank %}
+          <h2 class="twoColumnGrid__title {% unless bock_type == "review" %}twoColumnGrid__title--review{% endunless %}">
+            {{ title }}
+          </h2>
+        {% endif %}
+        {% if subtitle != blank %}
+          <p class="twoColumnGrid__subTitle">{{ subtitle }}</p>
+        {% endif %}
+        {% if text.size > 0 %}
+          <div class="twoColumnGrid__richText">
+            {% render 'prismic-rich-text', rich_text: text %}
+          </div>
+        {% endif %}
+        {% if cta_text != blank and cta_link != blank %}
+          <div class="twoColumnGrid__cta">
+            <a href="{{cta_link}}" class="button-link">{{ cta_text }}</a>
+          </div>
+        {% endif %}
+      </div>
+      {%- if background_texture != blank and bock_type == 'review' -%}
+        <img
+          class="twoColumnGrid__textBlockBg lazyload"
+          data-src="{{ background_texture.url }}"
+          src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/u3zfwAJrQPhbkYXzAAAAABJRU5ErkJggg=="
+          alt=""
+          role="presentation"
+          width="300"
+          height="200"
+        >
+      {%- endif -%}
+    </div>
+  </div>
+</section>

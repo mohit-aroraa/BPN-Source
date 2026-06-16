@@ -1,0 +1,28 @@
+.breadcrumbMain {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+
+  li {
+    font-size: 10px;
+    line-height: 1.2;
+    color: #4e4e4e;
+    font-weight: 400;
+    letter-spacing: normal;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-4");
+    }
+    a {
+      color: #4e4e4e;
+      text-decoration: none;
+    }
+    & + li {
+      margin-left: 6px;
+      &::before {
+        content: "/";
+        display: inline-block;
+        padding-right: 6px;
+      }
+    }
+  }
+}

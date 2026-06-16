@@ -1,0 +1,260 @@
+<!-- snippets/master--ctas -->
+
+{% liquid 
+
+    assign s                    = section.settings
+    assign sID                  = section.id
+
+    assign lp                   = 1
+    if slider == true 
+        assign lp               = 2
+    endif 
+
+    assign blockCSS             = ''
+    assign sectionCustomCSS     = s.custom_css
+    assign class                = 'section--' | append: sID
+    assign cssClass             = '.' | append: class
+
+    assign ttl                  = s.title
+    assign txt                  = s.text
+
+    assign img                  = s.image
+
+    assign btnTxt               = s.btn_text
+    assign btnUrl               = s.btn_url
+
+    assign bgClr                = s.color_bg
+    assign txtClr               = s.color_txt
+    assign ttlClr               = s.color_ttl_bg
+
+    case section.blocks.size
+        when 2  
+            assign width        = 'medium-up--one-half'
+        when 3  
+            assign width        = 'medium-up--one-third'
+        when 4  
+            assign width        = 'medium-up--one-quarter'
+        when 5  
+            assign width        = 'medium--one-third large-up--one-fifth'
+        when 6  
+            assign width        = 'medium--one-third large-up--one-sixth'
+        when 7  
+            assign width        = 'medium-up--one-quarter'
+        when 8  
+            assign width        = 'medium-up--one-quarter'
+        when 9  
+            assign width        = 'medium--one-third large-up--one-fifth'
+        when 10 
+            assign width        = 'medium--one-third large-up--one-fifth'
+        when 11 
+            assign width        = 'medium--one-third large-up--one-sixth'
+        when 12 
+            assign width        = 'medium--one-third large-up--one-sixth'
+    endcase 
+    
+%}
+
+{% capture colorsCSS %}
+    {% if bgClr != blank %}
+    == {
+        background: {{bgClr}};
+    }
+    {% endif %}
+    {% if txtClr != blank %}
+    == h2, 
+    == .rte * {
+        color: {{txtClr}};
+    }
+    {% endif %}
+    {% if ttlClr != blank %}
+    == .inner-container h2 {
+        background: {{ttlClr}};
+    }
+    {% endif %}
+{% endcapture %}
+
+
+<div class="section--ctas {{class}} {{sectionClass}}" data-section-id="{{ sID }}">
+    <div class="page-width">
+
+        {% if ttl != blank or img != blank %}
+            <div class="section-title">
+                {% if ttl != blank or img == blank %}
+                    <h2>{{ttl}}</h2>
+                {% endif %}
+                {% if txt != blank %}
+                    <div class="rte">{{txt}}</div>
+                {% endif %}
+                {% if img != blank %}
+                    {% include 'snippet--image', 
+                        img: img, 
+                        useBG: false 
+                    %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="grid vert-top grid_margin_bottom text-center" >
+            {% capture itms %}
+                {% for block in section.blocks %}
+
+                    {% liquid 
+                        assign b            = block.settings
+
+                        assign bID          = block.id
+
+                        assign blkCls   = 'block--' | append: bID
+                        assign blockClass     = '.' | append: blkCls
+
+                        assign ttl          = b.title 
+                        assign txt          = b.text 
+                        assign img          = b.image 
+                        assign imgMob       = b.image_mob
+                        assign lnk          = b.url 
+                        assign lnkTxt       = b.link_text 
+
+                        assign bgClr        = b.color_bg
+                        assign txtClr       = b.color_txt
+                        assign ttlClr       = b.color_ttl_bg
+
+                        assign vidExt       = b.video_url 
+                        assign vidHosted    = b.video_hosted 
+                        assign hostedThumb  = b.video_hosted_thumbnail
+
+                        if vidExt != blank or vidHosted != blank
+                            assign img      = blank
+                            assign lnk      = blank
+                        endif 
+
+                        assign el           = 'div'
+                        assign attr         = ''
+                        if lnk != blank and lnkTxt == blank
+                            assign el       = 'a'
+                            assign attr     = 'href="' | append: lnk | append: '"'
+                        endif  
+
+                        assign dskCls       = ''
+                        if imgMob != blank 
+                            assign dskCls   = 'small--hide'
+                        endif 
+                    %}
+
+                    {% capture blockCSS %}
+                        {{blockCSS}}
+                        {% if bgClr != blank %}
+                        {{blockClass}} .inner-container {
+                            background: {{bgClr}};
+                        }
+                        {% endif %}
+                        {% if txtClr != blank %}
+                        {{blockClass}} .inner-container h2, 
+                        {{blockClass}} .inner-container .rte * {
+                            color: {{txtClr}};
+                        }
+                        {% endif %}
+                        {% if ttlClr != blank %}
+                        {{blockClass}} .inner-container h2 {
+                            background: {{ttlClr}};
+                        }
+                        {% endif %}
+                    {% endcapture %}
+
+                    <div class="grid__item narrow--one-whole one-half {{width}} {{blkCls}}">
+                        <{{el}} {{attr}} class="inner-container">
+                            {% include 'snippet--image', 
+                                img: img, 
+                                extraClass: dskCls,
+                                useBG: false 
+                            %}
+                            {% include 'snippet--image', 
+                                img: imgMob, 
+                                extraClass: 'medium-up--hide',
+                                useBG: false 
+                            %}
+                            {% include 'snippet--video', 
+                                vidExt: vidExt, 
+                                vidHosted: vidHosted, 
+                                hostedThumb: hostedThumb,
+                                cf: false,
+                                vidClass: sectionClass, 
+                                autoPlay: false,
+                                normalMobile: false,
+                                useBG: false 
+                            %}
+                            {% if ttl != blank %}
+                                <h2>{{ttl}}</h2>
+                            {% endif %}
+                            {% if txt != blank %}
+                                <div class="rte">{{txt}}</div>
+                            {% endif %}
+                            {% if lnk != blank and lnkTxt != blank %}
+                                <a href="{{lnk}}" class="">
+                                    <span>{{lnkTxt}}</span>
+                                    {% include 'icon-arrow-right' %}
+                                </a>
+                            {% endif %}
+                        </{{el}}>
+                    </div>
+
+                {% endfor %}
+            {% endcapture %}
+
+            {% for i in (1..lp) %}
+                {{itms}}
+            {% endfor %}
+        </div>
+
+        {% if btnUrl != blank and btnTxt != blank %}
+            <div class="btn-container text-center">
+                <a href="{{btnUrl}}" class="btn">
+                    {{btnTxt}}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% assign sectionCustomCSS = sectionCustomCSS | prepend: blockCSS | prepend: colorsCSS %}
+
+
+    {% include 'custom-css', 
+        css: sectionCustomCSS, 
+        class: cssClass 
+    %}
+
+    {% if slider == true %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('{{cssClass}} .grid').slick({
+                    infinite: true,
+                    rows: 0,
+                    arrows: true,
+                    dots: false,
+                    centerMode: true,
+                    slidesToShow: 5,
+                    responsive: [
+                        {
+                            breakpoint: 991,
+                            settings: {
+                                slidesToShow: 3
+                            }
+                        },
+                        {
+                            breakpoint: 500,
+                            settings: {
+                                slidesToShow: 1,
+                                centerMode: false
+                            }
+                        }
+                    ]
+
+
+                });
+            })
+            waitFor_jQuery(function () {
+            
+            })       
+        </script>
+    {% endif %}
+
+    
+</div>

@@ -1,0 +1,16 @@
+
+{% if product.metafields.custom_fields["product_shots"] != blank %}
+<div class="product-banner">
+  <div class="container-fluid">
+    {% assign separator = "|###|" %}
+      {% assign product_shot_image_array = product.metafields.custom_fields["product_shot_image"] | split: separator %}
+      {% assign fc_keys = product.metafields.custom_fields["product_shots"] | split: "," %}
+      {% for i in fc_keys %}
+	    {% assign index = i | plus: 0 %}
+          <div class="row">
+              <img src="{{ product_shot_image_array[index] }}" class="w-100 img-fluid">
+          </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

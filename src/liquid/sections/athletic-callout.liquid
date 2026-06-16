@@ -1,0 +1,91 @@
+{% comment %}
+  Athletic Callout Section
+  ------------------------
+  - Up to 3 columns (blocks)
+  - Each column has an icon, title, and description
+{% endcomment %}
+
+<section class="bpn-athletic-callout" data-section-id="{{ section.id }}">
+  <div class="bpn-athletic-callout__container">
+    {% for block in section.blocks %}
+      <div class="bpn-athletic-callout__item">
+        <!-- Icon -->
+        {% if block.settings.icon != blank %}
+          <div class="bpn-athletic-callout__icon">
+            <img
+              src="{{ block.settings.icon | img_url: '200x' }}"
+              alt="{{ block.settings.title | escape }}"
+            />
+          </div>
+        {% endif %}
+
+        <div class="bpn-athletic-callout__content">
+          <!-- Title -->
+          {% if block.settings.title != blank %}
+            <div class="bpn-athletic-callout__title">
+              {{ block.settings.title }}
+            </div>
+          {% endif %}
+
+          <!-- Description -->
+          {% if block.settings.description != blank %}
+            <div class="bpn-athletic-callout__description">
+              {{ block.settings.description }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Athletic Callout",
+  "max_blocks": 3,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "callout_item",
+      "name": "Callout Column",
+      "settings": [
+        {
+          "id": "icon",
+          "type": "image_picker",
+          "label": "Icon"
+        },
+        {
+          "id": "title",
+          "type": "text",
+          "label": "Title",
+          "default": "Title text goes here."
+        },
+        {
+          "id": "description",
+          "type": "textarea",
+          "label": "Description",
+          "default": "Description text goes here.",
+          "info": "Description is hidden on mobile devices."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Athletic Callout",
+      "category": "Athletic Landing Pages",
+      "blocks": [
+        {
+          "type": "callout_item"
+        },
+        {
+          "type": "callout_item"
+        },
+        {
+          "type": "callout_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

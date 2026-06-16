@@ -1,0 +1,39 @@
+
+{% include 'media-common-section' %}
+{% schema %}
+   {
+    "name": "Read Section",
+    "class": "Read Section",
+    "settings": [
+			{
+                "id": "title",
+                "type": "text",
+                "label": "Title"
+            },
+			{
+                "id": "link",
+                "type": "url",
+                "label": "View More Link"
+            }
+	],
+    "blocks": [
+      {
+        "type": "section",
+        "name": "Read Section",
+        "settings": [
+            {
+                "id": "blog_ref",
+                "type": "article",
+                "label": "Blog"
+            }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,109 @@
+{%- assign block = section[module] -%}
+{%- assign banner_image = block.banner_image -%}
+{%- assign text = block.text -%}
+{%- assign text_color = block.text_color | default: '#ffffff' -%}
+{%- assign collection_handle = block.collection_handle -%}
+{%- assign collection = collections[collection_handle] -%}
+
+<section class="flannelProductGrid flannelProductGrid--{{ id }} flannelProductGrid--{{ request.page_type | handle }}">
+  <div class="flannelProductGrid__container">
+    {% for product in collection.products limit: 2 %}
+      {% assign selected_variant = product.selected_or_first_available_variant %}
+      <div class="productGridItem productGridItem--flannel productGridItem--flannel">
+        <div class="productGridItem__media">
+          <a href="/products/{{ product.handle }}" class="productGridItem__mediaLink">
+            {% render 'shopify-responsive-image' with image: product.featured_image, image_attributes: 'width="320" height="320"' %}
+          </a>
+        </div>
+        <div class="productGridItem__ProductDetails">
+          <p class="productGridItem__ProductTitle">{{ product.title }}</p>
+          <p class="productGridItem__productPrice">${{ selected_variant.price | money_without_currency }}</p>
+        </div>
+        <div class="productGridItem__action productGridItem__action--flannel">
+          <p class="productGridItem__dropdownLabel">Choose Size:</p>
+          <div data-form="AddToCartForm" class="js-upsell-product-form">
+            <input name="product_name" value="{{ product.title }}" hidden>
+            <select name="quantity" class="hide">
+              <option value="1" selected>1</option>
+            </select>
+            {% for variant in product.variants %}
+              {% capture upsell_select_options %}
+                {{ upsell_select_options }}
+                <option
+                  {% unless variant.available %}
+                    disabled="disabled"
+                  {% endunless %}
+                  value="{{ variant.id }}"
+                >
+                  {{ variant.title }}
+                </option>
+              {% endcapture %}
+              {% capture upsell_dropdown_markup %}
+                {{ upsell_dropdown_markup }}
+                <li
+                  role="button"
+                  data-variant-id="{{ variant.id }}"
+                  data-upsell-variant-selector
+                  data-variant-title="{{ variant.title }}"
+                  data-variant-available="{{ variant.available }}"
+                  class="productVariantDropdown__item {% if variant.id == selected_variant.id %}productVariantDropdown__item--selected js-product-variant-dropdown-item-selected{% endif %} {% unless variant.available %}productVariantDropdown__item--soldOut{% endunless %}"
+                >
+                  {{ variant.title }}
+                  {% unless variant.available %}
+                    <sup>Sold Out</sup>
+                  {% endunless %}
+                </li>
+              {% endcapture %}
+            {% endfor %}
+            <select class="hide" name="id">
+              {{ upsell_select_options }}
+            </select>
+            <div class="productVariantDropdown productVariantDropdown--flannel js-productVariantDropdown">
+              <button
+                type="button"
+                title="Product variant selector"
+                aria-expanded="false"
+                data-sl="upsell_variant_selector_dropdown"
+                data-upsell-variant-dropdown-trigger
+                class="productVariantDropdown__trigger"
+                {% if product.variants.size == 1 %}
+                  disabled
+                {% endif %}
+              >
+                <span class="text">{{ selected_variant.title }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" class="arrow">
+                  <path d="M9.126 1.126 5.222 5.03a.305.305 0 0 1-.444 0L.874 1.126" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+              <ul class="productVariantDropdown__items">
+                {{ upsell_dropdown_markup }}
+              </ul>
+            </div>
+            <button
+              type="button"
+              title="Add to cart"
+              data-sl="add_to_cart_flannel_page"
+              style="display: block;"
+              class="button button-primary js-upsell-add-to-cart-btn"
+              onclick="window.openCartDrawer && window.openCartDrawer()"
+              {% if selected_variant.available == false %}
+                disabled
+              {% endif %}
+            >
+              {% if selected_variant.available %}ADD TO CART{% else %}SOLD OUT{% endif %}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {%- assign upsell_select_options = null -%}
+      {%- assign upsell_dropdown_markup = null -%}
+    {% endfor %}
+    {% if banner_image != blank %}
+      <div class="flannelProductGrid__banner">
+        {% render 'prismic-responsive-image' with image: banner_image, image_attributes: 'width="416" height="535"' %}
+        <div class="flannelProductGrid__bannerText" style="--color: {{ text_color }}">{{ text }}</div>
+      </div>
+    {% endif %}
+  </div>
+</section>

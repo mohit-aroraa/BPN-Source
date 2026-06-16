@@ -1,0 +1,22 @@
+
+
+<div class="tab-pane fade {{ tab_active }}" id="Essential-Ingedients" role="tabpanel" aria-labelledby="Essential-Ingedients-tab">
+ {% comment %} 
+{%- for variant in product.variants -%}
+  {% if variant.metafields.custom_fields["essential_ingedients_content"] != blank %}
+	<div data-id="{{ variant.id }}" class="variation-data variation-data-{{ variant.id }}" style="display:none">
+	    {{ variant.metafields.custom_fields["essential_ingedients_content"] }}
+    </div>  
+  {% else if product.metafields.custom_fields["essential_ingedients_content"] != blank %}
+  	<div data-id="{{ variant.id }}" class="variation-data variation-data-{{ variant.id }}" style="display:none">
+	    {{ product.metafields.custom_fields["essential_ingedients_content"] }}
+    </div>  
+  {% endif %}
+{% endfor %}
+  {% endcomment %}
+{% if product.metafields.custom_fields["essential_ingedients_content"] != blank %}
+  	<div class="data-content-default">
+	  {{ product.metafields.custom_fields["essential_ingedients_content"] }}
+	</div>
+{% endif %}
+</div>

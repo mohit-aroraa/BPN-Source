@@ -1,0 +1,67 @@
+.selector-container {
+  .selector-variants-count {
+    margin-top: 16px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+
+    @include above('desktop') {
+      margin-top: 24px;
+      font-size: 18px;
+      line-height: 22px; /* 122.222% */
+      letter-spacing: -0.36px;
+    }
+  }
+
+  .selector {
+    margin-top: 8px;
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+
+    &__item {
+      flex-grow: 1;
+      padding: 9px 0;
+      text-align: center;
+      color: black;
+      border-radius: 5px;
+      border: 1px solid #CCC;
+      background-color: #FFF;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: -0.32px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:hover,
+      &.selected {
+        border-color: black;
+        font-weight: 700;
+        color: black;
+      }
+
+      &.disabled:hover,
+      &.disabled.selected {
+        background-color: #DDD;
+      }
+
+      &.disabled {
+        position: relative;
+        color: #777777;
+        border-color: #CCC;
+
+        &:hover {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{%- comment -%}
+  Registering BPN object to BPN specific data
+{%- endcomment -%}
+<script>
+{
+  window.dataLayer = window.dataLayer || [];
+  window.BPN = window.BPN || {};
+  window.BPN.flushCart = false;
+  window.BPN.drawer = { name: 'cart', position: 'left', trigger: null, drop: false }
+  window.useIpinfoApi = {{ settings.use_paid_ipinfo_api }};
+
+
+  const globalRefs = (function initElements() {
+    return {
+      toast: {
+        toastItem: document.getElementById('toast'),
+        toastMessage: document.getElementById('toast__message'),
+        toastClose: document.getElementById('toast__close')
+      },
+    }
+  })();
+
+  window.BPN.globalRefs = globalRefs;
+
+  const { toastItem, toastMessage, toastClose } = globalRefs.toast;
+  let toastTimeout = null;
+  window.enableToast = function enableToast(message, messageType = 'info', timeout = 5000) {
+    if (toastItem && message) {
+      switch (messageType) {
+        case 'info':
+          toastMessage.classList.remove('error');
+          break;
+        case 'error':
+          toastMessage.classList.add(messageType);
+          break
+      }
+      toastMessage.innerHTML = `<p>${message}</p>`;
+      toastItem.classList.add('active');
+      toastTimeout = setTimeout(() => {
+        toastItem.classList.remove('active');
+      }, timeout);
+    }
+  }
+
+  toastClose && toastClose.addEventListener('click', () => {
+    clearTimeout(toastTimeout);
+    toastItem && toastItem.classList.remove('active')
+  })
+}
+</script>

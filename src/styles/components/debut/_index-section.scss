@@ -1,0 +1,354 @@
+/*================ Index sections ================*/
+.index-section {
+  padding-top: $section-spacing-small;
+  padding-bottom: $section-spacing-small;
+
+  @include mq($medium-up) {
+    padding-top: $section-spacing;
+    padding-bottom: $section-spacing;
+  }
+
+  &:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.index-section--flush + .index-section--flush {
+  margin-top: -($section-spacing-small * 2);
+}
+
+[class*="index-section--flush"] + [class*="index-section--flush"] {
+  @include mq($medium-up) {
+    margin-top: -($section-spacing * 2);
+  }
+}
+
+// Flush sections should be tight to the nav if they are the first on the page
+.index-section--flush:first-child {
+  margin-top: -$section-spacing-small;
+}
+
+[class*="index-section--flush"]:first-child {
+  @include mq($medium-up) {
+    margin-top: -$section-spacing;
+  }
+}
+
+// Flush sections should be tight to the footer if they are last on the page
+.index-section--flush:last-child {
+  margin-bottom: -$section-spacing-small;
+}
+
+[class*="index-section--flush"]:last-child {
+  @include mq($medium-up) {
+    margin-bottom: -$section-spacing;
+  }
+}
+
+// Visually align featured product section (if first on homepage on mobile)
+.index-section--featured-product:first-child {
+  @include mq($small) {
+    margin-top: -12px;
+  }
+}
+
+// Override for slideshow on mobile
+.index-section--slideshow + .index-section--flush {
+  @include mq($small) {
+    margin-top: 0.4rem;
+  }
+}
+
+$color-blankstate: rgba($color-body-text, 0.35);
+$color-blankstate-border: rgba($color-body-text, 0.2);
+$color-blankstate-background: rgba($color-body-text, 0.1);
+
+.placeholder-svg {
+  display: block;
+  fill: $color-blankstate;
+  background-color: $color-blankstate-background;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid $color-blankstate-border;
+}
+
+.placeholder-noblocks {
+  padding: 40px;
+  text-align: center;
+}
+
+// Mimic a background image by wrapping the placeholder svg with this class
+.placeholder-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  .icon {
+    border: 0;
+  }
+}
+
+.placeholder-background--animation {
+  background-color: $color-text;
+
+  @include animation(placeholder-background-loading 1.5s infinite linear);
+
+  .no-js & {
+    display: none;
+  }
+}
+
+// Custom styles for some blank state images
+.image-bar__content .placeholder-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.plyr.plyr--full-ui.plyr--video {
+  color: $color-text;
+  background-color: transparent;
+  cursor: pointer;
+
+  .plyr__video-wrapper {
+    background-color: transparent;
+  }
+
+  .plyr__poster {
+    background-color: $color-video-bg;
+  }
+
+  // --------------------------------------------------------------
+  // Fullscreen
+  // --------------------------------------------------------------
+
+  &:fullscreen .plyr__video-wrapper &:fullscreen .plyr__poster {
+    background-color: #000;
+  }
+
+  /* stylelint-disable-next-line */
+  &:-webkit-full-screen .plyr__video-wrapper,
+  &:-webkit-full-screen .plyr__poster {
+    background-color: #000;
+  }
+
+  /* stylelint-disable-next-line */
+  &:-moz-full-screen .plyr__video-wrapper,
+  &:-moz-full-screen .plyr__poster {
+    background-color: #000;
+  }
+
+  /* stylelint-disable-next-line */
+  &:-ms-fullscreen .plyr__video-wrapper,
+  &:-ms-fullscreen .plyr__poster {
+    background-color: #000;
+  }
+
+  // Fallback for unsupported browsers
+  .plyr--fullscreen-fallback .plyr__video-wrapper,
+  .plyr--fullscreen-fallback .plyr__poster {
+    background-color: #000;
+  }
+
+  .plyr__control.plyr__control--overlaid {
+    background-color: $color-bg;
+    border-color: rgba($color-text, 0.05);
+
+    &.plyr__tab-focus,
+    &:hover {
+      color: rgba($color-text, 0.55);
+    }
+  }
+
+  .plyr__controls {
+    background-color: $color-bg;
+    border-color: rgba($color-text, 0.05);
+  }
+
+  .plyr__progress {
+    input[type="range"] {
+      &::-moz-range-thumb {
+        box-shadow: 2px 0 0 0 $color-bg;
+      }
+
+      &::-ms-thumb {
+        box-shadow: 2px 0 0 0 $color-bg;
+      }
+
+      &::-webkit-slider-thumb {
+        box-shadow: 2px 0 0 0 $color-bg;
+      }
+
+      &::-webkit-slider-runnable-track {
+        background-image: linear-gradient(
+          to right,
+          currentColor var(--value, 0),
+          rgba($color-text, 0.6) var(--value, 0)
+        );
+      }
+
+      &::-moz-range-track {
+        background-color: rgba($color-text, 0.6);
+      }
+
+      &::-ms-fill-upper {
+        background-color: rgba($color-text, 0.6);
+      }
+
+      &.plyr__tab-focus {
+        &::-webkit-slider-runnable-track {
+          box-shadow: 0 0 0 4px rgba($color-text, 0.25);
+        }
+
+        &::-moz-range-track {
+          box-shadow: 0 0 0 4px rgba($color-text, 0.25);
+        }
+
+        &::-ms-track {
+          box-shadow: 0 0 0 4px rgba($color-text, 0.25);
+        }
+      }
+
+      &:active {
+        &::-moz-range-thumb {
+          box-shadow: 0 0 0 3px rgba($color-text, 0.25);
+        }
+
+        &::-ms-thumb {
+          box-shadow: 0 0 0 3px rgba($color-text, 0.25);
+        }
+
+        &::-webkit-slider-thumb {
+          box-shadow: 0 0 0 3px rgba($color-text, 0.25);
+        }
+      }
+    }
+
+    .plyr__tooltip {
+      background-color: $color-text;
+      color: $color-bg;
+
+      &::before {
+        border-top-color: $color-text;
+      }
+    }
+  }
+
+  &.plyr--loading .plyr__progress__buffer {
+    background-image: linear-gradient(
+      -45deg,
+      rgba($color-text, 0.6) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba($color-text, 0.6) 50%,
+      rgba($color-text, 0.6) 75%,
+      transparent 75%,
+      transparent
+    );
+  }
+
+  .plyr__volume {
+    input[type="range"] {
+      color: $color-bg;
+
+      &::-moz-range-thumb {
+        box-shadow: 2px 0 0 0 $color-text;
+      }
+
+      &::-ms-thumb {
+        box-shadow: 2px 0 0 0 $color-text;
+      }
+
+      &::-webkit-slider-thumb {
+        box-shadow: 2px 0 0 0 $color-text;
+      }
+
+      &::-webkit-slider-runnable-track {
+        background-image: linear-gradient(
+          to right,
+          currentColor var(--value, 0),
+          rgba($color-bg, 0.6) var(--value, 0)
+        );
+      }
+
+      &::-moz-range-track,
+      &::-ms-fill-upper {
+        background-color: rgba($color-bg, 0.6);
+      }
+
+      &.plyr__tab-focus {
+        &::-webkit-slider-runnable-track {
+          box-shadow: 0 0 0 4px rgba($color-bg, 0.25);
+        }
+
+        &::-moz-range-track {
+          box-shadow: 0 0 0 4px rgba($color-bg, 0.25);
+        }
+
+        &::-ms-track {
+          box-shadow: 0 0 0 4px rgba($color-bg, 0.25);
+        }
+      }
+
+      &:active {
+        &::-moz-range-thumb {
+          box-shadow: 0 0 0 3px rgba($color-bg, 0.25);
+        }
+
+        &::-ms-thumb {
+          box-shadow: 0 0 0 3px rgba($color-bg, 0.25);
+        }
+
+        &::-webkit-slider-thumb {
+          box-shadow: 0 0 0 3px rgba($color-bg, 0.25);
+        }
+      }
+    }
+  }
+}
+
+.shopify-model-viewer-ui {
+  .shopify-model-viewer-ui__controls-area {
+    background: $color-bg;
+    border-color: rgba($color-text, 0.05);
+  }
+
+  .shopify-model-viewer-ui__button {
+    color: $color-text;
+  }
+
+  .shopify-model-viewer-ui__button--control {
+    &:hover {
+      color: rgba($color-text, 0.55);
+    }
+
+    &:active,
+    &.focus-visible:focus {
+      color: rgba($color-text, 0.55);
+      background: rgba($color-text, 0.05);
+    }
+
+    &:not(:last-child):after {
+      border-color: rgba($color-text, 0.05);
+    }
+  }
+
+  .shopify-model-viewer-ui__button--poster {
+    background: $color-bg;
+    border-color: rgba($color-text, 0.05);
+
+    &:hover,
+    &:focus {
+      color: rgba($color-text, 0.55);
+    }
+  }
+}

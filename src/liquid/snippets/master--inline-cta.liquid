@@ -1,0 +1,53 @@
+<!-- snippets/master--inline-cta -->
+
+{% liquid 
+
+    assign s                    = section.settings
+    assign sID                  = section.id
+
+    assign sectionCustomCSS     = s.custom_css
+    assign class                = 'section--inline-cta'
+    assign cssClass             = '.' | append: class
+
+    assign img                  = s.image
+    assign ttl                  = s.title
+    assign txt                  = s.text
+    assign lnkTxt               = s.link_text
+    assign lnkUrl               = s.link_url
+    assign useBtn               = false
+    if lnkTxt != blank and lnkUrl != blank 
+        assign useBtn           = true
+    endif 
+
+%}
+
+
+{% if ttl != blank or img != blank %}
+    <div class="section--inline-ctas {{class}}">
+        <div class="page-width">
+            <div class="cta-flex">
+                {% include 'snippet--image', 
+                    img: img, 
+                    useBG: false 
+                %}
+                {% if ttl != blank %}
+                    <div class="text-content">
+                        {% if ttl != blank %}
+                            <h2>{{ttl}}</h2>
+                        {% endif %}
+                        {% if txt != blank %}
+                            <div class="rte">{{txt}}</div>
+                        {% endif %}
+                        {% if useBtn == true %}
+                            <a class="link-item" href="{{lnkUrl}}">{{lnkTxt}}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% include 'custom-css', 
+            css: sectionCustomCSS, 
+            class: cssClass 
+        %}
+    </div>
+{% endif %}

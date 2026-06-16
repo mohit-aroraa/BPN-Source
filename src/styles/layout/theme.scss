@@ -1,0 +1,53 @@
+/*
+ * Basic file with global styles.
+ * Files imported here will be available on every page.
+ */
+
+@charset "UTF-8";
+
+// Normalization
+// @import "~accoutrement/sass/init";
+
+//  Only Required components of bootstrap
+@import "../font-face";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/grid";
+
+// Design Tokens
+@import "./src/design-tokens/index";
+@import "../root";
+// Global Components
+@import "swiper/swiper.scss";
+@import "swiper/modules/a11y/a11y.scss";
+@import "swiper/modules/scrollbar/scrollbar.scss";
+@import "swiper/modules/free-mode/free-mode.scss";
+@import "swiper/modules/controller/controller.scss";
+@import "swiper/modules/autoplay/autoplay.scss";
+@import "swiper/modules/mousewheel/mousewheel.scss";
+@import "./src/styles/components/debut/index";
+@import "./src/styles/components/global/index";
+@import "../components/shared/prismic/site-accordion";
+@import "../templates/customers/account";
+
+//og-subscriptions-manager styles
+@import "../templates/page.subscriptions";
+
+@import "../components/sms-subscription";
+@import "../components/cart-drawer";
+
+.hover-reveal {
+  cursor: pointer;
+}
+// For the store locator page
+#store-locator-title {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  text-align: center;
+  @include above("tablet-large") {
+    margin-top: 35px;
+    margin-bottom: 25px;
+  }
+}
+

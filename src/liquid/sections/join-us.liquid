@@ -1,0 +1,58 @@
+{% assign handle = section.settings.handle %}
+
+{% assign settings = shop.metaobjects.join_us[handle] %}
+
+<section class='join-us bpn-newsletter'>
+  <div class='join-us__content'>
+    <div class='join-us__content-info'>
+      <h3 class='join-us__title mobile--only-anatta'>
+        {{ settings.mobile_title }}
+      </h3>
+      <h3 class='join-us__title desktop--only-anatta'>
+        {{ settings.title }}
+      </h3>
+      <p class='join-us__text'>{{ settings.text | metafield_text }}</p>
+    </div>
+    <form class='join-us__form bpn-newsletter__form'>
+      <div class='join-us__input-message bpn-newsletter__message hidden'>
+        <h3>Thank you for subscribing!</h3>
+        <p>Check your phone for a confirmation message.</p>
+      </div>
+      <input
+        class='join-us__input bpn-newsletter__input'
+        type='tel'
+        placeholder='Mobile xxx.xxx.xxxx'
+      >
+      <div class='join-us__input-error bpn-newsletter__error hidden'>error</div>
+      <input
+        class='join-us__button bpn-join-us__button'
+        type='submit'
+        value='TEXT ME'
+        data-click-id='footer_sms'
+      >
+    </form>
+    <p class='join-us__small-text'>
+      {{ settings.small_text }}
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Join us",
+  "settings": [
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Join us meta object handle",
+      "default": "join-us-global"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Join us"
+    }
+  ]
+}
+{% endschema %}

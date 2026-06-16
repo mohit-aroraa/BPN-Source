@@ -1,0 +1,8 @@
+{%- assign block = metafields[module] -%}
+{%- assign header = block.header -%}
+
+{% if header != blank %}
+    <div class="headingTextSection">
+        <h2 class="headingTextSection__header">{% render "prismic-rich-text", rich_text: header %}</h2>
+    </div>
+{% endif %}

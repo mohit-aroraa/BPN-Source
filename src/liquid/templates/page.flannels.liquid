@@ -1,0 +1,6 @@
+{% layout 'anatta_theme' %}
+{%- assign metafields = pages.flannels-lp.metafields -%}
+
+<main class="flannels-lp">
+    {% include 'prismic-dynamic-slices' section: metafields %}
+</main>

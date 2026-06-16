@@ -1,0 +1,53 @@
+@mixin transition-03($transition-03) {
+  -webkit-transition: $transition-03;
+  -moz-transition: $transition-03;
+  -o-transition: $transition-03;
+  transition: $transition-03;
+}
+
+@mixin transformY($transforms) {
+  -moz-transform: translateY($transforms);
+  -o-transform: translateY($transforms);
+  -ms-transform: translateY($transforms);
+  -webkit-transform: translateY($transforms);
+  transform: translateY($transforms);
+}
+
+@mixin transformX($transforms) {
+  -moz-transform: translateX($transforms);
+  -o-transform: translateX($transforms);
+  -ms-transform: translateX($transforms);
+  -webkit-transform: translateX($transforms);
+  transform: translateX($transforms);
+}
+
+@mixin placeholder-text {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+
+  &::-moz-placeholder {
+    @content;
+  }
+
+  &::-o-placeholder {
+    @content;
+  }
+
+  &::-ms-input-placeholder {
+    @content;
+  }
+}
+@mixin background(
+  $imgpath,
+  $position: center center,
+  $repeat: no-repeat,
+  $size: cover
+) {
+  background: {
+    image: url($imgpath);
+    position: $position;
+    repeat: $repeat;
+    size: $size;
+  }
+}

@@ -1,0 +1,12 @@
+{% if section.settings.rotational_offer_image and section.settings.rotational_offer_link %}
+  <a href='{{ section.settings.rotational_offer_link }}'>
+    {{
+      section.settings.rotational_offer_image
+      | image_url: height: 160, width: 660
+      | image_tag:
+        loading: 'lazy',
+        class:'bpn-hamburger-drawer__rotational-offer-image',
+        alt: 'Offer Image'
+    }}
+  </a>
+{% endif %}

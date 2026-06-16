@@ -1,0 +1,99 @@
+// prevent scrolling when dialog open
+html:has(& sm-dialog dialog[open]) {
+  scrollbar-gutter: stable; // prevent layout shift
+  overflow: hidden;
+}
+
+sm-dialog {
+  dialog {
+    position: fixed;
+    inset: 0;
+    top: unset; // override some UA styles
+    max-width: 100%;
+    width: 100%;
+
+    background: @container-background;
+    border: 0;
+    border-radius: @border-radius-md @border-radius-md 0 0;
+    padding: @size-7 @size-4 @size-4;
+
+    &::backdrop {
+      background: @color-dialog-backdrop;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      &[open] {
+        animation: og-slide-in-up 0.3s ease-out;
+      }
+
+      &[data-animating-out] {
+        animation: og-slide-out-down 0.2s linear;
+      }
+    }
+
+    &.og-dialog-wide {
+      max-width: 637px;
+    }
+
+    @media (min-width: @mobile-width) {
+      max-width: @dialog-max-width;
+      margin: auto;
+      top: 0;
+      border-radius: @border-radius-md;
+      animation: none !important;
+      padding: @size-7;
+    }
+  }
+
+  h1 {
+    font-size: @text-lg;
+    font-weight: 700;
+
+    @media (min-width: @mobile-width) {
+      font-size: @text-xl;
+    }
+  }
+
+  p {
+    font-size: @text-xs;
+  }
+
+  .og-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .og-dialog-close {
+    appearance: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    svg {
+      display: block;
+    }
+  }
+
+  .og-dialog-body {
+    margin-top: @size-2;
+    margin-bottom: @size-5;
+
+    @media (min-width: @mobile-width) {
+      margin-top: @size-4;
+      margin-bottom: @size-8;
+    }
+  }
+
+  .og-dialog-footer {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: @size-2;
+    justify-content: end;
+
+    @media (min-width: @mobile-width) {
+      flex-direction: row;
+      gap: @size-4;
+    }
+  }
+}

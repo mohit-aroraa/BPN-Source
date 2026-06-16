@@ -1,0 +1,36 @@
+/*============================================================================
+    Animation Classes and Keyframes
+  ==============================================================================*/
+.is-transitioning {
+  // sass-lint:disable no-important
+  display: block !important;
+  visibility: visible !important;
+}
+
+@mixin animation($animation) {
+  @include prefix(animation, #{$animation}, moz o webkit spec);
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@mixin fade-transition-base($duration: $transition-duration) {
+  transition-property: opacity, visibility;
+  transition-duration: $duration;
+  transition-timing-function: ease-in-out;
+}

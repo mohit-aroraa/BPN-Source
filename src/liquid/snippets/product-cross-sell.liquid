@@ -1,0 +1,226 @@
+{% comment %}
+  Cross-sell using metaobjects with product replacement
+  Use: {% render 'cross-sell', metaobject_handle: 'endurance-products' %}
+{% endcomment %}
+
+{% comment %} Get metaobject {% endcomment %}
+{% assign cross_sell_list = shop.metaobjects.cross_sell_list[metaobject_handle] %}
+
+{% if cross_sell_list and cross_sell_list.active %}
+
+<div class="cross-sell-section">
+
+  {% if cross_sell_list.custom_title and cross_sell_list.custom_title != blank %}
+    <h3 class="cross-sell-title">{{ cross_sell_list.custom_title }}</h3>
+  {% endif %}
+  
+  <div class="cross-sell-products">
+    {% assign products_shown = 0 %}
+    
+    {% for check_product in cross_sell_list.products.value %}
+      {% if products_shown >= 2 %}
+        {% break %}
+      {% endif %}
+      
+      {% if check_product.id != product.id and check_product.available %}
+        {% assign products_shown = products_shown | plus: 1 %}
+        
+        <div class="cross-sell-item" data-product-index="{{ forloop.index0 }}">
+          <div class="product-image">
+            {% if check_product.featured_image %}
+              <img src="{{ check_product.featured_image | image_url: width: 176 }}" 
+                    alt="{{ check_product.title }}" 
+                    loading="lazy">
+            {% else %}
+              <div class="no-image-placeholder"></div>
+            {% endif %}
+          </div>
+
+          <div class="product-info">
+            <div class="container-info">
+            <h4 class="product-title" data-full-title="{{ check_product.title | escape }}">{{ check_product.title | upcase }}</h4>
+            <div class="product-meta">
+              {% assign check_filter_goal = check_product.metafields.custom._filter_goal.value %}
+              <span class="product-type">{{ check_filter_goal | default: check_product.type | upcase }}</span>
+              <span class="separator">•</span>
+              {% if check_product.variants.size == 1 %}
+                {% if check_product.variants.first.option1 and check_product.variants.first.option1 != 'Default Title' %}
+                  <span class="product-variant">{{ check_product.variants.first.option1 | upcase }}</span>
+                {% else %}
+                  <span class="product-variant">ORIGINAL</span>
+                {% endif %}
+              {% else %}
+                <span class="product-variant">{{ check_product.variants.size }} OPTIONS</span>
+              {% endif %}
+            </div>
+            </div>
+
+            {% if check_product.variants.size > 1 %}
+              <div class="select-wrapper">
+                <select class="variant-selector" data-product-id="{{ check_product.id }}">
+                  {% for variant in check_product.variants %}
+                    <option value="{{ variant.id }}" 
+                            data-price="{{ variant.price }}"
+                            {% unless variant.available %}disabled{% endunless %}>
+                      {{ variant.title }} 
+                      {% unless variant.available %} - Sold Out{% endunless %}
+                    </option>
+                  {% endfor %}
+                </select>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="select-arrow">
+                  <path d="M8 9.28736L12.6669 4.53928L14 5.8956L8 12L2 5.8956L3.33312 4.53928L8 9.28736Z" fill="black"></path>
+                </svg>
+              </div>
+            {% endif %}
+          </div>
+          
+          <div class="product-actions">
+            <div class="price">
+              ${{ check_product.price | money_without_currency }}
+            </div>
+            
+            <button type="button" 
+                    class="add-to-cart-btn cross-sell-add-btn"
+                    data-variant-id="{{ check_product.selected_or_first_available_variant.id }}"
+                    data-product-id="{{ check_product.id }}"
+                    {% unless check_product.available %}disabled{% endunless %}>
+              {% if check_product.available %}
+                ADD
+              {% else %}
+                SOLD OUT
+              {% endif %}
+            </button>
+          </div>
+        </div>
+        
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% comment %} Create data for all products for JavaScript {% endcomment %}
+<script type="application/json" id="cross-sell-products-data">
+[
+  {% for check_product in cross_sell_list.products.value %}
+    {% if check_product.id != product.id and check_product.available %}
+      {
+        "id": "{{ check_product.id }}",
+        "variantId": "{{ check_product.selected_or_first_available_variant.id }}",
+        "title": "{{ check_product.title | escape }}",
+        "price": "{{ check_product.price | money_without_currency }}",
+        "image": "{{ check_product.featured_image | image_url: width: 176 }}",
+        "filterGoal": "{{ check_product.metafields.custom._filter_goal.value | default: check_product.type }}",
+        "variants": [
+          {% for v in check_product.variants %}
+            {
+              "id": {{ v.id | json }},
+              "price": {{ v.price | money_without_currency | json }},
+              "available": {{ v.available | json }},
+              "title": {{ v.title | json }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "addProduct": "false",
+        "variantInfo": "{% if check_product.variants.size == 1 %}{% if check_product.variants.first.option1 and check_product.variants.first.option1 != 'Default Title' %}{{ check_product.variants.first.option1 }}{% else %}ORIGINAL{% endif %}{% else %}{{ check_product.variants.size }} FLAVORS{% endif %}"
+      }{% unless forloop.last %},{% endunless %}
+    {% endif %}
+  {% endfor %}
+]
+</script>
+
+{% else %}
+
+{% comment %} Fallback: use filter_goal if there is no metaobject {% endcomment %}
+{% assign current_filter_goal = product.metafields.custom._filter_goal.value %}
+
+{% if current_filter_goal and current_filter_goal != blank %}
+
+<div class="cross-sell-section">
+  <h3 class="cross-sell-title">ENHANCE YOUR RESULTS WITH:</h3>
+  
+  <div class="cross-sell-products">
+    {% assign products_shown = 0 %}
+    
+    {% comment %} Search and display products directly by filter_goal {% endcomment %}
+    {% for check_product in collections.all.products %}
+      {% if products_shown >= 2 %}
+        {% break %}
+      {% endif %}
+      
+      {% assign check_filter_goal = check_product.metafields.custom._filter_goal.value %}
+      
+      {% comment %} Display product if filter_goal matches and is not the current one {% endcomment %}
+      {% if check_filter_goal == current_filter_goal and check_product.id != product.id %}
+        {% assign products_shown = products_shown | plus: 1 %}
+        
+        <div class="cross-sell-item">
+          <div class="product-image">
+            {% if check_product.featured_image %}
+              <img src="{{ check_product.featured_image | image_url: width: 176 }}" 
+                   alt="{{ check_product.title }}" 
+                   loading="lazy">
+            {% else %}
+              <div class="no-image-placeholder"></div>
+            {% endif %}
+          </div>
+          
+          <div class="product-info">
+            <h4 class="product-title" title="{{ check_product.title }}">{{ check_product.title | upcase }}</h4>
+            <div class="product-meta">
+              <span class="product-type">{{ check_filter_goal | upcase }}</span>
+              <span class="separator">•</span>
+              {% if check_product.variants.size == 1 %}
+                {% comment %} One variant only: display the specific flavor {% endcomment %}
+                {% if check_product.variants.first.option1 and check_product.variants.first.option1 != 'Default Title' %}
+                  <span class="product-variant">{{ check_product.variants.first.option1 | upcase }}</span>
+                {% else %}
+                  <span class="product-variant">ORIGINAL</span>
+                {% endif %}
+              {% else %}
+                {% comment %} Multiple variants: display number of flavors {% endcomment %}
+                <span class="product-variant">{{ check_product.variants.size }} FLAVORS</span>
+              {% endif %}
+            </div>
+            
+            {% comment %} Dropdown of variants if they exist {% endcomment %}
+            {% if check_product.variants.size > 1 %}
+              <select class="variant-selector" data-product-id="{{ check_product.id }}">
+                {% for variant in check_product.variants %}
+                  <option value="{{ variant.id }}" 
+                          data-price="{{ variant.price }}"
+                          {% unless variant.available %}disabled{% endunless %}>
+                    {{ variant.title }}
+                    {% unless variant.available %} - Sold Out{% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            {% endif %}
+          </div>
+          
+          <div class="product-actions">
+            <div class="price">
+              ${{ check_product.price | money_without_currency }}
+            </div>
+            
+            <button type="button" 
+                    class="add-to-cart-btn cross-sell-add-btn"
+                    data-variant-id="{{ check_product.selected_or_first_available_variant.id }}"
+                    data-product-id="{{ check_product.id }}"
+                    {% unless check_product.available %}disabled{% endunless %}>
+              {% if check_product.available %}
+                ADD
+              {% else %}
+                SOLD OUT
+              {% endif %}
+            </button>
+          </div>
+        </div>
+        
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% endif %}
+
+{% endif %}

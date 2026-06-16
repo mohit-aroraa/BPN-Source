@@ -1,0 +1,21 @@
+{%- comment -%}
+	
+	{%- include 'adaptive-color', color: color -%}
+
+{%- endcomment -%}
+{%- liquid
+	assign clr 		= color
+	assign brght 	= clr | color_brightness
+
+
+	if brght <= 26
+		assign newColor = clr | color_lighten: 25
+	endif
+	if brght <= 64 
+		assign newColor = clr | color_lighten: 15
+	else
+		assign newColor = clr | color_darken: 10
+	endif
+
+-%}
+{%- if color != blank -%}{{-newColor-}}{%- endif -%}

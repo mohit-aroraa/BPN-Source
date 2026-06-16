@@ -1,0 +1,84 @@
+{%- comment -%}
+  This is a required section for the Shopify Theme Store.
+  It is available in the "Header" section in the theme editor.
+
+  Theme Store required settings:
+  - Show announcement
+  - Text: message to announce
+  - Link: link of the announcement bar
+
+  Theme Store optional settings:
+  - Home page only: only shows on the home page
+{%- endcomment -%}
+{%- assign metafields = pages['global-header-redesign-test'].metafields -%}
+
+{%- assign header_menu = metafields.primary_navigation -%}
+{%- assign mobile_primary_menu = metafields.nav_mobile -%}
+{%- assign secondary_header_menu = metafields.secondary_navigation -%}
+{%- assign user_header_menu = metafields.users_action -%}
+{%- assign is_flannel_page = false -%}
+
+{%- if template contains 'page.flannels' or template contains 'product.flannels' -%}
+  {%- assign is_flannel_page = true -%}
+{%- endif -%}
+
+<div class='siteHeader' id='site-header'>
+  <div
+    class='
+      header__wrapper
+      {% if request.path == '/account' or request.path contains '/subscriptions' %}
+      header__wrapper--account
+      {% endif %}
+    '
+  >
+    <div class='header__wrapper-inner' data-click-id='m-nav_nav-toggle'>
+      <a
+        href='javascript:void(0);'
+        class='mobile--only header__menu-link'
+        data-sl='mobile_menu_toggle'
+        title='Toggle Mobile menu'
+        data-click-id='m-nav_nav-toggle'
+      >
+        {% render 'icon',
+          icon: 'menu',
+          class: 'js-open-menuDrawer icon--menu',
+          tag: 'm-nav_nav-toggle'
+        %}
+      </a>
+      <div class='drawer_backDrop js-backDrop' data-sl='drawer_backDrop'></div>
+      {% render 'mobile-navigation'
+        with mobile_primary_menu as mobile-navigation,
+        metafields: metafields
+      %}
+    </div>
+    <div class='header__logo'>
+      <a
+        href='{% if is_flannel_page %}/pages/flannels-lp{% else %}/{% endif %}'
+        class='header__logo-link'
+        data-sl='header_logo'
+        title='bareperformancenutrition logo'
+        aria-label='bareperformancenutrition logo'
+      >
+        {% render 'icon', icon: 'site-logo', class: 'header__logo-image', tag: 'nav_top-logo' %}
+      </a>
+    </div>
+    {% render 'desktop-navigation'
+      with header_menu as navigation,
+      metafields: metafields,
+      aria_label: 'Header primary navigation'
+    %}
+
+    {% if false %}
+      <div class='secondary-header desktop--only'>
+        {% render 'desktop-navigation'
+          with secondary_header_menu as navigation,
+          metafields: metafields,
+          aria_label: 'Header secondary navigation'
+        %}
+      </div>
+    {% endif %}
+
+    {% render 'user-header' with user_header_menu as header-extra %}
+  </div>
+</div>
+<div class='megamenuOverlay'></div>

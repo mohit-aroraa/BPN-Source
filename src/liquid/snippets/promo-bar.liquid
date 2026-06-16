@@ -1,0 +1,51 @@
+{%- comment -%}
+  today_date will always return the store timezone.
+{%- endcomment -%}
+{%- assign block = section[module] | default: pages.site-global-data.metafields.promo_bar -%}
+{%- assign sale_information = pages.site-global-data.metafields.sale_information -%}
+{%- assign enable = block.enable -%}
+{%- assign sale_text = block.sale_text -%}
+{%- assign timer_text = block.timer_text -%}
+{%- assign sale_start_date = sale_information.main_sale_start_date | date: '%s' | times: 1 -%}
+{%- assign sale_end_date = sale_information.main_sale_end_date | date: '%s' | times: 1 -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign link = block.link -%}
+{%- assign hide_on = block.hide_on -%}
+{%- assign hide_on_split = block.hide_on | split: ',' -%}
+{%- assign today_date = 'now' | date: '%s' | times: 1 -%}
+{%- assign hide_on_page = false -%}
+{%- for hide_item in hide_on_split -%}
+  {%- if request.path == hide_item or template contains hide_item -%}
+    {%- assign hide_on_page = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.saleData = {
+    startDate: "{{ sale_start_date | date: '%Y-%m-%d %H:%M:%S.%6N' }}",
+    endDate: "{{ sale_end_date | date: '%Y-%m-%d %H:%M:%S.%6N' }}",
+    now: "{{ today_date | date: '%Y-%m-%d %H:%M:%S.%6N' }}"
+  }
+</script>
+
+{%- if enable and today_date > sale_start_date and today_date <= sale_end_date -%}
+  {% unless hide_on_page %}
+    <a class="promoBar js-promo-bar" href="{{ link }}">
+      <div class="promoBar__saleText">
+        {% render 'prismic-rich-text', rich_text: sale_text %}
+      </div>
+      <button class="button promoBar__cta" type="button">{{ cta_text }}</button>
+      <div class="promoBar__timer">
+        <p class="promoBar__timerText">{{ timer_text }}</p>
+        <span class="promoBar__timerCountdown" data-sale-timer>
+          <span class="hrs">00</span>
+          <span class="separator">:</span>
+          <span class="minutes">00</span>
+          <span class="separator">:</span>
+          <span class="seconds">00</span>
+        </span>
+      </div>
+    </a>
+  {% endunless %}
+{%- endif -%}

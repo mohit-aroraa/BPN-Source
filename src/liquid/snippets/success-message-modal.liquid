@@ -1,0 +1,22 @@
+<div id="sms-subscription-information-modal" class="sms-subscription-modal-wrapper hidden"
+       data-popupId="{{ popup_id }}"
+       data-modilePopupId="{{ mobile_popup_id }}"
+       data-smsBenefitPopupId="{{ sms_benefit_popup_id }}"
+       data-smsBenefitMobilePopupId="{{ sms_benefit_mobile_popup_id }}"
+       data-gwpId="{{ gwp_id }}"
+  >
+  <div class="sms-subscription-modal">
+    <span class="sms-subscription-modal__close-button">
+        {% render 'icon', icon: 'modal-close' %}
+    </span>
+    <h2 class="sms-subscription-modal__title">
+      {{ section.settings.modal_title }}
+    </h2>
+    <div class="sms-subscription-modal__text">
+      {{ section.settings.modal_text }}
+    </div>
+    <div class="sms-subscription-modal__sub-text">
+      {{ section.settings.modal_sub_text }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+{% assign _product = product %}
+{% assign var_suffix = 'flavor' %}
+{% if click_id_prefix == 'homepage_gear' %}
+  {% assign var_suffix = 'size' %}
+{% endif %}
+{% assign click_id_prefix = click_id_prefix | append: '_p' | append: index | append: '_' %}
+{% assign thumb_click_id = click_id_prefix | append: 'thumbnail' %}
+{% assign var_click_id = click_id_prefix | append: var_suffix %}
+
+{% assign tag_discount = blank %}
+
+{% for tag in _product.tags %}
+  {% if tag contains 'ssale' %}
+    {% assign tag_discount = tag | remove: 'ssale' %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% assign _tag_discount_adjusted = tag_discount | divided_by: 100.00 %}
+{% assign tag_discounted_price = _product.price | times: _tag_discount_adjusted %}
+{% assign tag_final_price = _product.price | minus: tag_discounted_price %}
+
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign product_filter_section = metafields.filters -%}
+{%- assign has_badge = product_filter_section.has_badge | default: false -%}
+{%- assign badge_title = product_filter_section.badge_title -%}
+{%- assign badge_background_color = product_filter_section.badge_background_color
+  | default: '#D9C79C'
+-%}
+{%- assign badge_text_color = product_filter_section.badge_text_color | default: '#ffffff' -%}
+
+<a class='product-card js-product-grid-item swiper-slide' href='{{ _product.url }}'>
+  {% if has_badge == true %}
+    <div
+      class='product-card__badge'
+      style='background-color: {{ badge_background_color }}; color: {{ badge_text_color }}'
+    >
+      {{ badge_title }}
+    </div>
+  {% endif %}
+
+  <div class='product-card__image-container' data-click-id='{{ thumb_click_id }}'>
+    <img
+      class='product-card__image'
+      src='{{ product.images[0].src | img_url: '304x304' }}'
+      alt='{{ product.title }}'
+      data-click-id='{{ thumb_click_id }}'
+    >
+  </div>
+  <div class='product-card__content'>
+    <div class='product-card__rating'>
+      {{ _product.metafields.okendo.StarRatingSnippet }}
+    </div>
+
+    <h4 class='product-card__title'>
+      {{ _product.title }}
+      {% if tag_discount != blank %}
+        <span style='text-align: right; display: flex; flex-direction: column'>
+          <span class='has-red-color'>{% render 'price-value', price: tag_final_price %}</span>
+          <span class='has-line-through'>{% render 'price-value', price: _product.price %}</span>
+        </span>
+      {% else %}
+        <span>{% render 'price-value', price: _product.price %}</span>
+      {% endif %}
+    </h4>
+
+    {% assign product_card_description = _product.metafields.custom.product_card_description
+      | default: ''
+    %}
+    <p class='product-card__category'>
+      {{ product_card_description }}
+    </p>
+
+    {% assign variants_count = _product.variants | size | default: 0 %}
+
+    {% if variants_count != 0 %}
+      <div class='product-card__dropdown'>
+        <button class='product-card__dropdown-trigger' data-click-id='{{ var_click_id }}'>
+          <span>
+            {% assign variant_icon = _product.selected_or_first_available_variant.metafields.custom.product_card_variation_icon
+              | default: blank
+            %}
+            {% if variant_icon != blank %}
+              {% assign icon_click_id = '<svg data-click-id="[tag]" '
+                | replace: '[tag]', var_click_id
+              %}
+              {% assign variant_icon = variant_icon | replace: '<svg ', icon_click_id %}
+              {{ variant_icon }}
+            {% else %}
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='12'
+                height='12'
+                viewBox='0 0 12 12'
+                fill='none'
+                data-click-id='{{ var_click_id }}'
+              >
+                <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5" data-click-id="{{ var_click_id }}"/>
+              </svg>
+            {% endif %}
+            <span class='name' data-click-id='{{ var_click_id }}'>
+              {{- _product.selected_or_first_available_variant.options -}}
+            </span>
+          </span>
+          {% render 'icon', icon: 'buttom-arrow', tag: var_click_id %}
+        </button>
+
+        <div class='product-card__dropdown-content'>
+          {% for variant in _product.variants %}
+            {% assign variant_icon = variant.metafields.custom.product_card_variation_icon
+              | default: blank
+            %}
+
+            <div
+              class='product-card__dropdown-item{% if forloop.index == 1 %} selected{% endif %}'
+              data-product_id='{{ product.id }}'
+              data-variation_id='{{ variant.id }}'
+              data-product_name='{{ variant.options }}'
+            >
+              {% if variant_icon != blank %}
+                {{ variant_icon }}
+              {% else %}
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='12'
+                  height='12'
+                  viewBox='0 0 12 12'
+                  fill='none'
+                >
+                  <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5"/>
+                </svg>
+              {% endif %}
+
+              <span class='name'>{{ variant.options }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <button
+      class='product-card__add-button'
+      data-variation_id='{{ product.selected_or_first_available_variant.id }}'
+      data-product_id='{{ product.id }}'
+      data-click-id='{{ click_id_prefix }}cta'
+    >
+      ADD TO CART
+    </button>
+  </div>
+</a>

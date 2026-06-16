@@ -1,0 +1,157 @@
+/// @access private
+/// @link https://www.oddbird.net/accoutrement/docs/type.html
+
+// Import all local fonts
+@include import-webfonts;
+
+$typography: (
+  "body": (
+    "size": size("text"),
+    "height": 1,
+    "weight": normal,
+    "space": 0.5px,
+  ),
+  "heading": (
+    "weight": 900,
+  ),
+  "heading-1": (
+    "size": var(--heading-1),
+    "height": var(--lh-heading-1),
+    "space": var(--ls-heading-1),
+  ),
+  "heading-2": (
+    "size": var(--heading-2),
+    "height": var(--lh-heading-2),
+    "space": var(--ls-heading-2),
+  ),
+  "heading-3": (
+    "size": var(--heading-3),
+    "height": var(--lh-heading-3),
+    "space": var(--ls-heading-3),
+  ),
+  "heading-4": (
+    "size": var(--heading-4),
+    "height": var(--lh-heading-4),
+    "space": var(--ls-heading-4),
+  ),
+  "heading-5": (
+    "size": var(--heading-5),
+    "height": var(--lh-heading-5),
+    "space": var(--ls-heading-5),
+  ),
+  "display-1": (
+    "weight": 900,
+    "size": var(--display-1),
+    "height": var(--lh-display-1),
+    "space": var(--ls-display-1),
+  ),
+  "paragraph": (
+    "weight": 400,
+  ),
+  "paragraph-strong": (
+    "weight": 700,
+  ),
+  "paragraph-body-1": (
+    "size": var(--para-body-1),
+    "height": var(--lh-para-body-1),
+    "space": var(--ls-para-body-1),
+  ),
+  "paragraph-body-2": (
+    "size": var(--para-body-2),
+    "height": var(--lh-para-body-2),
+    "space": var(--ls-para-body-2),
+  ),
+  "paragraph-body-3": (
+    "size": var(--para-body-3),
+    "height": var(--lh-para-body-3),
+    "space": var(--ls-para-body-3),
+  ),
+  "paragraph-body-4": (
+    "size": var(--para-body-4),
+    "height": var(--lh-para-body-4),
+    "space": var(--ls-para-body-4),
+  ),
+  "lead": (
+    "weight": 500,
+  ),
+  "lead-1": (
+    "size": var(--lead-1),
+    "height": var(--lh-lead-1),
+    "space": var(--ls-lead-1),
+  ),
+  "lead-2": (
+    "size": var(--lead-2),
+    "height": var(--lh-lead-2),
+    "space": var(--ls-lead-2),
+  ),
+  "lead-3": (
+    "size": var(--lead-3),
+    "height": var(--lh-lead-3),
+    "space": var(--ls-lead-3),
+  ),
+  "lead-4": (
+    "size": var(--lead-4),
+    "height": var(--lh-lead-4),
+    "space": var(--ls-lead-4),
+  ),
+  "button": (
+    "size": var(--btn-fs),
+    "weight": 700,
+    "height": var(--btn-lh),
+    "space": var(--btn-ls),
+    "padding": var(--btn-gap),
+  ),
+  "button-small": (
+    "size": var(--btn-small-fs),
+    "height": var(--btn-small-lh),
+    "space": var(--btn-small-ls),
+    "padding": var(--btn-small-gap),
+  ),
+  "button-link": (
+    "size": var(--btn-link-fs),
+    "weight": 700,
+    "height": var(--btn-link-lh),
+    "space": var(--btn-link-ls),
+  ),
+);
+
+/// Set text style.
+/// @param {string} $token - One of keys of $typography map above.
+
+@mixin use-text-style($token: "body") {
+  $type: get-token($typography, $token);
+
+  @if (get-token($type, "font") != "font") {
+    font-family: font-family(get-token($type, "font"));
+  }
+
+  @if (get-token($type, "size") != "size") {
+    font-size: get-token($type, "size");
+  }
+
+  @if (get-token($type, "weight") != "weight") {
+    font-weight: get-token($type, "weight");
+  }
+
+  @if (get-token($type, "height") != "height") {
+    line-height: get-token($type, "height");
+  }
+
+  @if (get-token($type, "space") != "space") {
+    letter-spacing: get-token($type, "space");
+  }
+
+  @if (get-token($type, "padding") != "padding") {
+    padding: get-token($type, "padding");
+  }
+}
+
+///  text style update- only font size and line height
+/// @param {string} $token - One of keys of $typography map above.
+@mixin update-text-style($token: "body") {
+  $type: get-token($typography, $token);
+
+  font-size: get-token($type, "size");
+  line-height: get-token($type, "height");
+  letter-spacing: get-token($type, "spacing");
+}

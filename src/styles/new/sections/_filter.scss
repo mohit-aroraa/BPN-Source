@@ -1,0 +1,355 @@
+// ==========================================================================
+// Components Layer - Facets (Filters)
+// ==========================================================================
+//
+// Contains styles for collection page filters and faceted search
+//
+// 1. Facets container - Main wrapper for filters
+// 2. Active filters - Currently selected filter values
+// 3. Filter groups - Collapsible filter categories
+// 4. Checkbox inputs - Individual filter options
+// 5. Active filter tags - Pills showing selected filters
+//
+// ==========================================================================
+
+/*
+ * Facets Component
+ * -------------------------------------------------
+ * Basic styling for collection filters
+ */
+
+/* stylelint-disable scss/selector-nest-combinators */
+// Facets (Filters) Component
+.#{$prefix}facets {
+  // Box Model
+  width: 100%;
+  margin-bottom: 20px;
+
+}
+
+.#{$prefix}facets__form {
+  // Box Model
+  width: 100%;
+}
+
+.#{$prefix}facets__active-filters {
+  // Box Model
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.#{$prefix}facets__clear {
+  // Box Model
+  display: inline-block;
+  margin-top: 10px;
+
+  // Visual
+  cursor: pointer;
+}
+
+.#{$prefix}facets__clear-all {
+  // Typography
+  @include use-text-style("bpn-body-sm");
+  color: color("bpn-grey-60");
+  text-decoration: underline;
+
+  // Visual
+  transition: color 0.2s ease;
+}
+
+.#{$prefix}facets__clear-all:hover {
+  color: color("bpn-black");
+}
+
+.#{$prefix}facets__filters {
+  // Box Model
+  width: 100%;
+}
+
+.#{$prefix}facets__details {
+  margin-bottom: 20px;
+  padding-bottom: 19px;
+
+  // Box Model
+  border-bottom: 1px solid color("bpn-grey-20");
+
+  // Visual
+  cursor: pointer;
+
+  @include below("tablet-large") {
+    margin-bottom: 18px;
+    padding-bottom: 15px;
+  }
+}
+
+.#{$prefix}facets__summary {
+  // Box Model
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+
+  // Typography
+  @include use-text-style("bpn-body-base");
+  font-weight: 600;
+
+  // Visual
+  list-style: none;
+}
+
+.#{$prefix}facets__summary-label {
+  text-transform: uppercase;
+}
+
+.#{$prefix}facets__summary::-webkit-details-marker {
+  display: none;
+}
+
+.#{$prefix}facets__summary-icon {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+
+  &::after,
+  &::before {
+    content: "";
+    display: block;
+    background-color: #333;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transition: 0.35s;
+    width: 100%;
+    height: 3px;
+  }
+
+  &::before {
+    transform: translateY(-50%);
+  }
+
+  &::after {
+    transform: translateY(-50%) rotate(90deg);
+  }
+}
+
+details[open] .#{$prefix}facets__summary-icon {
+  &::before {
+    transform: translateY(-50%) rotate(-90deg);
+    opacity: 0;
+  }
+
+  &::after {
+    transform: translateY(-50%) rotate(0);
+  }
+}
+
+
+.#{$prefix}facets__count {
+  // Typography
+  @include use-text-style("bpn-body-sm");
+  margin-left: 5px;
+  font-weight: 500;
+}
+
+.#{$prefix}facets__values {
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 14px 0 0;
+
+  @include above("tablet-large") {
+    gap: 12px;
+  }
+}
+
+.#{$prefix}facets__checkbox {
+  position: relative;
+
+  // Box Model
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+  align-items: center;
+
+  // Typography
+  @include use-text-style("bpn-body-base");
+  font-weight: 500;
+}
+
+.#{$prefix}facets__checkbox:last-child {
+  margin-bottom: 0;
+}
+
+.#{$prefix}facets .#{$prefix}facets__checkbox-input {
+  // Box Model
+  width: 20px;
+  height: 20px;
+
+  margin: 0;
+
+  border-radius: 4px;
+
+  @include above('tablet-large') {
+    // Box Model
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.#{$prefix}facets__checkbox-input:checked + .#{$prefix}facets__checkbox-icon {
+  display: block;
+}
+
+.#{$prefix}facets__checkbox-input:checked + .#{$prefix}facets__checkbox-icon:after {
+  opacity: 1;
+}
+
+.#{$prefix}facets__checkbox-input:focus + .#{$prefix}facets__checkbox-icon {
+  border-color: color("bpn-blue");
+}
+
+.#{$prefix}facets__checkbox-icon {
+  // Positioning
+  position: absolute;
+  top: 1px;
+  left: -1px;
+
+  // Box Model
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid color("bpn-white");
+  border-radius: 4px;
+
+  // Misc
+  transition: border-color 0.2s ease;
+}
+
+.#{$prefix}facets__checkbox-icon:hover {
+  cursor: pointer;
+}
+
+.#{$prefix}facets__checkbox-icon::after {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid color("bpn-white");
+  background-color: color('bpn-navy-950');
+
+  // Visual
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  transform: rotate(45deg);
+
+  // Box Model
+  content: "";
+  border-width: 0 2px 2px 0;
+}
+
+.#{$prefix}facets__checkbox-label {
+  // Typography
+  @include use-text-style("bpn-body-sm");
+  padding-top: 1px;
+  line-height: 1.4;
+  user-select: none;
+}
+
+// Active filters
+.#{$prefix}facets__active-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.#{$prefix}facets__active-filter {
+  display: flex;
+
+  // Box Model
+  margin: 0 0 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  @include above("tablet-large") {
+    gap: 16px;
+  }
+}
+
+.#{$prefix}facets__active-filter-item {
+  display: none;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background-color: #CCC9;
+  align-items: center;
+  gap: 8px;
+
+  @include use-text-style("bpn-body-xs");
+
+  @include above("tablet-large") {
+    padding: 6px 8px;
+    gap: 7px;
+
+    @include use-text-style("bpn-body-base");
+  }
+}
+
+.#{$prefix}facets__active-filter-item.active {
+  display: flex;
+}
+
+.#{$prefix}facets__active-filter-button {
+  display: flex;
+  padding: 0;
+  border: unset;
+  background-color: unset;
+  align-items: center;
+}
+
+.#{$prefix}facets__active-filter-button svg {
+  width: 10px;
+  height: 10px;
+  color: color("bpn-grey-60");
+}
+
+.#{$prefix}facets__active-filter-clear-button {
+  position: relative;
+  display: none;
+  padding: 0;
+  border: unset;
+  background-color: unset;
+  font-weight: 900;
+
+  @include use-text-style("bpn-body-xs");
+}
+
+.#{$prefix}facets__active-filter-clear-button.active {
+  display: block;
+
+  @include above("tablet-large") {
+    @include use-text-style("bpn-body-base");
+
+    font-weight: 700;
+  }
+}
+
+.#{$prefix}facets__active-filter-clear-button:after {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: color('bpn-black-950');
+  content: ' ';
+
+  @include above("tablet-large") {
+    bottom: 4px;
+  }
+
+}

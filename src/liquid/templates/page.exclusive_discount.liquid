@@ -1,0 +1,10 @@
+{%- comment -%}
+  This Use this template for exclusive discount app. Like first responder discount
+{%- endcomment -%}
+{% layout 'anatta_theme' %}
+{%- assign metafields = page.metafields -%}
+<div class="military-discount">
+  {% include 'prismic-dynamic-slices', section: metafields %}
+</div>
+{{ 'idme-checkout-style.css' | asset_url | stylesheet_tag }}
+{{ 'idme-checkout-template.js' | asset_url | script_tag }}

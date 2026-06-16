@@ -1,0 +1,39 @@
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  {% for block in section.blocks %}
+    <li class="nav-item">
+      <a class="nav-link {% if forloop.first == true %} active {% endif %}" id="overall-health-tab-{{ forloop.index }}" data-toggle="tab" href="#overall-health-{{ forloop.index }}" role="tab" aria-controls="overall-health-{{ forloop.index }}" aria-selected="{% if forloop.first == true %}true{% else %}false{% endif %}">{{ block.settings.title }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% schema %}
+{
+    "name": "Achieve Your Goal Tabs",
+    "blocks":[
+      {
+      "type": "text",
+      "name": "Tab Section",
+      "settings": [
+              {
+                  "type": "text",
+                  "id": "title",
+                  "label": "Title"
+              }
+          ]
+      }
+    ],
+    "presets": [{
+    "name": 
+		{    
+			"en": "Tab Section"
+	    }
+    }]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,43 @@
+.featuredIn {
+  margin-bottom: 56px;
+  line-height: normal;
+  @include above("desktop-med") {
+    margin-bottom: 118px;
+  }
+  &__wrapper {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 12px;
+    @include above("mobile-large") {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+    @include above("desktop-med") {
+      padding-left: 142px;
+      padding-right: 142px;
+    }
+    .swiper-wrapper {
+      align-items: flex-end;
+    }
+  }
+  &__header {
+    font-size: 12px;
+    letter-spacing: normal;
+    line-height: 1.917;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 18px;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-1");
+      margin-bottom: 50px;
+    }
+  }
+  &__icon {
+    height: 13px;
+    @include above("mobile-large") {
+      height: auto;
+      width: auto;
+    }
+  }
+}

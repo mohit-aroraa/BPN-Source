@@ -1,0 +1,26 @@
+{% layout 'anatta_theme' %}
+{%- comment -%}
+  Making the product structure and storing it on the window object
+{%- endcomment -%}
+{%- assign _metafields = pages[collection.handle].metafields -%}
+{% render 'collection-hero-banner', metafields: _metafields %}
+
+<div id="js_collection_page" style="min-height: 100vh">
+  {% render 'collection-loader' %}
+</div>
+{%- if collection.description != blank -%}
+  <section class="collectionSection collectionSection--small">
+    <div class="collectionSection__description">{{ collection.description }}</div>
+  </section>
+{%- endif -%}
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.collection_page_data = {
+    "handle": "{{ collection.handle }}",
+    "id":{{ collection.id }},
+    "products_count": {{ collection.products_count }},
+    "title": "{{ collection.title | escape }}",
+    "products": {% render 'collection-json' %},
+    "filter_data": {% render 'json-output-collection', metafields: _metafields %}
+  };
+</script>

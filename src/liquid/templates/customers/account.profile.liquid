@@ -1,0 +1,44 @@
+<div class="account account-profile">
+  {% render 'account-side-nav' %}
+
+  <div class="account__main-content">
+    <div class="account__top-wrapper">
+      <div class="account-breadcrumbs">
+        <a href="/">Home</a>/
+        <a href="/account">Account</a>/
+        <a href="/account?view=profile">My Profile</a>
+      </div>
+
+      <section class="account__section">
+        <h2 class="account-profile__heading">{{ 'MY PROFILE' | upcase }}</h2>
+
+        <div class="account-profile__user-information">
+          <p class="account-profile__user-information-item">Name</p>
+          <p class="account-profile__user-information-item">{{ customer.first_name }} {{ customer.last_name }}</p>
+          <p class="account-profile__user-information-item">Email</p>
+          <p class="account-profile__user-information-item">{{ customer.email }}</p>
+
+          {% if customer.phone != blank %}
+            <p class="account-profile__user-information-item">Phone</p>
+            <p class="account-profile__user-information-item">
+
+              {% assign phone = customer.phone %}
+              {%- if phone.size == 12 and phone contains '+' -%}
+                {%- assign country_code = phone | slice: 0, 2 -%}
+                {%- assign area_code = phone | slice: 2, 3 -%}
+                {%- assign central_office_code = phone | slice: 5, 3 -%}
+                {%- assign line_number = phone | slice: 8, 4 -%}
+
+                {{ country_code }}-{{ area_code }}-{{ central_office_code }}-{{ line_number }}
+              {%- else -%}
+                {{ phone }}
+              {%- endif -%}
+            </p>
+          {% endif %}
+        </div>
+      </section>
+
+
+    </div>
+  </div>
+</div>

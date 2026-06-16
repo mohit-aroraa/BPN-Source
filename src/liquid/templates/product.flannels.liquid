@@ -1,0 +1,125 @@
+{% layout 'anatta_theme' %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+{%- comment -%}
+  Fetch data which is in Prismic
+{%- endcomment -%}
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+
+{%- comment -%}
+  Global fields data
+{%- endcomment -%}
+{%- assign global_fields_section = metafields.global_fileds -%}
+{%- assign product_title = global_fields_section.product_title -%}
+{%- assign product_subtitle = global_fields_section.product_subtitle -%}
+{%- assign product_description = global_fields_section.description -%}
+
+<main class="PDP PDP--flannel">
+  <div class="productSection">
+    <div class="PDP__container">
+      {% render 'breadcrumb-slice', metafields: metafields, class: 'PDP__breadcrumb' %}
+    </div>
+    <div class="productSectionTopMobile">
+      <h1 class="productTitle">
+        {% if product_title %}
+          {{ product_title }}
+        {% else %}
+          {% render 'product-title', product: product %}
+        {% endif %}
+      </h1>
+      {% render 'product-price', variant: current_variant %}
+    </div>
+    <div class="PDP__container">
+      <div class="productSection__wrapper">
+        <div class="productSection__left">
+          <div class="productGallery">
+            <div
+              class="productGallery__thumbnailWrapper js-product-gallery-thumb-1 swiper"
+              data-product-gallery-thumbnail
+              data-variant-gallery="{{ current_variant.name }}"
+            >
+              <div class="productGallery__thumbnailList swiper-wrapper">
+                {% for media in product.media %}
+                  {% render 'pdp-swiper-slide', pdp_image: media.image, type: 'thumb' %}
+                {% endfor %}
+              </div>
+            </div>
+            <div
+              class="productGallery__swiper swiper js-product-gallery-1"
+              data-product-gallery
+              data-variant-gallery="{{ current_variant.name }}"
+            >
+              <div class="swiper-wrapper productGallery__swiperWrapper">
+                {% for media in product.media %}
+                  <div class="swiper-slide productGallery__slide">
+                    {% render 'pdp-swiper-slide', pdp_image: media.image %}
+                  </div>
+                {% endfor %}
+              </div>
+              {% render 'pdp-swiper-arrow' %}
+            </div>
+          </div>
+        </div>
+        <div class="productSection__right">
+          <div class="productSection__data">
+            <div class="productSectionTopDesktop">
+              <h1 class="productTitle">
+                {% if product_title %}
+                  {{ product_title }}
+                {% else %}
+                  {% render 'product-title', product: product %}
+                {% endif %}
+              </h1>
+              {% render 'product-price', variant: current_variant %}
+            </div>
+            <p class="flannelPdpDescription__label">Description</span></p>
+            {% if product_description != blank %}
+              <p class="flannelPdpDescription__text">{{ product_description }}</span></p>
+            {% endif %}
+            {% render 'pdp-form', current_variant: current_variant %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include 'prismic-dynamic-slices', section: metafields %}
+</main>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {%- if product.featured_media -%}
+      {%- assign media_size = product.featured_media.preview_image.width | append: 'x' -%}
+      "image": [
+        {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+      ],
+    {%- endif -%}
+    "description": {{ product.description | strip_html | json }},
+    {%- if current_variant.sku != blank -%}
+      "sku": {{ current_variant.sku | json }},
+    {%- endif -%}
+    "brand": {
+      "@type": "Thing",
+      "name": {{ product.vendor | json }}
+    },
+    "offers": [
+      {%- for variant in product.variants -%}
+        {
+          "@type" : "Offer",
+          {%- if variant.sku != blank -%}
+            "sku": {{ variant.sku | json }},
+          {%- endif -%}
+          "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price" : {{ variant.price | divided_by: 100.00 | json }},
+          "priceCurrency" : {{ cart.currency.iso_code | json }},
+          "url" : {{ shop.url | append: variant.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>

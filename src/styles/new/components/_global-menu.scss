@@ -1,0 +1,484 @@
+// ==========================================================================
+// Global Menu Component
+// ==========================================================================
+//
+// Contains styles for the main navigation menu in the header
+// (primary navigation links)
+
+.#{$prefix}global-menu {
+  // Box Model
+  display: flex;
+  align-items: center;
+
+  // Typography
+  @include use-text-style("bpn-body-base");
+  font-weight: 900;
+
+  // Media Queries
+  @include below("tablet-large") {
+    display: none;
+  }
+
+  &__indicator {
+    width: 10px;
+    position: absolute !important;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    padding: 0;
+    border: 0;
+    margin-left: 4px;
+    background: transparent;
+    &:focus-visible {
+      width: 10px;
+      height: auto;
+      position: static !important;
+    }
+  }
+}
+
+.#{$prefix}global-menu__item {
+  display: inline-flex;
+  padding: 20px 6px;
+
+  @include above("desktop-med") {
+    padding: 38px 16px;
+  }
+
+  @include above("desktop") {
+    padding: 38px 32px;
+  }
+}
+
+.#{$prefix}global-menu__link {
+  // Box Model
+  display: inline-flex;
+  align-items: center;
+
+  // Visual
+  color: color("bpn-black");
+  text-decoration: none;
+  background: transparent;
+  border: none;
+
+  // Typography
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+
+  // Misc
+  transition: color 0.2s ease;
+}
+
+.#{$prefix}global-menu__link:hover {
+  color: color('bpn-red') !important;
+}
+
+.#{$prefix}has-megamenu .#{$prefix}global-menu__link {
+  position: relative;
+
+  &:hover::after {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+    bottom: -19px;
+    width: 100%;
+    left: 0;
+    position: absolute;
+    content: ' ';
+    height: 5px;
+    background: color('bpn-red');
+
+    @include above("desktop-med") {
+      bottom: -39px;
+    }
+  }
+}
+
+// Mega Menu Styles
+// ==========================================================================
+
+.#{$prefix}has-megamenu {
+  position: static;
+}
+
+.#{$prefix}has-megamenu:hover .#{$prefix}megamenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.#{$prefix}megamenu {
+  // Positioning
+  position: absolute;
+  top: 101%;
+  left: 0;
+  z-index: 100;
+
+  // Box Model
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+
+  // Visual
+  opacity: 0;
+  visibility: hidden;
+
+  // Misc
+  transform: translateY(-5px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  @include below("tablet") {
+    display: none;
+  }
+}
+
+// Full bleed background
+.#{$prefix}megamenu__background {
+  // Positioning
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+
+  // Box Model
+  width: 100%;
+  height: 100%;
+
+  // Visual
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.#{$prefix}megamenu__container {
+  // Positioning
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+
+  // Box Model
+  display: flex;
+  padding-left: 64px;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.#{$prefix}megamenu__menus-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.#{$prefix}megamenu__menus {
+  display: flex;
+  gap: 3rem;
+  flex-grow: 1;
+  padding-bottom: 20px;
+  height: fit-content;
+  padding-top: 39px;
+}
+
+.#{$prefix}megamenu__menu {
+  padding-left: 0;
+  padding-right: 0;
+  height: 100%;
+  flex: 0 1 192px;
+  min-width: 192px;
+}
+
+.#{$prefix}megamenu__title {
+  // Box Model
+  margin-bottom: 1rem;
+
+  // Typography
+  @include use-text-style("bpn-body-base");
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+
+  &:hover {
+    color: color('bpn-grey-60');
+  }
+}
+
+.#{$prefix}megamenu__link-item {
+  margin-bottom: 0.75rem;
+}
+
+.#{$prefix}megamenu__link {
+  // Visual
+  color: color("bpn-black-60");
+
+  // Typography
+  font-weight: 500;
+  text-transform: uppercase;
+
+  // Misc
+  transition: color 0.2s ease;
+}
+
+.#{$prefix}megamenu__link:hover {
+  color: color("bpn-red") !important;
+}
+
+.#{$prefix}megamenu.full-view .#{$prefix}megamenu__featured {
+  width: 100%;
+  max-width: 704px;
+  height: 319px;
+  padding: 0;
+
+  & > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.#{$prefix}megamenu__featured {
+  display: flex;
+  gap: 32px;
+  justify-content: space-evenly;
+  padding: 19px 64px 20px 0;
+  @include below("desktop") {
+    gap: 15px;
+  }
+
+  & > * {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  @include above("desktop") {
+    & > * {
+      flex: 0 1 304px;
+    }
+  }
+}
+
+.#{$prefix}megamenu__image-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-color);
+  z-index: 1;
+}
+
+.#{$prefix}megamenu__image {
+  // Positioning
+  position: relative;
+
+  // Box Model
+  display: block;
+  flex: 0 0 auto;
+  min-width: 160px;
+  width: 100%;
+  max-width: 704px;
+}
+
+.#{$prefix}megamenu__image:not(:only-child) {
+  max-width: 320px;
+
+  @include below("desktop") {
+    max-width: 240px;
+  }
+
+  @include below("desktop-med") {
+    max-width: 200px;
+  }
+}
+
+.#{$prefix}megamenu__image:not(:only-child) img {
+  border-radius: 1rem;
+}
+
+.#{$prefix}megamenu__image-link {
+  // Positioning
+  position: relative;
+
+  // Box Model
+  display: block;
+  height: 100%;
+
+  // Visual
+  text-decoration: none;
+}
+
+.#{$prefix}megamenu__image-img {
+  width: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+
+.#{$prefix}megamenu__image-content {
+  // Positioning
+  position: absolute;
+  inset: 0;
+
+  // Box Model
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.#{$prefix}megamenu__image-title {
+  // Box Model
+  margin-bottom: 0.8rem;
+  text-align: center;
+
+  // Visual
+  color: color('bpn-white');
+
+  // Typography
+  @include use-text-style('bpn-h5');
+}
+
+.#{$prefix}megamenu__image-button {
+  // Positioning
+  position: relative;
+
+  // Visual
+  color: color('bpn-white');
+
+  // Typography
+  @include use-text-style('bpn-callout-base');
+}
+
+.#{$prefix}megamenu__image-button::after {
+  // Positioning
+  position: absolute;
+  inset: auto auto -10px 0;
+
+  // Box Model
+  width: 100%;
+  height: 5px;
+
+  // Visual
+  background-color: color('bpn-red');
+  content: '';
+}
+
+// Hover state for megamenu image button
+.#{$prefix}megamenu__image-button:hover {
+  color: color('bpn-white') !important;
+}
+
+// Call to action container in megamenu
+.#{$prefix}megamenu__cta {
+  // Box Model
+  width: 100%;
+  margin-bottom: 20px;
+
+  // Typography
+  text-align: center;
+  margin-top: auto;
+}
+
+// Full view CTA link variant
+.#{$prefix}megamenu.full-view .#{$prefix}megamenu__cta-link {
+  // Box Model
+  padding: 15px 132px;
+  width: unset;
+}
+
+// Call to action link styles
+.#{$prefix}megamenu__cta-link {
+  // Box Model
+  width: 304px;
+  padding: 15px 0;
+  display: inline-block;
+
+  // Typography
+  text-align: center;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 18px;
+  letter-spacing: -0.36px;
+  text-transform: uppercase;
+
+  // Visual
+  border-radius: 200px;
+  border: 1px solid color('bpn-black-20');
+  color: color('bpn-black-950');
+
+  &:hover {
+    color: color('bpn-grey-60');
+  }
+
+  @include below("desktop-med") {
+    width: 260px;
+  }
+}
+
+// Horizontal navigation in hamburger drawer
+.bpn-hamburger-drawer__horizontal-nav {
+  // Box Model
+  padding: 0 16px 16px;
+  display: flex;
+  gap: 8px;
+
+  // Scroll behavior
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  // Link styles within horizontal nav
+  .bpn-hamburger-drawer__horizontal-nav-link {
+    // Box Model
+    min-width: fit-content;
+    padding: 8px 16px;
+
+    // Typography
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0;
+
+    // Visual
+    border-radius: 100px;
+    color: black;
+  }
+}
+
+// Mobile social links container
+.mobileSocialLinks {
+  // Box Model
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+// Individual social link styles
+.mobileSocialLink {
+  & + & {
+    margin-left: 16px;
+  }
+
+  // Image styles within social links
+  .img {
+    width: 25px;
+    height: auto;
+  }
+}
+
+body {
+  button:focus-visible,
+  a:focus-visible,
+  span:focus-visible,
+  :focus-visible {
+    outline: 1px solid blue !important;
+    outline-offset: 4px;
+    border-radius: 2px;
+    transition: all 0.2 ease-in-out;
+    opacity: 1;
+  }
+}

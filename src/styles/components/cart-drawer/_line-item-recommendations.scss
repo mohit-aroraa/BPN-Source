@@ -1,0 +1,164 @@
+.line-item-recommendations {
+  margin: 8px 16px;
+  padding: 8px;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  letter-spacing: normal;
+
+  &__title {
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__toggle {
+    width: 10px;
+    transition: transform 0.2s ease-out;
+    cursor: pointer;
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__list {
+    background-color: white;
+    padding: 6px;
+    border-radius: 5px;
+    margin-top: 8px;
+    max-height: 400px;
+    // overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 1;
+
+    &.hidden {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 6px;
+    }
+  }
+  &__category {
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    position: relative;
+    &::after {
+      content: ' ';
+      border-top: 1px solid #EBEBEB;
+      width: -webkit-fill-available;
+      height: 100%;
+      margin-left: 4px;
+      position: absolute;
+      top: 50%;
+    }
+
+    &-icon {
+      width: 12px;
+      height: 12px;
+      filter: invert(1) brightness(2);
+    }
+  }
+
+  &__product {
+    @include below('tablet') {
+      gap: 8px;
+    }
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    &:last-child {
+      margin-bottom: 10px;
+    }
+    &-image {
+      border-radius: 5px;
+      width: 58px;
+      height: 58px;
+      flex-shrink: 0;
+    }
+    &-details {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      width: 100%;
+    }
+
+    &-info {
+      flex:1;
+    }
+    &-title,&-price {
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 18px;
+    }
+    .discounted-price {
+      color: #EB1000;
+    }
+    .line-through {
+      text-decoration: line-through;
+    }
+    &-servings {
+      font-size: 12px;
+      color: #777777;
+      line-height: 14px;
+      font-weight: 500;
+    }
+    &-action {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+  }
+
+  &__add-button {
+    font-size: 12px;
+    font-weight: 900;
+    background-color: #000;
+    color: #fff;
+    border-radius: 3px;
+    padding: 6px;
+    border: none;
+    margin-top: auto;
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  }
+  .bpn-product-content__variant {
+    padding: 0px;
+    margin-top: 2px;
+  }
+  .bpn-product-content__option {
+    margin-bottom: 0;
+    &-name {
+      display: none;
+    }
+  }
+  .bpn-product-content__dropdown-selected, .bpn-product-content__dropdown-option {
+    min-height: auto;
+    padding: 4px 7px;
+    font-size: 12px;
+    line-height: 14px;
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+    @include below('tablet') {
+      font-size: 11px;
+      svg {
+        width: 11px;
+        height: 11px;
+      }
+    }
+  }
+  .bpn-product-content__variation-icon {
+    margin-right: 4px;
+    svg {
+      width:12px;
+      height:12px;
+      vertical-align: text-bottom;
+    }
+  }
+}

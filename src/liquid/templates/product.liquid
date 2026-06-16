@@ -1,0 +1,120 @@
+{% layout 'anatta_theme' %}
+{%- comment -%}
+  Storing the current product's data on window
+{%- endcomment -%}
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.currentProductData = {% render 'product-json' %};
+  window.BPN.rcWidgetData = {% render 'subscription-widget-data' %};
+</script>
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign combo_products_section = metafields.combo_products -%}
+{%- assign combo_products_enable = combo_products_section.enable | default: false -%}
+<div class="PDP">
+  {%- comment -%}PDP Buybox Area{%- endcomment -%}
+  <div class="productSection" id="js_pdp_buy_box">{% render 'pdp-buybox-shimmer' %}</div>
+  <div class="PDP__below-buybox">
+    {% include 'prismic-dynamic-slices', section: metafields %}
+    {% include 'pdp-reviews' %}
+  </div>
+</div>
+{%- comment -%}If combo product then hide the BIS side widget. Open it dynamacally{%- endcomment -%}
+{%- if combo_products_enable -%}
+  <style>
+    .bis-reset {
+      display: none !important;
+    }
+  </style>
+{%- endif -%}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {%- if product.featured_media -%}
+      {%- assign media_size = product.featured_media.preview_image.width | append: 'x' -%}
+      "image": [
+        {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+      ],
+    {%- endif -%}
+    "description": {{ product.description | strip_html | json }},
+    {%- if current_variant.sku != blank -%}
+      "sku": {{ current_variant.sku | json }},
+    {%- endif -%}
+    "brand": {
+      "@type": "Thing",
+      "name": {{ product.vendor | json }}
+    },
+    "offers": [
+      {%- for variant in product.variants -%}
+        {
+          "@type" : "Offer",
+          {%- if variant.sku != blank -%}
+            "sku": {{ variant.sku | json }},
+          {%- endif -%}
+          "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price" : {{ variant.price | divided_by: 100.00 | json }},
+          "priceCurrency" : {{ cart.currency.iso_code | json }},
+          "url" : {{ shop.url | append: variant.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% assign product_tags_string = product.tags | join: ' ' %}
+{% if product_tags_string contains 'bundle' %}
+  {% raw %}
+  <script id="rebuy-dynamic-bundle-template" type="text/template"  data-em-load="afterInteractive">
+  <div class="bundles-buy-box"
+    v-cloak
+    v-on:click="stopPropagation($event)"
+    v-bind:id="'rebuy-widget-' + id"
+    v-bind:class="['widget-type-' + config.type.replace('_','-'), products.length > 0 ? 'is-visible' : 'is-hidden']">
+
+      <div class="bundle-variant-selector" v-for="(product, product_index) in products"
+        v-bind:class="[product.handle, 'product-id-' + product.id, cartHasProduct(product) ? 'cart-has-item' : '', productTagClasses(product), isInputProduct(product) ? 'is-input-product' : '' ,product.selected ? 'is-selected': '']">
+        <div class="rebuy-product-info">
+          <a class="rebuy-product-title" target="_blank" v-bind:href="learnMoreURL(product)" v-on:click="learnMore(product);" v-html="product.title" v-bind:class="[hasLearnMore() && !isInputProduct(product) ? 'clickable' : '']" v-bind:alt="'View ' + product.title"></a>
+        </div>
+        <div class="rebuy-product-options" v-if="showVariantSelect(product)">
+          <label :for="id + '-' + 'select' + '-' + product_index" class="visually-hidden" v-html="product.title + ' Flavor Select'"></label>
+            <select
+              :id="id + '-' + 'select' + '-' + product_index"
+              :class="{ hide : settings.view_options.variant_selector == 'buttons' }"
+              class="rebuy-select"
+              v-model="product.selected_variant_id"
+              v-on:change="selectVariant(product)">
+              <option v-for="variant in product.variants" v-bind:value="variant.id">{{ variant.title }}</option>
+            </select>
+            <div v-if="option.name == 'Size' && settings.view_options.variant_selector == 'buttons'" v-for="(option, option_index) in product.options" class="mt-10 rebuy-size-swatches">
+              <div v-for="(value, value_index) in option.values" class="rebuy-size-swatch">
+                <input
+                  :name="id + '-size-' + product_index"
+                  :id="id + '-size-' + product_index + '-' + value"
+                  :checked="value_index == 0"
+                  :value="value"
+                  type="radio"
+                  class="rebuy-size-input hide"
+                  v-on:change="selectVariantBySize(product, value, product_index)">
+                  <label :for="id + '-size-' + product_index + '-' + value" class="rebuy-size-label">{{ value }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="" v-if="subtotal() > 0">
+          <button
+            class="button button-primary"
+            v-on:click="addSelectedProductsToCart()"
+            type="button"
+            style="width:100%"
+          >
+            <span v-html="buttonWidgetLabel()"></span>
+          </button>
+      </div>
+  </div>
+</script>
+{% endraw %}
+{% endif %}

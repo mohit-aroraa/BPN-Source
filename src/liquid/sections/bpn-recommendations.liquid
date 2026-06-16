@@ -1,0 +1,85 @@
+{%- assign _section = section.settings -%}
+{%- assign title = _section.title -%}
+{%- assign click_id = _section.click_id -%}
+{%- assign collection_handle = _section.collection_handle -%}
+{%- assign collection = collections[collection_handle] -%}
+{%- assign background_color = _section.background_color -%}
+{% assign click_id_prefix = 'homepage_' | append: click_id %}
+
+<a href="#bpn-recommendations-end-{{ section.id }}" class="visually-hidden skip-link in-page-link">Skip all {{ title }} Products</a>
+<section
+  class='bpn-recommendations js-bpn-recommendations'
+  role='region'
+  aria-labelledby='bpn-recommendations-{{ section.id }}'
+  {% if background_color != blank %}
+    style='background-color: {{ background_color }};'
+  {% endif %}
+>
+{% if title != blank %}
+  <h2 id="bpn-recommendations-{{ section.id }}" class='bpn-recommendations__title'>{{ title }}</h2>
+{% endif %}
+  <div class='bpn-recommendations__slider swiper' data-recommendations-swiper>
+    <div class='bpn-recommendations__navigation'>
+      {% assign nav_click_id = click_id_prefix | append: '_navigation' %}
+      <button
+        class='bpn-recommendations__nav-button bpn-recommendations__nav-button--prev swiper-button-prev'
+        data-click-id='{{- nav_click_id -}}'
+        aria-label="Show next products"
+      >
+        {% render 'icon', icon: 'left-arrow', tag: nav_click_id %}
+      </button>
+      <button
+        class='bpn-recommendations__nav-button bpn-recommendations__nav-button--next swiper-button-next'
+        data-click-id='{{- nav_click_id -}}'
+        aria-label="Show next products"
+      >
+        {% render 'icon', icon: 'right-arrow', tag: nav_click_id %}
+      </button>
+    </div>
+
+    <div class='bpn-recommendations__products swiper-wrapper'>
+      {% for product in collection.products limit: 6 %}
+        {% render 'product-grid', product: product, index: forloop.index %}
+      {% endfor %}
+    </div>
+    <div class='bpn-recommendations__controls'>
+      <div class='bpn-recommendations__pagination swiper-pagination'></div>
+    </div>
+  </div>
+</section>
+<div class="visually-hidden" id="bpn-recommendations-end-{{ section.id }}"></div>
+
+{% schema %}
+{
+  "name": "BPN Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "collection",
+      "id": "collection_handle",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "click_id",
+      "label": "Click Id"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#FFFFFF"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BPN Product Grid Recommendations",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

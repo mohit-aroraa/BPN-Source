@@ -1,0 +1,20 @@
+{%- comment -%}
+  Renders Rebuy cross-sell widget based on the id
+  Accepts rebuy_id(Number) (Default: 97750)
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign widget_id = 97750 -%}
+{%- assign min_height = block.min_height -%}
+{%- if rebuy_id -%}
+  {%- assign widget_id = rebuy_id -%}
+{%- elsif block.widget_id -%}
+  {%- assign widget_id = block.widget_id -%}
+{%- endif -%}
+<section class="rebuyWidget">
+  <div
+    data-rebuy-id="{{ widget_id }}"
+    {% if min_height %}
+      class="rebuyWidget__block"
+    {% endif %}
+  ></div>
+</section>

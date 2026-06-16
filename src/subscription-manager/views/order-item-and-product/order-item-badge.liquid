@@ -1,0 +1,19 @@
+{# Determine what type of item it is #}
+{% if not subscription %}
+  {% set item_text = 'item_badge_one_time' | t %}
+  {% set badge_class = "og-badge-one-time" %}
+  {% elseif subscription.prepaid_subscription_context %}
+  {% set item_text = 'item_badge_prepaid' | t %}
+  {% set badge_class = "og-badge-prepaid" %}
+{% else %}
+  {% set item_text = 'item_badge_pay_as_you_go' | t %}
+  {% set badge_class = "og-badge-pay-as-you-go" %}
+{% endif %}
+
+{# Create badge #}
+<div class="og-item-overlay">
+  <!--<div class="og-item-badge {{ badge_class }}">{{ item_text }}</div>-->
+  <!--<svg class="og-item-badge-hook {{ badge_class }}">-->
+  <!--  <use href="#item-badge-hook"></use>-->
+  <!--</svg>-->
+</div>

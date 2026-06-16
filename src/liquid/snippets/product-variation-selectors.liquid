@@ -1,0 +1,42 @@
+{% assign flavor_option_index = null %}
+{% assign serving_option_index = null %}
+{% assign size_option_index = null %}
+
+{% assign flavor_options = null %}
+{% assign serving_options = null %}
+{% assign size_options = null %}
+
+{% for value in product.options_with_values %}
+  {% if value.name == 'Flavor' %}
+    {% assign flavor_option_index = value.position | minus: 1 %}
+    {% assign flavor_options = value.values %}
+  {% elsif value.name == 'Servings' %}
+    {% assign serving_option_index = value.position | minus: 1 %}
+    {% assign serving_options = value.values %}
+  {% elsif value.name == 'Size' %}
+    {% assign size_option_index = value.position | minus: 1 %}
+    {% assign size_options = value.values %}
+  {% endif %}
+{% endfor %}
+
+{% assign flavor_options_size = flavor_options | size | default: 0 %}
+{% assign serving_options_size = serving_options | size | default: 0 %}
+{% assign size_options_size = size_options | size | default: 0 %}
+
+{% if flavor_options_size != 0 %}
+  {% assign hide_flavor_dropdown = false %}
+  {% if product.handle == 'whey-protein-powder' %}{% assign hide_flavor_dropdown = true %}{% endif %}
+  {% render 'product-flavors-dropdown', options: flavor_options, size: flavor_options_size, index: flavor_option_index, title: 'Flavors', selected_variation: selected_variation, click_id: 'pdp_buyblock_flavor-selector', exposed: exposed, hide_selector: hide_flavor_dropdown %}
+{% endif %}
+
+{% if flavor_options_size != 0 and product.handle == "whey-protein-powder" %}
+  {% render 'product-flavors-thumbnails', options: flavor_options, size: flavor_options_size, index: flavor_option_index, title: 'Flavors', selected_variation: selected_variation, click_id: 'pdp_buyblock_flavor-selector' %}
+{% endif %}
+
+{% if serving_options_size != 0 %}
+  {% render 'product-option-selector', options: serving_options, size: serving_options_size, index: serving_option_index, title: 'Servings', click_id: 'pdp_buyblock_serving-selector' %}
+{% endif %}
+
+{% if size_options_size != 0 %}
+  {% render 'product-option-selector', options: size_options, size: size_options_size, index: size_option_index, title: 'Size', click_id: 'pdp_buyblock_size-selector' %}
+{% endif %}

@@ -1,0 +1,376 @@
+// ==========================================================================
+// Components Layer - Product Grid Item
+// ==========================================================================
+//
+// Contains styles for individual product grid items in collection listings
+//
+// 1. Product grid item container - Main wrapper for each product
+// 2. Product image - Primary and hover state product images
+// 3. Product badges - Sale and other status indicators
+// 4. Product info - Title and price information
+// 5. Product actions - Add to cart and sold out states
+// 6. Product slider - Swiper slider functionality
+//
+// ==========================================================================
+
+/*
+ * Product Grid Item Component
+ * -------------------------------------------------
+ * Basic styling for product grid items
+ */
+
+.#{$prefix}product-grid-item {
+    // Positioning
+    position: relative;
+
+    // Box Model
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .#{$prefix}product-grid-item button {
+    font-weight: 900;
+  }
+
+  .#{$prefix}product-grid-item__link {
+    // Box Model
+    display: block;
+    // flex-grow: 1;
+
+    // Visual
+    color: color("bpn-black");
+    text-decoration: none;
+  }
+
+  .#{$prefix}product-grid-item__image-wrapper {
+    // Positioning
+    position: relative;
+    margin-bottom: 10px;
+
+    // Box Model
+    overflow: hidden;
+    border-radius: 4px;
+
+    &:hover {
+      .#{$prefix}product-grid-item__arrow {
+        opacity: 1;
+      }
+    }
+  }
+
+  .#{$prefix}product-grid-item__image-slider {
+    // Box Model
+    width: 100%;
+  }
+
+  .#{$prefix}product-grid-item__image-slider .swiper-slide {
+    // Box Model
+    width: 100% !important;
+  }
+
+  .#{$prefix}product-grid-item__image {
+    // Box Model
+    width: 100%;
+    height: auto;
+    display: block;
+
+    // Visual
+    object-fit: cover;
+  }
+
+  .#{$prefix}product-grid-item__arrow {
+    // Positioning
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    // Box Model
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    // Visual
+    background-color: color("bpn-white");
+    border: 1px solid color("bpn-grey-20");
+    cursor: pointer;
+    opacity: 0;
+
+    // Misc
+    transition: opacity 0.3s ease;
+
+    @include above("tablet") {
+      width: 28px;
+      height: 28px;
+    }
+
+    &.#{$prefix}swiper-button-next {
+      right: 8px;
+      &:after {
+        content: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7.5 15L12.5 10L7.5 5' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        width: 20px;
+        height: 20px;
+        display: flex;
+      }
+    }
+
+    &.#{$prefix}swiper-button-prev {
+      left: 8px;
+      &:after {
+        content: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.5 15L7.5 10L12.5 5' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        width: 20px;
+        height: 20px;
+        display: flex;
+      }
+    }
+
+    &.#{$prefix}swiper-button-disabled {
+      cursor: default;
+      background-color: color("bpn-grey-20");
+    }
+  }
+
+  .#{$prefix}product-grid-item__sale-badge {
+    // Positioning
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    // Box Model
+    padding: 4px 8px;
+    border-radius: 2px;
+
+    // Visual
+    background-color: color("bpn-red");
+    color: color("bpn-white");
+
+    // Typography
+    @include use-text-style("bpn-body-sm");
+    font-weight: 700;
+  }
+
+  .#{$prefix}product-grid-item__info {
+    // Box Model
+    margin-bottom: 6px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .#{$prefix}product-grid-item__title {
+    // Box Model
+    margin: 4px 0 4px;
+
+    // Typography
+    @include use-text-style("bpn-body-base");
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+    // min-height: 38px;
+  }
+
+  .#{$prefix}product-grid-item__price {
+    // Typography
+    @include use-text-style("bpn-body-sm");
+
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .#{$prefix}product-grid-item__price--sale {
+    // Visual
+    color: color("bpn-red");
+
+    // Typography
+    font-weight: 700;
+  }
+
+  .#{$prefix}product-grid-item__price--compare {
+    // Typography
+    text-decoration: line-through;
+    font-weight: 500;
+
+    // Box Model
+    margin-left: 5px;
+  }
+
+  .#{$prefix}product-grid-item__price--regular {
+    // Typography
+    font-weight: 700;
+  }
+
+  .#{$prefix}product-grid-item__form {
+    // Box Model
+    margin-top: auto;
+  }
+
+  .#{$prefix}product-grid-item__description {
+    margin-top: auto;
+  }
+
+  .#{$prefix}product-grid-item__add-to-cart {
+    // Box Model
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 4px;
+
+    // Typography
+    @include use-text-style("bpn-body-sm");
+
+    font-weight: 700;
+
+    // Misc
+    transition: all 0.2s ease;
+  }
+
+  .#{$prefix}product-grid-item__sold-out {
+    // Visual
+    background-color: #ddd;
+    color: color("bpn-navy-950");
+    cursor: not-allowed;
+
+    // Misc
+    transition: all 0.2s ease;
+
+    // Typography
+    @include use-text-style("bpn-body-sm");
+  }
+
+  .#{$prefix}product-grid-item__badge {
+    // Positioning
+    position: absolute;
+    top: 8px;
+    z-index: 2;
+
+    // Box Model
+    display: flex;
+    align-items: center;
+    padding: 4px 8px 4px 8px;
+
+    // Typography
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .1px;
+    line-height: 1.333;
+    text-transform: uppercase;
+    font-style: italic;
+
+    // Visual
+    background: color("bpn-white");
+  }
+
+  .#{$prefix}product-grid-item__badge.bpn-save-badge {
+    // Typography
+    color: #EB1000;
+  }
+
+  .#{$prefix}product-grid-item__rating {
+    // Custom Properties
+    --oke-stars-foregroundColor: color("bpn-black-950");
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-stars-foreground {
+    // Box Model
+    width: unset;
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-stars-foreground,
+  .#{$prefix}product-grid-item__rating .oke-stars-background {
+    // Box Model
+    display: flex;
+    width: unset;
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-stars-foreground svg,
+  .#{$prefix}product-grid-item__rating .oke-stars-background svg {
+    // Box Model
+    height: 12px;
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-sr-count {
+    // Typography
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    text-transform: uppercase;
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-sr-count span {
+    // Visual
+    color: color("bpn-grey-60");
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-sr-label-text {
+    // Box Model
+    display: none;
+  }
+
+  .#{$prefix}product-grid-item__rating .oke-sr-stars {
+    // Box Model
+    line-height: 1;
+    margin-right: 6px;
+  }
+
+  .#{$prefix}product-grid-item__title-wrapper {
+    // Box Model
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+    justify-content: space-between;
+
+    @include below('tablet') {
+      // Box Model
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+
+  .#{$prefix}product-grid-item__category {
+    // Typography
+    line-height: 20px;
+    font-weight: 500;
+    text-transform: capitalize;
+
+    // Visual
+    color: color("bpn-grey-60");
+
+    @include below('tablet') {
+      // Typography
+      font-size: 12px;
+    }
+  }
+
+  .#{$prefix}product-grid-item__serving-text {
+    // Typography
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0;
+
+    @include below('tablet') {
+      // Typography
+      font-size: 12px;
+    }
+  }
+
+  .#{$prefix}product-content__view-details {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 16px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    color: color("bpn-black-950");
+    letter-spacing: -0.32px;
+    margin-bottom: 16px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }

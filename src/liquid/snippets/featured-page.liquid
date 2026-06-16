@@ -1,0 +1,40 @@
+{%- comment -%}
+    -featured-page.scss is required
+    -_featured-page.js is required
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign length = block.count | minus: 1 -%}
+{%- assign background_color = block.background_color | default: '#F6F4F3' -%}
+
+
+{%- for index in (0..length) -%}
+    {% assign icon_key = 'icon_' | append: index %}
+    {% assign text_key = 'text_' | append: index %}
+    {% capture icon_slides %}
+        {{icon_slides}}
+        <div class="swiper-slide">
+            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{block[icon_key].url}}" alt="{{block[icon_key].alt}}" class="lazyload featuredPage__icon" width="auto" height="auto">
+        </div>
+    {% endcapture %}
+    {% capture text_slides %}
+        {{text_slides}}
+        <div class="swiper-slide">
+            <p class="featuredPage__text">{{block[text_key]}}</p>
+        </div>
+    {% endcapture %}
+{%- endfor -%}
+
+<section class="featuredPage featuredPpage--{{id}}" style="background-color: {{background_color}};">
+    <div class="featuredPage__wrapper">
+        <div class="swiper featuredPage__iconsText" data-featured-text-slider>
+            <div class="swiper-wrapper">
+                {{text_slides}}
+            </div>
+        </div>
+        <div class="swiper featuredPage__iconsSwiper" data-featured-icon-slider>
+            <div class="swiper-wrapper">
+                {{icon_slides}}
+            </div>
+        </div>
+    </div>
+</section>

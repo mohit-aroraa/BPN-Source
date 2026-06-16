@@ -1,0 +1,170 @@
+{% assign settings = shop.metaobjects.account_pages_settings['global-account-pages-settings'] %}
+
+{% assign okendo_store_id = settings.okendo_store_id %}
+
+{% assign locale = 'en' %}
+
+{% assign is_order_cancelled = false %}
+
+{% if order.fulfillment_status == 'restocked' %}
+  {% assign is_order_cancelled = true %}
+{% endif %}
+
+<div class="account account-order">
+  {% render 'account-side-nav' %}
+
+  <div class="account__main-content">
+    <div class="account__top-wrapper">
+      <div class="account-order__content">
+        <a href='/account?view=orders_history' class="account-order__back-link">< Back to order history</a>
+
+        <h1 class="account-order__heading">Order {{ order.name }} <span
+            class="count">{{ order.line_items | size }} items</span></h1>
+
+        <div class="account-order__information-container">
+          <div class="account-order__status-information">
+            <div class="account-order__status-information-list">
+              <div>
+                <span>Placed on:</span>
+                {{ order.created_at | date: "%d" }}th {{ order.created_at | date: "%B %Y" }}
+              </div>
+              <div>
+                <span>Order Status:</span>
+
+                {% if is_order_cancelled == false %}
+                  {{ order.fulfillment_status_label }}
+                {% else %}
+                  Canceled
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="account-order__controls">
+            {% if is_order_cancelled == false %}
+              {% if order.fulfillment_status == 'fulfilled' %}
+                <a class="btn secondary-button" href='/pages/return-policy'>return/exchange</a>
+              {% else %}
+                <a class="btn primary-button" href="{{ order.order_status_url }}">track order</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+
+        <div class="account-order__product-list">
+          {%- for item in order.line_items -%}
+            <div class="account-order__product">
+              <a class="account-order__product-image-container" href="{{ item.url }}">
+                <img src="{{ item.image | img_url: '120x129' }}" alt="{{ item.product.title }}"/>
+              </a>
+              <div class="account-order__product-details">
+                <div class="account-order__product-details-title-container">
+                  <h3 class="account-order__product-details-title">
+                    {{ item.product.title }}
+                  </h3>
+                  <span class="account-order__product-details-price"
+                        style="margin-left: auto">{{ item.price | money_with_currency }} </span>
+                </div>
+                <p class="account-order__product-details-text">{{ item.variant.title }}</p>
+                <p class="account-order__product-details-text">Quantity: {{ item.quantity }}</p>
+
+                {% assign product_id = 'shopify-' | append: item.product.id %}
+
+                {% if order.fulfillment_status == 'fulfilled' %}
+                  <div class="account-order__product-details-controls">
+                    <div>
+                      <a class="link"
+                         href="https://okendo.reviews/?subscriberId={{ okendo_store_id }}&productId={{ product_id }}&locale={{ locale }}">
+                        rate & review</a>
+                    </div>
+
+                    <input type="button" class="btn btn-primary add-to-cart-trigger"
+                           data-variant_id="{{ item.variant_id }}" value="re-order"/>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="account-order__information">
+          <div class="account-order__information-item">
+            <div>Subtotal</div>
+            <div>{{ order.line_items_subtotal_price | money }}</div>
+          </div>
+          {%- for shipping_method in order.shipping_methods -%}
+            <div class="account-order__information-item">
+              <div>{{ shipping_method.title }}</div>
+              <div style="min-width: fit-content">{{ shipping_method.price | money }}</div>
+            </div>
+          {% endfor %}
+          {%- if order.cart_level_discount_applications != blank -%}
+            {%- for discount_application in order.cart_level_discount_applications -%}
+              <div class="account-order__information-item">
+                <div>
+                  <span class="order-discount order-discount--title">
+                    {% include 'icon-saletag' %}{{- discount_application.title -}}
+                  </span>
+                </div>
+                <div>
+                  <div class="order-discount-wrapper">
+                    <span class="order-discount">-{{ discount_application.total_allocated_amount | money }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+          {%- for tax_line in order.tax_lines -%}
+            <div class="account-order__information-item">
+              <div>
+                Tax ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)
+              </div>
+              <div style="min-width: fit-content">{{ tax_line.price | money }}</div>
+            </div>
+          {%- endfor -%}
+
+          <div class="account-order__information-item">
+            <div>{{ 'customer.order.total' | t }}</div>
+            <div>{{ order.total_price | money }}</div>
+          </div>
+        </div>
+
+        <div class="account-order__address-container">
+          <div class="account-order__address">
+            <div class="account-order__address-item" style="width: fit-content;">
+              <h4>Payment Method</h4>
+
+              <div>
+                {% for transaction in order.transactions %}
+                  {% if transaction.payment_details.credit_card_company != blank %}
+                    <p>
+                      {{ transaction.payment_details.credit_card_company }}
+                    </p>
+                    <p>Card no: {{ transaction.payment_details.credit_card_number }}</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="account-order__address">
+            <div class="account-order__address-item">
+              <h4>Shipped to</h4>
+
+              <div>
+                {{ order.shipping_address | format_address }}
+              </div>
+            </div>
+            <div class="account-order__address-item">
+              <h4>Billed to</h4>
+
+              <div>
+                {{ order.billing_address | format_address }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

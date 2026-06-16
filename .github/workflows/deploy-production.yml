@@ -1,0 +1,96 @@
+name: Build & Deploy to Production Repo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Deploy even if no theme files changed'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Prevent concurrent deploys — queue them instead of cancelling
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build Theme & Push to Production Repo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+        with:
+          # Full history is required — ThemeVersionPlugin embeds the git SHA,
+          # branch name, and timestamp into dist/snippets/theme-version.liquid
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build production theme
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Verify build output
+        run: |
+          echo "Build complete:"
+          echo "  Total files : $(find dist -type f | wc -l | tr -d ' ')"
+          echo "  JS/CSS files: $(find dist/assets -name '*.js' -o -name '*.css' | wc -l | tr -d ' ')"
+          echo "  Liquid files: $(find dist -name '*.liquid' | wc -l | tr -d ' ')"
+          ls dist/
+
+      - name: Push built theme to production repository
+        env:
+          PROD_REPO_PAT: ${{ secrets.PROD_REPO_PAT }}
+          PROD_REPO: ${{ vars.PROD_REPO }}
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Capture source commit metadata for the production commit message
+          SOURCE_SHA=$(git rev-parse --short HEAD)
+          SOURCE_MSG=$(git log -1 --pretty=%s)
+          SOURCE_AUTHOR=$(git log -1 --pretty=%an)
+
+          echo "Deploying commit ${SOURCE_SHA}: ${SOURCE_MSG}"
+
+          # Clone the production repo into a temp directory
+          PROD_DIR=$(mktemp -d)
+          git clone "https://x-access-token:${PROD_REPO_PAT}@github.com/${PROD_REPO}.git" "$PROD_DIR"
+
+          # Wipe all tracked files (preserving .git) so deleted source files
+          # don't linger in the production repo
+          find "$PROD_DIR" -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+
+          # Copy the entire dist/ output into the production repo root
+          cp -r dist/. "$PROD_DIR/"
+
+          cd "$PROD_DIR"
+          git add -A
+
+          # Nothing changed — skip the commit (e.g. only comments edited in source)
+          if git diff --staged --quiet && [ "${{ inputs.force }}" != "true" ]; then
+            echo "No theme file changes detected — skipping deploy."
+            exit 0
+          fi
+
+          git commit \
+            -m "deploy: ${SOURCE_MSG} [${SOURCE_SHA}]" \
+            -m "Deployed by: ${SOURCE_AUTHOR}" \
+            -m "Source: https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+
+          git push origin main
+
+          echo "Deployed to https://github.com/${PROD_REPO}"

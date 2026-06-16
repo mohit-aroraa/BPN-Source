@@ -1,0 +1,209 @@
+.product-images-carousel {
+  height: max-content;
+
+  position: sticky;
+  position: -webkit-sticky;
+  display: block;
+  padding: 0 16px 16px 16px;
+  @include above('desktop') {
+    display: flex;
+    gap: 32px;
+    flex-direction: row;
+    padding: 0;
+  }
+
+  &__badge {
+    z-index: 10;
+    position: absolute;
+    top: 12px;
+    left: 0;
+    padding: 2px 8px;
+    font-size: 16px;
+    font-weight: 701;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+    font-style: italic;
+
+    @include above('desktop') {
+      top: 20px;
+      padding: 6px 12px;
+      font-size: 24px;
+      line-height: 20px;
+      letter-spacing: -0.48px;
+    }
+  }
+
+  &__label {
+    z-index: 10;
+    position: absolute;
+    background-color: white;
+    top: 12px;
+    left: 0;
+    padding: 2px 8px;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 701;
+    line-height: 20px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+
+    @include above('desktop') {
+      top: 20px;
+      padding: 6px 12px;
+      font-size: 24px;
+      line-height: 20px;
+      letter-spacing: -0.48px;
+    }
+  }
+
+  .product-images-carousel-vertical-slider {
+    display: none;
+    width: 80px;
+    min-width: 80px;
+    max-height: 100%;
+    overflow: hidden;
+
+    @include above('desktop') {
+      display: flex;
+      max-height: 752px;
+    }
+
+    .image-slide {
+      height: unset;
+    }
+
+    .swiper-slide {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .product-images-carousel-slider {
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    @include above('desktop') {
+      min-width: 752px;
+      max-width: 752px;
+      min-height: 752px;
+      max-height: 752px;
+      border-radius: 0;
+    }
+
+    .swiper-wrapper {
+      @include above('desktop') {
+        height: unset;
+      }
+    }
+
+    &__controls {
+      @include above('desktop') {
+        display: none;
+      }
+    }
+
+    .image-slide {
+      &__image {
+        @include below('desktop') {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      video {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &__pagination {
+      justify-content: center;
+      width: 100%;
+      position: absolute;
+      bottom: 12px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+
+      .swiper-pagination-bullet {
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        background-color: #767676;
+
+        @include above('desktop') {
+          width: 16px;
+          height: 16px;
+        }
+
+        &:hover {
+          background-color: black;
+          cursor: pointer;
+        }
+
+        &:last-of-type:not(.swiper-pagination-bullet-active) {
+          width: 8px;
+          height: 8px;
+
+          @include above('desktop') {
+            width: 12px;
+            height: 12px;
+          }
+        }
+
+        &.swiper-pagination-bullet-active {
+          background-color: black;
+          width: 48px;
+          border-radius: 18px;
+
+          @include above('desktop') {
+            width: 64px;
+          }
+        }
+      }
+    }
+
+    .swiper-button {
+      color: black;
+      font-size: 15px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      top: calc(50% - 16px);
+      border: 1.5px solid #767676;
+      position: absolute;
+      border-radius: 50%;
+      background-color: white;
+      width: 32px;
+      height: 32px;
+
+      @include above('desktop') {
+        top: calc(50% - 24px);
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .swiper-button-prev {
+      left: 8px;
+
+      @include above('desktop') {
+        left: 16px;
+      }
+    }
+
+    .swiper-button-next {
+      right: 8px;
+
+      @include above('desktop') {
+        right: 16px;
+      }
+    }
+  }
+}

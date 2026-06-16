@@ -1,0 +1,30 @@
+<script>
+  (function () {
+    var b = function () {
+      window.___gcfg = {
+        lang: 'en_US'
+      };
+
+      window.renderOptIn = function () {
+        window.gapi.load('surveyoptin', function () {
+          window.gapi.surveyoptin.render(
+            {
+              "merchant_id": 120544680,
+              "order_id": "{{ order.name }}",
+              "email": "{{ order.email }}",
+              "delivery_country": "{{ shipping_address.country_code }}",
+              "estimated_delivery_date": "{{ order.created_at | date: '%s' | plus: 604800 | date: '%F' }}"
+            });
+        });
+      }
+
+      var a = document.createElement('script');
+      a.src = 'https://apis.google.com/js/platform.js?onload=renderOptIn';
+      a.type = 'text/javascript';
+      a.setAttribute('async', '');
+      a.setAttribute('defer', '');
+      document.getElementsByTagName('body')[0].appendChild(a);
+    };
+    window.addEventListener('DOMContentLoaded', b);
+  })();
+</script>

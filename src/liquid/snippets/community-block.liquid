@@ -1,0 +1,136 @@
+{%- assign block = section[module] -%}
+{%- assign heading = block.heading -%}
+{% assign split_heading = heading | split: '=' %}
+{%- assign length = block.count | minus: 1 -%}
+{%- if length > 2 -%}
+  {%- assign length = 2 -%}
+{%- endif -%}
+
+{%- for letter in split_heading -%}
+  {% if letter contains '$' %}
+    {% assign feature_text = letter %}
+    {% break %}
+  {% endif %}
+{%- endfor -%}
+
+{%- assign remove_from_heading = '=' | append: feature_text | append: '=' -%}
+{%- assign count_recipes = 0 -%}
+{%- assign count_articles = 0 -%}
+{%- for article in blogs.content.articles -%}
+  {% if article.tags contains 'recipes' %}
+    {% if count_recipes < 3 %}
+      {% assign count_recipes = count_recipes | plus: 1 %}
+      {% capture recipes %}
+                {{recipes}}
+                {% render "community-block-slide" article: article, tag: "recipes" %}
+            {% endcapture %}
+    {% endif %}
+  {% endif %}
+
+  {% if article.tags contains 'Articles' %}
+    {% if count_articles < 3 %}
+      {% assign count_articles = count_articles | plus: 1 %}
+      {% capture content_articles %}
+                {{content_articles}}
+                {% render "community-block-slide" article: article, tag: "Articles" %}
+            {% endcapture %}
+    {% endif %}
+  {% endif %}
+  {% if count_recipes == 3 and count_articles == 3 %}
+    {% break %}
+  {% endif %}
+{%- endfor -%}
+
+<section class="communityBlock communityBlock--{{id}}">
+  <div class="communityBlock__header">
+    <h2 class="sectionTitle">
+      {{ heading | remove: remove_from_heading }}
+      <span class="feature">{{ feature_text | remove: '$' }}</span>
+    </h2>
+  </div>
+  <div class="communityBlock__nav">
+    <ul class="communityBlock__tab">
+      <li>
+        <a
+          href="javascript:void(0);"
+          data-target="#featured-block"
+          data-all-link="/blogs/content"
+          data-all-text="View all content"
+          class="js-tab-trigger community-tab-featured active"
+          >Featured</a
+        >
+      </li>
+      <li>
+        <a href="/pages/podcasts" class="community-tab-podcasts">Podcasts</a>
+      </li>
+      <li>
+        <a
+          href="javascript:void(0);"
+          data-target="#recipes"
+          data-all-link="/blogs/content/tagged/recipes"
+          data-all-text="View all Recipes"
+          class="js-tab-trigger community-tab-recipes"
+          >Recipes</a
+        >
+      </li>
+      <li>
+        <a
+          href="javascript:void(0);"
+          data-target="#articles"
+          data-all-link="/blogs/content/tagged/articles"
+          data-all-text="View all Articles"
+          class="js-tab-trigger community-tab-articles"
+          >Articles</a
+        >
+      </li>
+    </ul>
+    <a href="/blogs/content" class="button-link contentAllCta--desktop js-view-all-content">VIEW ALL CONTENT</a>
+  </div>
+  <div class="communityBlock__content">
+    <div class="articleWrapper articleWrapper--featured js-article-wrapper" id="featured-block">
+      <div class="swiper" data-featured-slider>
+        <div class="swiper-wrapper">
+          {% for index in (0..length) limit: 3 %}
+            {% assign image_key = 'image_' | append: index %}
+            {% assign type_key = 'type_' | append: index %}
+            {% assign text_key = 'text_' | append: index %}
+            {% assign link_key = 'link_' | append: index %}
+            <div class="swiper-slide">
+              <div class="featuredCard">
+                <div class="featuredCard__image">
+                  <a href="{{block[link_key] | strip }}" title="{{ block[text_key] }}">
+                    {% render 'prismic-responsive-image' with image: block[image_key], image_attributes:'width="240px" height="218px"' %}
+                  </a>
+                </div>
+                <div class="featuredCard__content">
+                  <p class="featuredCard__type">{{ block[type_key] }}</p>
+                  <p class="featuredCard__description">{{ block[text_key] }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-scrollbar swiper-scrollbar--common"></div>
+      </div>
+    </div>
+    <div class="articleWrapper articleWrapper--Recipes js-article-wrapper hide" id="recipes">
+      <div class="swiper" data-featured-slider>
+        <div class="swiper-wrapper">
+          {{ recipes }}
+        </div>
+        <div class="swiper-scrollbar swiper-scrollbar--common"></div>
+      </div>
+    </div>
+    <div class="articleWrapper articleWrapper--articles js-article-wrapper hide" id="articles">
+      <div class="swiper" data-featured-slider>
+        <div class="swiper-wrapper">
+          {{ content_articles }}
+        </div>
+        <div class="swiper-scrollbar swiper-scrollbar--common"></div>
+      </div>
+    </div>
+    <div class="contentAllCta--mobile">
+      <a href="/blogs/content" class="button-link contentAllCta--mobile js-view-all-content">VIEW ALL CONTENT</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+/*
+ * The file collects all global styles.
+ */
+@import "./functions/function";
+@import "./variables";
+@import "./mixins";
+@import "./reset";
+@import "./utilities/utilities";
+@import "./responsive-image";
+@import "./container";
+@import "./announcement";
+@import "./site-header";
+@import "./mobile-nav";
+@import "./sidebar-drawer";
+@import "./footer";
+@import "./site-footer";
+@import "./breadcrumb";
+@import "./toast";
+@import "./style";
+@import "./custom";
+// Design system
+@import "./typography";
+@import "buttons";
+
+@import "../../vendor/__vendors-index";

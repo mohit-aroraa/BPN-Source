@@ -1,0 +1,40 @@
+.badge-list {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  @include above('desktop') {
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  &__item {
+    max-width: 130px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    @include above('desktop') {
+      gap: 12px;
+      max-width: 152px;
+    }
+
+    &-image {
+      width: 40px;
+    }
+
+    &-text {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 14px; /* 116.667% */
+      text-transform: uppercase;
+
+      @include above('desktop') {
+        font-size: 16px;
+        line-height: 16px;
+      }
+    }
+  }
+}

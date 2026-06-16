@@ -1,0 +1,172 @@
+
+{% if vidExt != blank or vidHosted != blank %}
+  {% comment %}
+
+    {% include 'snippet--video', 
+      vidExt: s.video_url, 
+      vidHosted: s.video_hosted, 
+      hostedThumb: s.video_hosted_thumbnail,
+      cf: false,
+      vidClass: sectionClass, 
+      autoPlay: false,
+      normalMobile: false,
+      bg_style: false 
+    %}
+
+
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ]
+    },
+    {
+      "type": "text",
+      "id": "video_hosted",
+      "label": "Video url if hosted"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_hosted_thumbnail",
+      "label": "Video thumbnail (only if hosted)"
+    },
+
+  {% endcomment %}
+  <!-- snippets/snippet--video -->
+  {% liquid 
+
+    assign vidID            = vidExt.id
+    assign vidType          = vidExt.type
+    assign showMobile       = false 
+    assign hideMobile       = ''
+    assign hideAutoplay     = '' 
+    assign thmbPoster       = '' 
+
+    if hostedThumb != blank 
+      assign thmbPoster       = hostedThumb
+      if cF != true 
+        assign thmbPoster     = hostedThumb | img_url: 'master'
+      endif 
+    endif 
+
+    if vidHosted != blank
+      assign vidType        = 'video'
+    endif
+
+    if autoPlay != false and normalMobile == true
+      assign showMobile     = true 
+      assign hideAutoplay   = 'small--hide' 
+    endif 
+
+    if autoPlay != false and normalMobile != true
+      assign hideMobile     = 'small--hide'
+    endif 
+
+  %}
+  {% capture videoEl %}
+    {% comment %} if Youtube {% endcomment %}
+    {% if vidType == "youtube" %}
+      <iframe
+        class="iframe-video {{hideAutoplay}}"
+        src="https://www.youtube.com/embed/{{ vidID }}?{% unless autoPlay == false %}&autoplay=1&mute=1&loop=1{% endunless %}&controls=0&vq=hd720&playlist={{ vidID }}"
+        width="800"
+        id="video-{{vidID}}"
+        height="480"
+        {% unless autoPlay == false %}
+        allow="autoplay"
+        {% endunless %}
+        frameborder="0"
+        allowfullscreen></iframe>
+      {% comment %} Show a version of video on mobile that allows user to press play. {% endcomment %}
+      {% if showMobile == true %}
+        <iframe
+        class="iframe-video medium-up--hide"
+        src="https://www.youtube.com/embed/{{ vidID }}?&controls=0&vq=hd720&playlist={{ vidID }}"
+        width="800"
+        id="video-{{vidID}}"
+        height="480"
+        frameborder="0"
+        allowfullscreen></iframe>
+      {% endif %}
+    {% endif %}
+    {% comment %} if Vimeo {% endcomment %}
+    {% if vidType == "vimeo" %}
+      <iframe
+        class="iframe-video {{hideAutoplay}}"
+        id="video-{{vidID}}"
+        src="//player.vimeo.com/video/{{ vidID }}?background=1{% unless autoPlay == false %}&autoplay=1&loop=1&muted=1{% endunless %}&byline=0&title=0"
+        width="800"
+        height="480"
+        frameborder="0"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen></iframe>
+      {% comment %} Show a version of video on mobile that allows user to press play. {% endcomment %}
+      {% if showMobile == true %}
+        <iframe
+          class="iframe-video medium-up--hide"
+          id="video{{section.id}}{{block.id}}"
+          src="//player.vimeo.com/video/{{ vidID }}?background=1&byline=0&title=0"
+          width="800"
+          height="480"
+          frameborder="0"
+          webkitallowfullscreen
+          mozallowfullscreen
+          allowfullscreen></iframe>
+      {% endif %}
+    {% endif %}
+    {% comment %} if Self-Hosted {% endcomment %}
+    {% if vidType == 'video' %}
+      <video 
+        class="html-video {{hideAutoplay}}" 
+        width="800" 
+        height="480" 
+        {% if thmbPoster == blank %}
+        preload="metadata"
+        {% else %}
+        poster={{thmbPoster}}
+        {% endif %}
+        id="video{{section.id}}{{block.id}}" 
+        {% unless autoPlay == false %}
+        autoplay muted loop 
+        {% else %}
+        controls
+        {% endunless %}
+        src="{{vidHosted}}{% if thmbPoster == blank %}#t=0.5{% endif %}"></video>
+      {% comment %} Show a version of video on mobile that allows user to press play. {% endcomment %}
+      {% if showMobile == true %}
+        <video 
+          class="html-video medium-up--hide" 
+          width="800" 
+          height="480" 
+          {% if thmbPoster == blank %}
+          preload="metadata"
+          {% else %}
+          poster={{thmbPoster}}
+          {% endif %}
+          controls
+          src="{{vidHosted}}{% if thmbPoster == blank %}#t=0.5{% endif %}"></video>
+      {% endif %}
+    {% endif %}
+  {% endcapture %}
+  {% if bg_style == true %}
+    <div class="video-ratio {{hideMobile}} {{vidClass}}">
+      <div class="wrapper">
+        {{videoEl}}
+      </div>
+    </div>
+  {% else %}
+    <div class="video-inline {{hideMobile}} {{vidClass}}">
+      <div class="wrapper">
+        {{videoEl}}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

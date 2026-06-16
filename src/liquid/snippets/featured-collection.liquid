@@ -1,0 +1,23 @@
+{%- assign block = section[module] -%}
+{%- assign heading = block.heading | default: 'TOP RATED SUPPLEMENTS' -%}
+{%- assign collection_handle = block.collection_handle | default: 'all' -%}
+{%- assign collection = collections[collection_handle] -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+{%- assign product_limit = block.product_limit | default: 4 -%}
+<section class='featuredCollection featuredCollection--{{ id }}' id='featuredCollection_{{ id }}'>
+  <div class='featuredCollection__header'>
+    <h2 class='sectionTitle'>{{ heading }}</h2>
+    {% if cta_text != blank and cta_link != blank %}
+      <a href='{{ cta_link }}' class='button-link featured-collection-cta'>{{ cta_text }}</a>
+    {% endif %}
+  </div>
+  <div class='featuredCollection__container swiper' data-featured-collection-slider>
+    <div class='swiper-wrapper featuredCollection__swiper'>
+      {% for product in collection.products limit: product_limit %}
+        {% render 'product-grid', product: product, index: forloop.index %}
+      {% endfor %}
+    </div>
+    <div class='swiper-scrollbar swiper-scrollbar--common'></div>
+  </div>
+</section>

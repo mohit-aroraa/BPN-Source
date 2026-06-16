@@ -1,0 +1,234 @@
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src =
+      'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-WKLLP6R');
+
+  const getItems = (event = {}) => {
+    const {data = {}} = event
+
+    return data.checkout?.lineItems?.map((item, index) => {
+      return {
+        'affiliation': "Bare Performance Nutrition",
+        'coupon': null,
+        'discount': item.discountAllocations.amount.amount,
+        'index': index,
+        'item_brand': "Bare Performance Nutrition",
+        'item_category': item.variant.product.type,
+        'item_category2': null,
+        'item_category3': null,
+        'item_category4': null,
+        'item_id': item.id,
+        'item_list_id': "Checkout_",
+        'item_list_name': "Checkout",
+        'item_name': item.variant.product.title,
+        'item_variant': item.variant.title,
+        'price': item.variant.price.amount,
+        'quantity': item.quantity,
+        'currency': event.data.checkout.currencyCode
+      }
+    })
+  }
+
+  //page_viewed
+  analytics.subscribe('page_viewed', (event) => {
+    window.dataLayer.push({
+      'event': 'page_viewed',
+      'pagelocation': event.context.document.location.href,
+      'page_title': event.context.document.title,
+    });
+  });
+
+  analytics.subscribe("checkout_started", event => {
+    let clientId = null
+    let clientType = 'Guest'
+
+    if (event.data.checkout.order.customer != null) {
+      clientId = event.data.checkout.order.customer.id
+      clientType = 'Registered'
+    }
+
+    window.dataLayer.push({
+        'event': 'track_user_id',
+        'user_id': clientId,
+        'user_type': clientType
+      }
+    )
+
+    window.dataLayer.push({
+      event: "checkout_started",
+      timestamp: event.timestamp,
+      id: event.id,
+      token: event.data?.checkout?.token,
+      url: event.context.document.location.href,
+      client_id: event.clientId,
+      email: event.data?.checkout?.email,
+      phone: event.data?.checkout?.phone,
+      first_name: event.data?.checkout?.shippingAddress?.firstName,
+      last_name: event.data?.checkout?.shippingAddress?.lastName,
+      address1: event.data?.checkout?.shippingAddress?.address1,
+      address2: event.data?.checkout?.shippingAddress?.address2,
+      city: event.data?.checkout?.shippingAddress?.city,
+      country: event.data?.checkout?.shippingAddress?.country,
+      countryCode: event.data?.checkout?.shippingAddress?.countryCode,
+      province: event.data?.checkout?.shippingAddress?.province,
+      provinceCode: event.data?.checkout?.shippingAddress?.provinceCode,
+      zip: event.data?.checkout?.shippingAddress?.zip,
+      orderId: event.data?.checkout?.order?.id,
+      currency: event.data?.checkout?.currencyCode,
+      subtotal: event.data?.checkout?.subtotalPrice?.amount,
+      shipping: event.data?.checkout?.shippingLine?.price?.amount,
+      value: event.data?.checkout?.totalPrice?.amount,
+      tax: event.data?.checkout?.totalTax?.amount,
+    });
+  });
+
+  analytics.subscribe("checkout_address_info_submitted", (event) => {
+    window.dataLayer.push({
+      event: "ga_checkout_address_info_submitted",
+      timestamp: event.timestamp,
+      id: event.id,
+      token: event.data?.checkout?.token,
+      url: event.context.document.location.href,
+      client_id: event.clientId,
+      email: event.data?.checkout?.email,
+      phone: event.data?.checkout?.phone,
+      first_name: event.data?.checkout?.shippingAddress?.firstName,
+      last_name: event.data?.checkout?.shippingAddress?.lastName,
+      address1: event.data?.checkout?.shippingAddress?.address1,
+      address2: event.data?.checkout?.shippingAddress?.address2,
+      city: event.data?.checkout?.shippingAddress?.city,
+      country: event.data?.checkout?.shippingAddress?.country,
+      countryCode: event.data?.checkout?.shippingAddress?.countryCode,
+      province: event.data?.checkout?.shippingAddress?.province,
+      provinceCode: event.data?.checkout?.shippingAddress?.provinceCode,
+      zip: event.data?.checkout?.shippingAddress?.zip,
+      orderId: event.data?.checkout?.order?.id,
+      currency: event.data?.checkout?.currencyCode,
+      subtotal: event.data?.checkout?.subtotalPrice?.amount,
+      shipping: event.data?.checkout?.shippingLine?.price?.amount,
+      value: event.data?.checkout?.totalPrice?.amount,
+      tax: event.data?.checkout?.totalTax?.amount,
+    });
+  });
+
+  analytics.subscribe("checkout_shipping_info_submitted", event => {
+    window.dataLayer.push({
+        'event': 'ga4_add_shipping_info',
+        'ecommerce': {
+          'timestamp': event.timestamp,
+          'id': event.id,
+          'value': event.data.checkout.totalPrice.amount,
+          'currency': event.data.checkout.currencyCode,
+          'shipping_tier': event.data.checkout.delivery.selectedDeliveryOptions.title,
+          'coupon': event.data.checkout.discountApplications.title,
+          'payment_type': event.data.checkout.transactions.paymentMethod.name,
+          'items': getItems(event),
+          'token': event.data?.checkout?.token,
+          'url': event.context.document.location.href,
+          'client_id': event.clientId,
+          'email': event.data?.checkout?.email,
+          'phone': event.data?.checkout?.phone,
+          'first_name': event.data?.checkout?.shippingAddress?.firstName,
+          'last_name': event.data?.checkout?.shippingAddress?.lastName,
+          'address1': event.data?.checkout?.shippingAddress?.address1,
+          'address2': event.data?.checkout?.shippingAddress?.address2,
+          'city': event.data?.checkout?.shippingAddress?.city,
+          'country': event.data?.checkout?.shippingAddress?.country,
+          'countryCode': event.data?.checkout?.shippingAddress?.countryCode,
+          'province': event.data?.checkout?.shippingAddress?.province,
+          'provinceCode': event.data?.checkout?.shippingAddress?.provinceCode,
+          'zip': event.data?.checkout?.shippingAddress?.zip,
+          'orderId': event.data?.checkout?.order?.id,
+          'subtotal': event.data?.checkout?.subtotalPrice?.amount,
+          'shipping': event.data?.checkout?.shippingLine?.price?.amount,
+          'tax': event.data?.checkout?.totalTax?.amount,
+        }
+      }
+    )
+  });
+
+  analytics.subscribe("payment_info_submitted", event => {
+    window.dataLayer.push({
+        'event': 'ga4_add_payment_info',
+        'ecommerce': {
+          'value': event.data.checkout.totalPrice.amount,
+          'currency': event.data.checkout.currencyCode,
+          'shipping_tier': event.data.checkout.delivery.selectedDeliveryOptions.title,
+          'coupon': event.data.checkout.discountApplications.title,
+          'payment_type': event.data.checkout.transactions.paymentMethod.name,
+          'items': getItems(event)
+        }
+      }
+    )
+  });
+
+  analytics.subscribe("checkout_contact_info_submitted", (event) => {
+    window.dataLayer.push({
+      'event': "ga_checkout_contact_info_submitted",
+      'timestamp': event.timestamp,
+      'id': event.id,
+      'token': event.data?.checkout?.token,
+      'url': event.context.document.location.href,
+      'client_id': event.clientId,
+      'email': event.data?.checkout?.email,
+      'phone': event.data?.checkout?.phone,
+      'first_name': event.data?.checkout?.shippingAddress?.firstName,
+      'last_name': event.data?.checkout?.shippingAddress?.lastName,
+      'address1': event.data?.checkout?.shippingAddress?.address1,
+      'address2': event.data?.checkout?.shippingAddress?.address2,
+      'city': event.data?.checkout?.shippingAddress?.city,
+      'country': event.data?.checkout?.shippingAddress?.country,
+      'countryCode': event.data?.checkout?.shippingAddress?.countryCode,
+      'province': event.data?.checkout?.shippingAddress?.province,
+      'provinceCode': event.data?.checkout?.shippingAddress?.provinceCode,
+      'zip': event.data?.checkout?.shippingAddress?.zip,
+      'orderId': event.data?.checkout?.order?.id,
+      'currency': event.data?.checkout?.currencyCode,
+      'subtotal': event.data?.checkout?.subtotalPrice?.amount,
+      'shipping': event.data?.checkout?.shippingLine?.price?.amount,
+      'value': event.data?.checkout?.totalPrice?.amount,
+      'tax': event.data?.checkout?.totalTax?.amount,
+    });
+  });
+
+  analytics.subscribe("checkout_completed", (event) => {
+    window.dataLayer.push({
+      'event': "checkout_completed",
+      'timestamp': event.timestamp,
+      'id': event.id,
+      'token': event.data?.checkout?.token,
+      'url': event.context.document.location.href,
+      'client_id': event.clientId,
+      'email': event.data?.checkout?.email,
+      'phone': event.data?.checkout?.phone,
+      'first_name': event.data?.checkout?.shippingAddress?.firstName,
+      'last_name': event.data?.checkout?.shippingAddress?.lastName,
+      'address1': event.data?.checkout?.shippingAddress?.address1,
+      'address2': event.data?.checkout?.shippingAddress?.address2,
+      'city': event.data?.checkout?.shippingAddress?.city,
+      'country': event.data?.checkout?.shippingAddress?.country,
+      'countryCode': event.data?.checkout?.shippingAddress?.countryCode,
+      'province': event.data?.checkout?.shippingAddress?.province,
+      'provinceCode': event.data?.checkout?.shippingAddress?.provinceCode,
+      'zip': event.data?.checkout?.shippingAddress?.zip,
+      'orderId': event.data?.checkout?.order?.id,
+      'currency': event.data?.checkout?.currencyCode,
+      'subtotal': event.data?.checkout?.subtotalPrice?.amount,
+      'shipping': event.data?.checkout?.shippingLine?.price?.amount,
+      'value': event.data?.checkout?.totalPrice?.amount,
+      'tax': event.data?.checkout?.totalTax?.amount,
+    });
+  });
+</script>

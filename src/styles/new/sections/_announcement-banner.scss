@@ -1,0 +1,21 @@
+.special-announcement-banner {
+  padding: 0.5rem;
+  background: color('bpn-volt');
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 0.5rem;
+  letter-spacing: 0;
+  color: #000;
+
+  &.cart-banner {
+    text-align: center;
+    width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+}

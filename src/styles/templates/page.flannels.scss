@@ -1,0 +1,53 @@
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+
+// Design tokens
+@import "./src/design-tokens/index";
+
+@import "../components/shared/prismic/featured-banner";
+@import "../components/shared/prismic/image-and-text";
+@import "../components/shared/product-grid-item";
+@import "../components/shared/prismic/flannel-product-grid";
+
+.template--page-flannels {
+  .featuredBanner {
+    @include below("mobile-large") {
+      margin-bottom: 32px;
+    }
+    @include above("desktop-med") {
+      margin-bottom: 64px;
+    }
+    &__content {
+      @include above("desktop-med") {
+        max-width: 715px;
+      }
+    }
+    &__imageBlock {
+      @include below("mobile-large") {
+        margin-bottom: 32px;
+      }
+    }
+    &__title {
+      @include below("mobile-large") {
+        font-size: 32px;
+        letter-spacing: -1.78px;
+        line-height: 1;
+      }
+    }
+    &__shortText {
+      @include below("mobile-large") {
+        @include use-text-style("paragraph-body-2");
+        font-weight: 400;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      @include above("desktop-med") {
+        max-width: 460px;
+      }
+    }
+  }
+}

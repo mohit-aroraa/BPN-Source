@@ -1,0 +1,42 @@
+.collectionBanner {
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    li {
+      @include use-text-style("paragraph-body-3");
+      color: color("white");
+      a {
+        color: inherit;
+        &:hover {
+          color: inherit;
+        }
+      }
+      & + li {
+        margin-left: 8px;
+        &::before {
+          content: "/";
+          display: inline-block;
+          padding-right: 8px;
+        }
+      }
+    }
+
+    &--insideBanner {
+      display: none;
+      margin-bottom: 26px;
+
+      @include above("tablet") {
+        display: flex;
+      }
+    }
+    &--outsideBanner {
+      padding: 8px 12px 12px 12px;
+      li {
+        color: color("black");
+      }
+      @include above("tablet") {
+        display: none;
+      }
+    }
+  }
+}

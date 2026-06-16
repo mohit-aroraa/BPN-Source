@@ -1,0 +1,42 @@
+<div class="bs-tabs-wrapper desktop-view">
+  <ul>
+    {% for block in section.blocks %}
+      <li class="{% if block.settings.link contains page.handle %} active-link {% endif %}">
+        <a href="{{ block.settings.link }}">{{ block.settings.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="bottom-nav top-nav mobile-view">
+  <ul>
+    <li>
+      <a href="{{ section.settings.bottom_nav1_link }}">
+        <img
+          src="{{ 'bottom_nav_left_arrow.svg' | asset_url }}"
+          alt="Go to {{ section.settings.bottom_nav1_link }}"
+          width="7"
+          height="13"
+          loading="lazy"
+        >
+      </a>
+    </li>
+    <li>
+      <a href="{{ section.settings.bottom_nav1_link }}">{{ section.settings.bottom_nav1_title }}</a>
+    </li>
+    <li>
+      <a href="{{ section.settings.bottom_nav2_link }}">{{ section.settings.bottom_nav2_title }}</a>
+    </li>
+    <li>
+      <a href="{{ section.settings.bottom_nav2_link }}">
+        <img
+          src="{{ 'bottom_nav_right_arrow.svg' | asset_url }}"
+          alt="Go to {{ section.settings.bottom_nav2_link }}"
+          width="7"
+          height="13"
+          loading="lazy"
+        >
+      </a>
+    </li>
+  </ul>
+</div>

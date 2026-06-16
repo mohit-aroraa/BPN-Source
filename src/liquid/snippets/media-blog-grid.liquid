@@ -1,0 +1,74 @@
+
+<div class="row">
+  {% for article in blog.articles %}
+    <div class="col-md-4 mb-4">
+      <div class="media-content">
+        <div class="blog-media">
+          <img src="{{ article.image | img_url: 'master' }}" class="img-fluid"/>
+          {% if article.metafields.custom_fields["audio_url"] != blank %}
+          	<a href="#" class="play-btn" data-toggle="modal" data-target="#audioModal-{{article.handle | replace: "/", "-"}}"><i class="fa fa-play play-audio" data-audio_url="{{ article.metafields.custom_fields["audio_url"] }}"></i></a>
+          {% elsif article.metafields.custom_fields["video_url"] != blank %}
+          	<a href="#" class="play-btn"  data-toggle="modal" data-target="#videoModal-{{article.handle | replace: "/", "-"}}"><i class="fa fa-play play-video" data-video_url="{{ article.metafields.custom_fields["video_url"] }}"></i></a>
+          {% endif %}
+        </div>
+        <div class="blog-content">
+          <h6 class="blog-date">{{ article.published_at | date: "%d %b %Y" }}</h6>
+          <h4 class="blog-heading">
+           {% if article.metafields.custom_fields["audio_url"] != blank %}
+                <a href="#" class="play-button play-audio" data-toggle="modal" data-target="#audioModal-{{article.handle | replace: "/", "-"}}" data-audio_url="{{ article.metafields.custom_fields["audio_url"] }}">{{ article.title }}</a>
+               
+           {% elsif article.metafields.custom_fields["video_url"] != blank %}
+                <a href="#" class="play-button play-video"  data-toggle="modal" data-target="#videoModal-{{article.handle | replace: "/", "-"}}" data-video_url="{{ article.metafields.custom_fields["video_url"] }}">{{ article.title }}</a>
+            {% else %}
+            	<a href="#">{{ article.title }}</a>
+            {% endif %}
+          </h4>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% for article in blog.articles %}
+ {% if article.metafields.custom_fields["audio_url"] != blank %}
+    <!--Audio Modal {{forloop.index}}-->
+    <div class="modal fade audioModal" id="audioModal-{{article.handle | replace: "/", "-"}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Listen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body holds-the-iframe">
+            <!--<audio controls controlsList="nodownload" style="width:100%; position:fix" id="audio">
+            Your browser does not support the audio element.
+            </audio> -->
+            <iframe id="audio" width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url={{ article.metafields.custom_fields["audio_url"] }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% elsif article.metafields.custom_fields["video_url"] != blank %}
+    <!-- video Modal -->
+    <div class="modal fade videoModal" id="videoModal-{{article.handle | replace: "/", "-"}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Watch</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body holds-the-iframe">
+            <iframe width="100%" height="450" src="{{ article.metafields.custom_fields["video_url"] }}" id="video">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+
+  {% endif %}
+{% endfor %}

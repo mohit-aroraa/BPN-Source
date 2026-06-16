@@ -1,0 +1,114 @@
+{% liquid
+  assign settings = section.settings
+  assign blocks = section.blocks
+%}
+
+<script>
+  window.BPN = window.BPN || {};
+
+  window.BPN.quizPageConfig = {
+    enabled: {{ settings.enabled | default: false }},
+    title: "{{ settings.title }}",
+    text: "{{ settings.text }}",
+    tabsTitle: "{{ settings.tabs_title }}",
+    nameAnswerKey: "{{ settings.name_answer_key }}",
+    quizId: "{{ settings.quiz_id }}",
+    icons: {
+      {% for block in blocks %}
+      "{{ block.settings.name }}": "{{ block.settings.icon | img_url: 'master' }}",
+      {% endfor %}
+    },
+  };
+</script>
+
+{% if settings.enabled %}
+  <style>
+    .quiz-hero {
+      background-image: url("{{ settings.background | img_url: 'master'  }}");
+    }
+  </style>
+
+  <div id="bpn-quiz-product-drawer-container"></div>
+{% endif %}
+
+<div class="quizPageWrapper">
+  {% if settings.enabled %}
+    <div class="octane-ai-quiz" data-quiz-id="{{ settings.quiz_id }}" data-embed-type="fullscreen">
+    </div>
+
+    {% comment %} <script src="https://app.octaneai.com/bsg3u3ljo4kplzuf/quiz.js" async defer></script> {% endcomment %}
+    <script>
+      (function() {
+        var script = document.createElement('script');
+        script.src = 'https://app.octaneai.com/bsg3u3ljo4kplzuf/quiz.js';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      })();
+    </script>
+  {% else %}
+    {{ page.content }}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Quiz Result Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable Custom result page",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "quiz_id",
+      "label": "Quiz Id"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "tabs_title",
+      "label": "Tabs title"
+    },
+    {
+      "type": "text",
+      "id": "name_answer_key",
+      "label": "Quiz Name answer key"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Category",
+      "type": "category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+{%- capture icon_class -%} {{ class }} {%- endcapture -%}
+{%- capture icon_click_id -%}{{ tag }}{%- endcapture -%}
+{%- case icon -%}
+  {% when 'filter-cross-icon' %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+      <path d="M1.8 9L1 8.2L4.2 5L1 1.8L1.8 1L5 4.2L8.2 1L9 1.8L5.8 5L9 8.2L8.2 9L5 5.8L1.8 9Z" fill="black"
+            stroke="black"
+            stroke-width="0.5" />
+    </svg>
+{%- endcase -%}

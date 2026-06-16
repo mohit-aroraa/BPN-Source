@@ -1,0 +1,27 @@
+{% assign bandge_block_count = 0 %}
+
+{% for block in section.blocks %}
+    {% if block.type == 'badge' %}
+        {% assign bandge_block_count = bandge_block_count | plus: 1 %}
+    {% endif %}
+{% endfor %}
+
+{% if bandge_block_count != 0 %}
+    <div class="badge-list">
+        {% for block in section.blocks %}
+            {% if block.type == 'badge' %}
+                <div class="badge-list__item">
+                    <img class="badge-list__item-image"
+                         src="{{ block.settings.image | img_url: 'master' }}"
+                         alt="{{ block.settings.title }}"
+                         loading="lazy"
+                    >
+
+                    <p class="badge-list__item-text">
+                        {{ block.settings.text }}
+                    </p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

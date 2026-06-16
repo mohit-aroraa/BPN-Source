@@ -1,0 +1,72 @@
+<section class="validators validators--{{ section.id }}"
+  style="padding-top: {{ section.settings.top_padding }}px">
+
+  <ul class="validators__list">
+    {% for block in section.blocks %}
+      <li class="validator">
+        <div class="validator__image-container">
+          {% if block.settings.logo %}
+            <img
+              src="{{ block.settings.logo | img_url: '500x' }}"
+              alt="{{ block.settings.title | escape }}"
+            />
+          {% endif %}
+        </div>
+
+        <div class="validator__content">
+          {% if block.settings.title %}
+            <h3 class="validator__title">{{ block.settings.title }}</h3>
+          {% endif %}
+          {% if block.settings.text %}
+            <p class="validator__text">{{ block.settings.text }}</p>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "Validators",
+  "settings": [
+    {
+      "type": "number",
+      "id": "top_padding",
+      "label": "Top padding (px)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "validator",
+      "name": "Validator",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Validators",
+      "category": "Visual"
+    }
+  ]
+}
+{% endschema %}
+

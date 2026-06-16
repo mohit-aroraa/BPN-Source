@@ -1,0 +1,39 @@
+{%- comment -%}
+  -_primary-benefits-icons.scss is required
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="primaryBenefitsIconSection">
+  {% for index in (0..length) limit: 5 %}
+    {% assign icon_key = 'icon_' | append: index %}
+    {% assign header_key = 'header_' | append: index %}
+    {% assign text_key = 'text_' | append: index %}
+    <div class="primaryBenefitsIconSection__card">
+      <div class="primaryBenefitsIconSection__icon">
+        <img
+          class="lazyload"
+          src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+          data-src="{{block[icon_key].url}}"
+          alt="{{block[icon_key].alt}}"
+        >
+      </div>
+      <div class="primaryBenefitsIconSection__cardContent">
+        {% if block[header_key] != blank %}
+          <p class="primaryBenefitsIconSection__header">{{ block[header_key] }}</p>
+        {% endif %}
+        {% if block[text_key] != blank %}
+          <p class="primaryBenefitsIconSection__text">{{ block[text_key] }}</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</section>
+
+<style>
+  @media (min-width: 48rem) {
+    .primaryBenefitsIconSection {
+      grid-template-columns: repeat({{ block.count }}, 1fr);
+    }
+  }
+</style>

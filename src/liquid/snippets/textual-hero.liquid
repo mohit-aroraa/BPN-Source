@@ -1,0 +1,32 @@
+{%- assign block = section[module] -%}
+{%- assign title = block.title[0] -%}
+{%- assign content = block.content -%}
+{%- assign desktop_height = block.desktop_height -%}
+{%- assign mobile_height = block.mobile_height -%}
+{%- assign mobile_height = block.mobile_height -%}
+{%- assign content_width = block.content_width -%}
+{%- assign text_color = block.text_color | default:'#fff' -%}
+
+<section 
+  class="textualHero {{snippet_name}} textualHero--{{id}}" 
+  style="
+    --height-desktop:{{desktop_height}};
+    --height-mobile:{{mobile_height}};
+    --text-color:{{text_color}};
+    --content-width:{{content_width}}
+  "
+>
+  <div class="textualHero__container">
+    <div class="textualHero__content">
+      {% if title != blank %}
+        <h1 class="textualHero__title">{{- title.text -}}</h1>
+      {% endif %}
+
+      {% if content != blank %}
+        <div class="textualHero__entry">
+          {{- content -}}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

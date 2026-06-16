@@ -1,0 +1,325 @@
+<!doctype html>
+<html class='no-js' lang='{{ shop.locale }}'>
+  <head>
+    {% comment %} 1. Character Encodings {% endcomment %}
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    {% comment %} Consent Mode + GTM Container (must load before all other scripts) {% endcomment %}
+    {% render 'gcm-integration-script' %}
+    {% render 'gtm-head' %}
+
+    {% comment %} 2. Title {% endcomment %}
+    {% include 'head-seo-title' %}
+    <title>{{ seo_title | strip }}</title>
+    {% comment %} Where is the meta description tag? {% endcomment %}
+
+    {% comment %} 3. Preconnected Links {% endcomment %}
+    {% render 'head-preconnect' %}
+
+    {% comment %} 4. Synchronous Scripts {% endcomment %}
+    {% include 'head-first-scripts' %}
+
+    {% comment %} 5. Synchronous CSS {% endcomment %}
+    {% render 'head-fonts' %}
+    {% include 'css-variables' %}
+    {% render 'style-bundle', layout: 'theme' %}
+    {% render 'style-bundle', layout: 'anatta_theme' %}
+    {{
+      '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'
+      | stylesheet_tag
+    }}
+
+    {% comment %} 6. Preloaded Links {% endcomment %}
+
+    {% comment %} 7. Asynchronous or deferred Scripts {% endcomment %}
+    {% unless template contains 'page.athletic' %}
+      <script
+        async
+        src='https://cdn.rebuyengine.com/onsite/js/rebuy.js?shop={{ shop.permanent_domain }}'
+      ></script>
+    {% endunless %}
+    {%- if request.page_type contains 'customers/' -%}
+      <script src='{{ 'shopify_common.js' | shopify_asset_url }}' defer='defer'></script>
+    {%- endif -%}
+    <script src='{{ 'plugins.min.js' | asset_url }}' defer='defer'></script>
+    <script src='{{ 'main.min.js' | asset_url }}' defer='defer'></script>
+
+    {%- if request.path contains '/pages/subscriptions' -%}
+      <script src='https://cdn.tapcart.com/webbridge-sdk/webbridge.umd.js' defer></script>
+    {%- endif -%}
+
+    {% if page.title contains 'hidden'
+      or template contains '404'
+      or product.handle == 'bpn-x-ciele-endurance-cap-black'
+    %}
+      <meta name='robots' content='noindex'>
+    {% endif %}
+
+    {% if template == 'product' and product.handle == 'bpn-x-rhone-black-hat' %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    {% if template == 'product' and product.handle == 'bpn-x-rhone-black-tee' %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    {% if template == 'product' and product.handle == 'bpn-x-rhone-olive-3-short' %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    {% if template == 'product' and product.handle == 'bpn-x-rhone-black-3-short' %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    {% if template contains 'collection' and collection.handle == 'bpn-x-rhone' %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+
+    {% comment %} 8. Prefetched Links {% endcomment %}
+
+    {% comment %} 9. Prerendered Links {% endcomment %}
+
+    {% comment %} 10. Non-rendering assets {% endcomment %}
+    {% if page.title contains 'hidden' or template contains '404' %}
+      <meta name='robots' content='noindex'>
+    {% endif %}
+    {% render 'tv-squared' %}
+    <link rel='canonical' href='{{ canonical_url }}'>
+    {% render 'head-track-element' %}
+    {% render 'head-favicon' %}
+    {% include 'head-social-meta-tags' %}
+    {%- if content_for_header contains 'previewBarInjector.init();' -%}
+      {% render 'console-logs' %}
+    {%- endif -%}
+
+    <script>
+      var theme = {
+        breakpoints: {
+          medium: 750,
+          large: 990,
+          widescreen: 1400
+        },
+        strings: {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }},
+          regularPrice: {{ 'products.product.regular_price' | t | json }},
+          salePrice: {{ 'products.product.sale_price' | t | json }},
+          sale: {{ 'products.product.on_sale' | t | json }},
+          fromLowestPrice: {{ 'products.product.from_lowest_price_html' | t: lowest_price: '[price]' | json }},
+          vendor: {{ 'products.product.vendor' | t | json }},
+          showMore: {{ 'general.filters.show_more' | t | json }},
+          showLess: {{ 'general.filters.show_less' | t | json }},
+          searchFor: {{ 'general.search.search_for' | t | json }},
+          addressError: {{ 'sections.map.address_error' | t | json }},
+          addressNoResults: {{ 'sections.map.address_no_results' | t | json }},
+          addressQueryLimit: {{ 'sections.map.address_query_limit_html' | t | json }},
+          authError: {{ 'sections.map.auth_error_html' | t | json }},
+          newWindow: {{ 'general.accessibility.link_messages.new_window' | t | json }},
+          external: {{ 'general.accessibility.link_messages.external' | t | json }},
+          newWindowExternal: {{ 'general.accessibility.link_messages.new_window_and_external' | t | json }},
+          removeLabel: {{ 'cart.label.remove' | t: product: '[product]' | json }},
+          update: {{ 'cart.label.update' | t | json }},
+          quantity: {{ 'cart.label.quantity' | t | json }},
+          discountedTotal: {{ 'cart.label.discounted_total' | t | json }},
+          regularTotal: {{ 'cart.label.regular_total' | t | json }},
+          priceColumn: {{ 'cart.label.price_column' | t | json }},
+          quantityMinimumMessage: {{ 'products.product.quantity_minimum_message' | t | json }},
+          cartError: {{ 'cart.general.cart_error' | t | json }},
+          removedItemMessage: {{ 'cart.general.removed_item_html' | t: quantity: '[quantity]', link: '[link]' | json }},
+          unitPrice: {{ 'products.product.unit_price_label' | t | json }},
+          unitPriceSeparator: {{ 'general.accessibility.unit_price_separator' | t | json }},
+          oneCartCount: {{ 'cart.popup.cart_count' | t: count: 1 | json }},
+          otherCartCount: {{ 'cart.popup.cart_count' | t: count: '[count]' | json }},
+          quantityLabel: {{ 'cart.popup.quantity_label' | t: quantity_count: '[count]' | json }},
+          products: {{ 'general.search.products' | t | json }},
+          loading: {{ 'general.search.loading' | t | json }},
+          number_of_results: {{ 'general.search.number_of_results' | t: result_number: '[result_number]', results_count: '[results_count]' | json }},
+          number_of_results_found: {{ 'general.search.number_of_results_found' | t: results_count: '[results_count]' | json }},
+          one_result_found: {{ 'general.search.one_result_found' | t | json }}
+        },
+        moneyFormat: {{ shop.money_format | json }},
+        moneyFormatWithCurrency: {{ shop.money_with_currency_format | json }},
+        settings: {
+          predictiveSearchEnabled: {{ settings.predictive_search_enabled | json }},
+          predictiveSearchShowPrice: {{ settings.predictive_search_show_price | json }},
+          predictiveSearchShowVendor: {{ settings.predictive_search_show_vendor | json }}
+        },
+        offer_end_date:{{ settings.offer_end_date | date: '%s' }},
+        today_date:{{ 'now' | date: '%s' }}
+      }
+
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+    <script>
+      function waitFor_jQuery(method) {
+        if (window.jQuery && typeof themeJSisLoaded !== 'undefined') {
+          method();
+        } else {
+          setTimeout(function () {
+            waitFor_jQuery(method);
+          }, 50);
+        }
+      }
+
+      function waitFor_Plugins(method) {
+        if (window.jQuery && typeof pluginsJSisLoaded !== 'undefined') {
+          method();
+        } else {
+          setTimeout(function () {
+            waitFor_Plugins(method);
+          }, 50);
+        }
+      }
+
+      waitFor_Plugins(function () {
+        new WOW().init();
+      });
+    </script>
+    <meta name='facebook-domain-verification' content='am3mtk47tbu8ze8vo8228en0f8o1kn'>
+    {{ content_for_header }}
+    {% render 'shogun-head' %}
+    <style>
+      div#rc_login {
+        display: none !important;
+      }
+
+      .template-apps-subscriptions-manage .grid {
+        list-style: unset;
+        margin: unset;
+        padding: unset;
+        font-size: unset;
+        letter-spacing: unset;
+      }
+    </style>
+    {% render 'customer-data' %}
+    {% render 'interstitial-config' %}
+    {% render 'microsoft-clarity-script' %}
+    <script async="true" src="https://app.lightlabs.com/assets/ll-pip-widget-v5.js"></script>
+    <script async="true" src="https://app.lightlabs.com/assets/ll-pip-sticker.js"></script>
+  </head>
+  {% assign class = '' %}
+  {% if page.handle == 'the-bare-standard' %}
+    {% assign class = 'the-bare-standard' %}
+  {% endif %}
+  <body class='{% render "body-class" %} {{ class }}'>
+    {% comment %} Edgemesh Server: Dynamic Data {% endcomment %}
+    <dynamic>
+      {% render 'gtm-body' %}
+      {% render 'gtm-data-layer-user-data' %}
+    </dynamic>
+    {% render 'gtm-data-layer' %}
+    {% render 'vwo' %}
+    {% render 'toast' %}
+    {% render 'bpn-init' %}
+    {% render 'sms-subscription-modal' %}
+    {% render 'cart' %}
+    {% render 'product-drawer' %}
+    {% render 'global-theme-variables' %}
+    <div role='complementary' id='skip-to-main-container'>
+      <a class='in-page-link visually-hidden skip-link' href='#MainContent'>
+        {{- 'general.accessibility.skip_to_content' | t -}}
+      </a>
+    </div>
+    <div class='wrapper'>
+      {% comment %} {% render 'sms-subscription' %} {% endcomment %}
+      <header class='pageHeader header__wrapper'>
+        {% sections 'header-group' %}
+      </header>
+      <div class='mid-container' id='MainContent' role='main' tabindex='-1'>
+        {% section 'page-heros' %}
+        {% if page.title == 'Podcasts' %}
+          {% if blogs.content.all_tags.size > 0 %}
+            <div class='section--blog-filter '>
+              <div class='blog-flex'>
+                <div class='tags'>
+                  <a href='{{ blogs['content'].url }}' class=' view-all'
+                    >All {{ blogs.content.title -}}
+                  </a>
+                  {% for tag in blogs.content.all_tags %}
+                    {% assign t = tag | downcase %}
+                    {%- unless t == 'bpn.tv' -%}
+                      <a
+                        href='{{ blogs['content'].url }}/tagged/{{ tag | handleize }}'
+                        class=' {% if current_tags contains tag %}selected{% endif %}'
+                      >
+                        {{- tag -}}
+                      </a>
+                    {%- endunless -%}
+                  {% endfor %}
+                  <a href='/pages/podcasts' class='selected'>Podcasts</a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+        {% if request.path contains '/subscriptions' %}
+          <!-- Wrap everything in a special container for account pages -->
+          <div class='account account__og-subscriptions'>
+            <!-- Render the side nav snippet -->
+            {% render 'account-side-nav' %}
+            <div class='account__main-content'>
+              <div class='account__top-wrapper'>
+                <main class='account__subscriptions-layout'>
+                  {% assign secret_key = shop.metafields.ordergroove.themeHashKey.value %}
+                  {% assign customer_id = customer.id %}
+                  {% assign timestamp = 'now' | date: '%s' %}
+                  {% assign signature = customer_id
+                    | append: '|'
+                    | append: timestamp
+                    | hmac_sha256: secret_key
+                  %}
+
+                  <div class='account-breadcrumbs'>
+                    <a href='/'>Home</a>/ <a href='/account'>Account</a>/
+                    <a
+                      href='/apps/subscriptions/manage/?customer={{ customer.id }}&customer_signature={{ signature }}&customer_timestamp={{ timestamp }}'
+                      >Subscriptions</a
+                    >
+                  </div>
+                  <!-- Main content for account pages -->
+                  {{ content_for_layout }}
+                </main>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <!-- For non-account pages, just show the normal content -->
+          {{ content_for_layout }}
+        {% endif %}
+      </div>
+      {% sections 'footer-group' %}
+      <script
+        data-src='//cdn.codeblackbelt.com/js/modules/frequently-bought-together/main.min.js?shop=bare-performance-nutrition.myshopify.com'
+      ></script>
+      <div id='slideshow-info' class='visually-hidden' aria-hidden='true'>
+        {{- 'sections.slideshow.navigation_instructions' | t -}}
+      </div>
+    </div>
+    <ul hidden>
+      <li id='a11y-refresh-page-message'>{{ 'general.accessibility.refresh_page' | t }}</li>
+      <li id='a11y-selection-message'>{{ 'general.accessibility.selection_help' | t }}</li>
+    </ul>
+    {% if template contains 'product' %}
+      <script type='text/javascript' charset='utf-8'>
+        if (Shopify && Shopify.Products) {
+          Shopify.Products.recordRecentlyViewed();
+        }
+      </script>
+    {% endif %}
+    {% unless template contains 'page.preview' %}
+      {% include 'global-prismic-settings' %}
+    {% endunless %}
+    <div class='div-tooltip'></div>
+    {% render 'accelerated-checkout-buttons' %}
+    {% include 'footer-crazy-egg' %}
+    <script
+      type='text/javascript'
+      async
+      data-em-load='afterInteractive'
+      src='https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WXXxWk'
+    ></script>
+    {% render 'audioeye-script' %}
+    {% render 'script-bundle', layout: 'theme' %}
+    {% render 'script-bundle', layout: 'anatta_theme' %}
+    <script src='{{ 'instantpage.js' | asset_url }}' async defer type='text/javascript'></script>
+  </body>
+</html>

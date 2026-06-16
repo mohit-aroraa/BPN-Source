@@ -1,0 +1,103 @@
+// ==========================================================================
+// Sections Layer - Header
+// ==========================================================================
+//
+// Contains layout and structure for the main header component
+//
+// 1. Header container - Main wrapper for the header section
+// 2. Header container inner - Flexbox container for header content
+//
+// ==========================================================================
+
+.#{$prefix}header {
+    position: relative;
+    background-color: color('bpn-white');
+}
+
+/* stylelint-disable-next-line selector-class-pattern -- legacy selector, refactor would require template changes */
+.pageHeader.header__wrapper {
+    flex-direction: column;
+    align-items: normal;
+    padding: unset !important;
+    position: sticky;
+    z-index: 101;
+}
+
+.#{$prefix}header__container {
+    // Box Model
+    display: flex;
+    width: 100%;
+    height: 56px;
+    padding: 0 1rem;
+
+    // Flexbox
+    align-items: center;
+    justify-content: space-between;
+
+    @include above("tablet-large") {
+        padding: 0 4rem;
+    }
+
+    // Media Queries
+    @include above("desktop-med") {
+        height: 96px;
+    }
+}
+
+.#{$prefix}header__left {
+    @include below("tablet-large") {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+.#{$prefix}header__athlete-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  @include above("tablet") {
+    justify-content: flex-end;
+    padding: 0 60px;
+  }
+}
+
+.#{$prefix}header__athlete-button {
+  align-items: center;
+  display: flex;
+  width: max-content;
+  height: 48px;
+  padding: 12px;
+  min-width: 200px;
+
+  @include use-text-style('bpn-callout-base');
+
+  @include below("desktop-med") {
+    height: 30px;
+    min-width: unset;
+
+    @include use-text-style('bpn-callout-xs');
+  }
+}
+
+.#{$prefix}header__athlete-button:hover {
+  background: color('bpn-red');
+  color: color('bpn-white');
+}
+
+.osano-cm-widget {
+    @include below('tablet') {
+      bottom: 0 !important;
+      width: 30px !important;
+    }
+}
+
+.search-form-submit svg {
+    width: 15px;
+    height: 15px;
+}
+
+.search-form-close svg {
+    width: 12px;
+}

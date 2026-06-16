@@ -1,0 +1,23 @@
+{%- assign block_content = metafields.breadcrumb_slice -%}
+{%- assign length = block_content.count | minus: 1 -%}
+{%- capture breadcrumb -%}
+    {%- for index in (0..length) -%}
+        {%- assign breadcrumb_text_key = 'text_' | append: index -%}
+        {%- assign breadcrumb_link_key = 'link_' | append: index -%}
+        {%- assign breadcrumb_text = block_content[breadcrumb_text_key] -%}
+        {%- assign breadcrumb_link = block_content[breadcrumb_link_key] -%}
+        {%- if breadcrumb_link -%}
+            <li data-click-id="{{ click_id }}"><a href="{{ breadcrumb_link }}"
+                                                  data-click-id="{{ click_id }}">{{ breadcrumb_text }}</a></li>
+        {%- else -%}
+            <li data-click-id="{{ click_id }}">{{ breadcrumb_text }}</li>
+        {%- endif -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+{%- if length > 0 -%}
+    <ol class="product-breadcrumb" data-click-id="{{ click_id }}">
+        {{- breadcrumb -}}
+    </ol>
+{%- endif -%}
+

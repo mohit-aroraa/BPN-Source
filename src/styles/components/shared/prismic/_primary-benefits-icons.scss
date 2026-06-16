@@ -1,0 +1,62 @@
+.primaryBenefitsIconSection {
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-bottom: 56px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 16px;
+  @include above("tablet") {
+    gap: 12px;
+  }
+  @include above("desktop-med") {
+    padding-left: 64px;
+    padding-right: 64px;
+    gap: 48px;
+    margin-bottom: 80px;
+  }
+
+  &__card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+  &__icon {
+    width: 41px;
+    margin-bottom: 12px;
+    @include above("tablet") {
+      margin-bottom: 24px;
+      margin-right: 0;
+    }
+    @include above("desktop-med") {
+      width: 62px;
+      min-height: 80px;
+    }
+  }
+  &__header {
+    font-size: 14px;
+    letter-spacing: normal;
+    line-height: 1.429;
+    font-weight: 700;
+    margin-bottom: 0;
+    @include above("tablet") {
+      margin-bottom: 4px;
+    }
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-2");
+    }
+  }
+  &__text {
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    line-height: 1.143;
+    margin-bottom: 0;
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-1");
+      letter-spacing: normal;
+    }
+  }
+}

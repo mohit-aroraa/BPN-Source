@@ -1,0 +1,206 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+
+// Design tokens
+@import "./src/design-tokens/index";
+@import "./src/styles/components/shared/_blog-flex";
+@import "./src/styles/components/shared/prismic/_tested-block";
+
+//Search Result Page
+.page-title--search-results {
+  .section-header {
+    margin-bottom: 18px;
+    margin-top: 58px;
+
+    h1 {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 0.889;
+      color: color("black");
+      text-align: center;
+      margin: 0;
+      text-transform: uppercase;
+      max-width: none;
+    }
+  }
+  .snize-search-results-main-content {
+    &::after,
+    &::before {
+      content: " ";
+      display: block;
+      height: 0;
+      visibility: hidden;
+      clear: both;
+    }
+  }
+  div.snize
+    #snize-search-results-grid-mode
+    .snize-simple-options-box
+    .snize-option-selector-wrapper
+    select {
+    padding-right: 22px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  div.snize-search-results-header:not(.snize-hidden) {
+    display: block !important;
+    @include use-text-style("paragraph-body-2");
+    color: color("black");
+    .snize-no-products-found-link {
+      font-weight: 700;
+      text-transform: uppercase;
+      color: inherit;
+      &[href="#"] {
+        cursor: default;
+      }
+    }
+  }
+
+  div.snize-recommendations.snize-horizontal-padding {
+    margin: 0 -30px;
+    @include above("tablet") {
+      margin: 0 -45px;
+    }
+  }
+
+  .snize-recommendation .snize-recommendation-title {
+    font-size: 18px;
+    line-height: 0.889;
+    font-weight: 900;
+    letter-spacing: normal;
+    color: color("black");
+    text-align: center;
+    border-bottom: 0;
+    margin-bottom: 0;
+    @include below("tablet") {
+      margin-bottom: 17px;
+    }
+  }
+
+  div.snize div.snize-header {
+    margin: 13px 0 6px 0 !important;
+
+    .snize-search-results-header {
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+  }
+  div.snize-search-results ul.snize-search-results-content {
+    min-height: 40px;
+  }
+  #snize-search-results-grid-mode li.snize-no-products-found {
+    background-color: transparent;
+    min-height: auto;
+    max-width: 300px;
+    margin: 0 auto;
+    padding-bottom: 10px;
+
+    div.snize-no-products-found-text {
+      padding: 0;
+
+      span {
+        font-size: 14px;
+        line-height: 1.268;
+        letter-spacing: 0.2px;
+        color: color("black");
+      }
+    }
+  }
+  .popularCategory {
+    text-align: center;
+    margin-top: 50px;
+
+    margin-bottom: 60px;
+    @include above("tablet-large") {
+      margin-bottom: 80px;
+      margin-top: 30px;
+    }
+    h4 {
+      font-size: 18px;
+      color: color("black");
+      font-weight: 900;
+      line-height: 0.889;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    &__links {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+    &__link {
+      font-family: inherit;
+      @include use-text-style("paragraph-body-3");
+      font-weight: 700;
+      color: color("black") !important;
+      padding-bottom: 4px !important;
+      position: relative;
+      border-bottom: 0 !important;
+      margin-bottom: 16px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: color("warm-red");
+      }
+    }
+  }
+
+  div.snize-recommendation-results {
+    span.snize-title {
+      font-weight: 700;
+      color: color("black");
+    }
+    .snize-price-list {
+      .snize-price {
+        font-weight: 700;
+        color: color("black");
+      }
+    }
+  }
+  div.snize
+    div.snize-main-panel-dropdown
+    ul.snize-main-panel-dropdown-content
+    a {
+    text-transform: uppercase;
+  }
+  #snize-modal-mobile-sortby-dialog ul.snize-main-panel-dropdown-content li a {
+    text-transform: uppercase;
+  }
+}
+
+#snize_results.snize-mobile-design.snize-new-version {
+  div.snize-search-results-header:not(.snize-hidden) {
+    display: block !important;
+  }
+}
+
+//Podcast Page
+.template--page.page-title--podcasts {
+  #fusebox-player-ZrekMj3PnO.fbx-player * {
+    font-family: "Blender pro","Arial","Helvetica Neue","Helvetica",sans-serif !important;
+    line-height: normal;
+    font-weight: 400;
+  }
+}

@@ -1,0 +1,48 @@
+<div class="services-slider-wrap index9 community-block-bg1">
+  <h2 class="wow fadeInUp">{{ section.settings.title }}</h2>
+
+  <div class="services-slider wow fadeIn">
+    {% for block in section.blocks %}
+      <div class="item">
+        <img
+          src="{{ block.settings.image | image_url: width: 800 }}"
+          loading="lazy"
+          width="320"
+          height="226"
+          alt="{{ block.settings.image.alt }}"
+        >
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Images",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "first-section",
+      "name": "Image",
+      "settings": [
+        {
+          "id": "image",
+          "type": "image_picker",
+          "label": "Image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

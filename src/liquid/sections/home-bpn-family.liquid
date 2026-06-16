@@ -1,0 +1,104 @@
+
+<!-- BPN Family -->
+<div class="bpn-family red-stripe-left">
+  <div class="container">
+    <div class="section-title-tertiary">
+      <h2>{{ section.settings.family_title }}</h2>
+    </div>
+    <div class="row no-gutters">
+        <div class="col-md-3 align-middle d-lg-block d-none">
+            <div class="thumbnail-slider thumbnail-slider-left">
+            	{% for block in section.blocks %}
+        		<div class="slider-item">
+                  <div class="left-slide-image">
+        			<img src="{{ block.settings.image | img_url: '241x325' }}" alt="{{ block.settings.title }}" />
+                  </div>	
+                    <div class="slider-item-title">
+                        <h5>{{ block.settings.title }}</h5>
+                        <h6>{{ block.settings.short_intro }}</h6>                               
+                    </div>	
+              </div>
+        		{% endfor %}
+            </div>
+          	<div class="product-arrow-left"></div>
+        </div>
+        <div class="col-md-6 col-sm-12 middle-image">
+            <div class="thumbnail-slider thumbnail-slider-middle">
+                {% for block in section.blocks %}
+                <div class="slider-item">
+                    <img src="{{ block.settings.image | img_url: '309x414' }}" alt="{{ block.settings.title }}" />
+                    <div class="slider-item-title">
+                        <h5>{{ block.settings.title }}</h5>
+                        <h6>{{ block.settings.short_intro }}</h6>                               
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3 align-middle d-lg-block d-none">
+            <div class="thumbnail-slider thumbnail-slider-right">
+                {% for block in section.blocks %}
+                <div class="slider-item">
+                  <div class="right-slide-image">
+                  	<img src="{{ block.settings.image | img_url: '241x325' }}" alt="{{ block.settings.title }}" />
+                  </div>
+                    <div class="slider-item-title">
+                        <h5>{{ block.settings.title }}</h5>
+                        <h6>{{ block.settings.short_intro }}</h6>                               
+                    </div>  
+                </div>
+                {% endfor %}
+            </div>
+	        <div class="product-arrow-right"></div>
+        </div>
+    </div>
+  </div>
+</div>
+<!-- /BPN Family -->
+
+{% schema %}
+{
+    "name": "BPN Family Slider",
+    "settings": [
+        {
+            "type": "text",
+            "id": "family_title",
+            "label": "Title"
+        }
+    ],
+    "blocks":[
+    {
+    "type": "text",
+    "name": "BPN Family Slider",
+    "settings": [
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Title"
+            },
+            {
+                "type": "text",
+                "id": "short_intro",
+                "label": "Short Intro"
+            }
+        ]
+    }
+    ],
+    "presets": [{
+    "name": 
+{    "en": "BPN Family Slider"
+        }
+    }]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

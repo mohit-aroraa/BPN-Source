@@ -1,0 +1,20 @@
+{%- assign block = section[module] -%}
+{%- assign heading = block.heading -%}
+{%- assign length = block.count | minus: 1 -%}
+
+<section class="featuredIn featuredIn--{{id}}">
+    <div class="featuredIn__wrapper">
+        <p class="featuredIn__header">{{heading}}</p>
+        <div class="swiper" data-featured-in-slider>
+            <div class="swiper-wrapper">
+                {% for index in (0..length) %}
+                    {% assign icon_key = 'icon_' | append: index %}
+                    <div class="swiper-slide">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="{{block[icon_key].url}}" alt="{{block[icon_key].alt}}" class="swiper-lazy featuredIn__icon" width="{{block[icon_key].dimensions.width}}" height="{{block[icon_key].dimensions.height}}">
+                        <div class="swiper-lazy-preloader swiper-lazy-preloader-black"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,105 @@
+<!-- snippets/snippet--article-item -->
+
+{% liquid 
+
+  assign image              = article.image
+  unless overrideImage == blank
+    assign image            = overrideImage
+  endunless 
+
+  assign imageBG            = blank
+  unless backgroundImage == blank
+    assign imageBG          = backgroundImage
+  endunless 
+
+  assign title              = article.title
+  unless overrideTitle == blank
+    assign title            = overrideTitle
+  endunless 
+
+  if article.excerpt.size > 0
+    assign text             = article.excerpt
+  else
+    assign text             = article.content | strip_html | truncate: 135
+  endif
+  unless overrideText     == blank
+    assign text             = overrideText | append: '... '
+  endunless 
+
+  assign date               = article.published_at | time_tag: format: 'date' 
+  unless overrideDate == blank 
+    assign date             = overrideDate
+  endunless 
+  if overrideDate == '' 
+    assign date             = blank
+  endif 
+
+  unless hideDesc == blank
+    assign hideDesc         = false
+  endunless 
+
+  assign lnk                = article.url
+  unless overrideLink == blank
+    assign lnk              = overrideLink
+  endunless 
+
+  assign buttonText         = false
+  if overrideButton != blank
+    assign buttonText       = true
+    assign text             = text | replace: '...',''
+  endif 
+
+%}
+
+<div class="article-item text-left">
+  <a class="grid-view-item__link grid-view-item__image-container full-width-link" href="{{ lnk }}">
+    <span class="visually-hidden">{{ title }}</span>
+  </a>
+  <div class="article-item__image-with-placeholder-wrapper" data-image-loading-animation>
+    {% render 'snippet--image', 
+      img: image, 
+      useBG: false,
+      cf: false,
+      extraClass: 'article-item__image-wrapper'
+    %}
+    {% render 'snippet--image', 
+      img: imageBG, 
+      useBG: false,
+      cf: false,
+      extraClass: 'article-item__image-wrapper bg_image'
+    %}
+  </div>
+
+  {% if date != blank %}
+    <div class="article-item__date">{{date}}</div>
+  {% endif %}
+  
+  <div class="h4 article-item__title" aria-hidden="true">{{ title }}</div>
+
+  {% if hideDesc != true and text != blank %}
+    <div class="article-item__excerpt rte">
+      {{text}}
+      {% if buttonText == false %}
+        <br>
+        <a class="read-more" href="{{lnk}}" aria-hidden="true">Read more</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if buttonText == true %}
+    <a class="btn " href="{{lnk}}" aria-hidden="true">
+      {{overrideButton}}
+    </a>
+  {% endif %}
+
+</div>
+
+{% liquid 
+  assign overrideButton   = blank
+  assign overrideImage    = blank
+  assign overrideTitle    = blank
+  assign overrideText     = blank
+  assign text             = blank
+  assign overrideDate     = blank
+
+%}

@@ -1,0 +1,44 @@
+.category-slides{
+  display: none;
+  gap: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin: 0;
+  padding: 10px;
+  background-color: #F2F2F2;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  div {
+    flex: 0 0 auto;
+
+    a {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid #000;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: "Blender pro",Arial,"Helvetica Neue",Helvetica,sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: #000;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: #fff;
+      transition: background 0.2s, color 0.2s;
+
+      &:hover {
+        background: #000;
+        color: #fff;
+      }
+    }
+  }
+}

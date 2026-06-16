@@ -1,0 +1,70 @@
+{% assign _title = title %}
+{% assign _options = options %}
+{% assign _size = size %}
+{% assign _index = index %}
+
+
+<div class='product-flavors-thumbnails-container'>
+  <div class="product-flavors-thumbnails-heading">
+    <p class='product-hero__variants_count'>Select flavor</p>
+    {% if product.variants.size > 6 %}
+      <div class="product-flavors-thumbnails-arrows">
+        <button
+          class="product-flavors-thumbnails-arrow"
+          type="button"
+          aria-label="Show previous flavors"
+          data-flavor-thumbnails-prev
+        >
+          {% render 'icon-arrow-circle', class: "prev" %}
+        </button>
+        <button
+          class="product-flavors-thumbnails-arrow"
+          type="button"
+          aria-label="Show more flavors"
+          data-flavor-thumbnails-next
+        >
+          {% render 'icon-arrow-circle', class: "next" %}
+        </button>
+      </div>
+    {% endif %}
+  </div>
+  <div class='product-flavors-thumbnails swiper' data-flavor-thumbnails-swiper>
+    <div class='swiper-wrapper'>
+      {% for variant in product.variants %}
+        <div
+          class='
+            product-flavors-thumbnails-item swiper-slide variant-thumbnail-{{ variant.id }} {%- if forloop.first -%}
+                selected
+            {%- endif -%}
+          '
+          data-variant-type='{% if variant.title contains "Variety Pack" %}variety-pack{% endif %}'
+          data-variation_id='{{ variant.id }}'
+          {% if variant.metafields.custom.has_caf.value %}
+            data-caffeine='true'
+          {% endif %}
+        >
+
+          {% liquid
+            assign image = ''
+            if variant.metafields.custom.variant_image.value != blank
+              assign image = variant.metafields.custom.variant_image.value
+            elsif variant.featured_image.src != blank
+              assign image = variant.featured_image.src
+            else
+              assign image = product.featured_image
+            endif
+          %}
+          <img
+            src='{{ image | image_url: width: 100 }}'
+            width='64px'
+            height='64px'
+            alt='{{ variant.title }}'
+          >
+          <p>
+            {{ variant.title | replace: '/ 15 ct', '' | replace: '/ 10 ct', '' | replace: 'CAF', '' }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div class="og-sku-swap-product-change">
+  <button
+    class="og-button"
+    data-size="lg"
+    @click="{{ '() => { SMDialog.open("og-add-items-dialog-" + order.public_id); initializeSelectionListeners(order.public_id); }' | js }}"
+  >
+    Add Product
+  </button>
+
+  <sm-multistep>
+    <sm-dialog id="og-add-items-dialog-{{ order.public_id }}" class="og-add-items-dialog">
+      <dialog
+        class="og-dialog-wide"
+        @close="{{ '(e) => resetDialogSteps(e, order.public_id)' | js }}"
+      >
+        <!-- Step 1: Select Product with Search -->
+        <div data-step="product-selection">
+          {% set dialog_header_text = 'Select Product' %}
+          {% include 'dialog-header' %}
+
+          <div class="og-dialog-body">
+            <p>Select the product you wish to add:</p>
+
+            <sm-product-filter>
+              <div class="og-sku-swap-search-wrapper">
+                <input
+                  type="text"
+                  placeholder="{{ 'search_placeholder' | t }}"
+                  aria-label="{{ 'search_placeholder' | t }}"
+                  data-search-input
+                />
+                <div class="og-sku-swap-search-icons">
+                  <button
+                    class="og-icon-button"
+                    data-clear-button
+                    type="button"
+                    aria-label="{{ 'clear_search_label' | t }}"
+                  >
+                    <svg width="16" height="16">
+                      <use href="#clear-search"></use>
+                    </svg>
+                  </button>
+                  <div class="og-sku-swap-search-icon">
+                    <svg width="12" height="12">
+                      <use href="#search"></use>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="og-sku-swap-display add-product-to-order__product-wrapper"
+                data-items
+              >
+                <div class="og-no-result-message" data-no-results>
+                  {{ 'change_product_search_no_results' | t }}
+                </div>
+                <div class="add-product-to-order__loader-wrapper">
+                  <div class="progress-indicator"></div>
+                </div>
+                <div
+                  class="add-product-to-order__product-items og-sku-swap-products og-sku-swap-display"
+                  data-product-items
+                ></div>
+              </div>
+            </sm-product-filter>
+          </div>
+
+          <div class="og-dialog-footer">
+            <button
+              class="og-button"
+              data-variant="tertiary"
+              type="button"
+              @click="{{ 'SMDialog.close' | js }}"
+            >
+              {{ 'cancel_button' | t }}
+            </button>
+            <button
+              id="select-options-button"
+              class="og-button"
+              name="change_product"
+              disabled
+              @click="{{ '(e) => { initializePurchaseOptionListeners(order.public_id); dispatchOGEvent(e, "og-step-change", { step: "purchase-options" }); }' | js }}"
+            >
+              Select
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Select Purchase Option -->
+        <div data-step="purchase-options">
+          {% set dialog_header_text = 'Select Purchase Type' %}
+          {% include 'dialog-header' %}
+
+          <div class="og-dialog-body">
+            <!-- Display selected product flavour -->
+            <p id="selected-product-flavour" class="selected-product-flavour">
+              <span class="selected-product-flavour__label">Flavor</span>
+              <span class="selected-product-flavour__name"></span>
+            </p>
+
+            <div class="purchase-type">
+              <div class="purchase-type__title">Purchase Type</div>
+              <div class="purchase-type__options">
+                <!-- Subscribe & Save Option with Frequency Dropdown -->
+                <input
+                  type="radio"
+                  id="subscribe-option-{{ order.public_id }}"
+                  name="purchase_type"
+                  value="subscription"
+                  class="visually-hidden"
+                />
+                <label
+                  for="subscribe-option-{{ order.public_id }}"
+                  class="subscribe-option"
+                >
+                  <div class="subscribe-option__wrapper flex-row">
+                    <div class="flex-column">
+                      <strong class="subscribe-option__title">
+                        Subscribe & Save 15%
+                      </strong>
+                      <span class="subscribe-option__description">
+                        Pause, Skip, or Cancel anytime.
+                      </span>
+                    </div>
+                    <div class="flex-column">
+                      <p
+                        id="subscription-selected-product-price"
+                        class="purchase-type__options__price"
+                      ></p>
+                      <p
+                        id="subscription-selected-product-price-discount"
+                        class="purchase-type__options__discount"
+                      ></p>
+                    </div>
+                  </div>
+                  <div class="deliver-frequency">
+                    <div class="deliver-frequency__name">Deliver Every</div>
+                    <select
+                      name="frequency"
+                      id="frequency-select-{{ order.public_id }}"
+                      aria-label="{{ 'a11y_frequency_select' | t }}"
+                    >
+                      {% for frequency in 'frequencies' | setting([{every:1,period:1},{every:2,period:2},{every:4,period:2}]) %}
+                        {% set frequency_days = frequency.every * frequency.period %}
+
+                        {% if selectedProductId == 12686486854 %}
+                          {% if frequency_days != 30 and frequency_days != 45 %}
+                            <option value="{{ frequency.every }}_{{ frequency.period }}">
+                              {{ 'frequency_period' | t(every = frequency.every, period = frequency.period) }}
+                            </option>
+                          {% endif %}
+                        {% else %}
+                          {% if frequency_days != 75 and frequency_days != 90 %}
+                            <option value="{{ frequency.every }}_{{ frequency.period }}">
+                              {{ 'frequency_period' | t(every = frequency.every, period = frequency.period) }}
+                            </option>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </label>
+
+                <!-- One-Time Purchase Option -->
+                <input
+                  type="radio"
+                  id="one-time-option-{{ order.public_id }}"
+                  name="purchase_type"
+                  value="one_time"
+                  class="visually-hidden"
+                />
+                <label
+                  for="one-time-option-{{ order.public_id }}"
+                  class="one-time-option"
+                >
+                  <strong class="one-time-option__title">
+                    One Time Purchase
+                  </strong>
+                  <p
+                    id="otp-selected-product-price"
+                    class="purchase-type__options__price otp-selected-product-price"
+                  ></p>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="og-dialog-footer">
+            <button
+              id="back-to-product-selection-button"
+              class="og-button"
+              data-variant="tertiary"
+              type="button"
+              @click="{{ '(e) => navigateToStep(e, "product-selection", order.public_id)' | js }}"
+            >
+              Back
+            </button>
+            <button
+              id="confirm-selection-button"
+              class="og-button"
+              data-variant="primary"
+              disabled
+              @click="{{ '(e) => addItemsWrapper(order.public_id, e)' | js }}"
+            >
+              Confirm Selection
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Processing -->
+        <div data-step="processing">
+          {% set dialog_header_text = 'Processing Your Order' %}
+          {% include 'dialog-header' %}
+
+          <div class="order-processing og-dialog-body">
+            <p class="order-processing__message">
+              Updating your order... This may take a moment. The dialogue will close automatically once finished.
+            </p>
+            <div class="progress-indicator"></div>
+          </div>
+        </div>
+      </dialog>
+    </sm-dialog>
+  </sm-multistep>
+</div>

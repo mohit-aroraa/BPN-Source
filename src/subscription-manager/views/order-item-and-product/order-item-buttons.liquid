@@ -1,0 +1,12 @@
+<div class="og-order-item-buttons">
+  {% if not subscription %}
+    {# Controls for a ONE-TIME item #}
+    {% include 'order-item-and-product/remove-product' %}
+  {% else %}
+    {# Controls for a PAY-AS-YOU-GO or PREPAID item #}
+    {% include 'order-item-and-product/order-item-dropdown' %}
+  {% endif %}
+  {% if subscription %}
+    {% include 'sku-swap-product-change' %}
+  {% endif %}
+</div>

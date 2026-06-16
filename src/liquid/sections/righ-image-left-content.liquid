@@ -1,0 +1,101 @@
+<div class="sectiontype1 space-bottom community-block community-block-bg index9 animation-img">
+  <div class="mobile-view text-center">
+    <h2 class="wow fadeInUp">{{ section.settings.title }}</h2>
+  </div>
+  <div class="content-block ">
+    <div class="desktop-view">
+      <h2 class="wow fadeInUp">{{ section.settings.title }}</h2>
+    </div>
+    <div class=" wow fadeInUp">{{ section.settings.content }}</div>
+    <div class="desktop-view">
+      <div class="social-wrap  wow fadeInUp">
+        <ul>
+          <li>
+            <a href="{{ settings.social_facebook_link }}" target="_blank">
+              <img
+                src="{{ 'facebook.svg'| asset_url }}"
+                loading="lazy"
+                width="24"
+                height="24"
+                alt="BPN's facebook link"
+                rel="noopener"
+            ></a>
+          </li>
+          <li>
+            <a href="{{ settings.social_instagram_link }}" target="_blank">
+              <img
+                src="{{ 'instagram.svg'| asset_url }}"
+                loading="lazy"
+                width="24"
+                height="24"
+                alt="BPN's instagram link"
+                rel="noopener"
+              >
+            </a>
+          </li>
+          <li>
+            <a href="{{ settings.social_twitter_link }}" target="_blank">
+              <img
+                src="{{ 'twitter.svg'| asset_url }}"
+                loading="lazy"
+                width="24"
+                height="24"
+                alt="BPN's twitter link"
+                rel="noopener"
+            ></a>
+          </li>
+          <li>
+            <a href="{{ settings.social_youtube_link }}" target="_blank">
+              <img
+                src="{{ 'youtube.svg'| asset_url }}"
+                loading="lazy"
+                width="24"
+                height="24"
+                alt="BPN's youtube link"
+                rel="noopener"
+            ></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="img-block desktop-view texture-wrap">
+    <div class="anim__image-swipe anim__image-swipe--right">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        loading="lazy"
+        width="320"
+        height="343"
+        alt="{{ section.settings.image.alt | escape }}"
+      >
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Right image left content",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Text"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "Content"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

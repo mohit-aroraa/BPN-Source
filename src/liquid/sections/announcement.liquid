@@ -1,0 +1,130 @@
+{%- comment -%}
+  Hide the announcement bar for the flannel page
+{%- endcomment -%}
+{%- assign is_flannel_page = false -%}
+{%- if template contains 'page.flannels' or template contains 'product.flannels' -%}
+  {%- assign is_flannel_page = true -%}
+{%- endif -%}
+
+{%- if section.settings.enable_announcement and is_flannel_page == false -%}
+  {%- comment -%}
+    data-announcementsettings atrribute should have to be in JSON format. Be careful about the quotation
+  {%- endcomment -%}
+  <div
+    class='announcementBar announcementBar--swiper'
+    style='--announcement-bg:{{ section.settings.announcement_background_color }}; --announcement-link-clr: {{ section.settings.announcement_text_color }}; --announcement-hover-bg: {{ section.settings.background_hover_color }}'
+    data-announcementsettings='{ "isEnable": {{ section.settings.enable_announcement }}, "slideInterval": {{ section.settings.slide_duration }} }'
+  >
+    <ul class='announcementBar__items swiper-wrapper'>
+      {% for block in section.blocks %}
+        <li
+          class='announcementBar__item swiper-slide'
+          data-click-id='nav_promo-bar'
+          {{ block.shopify_attributes }}
+        >
+          {% if cart.item_count > 0 %}
+            <a
+              href='/checkout/'
+              class='announcementBar__link announcement-checkout-now'
+              data-click-id='nav_promo-bar'
+            >Checkout Now</a
+            >
+          {% endif %}
+          <a
+            {% if block.settings.announcement_link != blank %}
+              href='{{ block.settings.announcement_link }}'
+            {% endif %}
+            class='announcementBar__link announcement-message {% if cart.item_count > 0 %}none{% endif %}'
+            data-click-id='nav_promo-bar'
+          >
+            {{- block.settings.announcement_text -}}
+          </a>
+          </li>
+        {% endfor %}
+
+        {% assign gwp_settings = shop.metaobjects.gwp['settings'] %}
+         {% if gwp_settings.enable_gwp and gwp_settings.enable_announcement_bar %}
+           <li class="announcementBar__item swiper-slide less-padding">
+             {% if gwp_settings.free_gift_image %}
+               <img class="announcementBar__item-image" src="{{ gwp_settings.free_gift_image |  image_url: width: 100 }}" height="26" width="35" alt="Free Gift Image">
+             {% endif %}
+           <span class="bfcm-sale-text"></span>
+           {% if gwp_settings.enable_timer %}
+             <span class="bfcm-countdown"></span>
+           {% endif %}
+           </li>
+         {% endif %}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar 1",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_announcement",
+      "label": "Enable announcement bar",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slide_duration",
+      "min": 1000,
+      "max": 9500,
+      "step": 500,
+      "unit": "ms",
+      "label": "Slide duration",
+      "default": 5000
+    },
+    {
+      "type": "color",
+      "id": "announcement_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "background_hover_color",
+      "label": "Background hover color",
+      "default": "#d9c79c"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "announcement_text",
+          "label": "Announcement text",
+          "default": "Announce your message here"
+        },
+        {
+          "type": "url",
+          "id": "announcement_link",
+          "label": "Announcement link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar",
+      "blocks": [
+        {
+          "type": "announcement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

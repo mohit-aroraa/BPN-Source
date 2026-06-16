@@ -1,0 +1,97 @@
+{% for block in rich_text %}
+  {%- assign block_type = block.type -%}
+  {%- assign spans = block.spans -%}
+  {%- assign text = block.text -%}
+  {%- assign text_length = text | size -%}
+  {%- assign formatted_text = '' -%}
+  {%- assign text_cursor = 0 -%}
+
+  {%- if spans.size > 0 -%}
+    {%- for span in spans -%}
+      {%- assign span_start = span.start -%}
+      {%- assign span_end = span.end -%}
+      {%- assign span_length = span_end | minus: span_start -%}
+
+      {%- comment -%}Copy the text from the last span (or start of string) to the start of this span{%- endcomment -%}
+      {%- assign cursor_to_span_length = span_start | minus: text_cursor -%}
+      {%- assign cursor_to_span = text | slice: text_cursor, cursor_to_span_length -%}
+      {%- assign formatted_text = formatted_text | append: cursor_to_span -%}
+
+      {%- comment -%}Format and copy span{%- endcomment -%}
+      {%- assign span_text = text | slice: span_start, span_length -%}
+      {%- assign span_type = span.type -%}
+      {%- case span_type -%}
+        {%- when 'strong' -%}
+          {%- capture formatted_span -%}
+            <strong>{{ span_text }}</strong>
+          {%- endcapture -%}
+        {%- when 'em' -%}
+          {%- capture formatted_span -%}
+            <em>{{ span_text }}</em>
+          {%- endcapture -%}
+        {%- when 'hyperlink' -%}
+          {%- capture formatted_span -%}
+            <a
+              class="richText__link"
+              href="{{ span.data.url }}"
+              {%- if span.data.target != blank -%}
+                target="{{ span.data.target }}"
+              {%- endif -%}
+            >
+              {{- span_text -}}
+            </a>
+          {%- endcapture -%}
+        {%- when 'label' -%}
+          {%- capture formatted_span -%}
+            <span class="structured-text__label-{{ span.data.label | handleize }}">{{ span_text }}</span>
+          {%- endcapture -%}
+        {%- else -%}
+          {%- capture formatted_span -%}
+            <span class="structured-text__{{ span_type }}">{{ span_text }}</span>
+          {%- endcapture -%}
+      {%- endcase -%}
+
+      {%- assign formatted_text = formatted_text | append: formatted_span -%}
+
+      {%- comment -%}Move cursor{%- endcomment -%}
+      {%- assign text_cursor = span_end -%}
+    {%- endfor -%}
+
+    {%- comment -%}Copy remaining text{%- endcomment -%}
+    {%- assign cursor_to_end = text | slice: text_cursor, text_length -%}
+    {%- assign formatted_text = formatted_text | append: cursor_to_end -%}
+  {%- else -%}
+    {%- assign formatted_text = text -%}
+  {%- endif -%}
+
+  {% assign textClass = '' %}
+  {% case block_type %}
+    {% when 'paragraph' %}
+      <p class="richText__text">{{ formatted_text }}</p>
+    {% when 'heading1' %}
+      <div class="richText__heading1" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'heading2' %}
+      <div class="richText__heading2" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'heading3' %}
+      <div class="richText__heading3" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'heading4' %}
+      <div class="richText__heading4" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'heading5' %}
+      <div class="richText__heading5" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'heading6' %}
+      <div class="richText__heading6" data-richText-heading>{{ formatted_text }}</div>
+    {% when 'o-list-item' %}
+      <ol class="richText__ol">
+        <li class="richText__olItem">{{ formatted_text }}</li>
+      </ol>
+    {% when 'list-item' %}
+      <ul class="richText__ul">
+        <li class="richText__ulItem">{{ formatted_text }}</li>
+      </ul>
+    {% when 'image' %}
+      <img src="{{block.url}}" alt="{{block.alt}}">
+    {% else %}
+      {% assign textClass = '' %}
+      <span class="{{textClass}}">{{ formatted_text }}</span>
+  {% endcase %}
+{% endfor %}

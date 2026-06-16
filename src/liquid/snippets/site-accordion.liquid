@@ -1,0 +1,38 @@
+<!-- fetch metafields based on namespace(slice_test) -->
+{%- assign block = section[module] -%}
+{%- assign faq_block_count = block.count | minus: 1 -%}
+{%- assign width_on_desktop = block.width_on_desktop -%}
+{%- assign title = block.title -%}
+{%- comment -%}
+    width_on_desktop: will return (true or false)
+    based on it we will decide container max-width should be or fixed(600px) or 100%
+    true = fixed
+    false = full
+{%- endcomment -%}
+
+<section class="accordionSection js-accordion-section-{{ request.page_type | handle }} accordionSection--{{id}} js-site-accordion-parent">
+    <div class="accordionSection__container {% if width_on_desktop %}accordionSection__container--fixed {% else %}faqSection__container--fluid{% endif %}">
+        {% if title %}
+            <h2 class="sectionTitle">{{title}}</h2>
+        {% endif %}
+        <div class="siteAccordion">
+            {% for index in (0..faq_block_count) %}
+                {% assign question_key = 'question_' | append: index %}
+                {% assign answer_key = 'answer_' | append: index %}
+                {% assign aria_controls_id = 'faq' | append: id | append: '_' | append: index %}
+
+                <div class="siteAccordion__wrapper">
+                    <a class="siteAccordion__header" role="button" data-accordion-trigger  href="javascript:void(0);" aria-expanded="false" aria-controls="{{aria_controls_id}}">
+                        <span class="siteAccordion__headerText">{{block[question_key]}}</span>
+                        <span class="siteAccordion__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7"><path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </a>
+                    <div class="siteAccordion__content" id="{{aria_controls_id}}">
+                        <div class="siteAccordion__contentPaddingBottom">
+                            {% render 'prismic-rich-text' rich_text: block[answer_key] %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,7 @@
+.product-recommendations__inner {
+  padding: $section-spacing-small 0;
+
+  @include mq($medium-up) {
+    padding: $section-spacing 0;
+  }
+}

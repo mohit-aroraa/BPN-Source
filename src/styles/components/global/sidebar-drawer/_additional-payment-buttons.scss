@@ -1,0 +1,72 @@
+// .additional-checkout-buttons-container {
+//   width: 100%;
+//   &--padding {
+//     padding-top: 12px;
+//     @include above("tablet") {
+//       padding-top: 20px;
+//     }
+//   }
+// }
+// .additional-checkout-buttons-text {
+//   font-size: 10px;
+//   font-weight: 700;
+//   line-height: 1.6;
+//   text-transform: uppercase;
+//   letter-spacing: 0;
+//   position: relative;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin-bottom: 12px;
+//   @include above("tablet") {
+//     font-size: 12px;
+//     letter-spacing: 0.17px;
+//     line-height: 1.3333;
+//     margin-bottom: 21px;
+//   }
+//   &::after,
+//   &::before {
+//     content: "";
+//     height: 1px;
+//     background-color: #eeeeee;
+//     flex: 1;
+//   }
+// }
+.additional-checkout-buttons {
+  &--horizontal {
+    .shopify-cleanslate {
+      [data-shopify-buttoncontainer] {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+        gap: 10px;
+        li {
+          margin-top: 0 !important;
+        }
+        // li {
+        //   position: absolute !important;
+        //   overflow: hidden !important;
+        //   clip: rect(0 0 0 0) !important;
+        //   height: 1px !important;
+        //   width: 1px !important;
+        //   margin: -1px !important;
+        //   padding: 0 !important;
+        //   border: 0 !important;
+        //   z-index: -1 !important;
+        //   &.active {
+        //     position: static !important;
+        //     overflow: visible !important;
+        //     clip: auto !important;
+        //     width: auto !important;
+        //     height: auto !important;
+        //     margin: 0 !important;
+        //     z-index: 0 !important;
+        //     flex: 1;
+        //   }
+        // }
+      }
+    }
+  }
+  undefined {
+    display: none !important;
+  }
+}

@@ -1,0 +1,31 @@
+{% comment %}
+  Product Drawer Snippet
+
+  This snippet contains the container for the product drawer.
+  It provides the basic structure that will be controlled by JavaScript.
+{% endcomment %}
+
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.subscriptionPlatform = {{ settings.subscription_platform | json }};
+</script>
+
+<!-- Product drawer backdrop -->
+<div id='bpn-product-drawer-backdrop' class='bpn-product-drawer__backdrop'></div>
+
+<!-- Product drawer container -->
+<div id='bpn-product-drawer' class='bpn-product-drawer'>
+  <div class='bpn-product-drawer__header'>
+    <button
+      class='bpn-product-drawer__close bpn-product-drawer-close'
+      aria-label='Close product drawer'
+    >
+      {% render 'icon', icon: 'hamburger-close' %}
+    </button>
+  </div>
+
+  <div class='bpn-product-drawer__content'>
+    <!-- Content will be filled dynamically -->
+    <p>Loading product options...</p>
+  </div>
+</div>

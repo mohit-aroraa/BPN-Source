@@ -1,0 +1,91 @@
+.landingPageBanner {
+  margin-bottom: 40px;
+  @include above("tablet") {
+    display: flex;
+    align-items: center;
+  }
+  @include above("desktop-med") {
+    margin-bottom: 81px;
+  }
+  &--imageLeft {
+    @include above("tablet") {
+      flex-direction: row-reverse;
+    }
+  }
+  &__image {
+    height: 280px;
+    margin-bottom: 22px;
+    @include above("tablet") {
+      height: 100%;
+      flex: 0 0 50%;
+      margin-bottom: 0;
+    }
+    @include above("desktop-med") {
+      height: 592px;
+      flex: 0 0 48.88%;
+    }
+    .responsive-image__wrapper {
+      height: 100%;
+    }
+    .responsive-image__image {
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+  &__content {
+    padding-left: 12px;
+    padding-right: 12px;
+    @include above("tablet") {
+      flex-grow: 1;
+      padding-left: 64px;
+      padding-right: 64px;
+    }
+    @include above("desktop-med") {
+      padding-left: 10%;
+      padding-right: 10%;
+      text-align: center;
+    }
+  }
+  &__header {
+    text-align: center;
+    margin-bottom: 12px;
+    @include above("desktop-med") {
+      margin-bottom: 16px;
+    }
+    .richText__text {
+      font-size: 32px;
+      letter-spacing: -1.78px;
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 0;
+      @include above("tablet") {
+        font-size: 40px;
+        line-height: 1;
+        letter-spacing: -2px;
+      }
+    }
+  }
+  &__text {
+    font-size: 16px;
+    letter-spacing: normal;
+    line-height: 1.25;
+    text-align: center;
+    margin-bottom: 24px;
+    @include above("desktop-med") {
+      @include use-text-style("paragraph-body-1");
+    }
+    @include above("tablet") {
+      margin-bottom: 18px;
+    }
+    @include above("desktop-med") {
+      margin-bottom: 32px;
+    }
+  }
+  &__cta {
+    --btn-gap: 11px 15px;
+    font-size: 16px;
+    letter-spacing: 0.18px;
+    line-height: 1.483;
+    width: 100%;
+  }
+}

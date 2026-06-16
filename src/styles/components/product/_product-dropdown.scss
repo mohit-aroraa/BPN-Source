@@ -1,0 +1,141 @@
+.product-hero__dropdown {
+  position: relative;
+  margin-top: 8px;
+  z-index: 9;
+
+  .sold-out-label {
+    color: #EB1000;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 701;
+    line-height: 12px; /* 100% */
+    letter-spacing: -0.24px;
+    text-transform: uppercase;
+    margin-left: 8px;
+  }
+
+  &-trigger {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #CCCCCC;
+    padding: 10px 7px 8px 11px;
+    background-color: white;
+    color: #000;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 12px;
+
+    @include above('desktop') {
+      padding: 11px 7px 11px 11px;
+    }
+
+    & > span {
+      height: 20px;
+
+      @include above('desktop') {
+        height: 22px;
+      }
+    }
+
+    svg:first-of-type {
+      top: -3px;
+      position: relative;
+      width: 20px;
+      height: 20px;
+
+      @include above('desktop') {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    svg:last-of-type {
+      @include above('desktop') {
+        top: -1px;
+        position: relative;
+        width: 32px;
+        height: 24px;
+      }
+    }
+
+    .name {
+      font-size: 16px;
+      margin-left: 5px;
+      letter-spacing: -0.32px;
+      line-height: 20px;
+
+      @include above('desktop') {
+        font-size: 18px;
+        line-height: 20px;
+        margin-left: 9px;
+      }
+    }
+  }
+
+  &-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 6px 0 6px 11px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 12px;
+    letter-spacing: 0;
+
+    @include above('desktop') {
+      padding: 11px 7px 11px 15px;
+      font-size: 18px;
+    }
+
+    svg:first-of-type {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+
+      @include above('desktop') {
+        margin-right: 16px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    &:hover {
+      background-color: #EEE;
+    }
+
+    &.selected {
+      background-color: #EEE;
+    }
+  }
+
+  &-content {
+    display: none;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+    z-index: 10;
+    border: 1px solid #CCC;
+    border-radius: 0 0 5px 5px;
+    border-top: unset;
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.10);
+  }
+
+  &.active {
+    .product-hero__dropdown-content {
+      display: block;
+    }
+
+    .product-hero__dropdown-trigger {
+      border-bottom: 1px solid white;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}

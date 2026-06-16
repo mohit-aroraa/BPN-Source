@@ -1,0 +1,141 @@
+{% assign click_id = "pdp_cys_stack_check" %}
+{% assign _tag_discount = tag_discount %}
+{% assign _tag_final_price = tag_final_price %}
+
+{%- assign PID = '' | append: selected_product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign product_filter_section = metafields.filters -%}
+{%- assign has_badge = product_filter_section.has_badge | default: false -%}
+{%- assign badge_title = product_filter_section.badge_title -%}
+{%- assign badge_background_color = product_filter_section.badge_background_color | default:'#D9C79C' -%}
+{%- assign badge_text_color = product_filter_section.badge_text_color | default: '#ffffff' -%}
+{%- assign product_metafields = pages[PID].metafields -%}
+{%- assign product_global_fields = product_metafields.global_fileds -%}
+{%- assign product_serving_text = product_global_fields.servings -%}
+{%- assign variant_servings = selected_product.selected_or_first_available_variant.metafields.custom.servings -%}
+
+<a class="product-card swiper-slide" style="z-index: {{ z_index }}" href="{{ selected_product.url }}">
+  {% assign product_card_label = selected_product.metafields.custom.product_card_label | default: blank %}
+
+  {% comment %}{% if product_card_label != blank %}{% endcomment %}
+    {% comment %}<div class="product-card__label">{% endcomment %}
+      {% comment %}{{ product_card_label }}{% endcomment %}
+    {% comment %}</div>{% endcomment %}
+  {% comment %}{% endif %}{% endcomment %}
+
+  {% if has_badge == true %}
+    <div class="product-card__badge" style="background-color: {{ badge_background_color }}; color: {{ badge_text_color }}">
+      {{ badge_title }}
+    </div>
+  {% endif %}
+
+  <div class="product-card__image-container">
+    <div class="product-card__selector selected" data-click-id="{{ click_id }}"
+      {% if _tag_discount != blank %}
+        data-price="{{ _tag_final_price }}"
+      {% else %}
+        data-price="{{ selected_product.price }}"
+      {% endif %}
+    >
+      {% render 'icon', icon: 'checked', tag: click_id %}
+    </div>
+    <img class="product-card__image"
+         data-click-id="{{ click_id }}"
+         src="{{ selected_product.images[0].src | img_url: '304x304' }}"
+         alt="{{ selected_product.title }}"
+         loading="lazy"
+    >
+  </div>
+  <div class="product-card__details">
+    <div class="product-card__rating">
+      {{ selected_product.metafields.okendo.StarRatingSnippet }}
+    </div>
+
+    <div class="product-card__title-container">
+      <h4 class="product-card__title" {% if tag_discount != blank %}style="max-width: 200px"{% endif %}>
+        {{ selected_product.title }}
+      </h4>
+
+      <p class="product-card__desktop-price">
+        {% if _tag_discount != blank %}
+          <span class="has-red-color">{% render 'price-value', price: _tag_final_price %}</span>
+          <span class="has-line-through">{% render 'price-value', price: selected_product.price %}</span>
+        {% else %}
+          {% render 'price-value', price: selected_product.price %}
+        {% endif %}
+      </p>
+    </div>
+
+    <p class="product-card__price">
+      {% if _tag_discount != blank %}
+        <span class="has-red-color">{% render 'price-value', price: _tag_final_price %}</span>
+        <span class="has-line-through">{% render 'price-value', price: selected_product.price %}</span>
+      {% else %}
+        {% render 'price-value', price: selected_product.price %}
+      {% endif %}
+    </p>
+
+    {% assign product_card_description = selected_product.metafields.custom.product_card_description | default: '&zwnj;&zwnj;&zwnj;' %}
+
+    <p class="product-card__category">
+      {{ product_card_description }}
+    </p>
+    {% if product_serving_text != blank %}
+      <p class="product-card__serving">
+        {{ product_serving_text }}
+      </p> {% elsif variant_servings %}
+        <p class="product-card__serving">
+          Servings - {{ variant_servings }}
+        </p>
+    {% endif %}
+
+    {% assign variants_count = selected_product.variants | size | default: 0 %}
+
+    {% if variants_count != 0 %}
+      <div class="product-card__dropdown">
+        <button class="product-card__dropdown-trigger"
+                data-click-id="pdp_cys_stack_flavor">
+                    <span>
+                        {% assign variant_icon = selected_product.selected_or_first_available_variant.metafields.custom.product_card_variation_icon | default: blank %}
+                      {% if variant_icon != blank %}
+                        {{ variant_icon }}
+                      {% else %}
+                        {% render 'icon', icon: 'white-variant' %}
+                      {% endif %}
+                        <span class="name"
+                              data-click-id="pdp_cys_stack_flavor">{{ selected_product.selected_or_first_available_variant.options }}</span>
+                    </span>
+          {% render 'icon', icon: 'buttom-arrow', tag: 'pdp_cys_stack_flavor' %}
+        </button>
+
+        <div class="product-card__dropdown-content">
+          {% for variant in selected_product.variants %}
+            {% assign variant_icon = variant.metafields.custom.product_card_variation_icon | default: blank %}
+
+            <div class="product-card__dropdown-item{% if forloop.index == 1 %} selected{% endif %}"
+                 data-product_id="{{ selected_product.id }}"
+                 data-variation_id="{{ variant.id }}"
+                 data-product_name="{{ variant.options }}"
+                 data-click-id="pdp_cys_stack_flavor"
+            >
+              {% if variant_icon != blank %}
+                {{ variant_icon }}
+              {% else %}
+                {% render 'icon', icon: 'white-variant', tag: "pdp_cys_stack_flavor" %}
+              {% endif %}
+              {{ variant.options }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <button
+      class="product-card__add-button"
+      data-variation_id="{{ selected_product.selected_or_first_available_variant.id }}"
+      data-product_id="{{ selected_product.id }}"
+    >
+      ADD TO CART - <span>{{ _product.price | money | remove: " " }}</span>
+    </button>
+  </div>
+</a>

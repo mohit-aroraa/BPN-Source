@@ -1,0 +1,30 @@
+<div class="search-form">
+  <div class="search-form-wrap">
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <div class="search-form-wrap-inner">
+        <div class="form-group">
+          <input
+            type="text"
+            name="q"
+            placeholder="{{ 'general.search.placeholder' | t }}"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-owns="predictive-search-results"
+            aria-expanded="false"
+            aria-label="{{ 'general.search.placeholder' | t }}"
+            aria-haspopup="listbox"
+            class="search-form__input search-bar__input"
+            data-sl="search_form_input"
+          >
+          <input type="hidden" name="options[prefix]" value="last" aria-hidden="true">
+          <button class="search-form-submit" type="submit" data-sl="search_form_submit" aria-label="Search">
+            {% render 'icon' with 'search' %}
+          </button>
+        </div>
+        <button type="button" class="search-form-close" aria-label="Close searchbar" data-sl="form_drawer_close">
+          {% render 'icon' with 'header-close', class: 'icon--closeSearch--mobile header-extra__icon' %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

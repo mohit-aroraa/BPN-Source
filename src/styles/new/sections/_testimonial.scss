@@ -1,0 +1,226 @@
+.#{$prefix}testimonials {
+  margin: 0 auto;
+  max-width: 1920px;
+  padding: 40px 16px 48px;
+
+  @include above('tablet') {
+    overflow: hidden;
+    padding: 49px 0 75px 64px;
+  }
+}
+
+.#{$prefix}testimonials__subtitle {
+  margin: 12px 0 0 4px;
+  color: color('bpn-grey-60');
+
+  @include above('desktop') {
+    @include use-text-style('bpn-h6');
+    margin: 0 0 0 5px;
+  }
+}
+
+.#{$prefix}testimonials__title-container {
+  @include above('desktop') {
+    display: flex;
+    gap: 21px;
+    flex-wrap: wrap;
+    width: 85%;
+  }
+}
+
+.#{$prefix}testimonials-slider {
+  position: relative;
+  margin: 24px 0 32px;
+  max-width: 375px;
+
+  @include above('tablet') {
+    margin: 49px 0 32px;
+    max-width: unset;
+    overflow: visible;
+  }
+}
+
+.#{$prefix}testimonial-slide {
+  display: flex;
+  cursor: pointer;
+  gap: 16px;
+
+  @include above('tablet') {
+    width: 192px;
+    height: 192px;
+    transition: width 0.5s ease;
+    gap: 32px;
+  }
+}
+
+.#{$prefix}testimonial-slide__image {
+  width: 128px;
+  height: 170px;
+  border-radius: 5px;
+  object-fit: cover;
+
+  @include above('tablet') {
+    width: 192px;
+    height: 192px;
+    cursor: pointer;
+  }
+}
+
+.#{$prefix}testimonial-slide__text {
+  @include use-text-style('bpn-body-base'); 
+  margin-top: 8px;
+  word-wrap: break-word;
+
+  @include above('tablet') {
+    width: 400px;
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    font-style: normal;
+  }
+}
+
+.#{$prefix}testimonial-slide__name {
+  @include use-text-style('bpn-title-1-large'); 
+  margin-top: 16px;
+
+  @include above('tablet') {
+    margin-top: 22px;
+  }
+}
+
+.#{$prefix}testimonial-slide__role {
+  @include use-text-style('bpn-body-xs'); 
+  color: color('bpn-grey-60');
+
+  @include above('tablet') {
+    margin-top: 1px;
+  }
+}
+
+.#{$prefix}testimonials-slider__navigation {
+  position: absolute;
+  top: -101px;
+  display: none;
+  width: 100%;
+  justify-content: flex-end;
+  max-width: calc(100% - 63px);
+
+  @include above('tablet') {
+    display: flex;
+    gap: 16px;
+  }
+
+  @include above('desktop') {
+    top: -70px;
+  }
+}
+
+.#{$prefix}testimonials-slider__navigation .swiper-button {
+  cursor: pointer;
+}
+
+.#{$prefix}testimonials-thumbs-slider {
+  display: flex;
+  flex-direction: column;
+
+  @include above('tablet') {
+    display: none;
+  }
+}
+
+.#{$prefix}testimonials-thumbs-slide {
+  width: 96px;
+  height: 96px;
+
+  @include above('tablet') {
+    width: 108px;
+    height: 108px;
+  }
+}
+
+.#{$prefix}testimonials-thumbs-slide img {
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.#{$prefix}testimonials-thumbs-slider__controls {
+  column-gap: 16px;
+  display: flex;
+  margin: 40px auto 0;
+
+  @include above('tablet') {
+    display: none;
+  }
+}
+
+.#{$prefix}testimonials-thumbs-slider__pagination {
+  align-items: center;
+  column-gap: 8px;
+  display: flex;
+
+  @include above('tablet') {
+    display: none;
+  }
+}
+
+.#{$prefix}testimonials-thumbs-slider__controls .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: color('bpn-grey-60');
+  cursor: pointer;
+}
+
+.#{$prefix}testimonials-thumbs-slider__controls .swiper-pagination-bullet:hover {
+  background: color('bpn-black-950');
+}
+
+.#{$prefix}testimonials-thumbs-slider__controls .swiper-pagination-bullet-active {
+  width: 48px;
+  border-radius: 18px;
+  background: color('bpn-black-950');
+} 
+
+.#{$prefix}stars-red-container {
+  margin-top: -2px;
+
+  @include above('tablet') {
+    margin-top: 2px;
+  }
+}
+
+.#{$prefix}testimonials__title {
+  @include above('tablet') {
+    @include use-text-style('bpn-h6');
+  }
+  word-wrap: break-word;
+}
+
+.#{$prefix}testimonial-slide__content {
+  @include above('tablet') {
+    display: none;
+  }
+  width: 55%;
+}
+
+.#{$prefix}testimonial-slide.swiper-slide-active {
+  @include above('tablet') {
+    width: 560px;
+    padding-right: 80px;
+    box-sizing: content-box;
+  }
+}
+
+.#{$prefix}testimonial-slide.swiper-slide-active .#{$prefix}testimonial-slide__content {
+  @include above('tablet') {
+    display: block;
+  }
+}
+
+.#{$prefix}testimonials-slide__stars {
+  @include above('tablet') {
+    margin-top: 2px;
+  }
+}

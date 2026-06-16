@@ -1,0 +1,19 @@
+# Ignore artifacts
+dist
+build
+coverage
+node_modules
+
+# Ignore all HTML files
+*.html
+
+# Ignore Shopify liquid files
+*.liquid
+
+# Ignore all SCSS files (let Stylelint handle them)
+**/*.scss
+
+# Ignore everything in src except JS files in new structure
+src/**/*
+!src/js/new/**/*
+!src/styles/new/**/* 

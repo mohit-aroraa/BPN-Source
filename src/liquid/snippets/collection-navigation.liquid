@@ -1,0 +1,19 @@
+{% assign collection_navigation = collection.metafields.custom.collection_navigation | default: blank %}
+
+<style>
+  .bpn-collection__collection-navigation-item:after {
+    background-image: url("{{ 'backdrop-image.png' | asset_url }}");
+  }
+</style>
+
+{% if collection_navigation != blank %}
+  <div class="bpn-collection__collection-navigation">
+    {%- for item in collection_navigation.value -%}
+      <a href="{{ item.url }}" class="bpn-collection__collection-navigation-item">
+        <span>
+          {{ item.title }}
+        </span>
+      </a>
+    {%- endfor -%}
+  </div>
+{% endif %}

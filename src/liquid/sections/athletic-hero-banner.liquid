@@ -1,0 +1,275 @@
+{% assign base_class = 'bpn-athletic-hero-banner' %}
+
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.athleteDiscountCode = '{{ section.settings.athlete_name_discount }}';
+  window.BPN.athleteName = '{{ section.settings.athlete_name }}';
+</script>
+
+<div
+  class='{{ base_class }} {{ base_class }}--{{ section.id }}'
+  style='
+    {%- if section.settings.background_color -%}
+     background: {{ section.settings.background_color }};
+    {%- endif -%}
+  '
+>
+  {% include 'athletic-media', base_class: base_class %}
+
+  <div class='{{ base_class }}__content-wrapper'>
+    {% include 'athletic-shared-content', base_class: base_class %}
+  </div>
+</div>
+
+<style>
+  {%- if section.settings.margin_bottom_enabled -%}
+    .{{ base_class }}--{{ section.id }} {
+      margin-bottom: 56px;
+    }
+
+    @media (min-width: 991px) {
+      .{{ base_class }}--{{ section.id }} {
+        margin-bottom: 80px;
+      }
+    }
+  {%- endif -%}
+
+  {%- if section.settings.video_desktop == blank and section.settings.image_desktop == blank -%}
+    .{{ base_class }}--{{ section.id }} {
+      min-height: 500px;
+    }
+  {%- else -%}
+    .{{ base_class }}--{{ section.id }} {
+      min-height: unset;
+    }
+  {%- endif -%}
+</style>
+
+{% schema %}
+{
+  "name": "Athletic Hero Banner",
+  "settings": [
+    {
+      "id": "athlete_name",
+      "type": "text",
+      "label": "Athlete Name",
+      "default": "Lucy"
+    },
+    {
+      "id": "athlete_name_discount",
+      "type": "text",
+      "label": "Athlete Discount Code",
+      "default": "athlete"
+    },
+    {
+      "type": "checkbox",
+      "id": "margin_bottom_enabled",
+      "label": "Add bottom margin",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "id": "font_color",
+      "type": "color",
+      "label": "Font Color",
+      "default": "#ffffff"
+    },
+    {
+      "id": "image_desktop",
+      "type": "image_picker",
+      "label": "Desktop Image",
+      "info": "Recommended 2880X1200 Image"
+    },
+    {
+      "id": "image_mobile",
+      "type": "image_picker",
+      "label": "Mobile Image",
+      "info": "Recommended 752X1104 Image"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "id": "video_desktop_type",
+      "type": "select",
+      "label": "Desktop Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_desktop_url",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Desktop Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Desktop Video Source is set to URL."
+    },
+    {
+      "id": "video_desktop_media",
+      "type": "video",
+      "label": "Video Desktop Media",
+      "info": "Select a video from your Media Gallery if Desktop Video Source is set to Media."
+    },
+    {
+      "id": "video_desktop_poster",
+      "type": "image_picker",
+      "label": "Desktop Video Poster"
+    },
+    {
+      "id": "video_mobile_type",
+      "type": "select",
+      "label": "Mobile Video Source",
+      "options": [
+        { "value": "url", "label": "URL" },
+        { "value": "media", "label": "Media Gallery" },
+        { "value": "", "label": "None" }
+      ],
+      "default": "url"
+    },
+    {
+      "type": "video_url",
+      "id": "video_mobile_url",
+      "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=Y60FideYBcY",
+      "label": "Mobile Video URL",
+      "info": "Enter a URL (YouTube or Vimeo) here if Mobile Video Source is set to URL."
+    },
+    {
+      "id": "video_mobile_media",
+      "type": "video",
+      "label": "Video Mobile Media",
+      "info": "Select a video from your Media Gallery if Mobile Video Source is set to Media."
+    },
+    {
+      "id": "video_mobile_poster",
+      "type": "image_picker",
+      "label": "Mobile Video Poster"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Alignment"
+    },
+    {
+      "id": "desktop-h-a",
+      "type": "select",
+      "label": "Horizontal Alignment",
+      "options": [
+        { "value": "d-left", "label": "Left" },
+        { "value": "d-center", "label": "Center" },
+        { "value": "d-right", "label": "Right" }
+      ],
+      "default": "d-left"
+    },
+    {
+      "id": "desktop-v-a",
+      "type": "select",
+      "label": "Vertical Alignment",
+      "options": [
+        { "value": "d-top", "label": "Top" },
+        { "value": "d-v-center", "label": "Center" },
+        { "value": "d-bottom", "label": "Bottom" }
+      ],
+      "default": "d-top"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Alignment"
+    },
+    {
+      "id": "mobile-h-a",
+      "type": "select",
+      "label": "Horizontal Alignment",
+      "options": [
+        { "value": "m-left", "label": "Left" },
+        { "value": "m-center", "label": "Center" },
+        { "value": "m-right", "label": "Right" }
+      ],
+      "default": "m-left"
+    },
+    {
+      "id": "mobile-v-a",
+      "type": "select",
+      "label": "Vertical Alignment",
+      "options": [
+        { "value": "m-top", "label": "Top" },
+        { "value": "m-v-center", "label": "Center" },
+        { "value": "m-bottom", "label": "Bottom" }
+      ],
+      "default": "m-top"
+    },
+    {
+      "type": "header",
+      "content": "Text Alignment"
+    },
+    {
+      "id": "mobile_text_align",
+      "type": "select",
+      "label": "Mobile Text Alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-left"
+    },
+    {
+      "id": "desktop_text_align",
+      "type": "select",
+      "label": "Desktop Text Alignment",
+      "options": [
+        { "value": "text-left", "label": "Left" },
+        { "value": "text-center", "label": "Center" },
+        { "value": "text-right", "label": "Right" }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "id": "eyebrow",
+      "type": "text",
+      "label": "Text"
+    },
+    {
+      "id": "title",
+      "type": "richtext",
+      "label": "Title",
+      "default": "<p>Lorem Ipsum is simply dummy text</p>"
+    },
+    {
+      "id": "hide_title_on_mobile",
+      "type": "checkbox",
+      "label": "Hide Title on Mobile",
+      "default": false
+    },
+    {
+      "id": "description",
+      "type": "richtext",
+      "label": "Description",
+      "default": "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>"
+    },
+    {
+      "id": "hide_description_on_mobile",
+      "type": "checkbox",
+      "label": "Hide Description on Mobile",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Athletic Hero Banner",
+      "category": "Athletic Landing Pages"
+    }
+  ]
+}
+{% endschema %}

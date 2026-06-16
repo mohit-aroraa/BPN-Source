@@ -1,0 +1,491 @@
+/**
+ *
+ * @element Cart Line Item
+ *
+ */
+
+// @block
+// -------------
+
+$component: ".cartItem";
+
+#{$component} {
+  @include relative();
+  @include flex();
+  margin-bottom: rem(12px);
+  padding: rem(8px) 0;
+}
+
+.list-complete-item:last-child #{$component} {
+  margin-bottom: rem(24px);
+}
+
+#{$component}--processing {
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -12px;
+    width: calc(100% + 24px);
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.2);
+
+    @include above("tablet") {
+      left: -20px;
+      width: calc(100% + 40px);
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    transform: translate(-50%, -50%);
+    border: 0.2rem solid #fff;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: processing 0.5s infinite linear;
+    z-index: 1;
+  }
+}
+
+// @__element
+// -------------
+
+#{$component}__left {
+  @include blocksize(72px, 72px);
+  @include margin($right: 12px);
+  flex-shrink: 0;
+
+  @include above("tablet") {
+    @include blocksize(90px, 90px);
+  }
+}
+
+#{$component}__right {
+  flex-grow: 1;
+}
+
+#{$component}__message {
+  margin-top: 5px;
+  height: 16px;
+  overflow: hidden;
+  opacity: 0;
+  width: 100%;
+
+  &.active {
+    opacity: 1;
+  }
+
+  p {
+    position: relative;
+    background-color: #ecf3f6;
+    padding-left: 10px;
+    margin-bottom: 0;
+
+    &::before {
+      @include absolute($top: 0, $left: 0);
+      @include blocksize(3px, 100%);
+      content: "";
+      background-color: #283546;
+    }
+  }
+}
+
+#{$component}__img {
+  @include blocksize(100%);
+  @include flex($align-items: center, $justify-content: center);
+  background-color: #fafafa;
+
+  .img {
+    width: 100%;
+  }
+}
+
+#{$component}__background {
+  padding: 9px 20px 25px 20px;
+  @include margin($left: -20px, $right: -20px, $bottom: 27px);
+  background-color: #f6f4f3;
+
+  #{$component} {
+    @include margin($bottom: 0);
+  }
+
+  @include below("tablet") {
+    @include margin($top: -4px, $left: -12px, $right: -12px, $bottom: 19px);
+  }
+}
+
+#{$component}__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+#{$component}__title {
+  text-decoration: none;
+  display: inline-block;
+
+  h3 {
+    font-size: rem(14px);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 1.143;
+    text-transform: uppercase;
+    @include margin($bottom: 0);
+  }
+}
+
+#{$component}__title--no-hover {
+  &:not([href]):hover,
+  &:focus {
+    color: color("black");
+  }
+}
+
+#{$component}__variant {
+  @include use-text-style("paragraph-body-4");
+  margin-bottom: 2px;
+}
+
+#{$component}__variant--light {
+  color: #777777;
+}
+
+#{$component}__variantSelector {
+  font-size: rem(13px);
+  height: 36px;
+  padding: 5px 25px 5px 12px;
+  font-weight: 500;
+  color: color("black");
+  background-color: color("white");
+  border: 1px solid #ececec;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2hldnJvbi1kb3duIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTEuNjQ2IDQuNjQ2YS41LjUgMCAwIDEgLjcwOCAwTDggMTAuMjkzbDUuNjQ2LTUuNjQ3YS41LjUgMCAwIDEgLjcwOC43MDhsLTYgNmEuNS41IDAgMCAxLS43MDggMGwtNi02YS41LjUgMCAwIDEgMC0uNzA4eiIvPgo8L3N2Zz4=);
+  background-position: calc(100% - 10px) center;
+  background-repeat: no-repeat;
+  background-size: 10px;
+  text-transform: capitalize;
+}
+
+#{$component}__size {
+  @include margin($bottom: 8px);
+  text-transform: capitalize;
+  font-weight: 700;
+
+  @include above("tablet") {
+    @include margin($bottom: 12px);
+  }
+}
+
+#{$component}__align {
+  @include flex($align-items: center);
+  @include text("right");
+  margin-top: rem(10px);
+}
+
+#{$component}__align--hide-price {
+  #{$component}__price {
+    display: none;
+  }
+
+  #{$component}__variantSelector {
+    flex-grow: 1;
+    margin-right: rem(12px);
+  }
+
+  .button-small {
+    @include above("mobile-large") {
+      --btn-small-gap: 0.45rem 1.2rem;
+      .mobile-only {
+        display: none;
+      }
+    }
+  }
+
+  @include below("mobile-large") {
+    flex-wrap: wrap;
+    #{$component}__variantSelector {
+      margin-right: 0;
+      margin-bottom: rem(8px);
+      flex: 0 0 100%;
+    }
+    .button-small {
+      flex: 0 0 100%;
+    }
+  }
+}
+
+#{$component}__price {
+  font-size: rem(14px);
+  font-weight: 700;
+  line-height: 1.143;
+  letter-spacing: 0.2px;
+  margin-left: auto;
+
+  &.focus {
+    color: color("primary-100");
+  }
+}
+
+#{$component}__priceOriginal {
+  margin-right: 3px;
+  @include above("desktop-med") {
+    margin-right: 6px;
+  }
+}
+
+#{$component}__saleDiscount {
+  font-weight: 700;
+  color: color("warm-red");
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+#{$component}__priceDiscounted {
+  color: color("warm-red");
+}
+
+#{$component}__freeGift {
+  font-size: rem(14px);
+  font-weight: 700;
+  line-height: 1.143;
+  letter-spacing: 0.2px;
+  margin-bottom: 0;
+
+  &.focus {
+    color: color("primary-100");
+  }
+}
+
+#{$component}__freeText {
+  @include margin($right: 8px);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+#{$component}__quantity {
+  @include flex($justify-content: center, $align-items: center);
+  border: 1px solid #ececec;
+  margin-top: 4px;
+}
+
+#{$component}__quantityIcon {
+  @include blocksize(28px, 26px);
+  background-color: transparent;
+  border: 0;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#{$component}__quantityVal {
+  font-size: rem(12px);
+  font-weight: 700;
+  color: color("black");
+  line-height: 1.33;
+  @include blocksize(34px, auto);
+  @include text("center");
+  padding: 0;
+  border: 0;
+}
+
+#{$component}__actionBtn {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  line-height: 1;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding-top: 0;
+}
+
+#{$component}__saveVal {
+  @include relative();
+}
+
+#{$component}__saveQuantity {
+  @include blocksize(120px, 32px);
+  @include text("left");
+  font-weight: 700;
+
+  line-height: 32px;
+}
+
+#{$component}__upsellBtn {
+  @include padding($right: 10px, $left: 10px);
+  @include blocksize(100%, 32px);
+  // @include use-text-style("small");
+
+  min-width: 120px;
+
+  @include above("tablet") {
+    @include padding($right: 20px, $left: 20px);
+    min-width: 145px;
+  }
+}
+
+#{$component}__secHeading {
+  @include use-text-style("paragraph-body-4");
+  color: color("black");
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+#{$component}__loadImg {
+  @include blocksize(25px);
+}
+
+#{$component}__loader {
+  @include blocksize(127px);
+  @include margin(0, auto, 0, auto);
+  @include text(center);
+}
+
+#{$component}__giftBlock {
+  @include position("static");
+}
+
+#{$component}__giftDetails {
+  @include margin($top: 4px);
+
+  p {
+    @include margin($bottom: 0);
+  }
+}
+
+// @--modifier
+// -------------
+
+.sidebar__cart--sticky #{$component}__giftBlock--sticky {
+  position: fixed;
+  bottom: 90px;
+  width: 100%;
+}
+
+.cartEmptyState {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 35px);
+  display: flex;
+  flex-direction: column;
+  padding-top: 28px;
+  padding-left: 12px;
+  padding-right: 12px;
+  @include above("tablet") {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @include above("tablet-large") {
+    padding-top: 56px;
+  }
+}
+
+.cartEmptyState__text {
+  margin-bottom: 39px;
+
+  @include above("tablet-large") {
+    margin-bottom: 60px;
+  }
+
+  .heading-4 {
+    margin-bottom: 4px;
+    @include above("tablet-large") {
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.cartEmptyState__action {
+  margin-bottom: 42px;
+
+  .button-link {
+    padding-bottom: 4px;
+  }
+}
+
+.cartEmptyState__image {
+  flex-grow: 1;
+  margin: 0 -12px;
+  @include above("tablet") {
+    margin: 0 -20px;
+  }
+
+  img {
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@keyframes processing {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.cartItemIconBox {
+  display: flex;
+  padding-bottom: 10px;
+  @include above("tablet") {
+    padding-bottom: 37px;
+  }
+
+  &__card {
+    display: flex;
+    @include above("tablet") {
+      max-width: 184px;
+    }
+
+    &--idme {
+      display: block;
+      max-width: none;
+      padding-left: 16px;
+    }
+  }
+
+  &__icon {
+    width: 20px;
+    flex-shrink: 0;
+    margin-right: 14px;
+    @include above("tablet") {
+      width: 26px;
+    }
+  }
+
+  &__title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.17px;
+    line-height: 1.33;
+    margin-bottom: 1px;
+    @include above("tablet") {
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      line-height: 1.143;
+    }
+  }
+
+  &__text {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.17px;
+    line-height: 1.33;
+    margin-bottom: 0;
+  }
+}

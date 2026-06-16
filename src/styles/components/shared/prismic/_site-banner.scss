@@ -1,0 +1,107 @@
+.siteBanner {
+  $parent: &;
+  height: var(--height-mobile);
+  margin-bottom: 44px;
+  @include above("tablet-large") {
+    height: var(--height-desktop);
+  }
+  @include above("desktop-med") {
+    margin-bottom: 95px;
+  }
+  &--page-athletic {
+    margin-bottom: 40px;
+    @include above("desktop-med") {
+      margin-bottom: 135px;
+    }
+  }
+  &__wrapper {
+    position: relative;
+    height: 100%;
+    .responsive-image__wrapper {
+      max-width: 100% !important;
+      height: 100%;
+      &--desktop {
+        display: none;
+        @include above("tablet") {
+          display: block;
+        }
+      }
+      &--mobile {
+        @include above("tablet") {
+          display: none;
+        }
+      }
+    }
+  }
+  &__image {
+    z-index: 1;
+    object-fit: cover;
+    object-position: center;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+  &__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    width: 100%;
+    color: var(--text-color);
+    padding-left: 12px;
+    padding-right: 12px;
+    @include above("tablet-large") {
+      padding-left: 44px;
+      padding-right: 44px;
+    }
+    p {
+      color: inherit;
+    }
+    .button-link {
+      color: var(--cta-text-color);
+      border-color: var(--cta-text-color);
+      @include above("desktop-med") {
+        font-size: 18px;
+        line-height: 1.278;
+        letter-spacing: normal;
+      }
+      &:not(:disabled):hover {
+        color: var(--cta-text-color);
+        border-color: var(--cta-text-color);
+      }
+    }
+  }
+  &__title {
+    font-size: 40px;
+    line-height: 0.75;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin-bottom: 14px;
+    @include above("tablet-large") {
+      font-size: 60px;
+      margin-bottom: 24px;
+    }
+  }
+  &__shortText {
+    font-size: 14px;
+    line-height: 1.163;
+    letter-spacing: normal;
+    font-weight: 500;
+    margin-bottom: 4px;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-1");
+      margin-bottom: 21px;
+    }
+  }
+  &__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: var(--overlay-background-color);
+    opacity: var(--opacity);
+  }
+}

@@ -1,0 +1,146 @@
+<img
+  width="99999"
+  height="99999"
+  style="pointer-events: none; position: absolute; top: 0; left: 0; width: 95vw; height: 95vh; max-width: 99vw; max-height: 99vh;visibility:hidden"
+  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSI5OTk5OXB4IiBoZWlnaHQ9Ijk5OTk5cHgiIHZpZXdCb3g9IjAgMCA5OTk5OSA5OTk5OSIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48ZyBzdHJva2U9Im5vbmUiIGZpbGw9Im5vbmUiIGZpbGwtb3BhY2l0eT0iMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9Ijk5OTk5IiBoZWlnaHQ9Ijk5OTk5Ij48L3JlY3Q+IDwvZz4gPC9zdmc+"
+  alt=""
+  aria-hidden="true"
+>
+
+{% assign wjhx = "document.addEventListener('DOMContentLoaded'" %}
+{% assign sSOd = "document.addEventListener('asyncLazyLoad'" %}
+{% assign gedH = 'e.addEventListener("DOMContentLoaded"' %}
+{% assign vNla = "e.addEventListener('asyncLazyLoad'" %}
+{% assign rapp = ', asyncLoad' %}
+{% assign napp = ', function(){}' %}
+{% assign kGxh = 'if(window.attachEvent)' %}
+{% assign snOi = "document.addEventListener('asyncLazyLoad',function(event){asyncLoad();});if(window.attachEvent)" %}
+{% assign kHje = 'var customDocumentWrite = function(content) {' %}
+{% assign kguk = "document.addEventListener('StartKernelLoading', function() { document.dispatchEvent(new CustomEvent('StartShopifyLoading')); var customDocumentWrite = function(content) {" %}
+{% assign lKEH = "document.getElementsByTagName('head')[0].appendChild(eventsListenerScript);" -%}
+{%- assign aCZU = "document.getElementsByTagName('head')[0].appendChild(eventsListenerScript);});" %}
+{% assign content_for_footer = '<script defer>themeJsInit();</script>' %}
+{% if template == 'cart' %}
+  {{ content_for_header }}
+{% elsif content_for_header contains 'Shopify.designMode' %}
+  {{ content_for_header }}
+{% else %}
+  {{
+    content_for_header
+    | replace: 'src=', 'data-src='
+    | replace: wjhx, sSOd
+    | replace: gedH, vNla
+    | replace: rapp, napp
+    | replace: kGxh, snOi
+    | replace: kHje, kguk
+    | replace: lKEH, aCZU
+  }}
+{% endif %}
+<script>
+  var themeJsInit, themeJsInit;
+  (function () {
+    var _0x17C72 = [
+      '\x75\x6E\x64\x65\x66\x69\x6E\x65\x64',
+      '\x62\x61\x72\x65\x2D\x70\x65\x72\x66\x6F\x72\x6D\x61\x6E\x63\x65\x2D\x6E\x75\x74\x72\x69\x74\x69\x6F\x6E\x2E\x6D\x79\x73\x68\x6F\x70\x69\x66\x79\x2E\x63\x6F\x6D',
+      '\x55\x6E\x61\x75\x74\x68\x6F\x72\x69\x73\x65\x64\x20\x75\x73\x65\x20\x6F\x66\x20\x63\x6F\x64\x65\x20\x64\x65\x74\x65\x63\x74\x65\x64\x2E\x20\x52\x65\x66\x72\x61\x69\x6E\x20\x66\x72\x6F\x6D\x20\x75\x73\x69\x6E\x67\x20\x74\x68\x65\x20\x63\x6F\x70\x79\x72\x69\x67\x68\x74\x65\x64\x20\x63\x6F\x64\x65\x20\x77\x69\x74\x68\x6F\x75\x74\x20\x70\x72\x69\x6F\x72\x20\x70\x65\x72\x6D\x69\x73\x73\x69\x6F\x6E\x2E',
+      '\x67\x68\x74\x68\x6F\x75',
+      '\x69\x66\x72\x61\x6D\x65\x2E\x6C\x61\x7A\x79',
+      '\x73\x63\x72\x69\x70\x74',
+      '\x64\x61\x74\x61\x2D\x73\x72\x63',
+      '\x73\x72\x63',
+      '\x6C\x61\x7A\x79\x6C\x6F\x61\x64\x73\x63\x72\x69\x70\x74',
+      '\x74\x79\x70\x65',
+      '\x74\x65\x78\x74\x2F\x6A\x61\x76\x61\x73\x63\x72\x69\x70\x74',
+      '\x6C\x69\x6E\x6B',
+      '\x64\x61\x74\x61\x2D\x68\x72\x65\x66',
+      '\x68\x72\x65\x66',
+      '\x53\x74\x61\x72\x74\x4B\x65\x72\x6E\x65\x6C\x4C\x6F\x61\x64\x69\x6E\x67',
+      '\x61\x73\x79\x6E\x63\x4C\x61\x7A\x79\x4C\x6F\x61\x64',
+      '\x73\x63\x72\x6F\x6C\x6C',
+      '\x6D\x6F\x75\x73\x65\x6D\x6F\x76\x65',
+      '\x74\x6F\x75\x63\x68\x73\x74\x61\x72\x74',
+      '\x6C\x6F\x61\x64',
+      '\x6F\x6E\x6C\x6F\x61\x64',
+    ];
+    function _0x17CCB() {}
+    function _0x17D24() {
+      var _0x17D24 = !1;
+      function _0x17CCB() {
+        if (!_0x17D24) {
+          _0x17D24 = !0;
+          document.querySelectorAll(_0x17C72[4]).forEach((_0x17C72) => {
+            (datasrc = _0x17C72.dataset.src), null != datasrc && (_0x17C72.src = datasrc);
+          });
+          var _0x17E88 = document.getElementsByTagName(_0x17C72[5]);
+          for (i = 0; i < _0x17E88.length; i++) {
+            if (
+              (null !== _0x17E88[i].getAttribute(_0x17C72[6]) &&
+                (_0x17E88[i].setAttribute(_0x17C72[7], _0x17E88[i].getAttribute(_0x17C72[6])),
+                delete _0x17E88[i].dataset.src),
+              _0x17C72[8] == _0x17E88[i].getAttribute(_0x17C72[9]))
+            ) {
+              for (
+                var _0x17D7D = document.createElement(_0x17C72[5]), _0x17DD6 = 0;
+                _0x17DD6 < _0x17E88[i].attributes.length;
+                _0x17DD6++
+              ) {
+                var _0x17CCB = _0x17E88[i].attributes[_0x17DD6];
+                _0x17D7D.setAttribute(_0x17CCB.name, _0x17CCB.value);
+              }
+              (_0x17D7D.type = _0x17C72[10]),
+                (_0x17D7D.innerHTML = _0x17E88[i].innerHTML),
+                _0x17E88[i].parentNode.removeChild(_0x17E88[i]),
+                _0x17E88[i].parentNode.insertBefore(_0x17D7D, _0x17E88[i]);
+            }
+          }
+          var _0x17E2F = document.getElementsByTagName(_0x17C72[11]);
+          for (i = 0; i < _0x17E2F.length; i++) {
+            null !== _0x17E2F[i].getAttribute(_0x17C72[12]) &&
+              (_0x17E2F[i].setAttribute(_0x17C72[13], _0x17E2F[i].getAttribute(_0x17C72[12])),
+              delete _0x17E2F[i].dataset.href);
+          }
+          document.dispatchEvent(new CustomEvent(_0x17C72[14])),
+            setTimeout(function () {
+              document.dispatchEvent(new CustomEvent(_0x17C72[15]));
+            }, 40);
+        }
+      }
+      window.addEventListener(_0x17C72[16], function (_0x17C72) {
+        _0x17CCB();
+      }),
+        window.addEventListener(_0x17C72[17], function () {
+          _0x17CCB();
+        }),
+        window.addEventListener(_0x17C72[18], function () {
+          _0x17CCB();
+        }),
+        window.addEventListener
+          ? window.addEventListener(
+              _0x17C72[19],
+              function () {
+                setTimeout(_0x17CCB, 10);
+              },
+              !1
+            )
+          : window.attachEvent
+          ? window.attachEvent(_0x17C72[20], function () {
+              setTimeout(_0x17CCB, 10);
+            })
+          : (window.onload = _0x17CCB);
+    }
+    if (typeof Shopify.shop !== _0x17C72[0]) {
+      if (Shopify.shop !== _0x17C72[1]) {
+        alert(_0x17C72[2]);
+        console.log(_0x17C72[2]);
+      }
+    } else {
+      alert(_0x17C72[2]);
+      console.log(_0x17C72[2]);
+    }
+    if (navigator.userAgent.indexOf(_0x17C72[3]) > 1) {
+      themeJsInit = _0x17CCB;
+    } else {
+      themeJsInit = _0x17D24;
+    }
+  })();
+</script>

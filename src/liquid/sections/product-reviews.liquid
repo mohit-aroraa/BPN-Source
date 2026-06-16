@@ -1,0 +1,27 @@
+<div class="product-reviews">
+    {% if section.settings.title != blank %}
+        <h2 class="product-reviews__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% render 'okendo-reviews-widget', product: product %}
+</div>
+
+{% schema %}
+{
+  "name": "Product Reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "CUSTOMER REVIEWS"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Reviews"
+    }
+  ]
+}
+{% endschema %}

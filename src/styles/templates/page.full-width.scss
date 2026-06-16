@@ -1,0 +1,15 @@
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+@import "./src/styles/components/global/mixins";
+
+// Design tokens
+@import "./src/design-tokens/index";
+
+.template-pages-store-locator {
+  .mid-container {
+    padding: 30px 15px;
+  }
+}

@@ -1,0 +1,27 @@
+<!-- snippets/master--blog-feed--paginate -->
+{% liquid 
+
+    assign s                    = section.settings
+
+    assign totalRows            = s.total_rows | plus: 0 
+    assign perRow               = s.per_row | plus: 0
+
+    assign lp                   = section.blocks
+    assign blks                 = lp.size
+    assign total                = 200
+
+
+    if blks == 0 
+        assign total            = totalRows | times: perRow
+    endif 
+    
+%}
+{% paginate blog.articles by total %}
+
+    {% include 'master--blog-feed' %}
+
+    {%- if paginate.pages > 1 -%}
+        {% include 'pagination', paginate: paginate %}
+    {%- endif -%}
+
+{% endpaginate %}

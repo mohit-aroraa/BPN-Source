@@ -1,0 +1,105 @@
+/*
+ * Import style components for the current template.
+ *
+ * Write your own styles after imports.
+ *
+ * Design tokens are required and encapsulated for each template.
+ * Import it from the design-tokens folder.
+ */
+
+/*========================
+Function variables of global theme is required
+========================*/
+@import "./src/styles/components/global/functions/function";
+@import "./src/styles/components/global/variables";
+
+@import "./src/styles/components/global/mixins";
+
+// Design tokens
+@import "./src/design-tokens/index";
+@import "./src/styles/components/shared/prismic-rich-text";
+@import "./src/styles/components/shared/micromodal";
+@import "./src/styles/components/shared/prismic/landing-page-banner";
+@import "./src/styles/components/shared/prismic/curated-reviews";
+@import "./src/styles/components/shared/prismic/tested-block";
+@import "./src/styles/components/shared/prismic/site-banner";
+@import "./src/styles/components/shared/prismic/heading-text";
+@import "./src/styles/components/shared/prismic/primary-benefits-icons";
+@import "./src/styles/components/shared/prismic/featured-page";
+@import "./src/styles/components/shared/prismic/image-and-text";
+@import "./src/styles/components/shared/product-grid-item";
+@import "./src/styles/components/shared/prismic/combo-product-area";
+@import "./src/styles/components/shared/prismic/ingredients";
+@import "./src/styles/components/shared/pdp-review-widget";
+
+.curatedReviews {
+  margin-bottom: 56px;
+  @include above("desktop-med") {
+    margin-bottom: 115px;
+  }
+}
+.testedBlock {
+  @include above("desktop-med") {
+    margin-bottom: 120px;
+  }
+}
+.imageAndText {
+  $parent: &;
+  padding-bottom: 0;
+  @include above("tablet") {
+    margin-top: 0;
+  }
+  @include above("desktop-med") {
+    margin-bottom: 144px;
+  }
+  &--image-on-right {
+    #{$parent}__content {
+      @include above("tablet") {
+        padding: 30px;
+        .richText__text {
+          text-align: left;
+        }
+      }
+      @include above("desktop-med") {
+        padding: 30px 87px 30px 64px;
+      }
+    }
+    #{$parent}__container {
+      @include above("desktop-med") {
+        padding-right: 0;
+      }
+    }
+    #{$parent}__aside {
+      @include above("tablet") {
+        flex: 0 0 51.68%;
+        max-width: 51.68%;
+      }
+    }
+  }
+  &__container {
+    padding: 0;
+    @include above("desktop-med") {
+      max-width: 100%;
+    }
+  }
+  &__content {
+    padding: 20px 12px 56px 12px;
+    @include above("desktop-med") {
+      padding: 30px 64px 30px 87px;
+    }
+    .richText__text {
+      margin-bottom: 0;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.7px;
+      line-height: 1.167;
+      text-align: center;
+      text-transform: uppercase;
+      @include above("desktop-med") {
+        font-size: 60px;
+        letter-spacing: -2px;
+        line-height: 0.933;
+      }
+    }
+  }
+}

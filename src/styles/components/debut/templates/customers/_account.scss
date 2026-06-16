@@ -1,0 +1,16 @@
+.myaccount {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.myaccount__order-history {
+  @include mq($large-up) {
+    @include flex(1 0 percentage(2/3));
+  }
+}
+
+.myaccount__account-details {
+  @include mq($large-up) {
+    @include flex(1 0 percentage(1/3));
+  }
+}

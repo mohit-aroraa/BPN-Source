@@ -1,0 +1,17 @@
+{%- capture layout_bundle_styles %}bundle.{{- layout -}}.css{% endcapture -%}
+{%- capture new_layout_bundle_styles %}bundle.new-{{- layout -}}.css{% endcapture -%}
+{{ layout_bundle_styles | asset_url | stylesheet_tag }}
+{{ new_layout_bundle_styles | asset_url | stylesheet_tag }}
+
+{%- if template != blank -%}
+  {%- capture style_bundle %}bundle.{{- template | remove: 'customers/' -}}.css{% endcapture -%}
+  {{ style_bundle | asset_url | stylesheet_tag }}
+
+  {%- capture new_style_bundle %}bundle.new-{{- template | remove: 'customers/' -}}.css{% endcapture -%}
+  {{ new_style_bundle | asset_url | stylesheet_tag }}
+
+  {%- if template contains 'redesign' -%}
+    {%- capture redesign_bundle %}bundle.product.redesign.css{% endcapture -%}
+    {{ redesign_bundle | asset_url | stylesheet_tag }}
+  {%- endif -%}
+{%- endif -%}

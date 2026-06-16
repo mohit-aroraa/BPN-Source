@@ -1,0 +1,277 @@
+{% comment %}
+  Product Grid Item
+
+  Displays a product in the collection grid.
+
+  Parameters:
+  - product: The product object to display
+  - index: The product index (used for tracking)
+{% endcomment %}
+
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+{%- assign product_filter_section = metafields.filters -%}
+{%- assign has_badge = product_filter_section.has_badge | default: false -%}
+{%- assign badge_title = product_filter_section.badge_title -%}
+{%- assign product_serving_text = metafields.global_fileds.servings -%}
+{%- assign variant_servings = product.selected_or_first_available_variant.metafields.custom.servings -%}
+
+{% assign availability = product.selected_or_first_available_variant.metafields.custom.availability
+  | default: 'default'
+%}
+{% assign external_link_url = product.selected_or_first_available_variant.metafields.custom.external_link.value.url
+  | default: ''
+%}
+{% assign external_link_text = product.selected_or_first_available_variant.metafields.custom.external_link.value.text
+  | default: ''
+%}
+
+{% assign tag_discount = blank %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'ssale' %}
+    {% assign tag_discount = tag | remove: 'ssale' %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% unless product.tags contains 'bis-hidden' %}
+  {% assign show_bis_cta = true %}
+{% else %}
+  {% assign show_bis_cta = false %}
+{% endunless %}
+
+{% assign _tag_discount_adjusted = tag_discount | divided_by: 100.00 %}
+{% assign tag_discounted_price = product.selected_or_first_available_variant.price | times: _tag_discount_adjusted %}
+{% assign tag_final_price = product.selected_or_first_available_variant.price | minus: tag_discounted_price %}
+
+{% assign variants_count = product.variants | size | default: 0 %}
+
+{% assign all_unavailable = true %}
+
+{% for variant in product.variants %}
+  {% if variant.available == true and variant.metafields.custom.availability != 'oos' %}
+    {% assign all_unavailable = false %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div
+  class='bpn-product-grid-item swiper-slide js-product-grid-item'
+  data-product-handle='{{ product.handle }}'
+  data-grid-item
+
+>
+  <a
+    href='{{ product.url }}'
+    class='bpn-product-grid-item__link'
+    aria-label='View details for {{ product.title }}'
+    {%- if product_thumbnail_click_id -%}
+      data-click-id='{{ product_thumbnail_click_id }}'
+    {%- endif -%}
+  >
+    <div class='bpn-product-grid-item__image-wrapper'>
+      {% if has_badge == true %}
+        <div class='bpn-product-grid-item__badge' >
+          {{ badge_title }}
+        </div>
+      {% endif %}
+
+      {% if tag_discount != blank %}
+        <div class='bpn-product-grid-item__badge bpn-save-badge'>Save {{ tag_discount }}%</div>
+      {% endif %}
+
+      {% if variants_count == 1 %}
+        {% if product.available == false %}
+          <div class='bpn-product-grid-item__badge bpn-sold-out-badge'>Sold Out</div>
+        {% endif %}
+
+      {% else %}
+        {% if product.available == false or all_unavailable %}
+          <div class='bpn-product-grid-item__badge bpn-sold-out-badge'>Sold Out</div>
+        {% endif %}
+      {% endif %}
+
+      <div class='bpn-product-grid-item__image-slider swiper js-product-grid-item-slider'>
+        <div class='swiper-wrapper'>
+          {%- assign thumbnail_img = product.metafields.custom.thumbnail_image.value -%}
+          {% if product.featured_image != blank %}
+            <div class='swiper-slide'>
+              {% if thumbnail_img != blank %}
+                <img
+                  src='{{ thumbnail_img | image_url: width: 400, height: 400, crop: 'center' }}'
+                  alt='{{ thumbnail_img.alt | default: product.title }}'
+                  class='bpn-product-grid-item__image'
+                  width='400'
+                  height='400'
+                  loading='lazy'
+                >
+              {% else %}
+                <img
+                  src='{{ product.featured_image | img_url: '400x400', crop: 'center' }}'
+                  alt='{{ product.featured_image.alt | default: product.title }}'
+                  class='bpn-product-grid-item__image'
+                  width='400'
+                  height='400'
+                  loading='lazy'
+                >
+              {% endif %}
+            </div>
+
+            {% for image in product.images %}
+              {% unless forloop.first %}
+                <div class='swiper-slide'>
+                  <img
+                    src='{{ image | img_url: '400x400', crop: 'center' }}'
+                    alt='{{ image.alt | default: product.title }}'
+                    class='bpn-product-grid-item__image'
+                    width='400'
+                    height='400'
+                    loading='lazy'
+                  >
+                </div>
+              {% endunless %}
+            {% endfor %}
+          {% else %}
+            <div class='swiper-slide'>
+              {{
+                'product-1'
+                | placeholder_svg_tag: 'bpn-product-grid-item__image placeholder-svg'
+              }}
+            </div>
+          {% endif %}
+        </div>
+        <div
+          class='bpn-swiper-button-prev bpn-product-grid-item__arrow'
+          {%- if nav_click_id -%}
+            data-click-id='{{ nav_click_id }}'
+          {%- endif -%}
+        ></div>
+        <div
+          class='bpn-swiper-button-next bpn-product-grid-item__arrow'
+          {%- if nav_click_id -%}
+            data-click-id='{{ nav_click_id }}'
+          {%- endif -%}
+        ></div>
+      </div>
+    </div>
+    </a>
+    <div class='bpn-product-grid-item__info'>
+      <div class='bpn-product-grid-item__rating'>
+        {{ product.metafields.okendo.StarRatingSnippet }}
+      </div>
+
+      <div class='bpn-product-grid-item__title-wrapper'>
+        <h3 id='recommend-{{ product.title }}' class='bpn-product-grid-item__title'>{{ product.title }}</h3>
+
+        <div class='bpn-product-grid-item__price'>
+          {% if tag_discount != blank %}
+            <span class='bpn-product-grid-item__price--sale'>
+              {%- render 'price-value', price: tag_final_price -%}
+            </span>
+            <span class='bpn-product-grid-item__price--compare'>
+              {%- render 'price-value', price: product.selected_or_first_available_variant.price -%}
+            </span>
+            {% elsif product.selected_or_first_available_variant.compare_at_price != blank %}
+              <span class='bpn-product-grid-item__price--sale'>
+              {%- render 'price-value', price: product.selected_or_first_available_variant.price -%}
+            </span>
+            <span class='bpn-product-grid-item__price--compare'>
+              {%- render 'price-value', price: product.selected_or_first_available_variant.compare_at_price -%}
+            </span>
+          {% else %}
+            <span class='bpn-product-grid-item__price--regular'>
+              {% assign default_selling_plan = product.selected_or_first_available_variant.selling_plan_allocations |  first %}
+              {% assign default_price = product.selected_or_first_available_variant.price %}
+              {% if default_selling_plan != nil %}
+                {% assign default_price = default_selling_plan.price %}
+              {% endif %}
+                {% render 'price-value', price: default_price %}
+            </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class='bpn-product-grid-item__description'>
+        {% if product_serving_text or variant_servings %}
+          <div class='bpn-product-grid-item__serving-text'>
+            {% if product_serving_text %}
+              {{ product_serving_text }}
+              {% elsif variant_servings %}
+                Servings - {{ variant_servings }}
+            {% endif %}
+
+            {% if variants_count > 1 %}
+              <span class='bpn-product-grid-item__variants-count'>
+                • {{ variants_count }} Flavors
+              </span>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+
+  {% if variants_count == 1 %}
+    {% if availability == 'external' %}
+      <a
+        class='bpn-product-grid-item__add-to-cart button-primary button'
+        href='{{ external_link_url }}'
+        target='_blank'
+      >
+        {{ external_link_text }}
+      </a>
+    {% elsif product.available == false or availability == 'oos' %}
+      {% capture variants_json %}[{% for variant in product.variants %}{% if variant.available == false or variant.metafields.custom.availability == 'oos' %}{ id: {{ variant.id | json }}, title: {{ variant.title | json }}, available: false }{%- if forloop.last == false -%},{%- endif -%}{% endif %}{% endfor %}]{% endcapture %}
+
+        {% render 'product-grid-oos-cta' , product:product, variants_json: variants_json, show_bis_cta: show_bis_cta %}
+
+    {% else %}
+      <button
+        type='button'
+        class='bpn-product-grid-item__add-to-cart button button-primary js-add-to-cart{% if availability == 'external' %} hidden{% endif %}'
+        data-product-id='{{ product.selected_or_first_available_variant.id }}'
+        data-product-handle='{{ product.handle }}'
+        {%- if product_cta_click_id -%}
+          data-click-id='{{ product_cta_click_id }}'
+        {%- endif -%}
+      >
+        Add to cart
+      </button>
+    {% endif %}
+  {% else %}
+    {% if all_unavailable %}
+      {% capture variants_json %}[{% for variant in product.variants %}{% if variant.available == false or variant.metafields.custom.availability == 'oos' %}{ id: {{ variant.id | json }}, title: {{ variant.title | json }}, available: false }{%- if forloop.last == false -%},{%- endif -%}{% endif %}{% endfor %}]{% endcapture %}
+
+      {% render 'product-grid-oos-cta' , product:product, variants_json: variants_json, show_bis_cta: show_bis_cta %}
+    {% else %}
+      {% if product.metafields.custom.enable_stack_and_save %}
+        <a
+          href='{{ product.url }}'
+          class='bpn-product-grid-item__add-to-cart button button-primary'
+          data-product-handle='{{ product.handle }}'
+          {%- if product_cta_click_id -%}
+            data-click-id='{{ product_cta_click_id }}'
+          {%- endif -%}
+        >
+          See details
+        </a>
+      {%- else -%}
+        <button
+          type='button'
+          class='bpn-product-grid-item__add-to-cart button button-primary js-product-drawer-trigger'
+          data-product-handle='{{ product.handle }}'
+          {%- if product_cta_click_id -%}
+            data-click-id='{{ product_cta_click_id }}'
+          {%- endif -%}
+        >
+          {% if product.metafields.custom.plp_options_label %}
+            {{ product.metafields.custom.plp_options_label }}
+          {% else %}
+            Select options
+          {% endif %}
+        </button>
+      {%- endif -%}
+    {% endif %}
+  {% endif %}
+</div>

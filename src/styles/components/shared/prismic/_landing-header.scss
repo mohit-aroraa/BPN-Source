@@ -1,0 +1,60 @@
+.landingPageHeader {
+  &__top {
+    text-align: center;
+    background-color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eaeaea;
+    @include above("tablet") {
+      display: none;
+    }
+  }
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background-color: #fff;
+    @include above("desktop-med") {
+      padding: 12px 60px;
+    }
+  }
+  &__logo {
+    display: none;
+    @include above("tablet") {
+      display: block;
+    }
+  }
+  &__text {
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    margin-right: 16px;
+    @include above("tablet") {
+      margin-right: 0;
+    }
+    @include above("desktop-med") {
+      font-size: 20px;
+      letter-spacing: 0.29px;
+      line-height: 0.8;
+    }
+  }
+  &__cta {
+    --btn-gap: 4.5px 17px;
+    font-size: 10px;
+    line-height: 2.3;
+    letter-spacing: 0;
+    width: 106px;
+    flex-shrink: 0;
+    @include above("desktop-med") {
+      --btn-gap: 7.5px 17px 7.5px 17px;
+      font-size: 12px;
+      letter-spacing: 0.13px;
+      line-height: 1.917;
+      width: 132px;
+    }
+  }
+}

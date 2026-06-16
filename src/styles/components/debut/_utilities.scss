@@ -1,0 +1,101 @@
+// allows tables to scroll when needed since we don't know
+// how many columns they will contain. Class added by JS.
+.scrollable-wrapper {
+  // sass-lint:disable no-misspelled-properties
+  max-width: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+hr {
+  margin: $gutter-site 0;
+  border: 0;
+  border-bottom: 1px solid $color-border;
+}
+
+.hr--small {
+  padding: 10px 0;
+  margin: 0;
+}
+
+.hr--invisible {
+  border-bottom: 0;
+}
+
+.border-bottom {
+  border-bottom: 1px solid $color-border;
+}
+
+.border-top {
+  border-top: 1px solid $color-border;
+}
+
+.empty-page-content {
+  padding: 80px $gutter-site;
+
+  @include mq($small) {
+    padding-left: $gutter-site-mobile;
+    padding-right: $gutter-site-mobile;
+  }
+}
+
+/*================ Flex item alignment ================*/
+.align--top-middle {
+  text-align: center;
+}
+
+.align--top-right {
+  text-align: right;
+}
+
+.align--middle-left {
+  @include align-self(center);
+}
+
+.align--center {
+  @include align-self(center);
+  text-align: center;
+}
+
+.align--middle-right {
+  @include align-self(center);
+  text-align: right;
+}
+
+.align--bottom-left {
+  @include align-self(flex-end);
+}
+
+.align--bottom-middle {
+  @include align-self(flex-end);
+  text-align: center;
+}
+
+.align--bottom-right {
+  @include align-self(flex-end);
+  text-align: right;
+}
+
+.newsletter-section {
+  padding-top: $section-spacing;
+}
+
+.index-section--newsletter-background {
+  background-color: $color-bg-alt;
+}
+
+.rich-text__heading--large {
+  font-size: 1.4em; //24px default
+}
+
+.rich-text__heading--small {
+  font-size: 0.88em; //16px default
+}
+
+.rich-text__text--large {
+  font-size: calc(#{$font-size-base} * 1.15);
+}
+
+.rich-text__text--small {
+  font-size: calc(#{$font-size-base} * 0.88);
+}

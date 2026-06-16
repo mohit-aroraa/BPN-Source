@@ -1,0 +1,5 @@
+{% assign _price = price %}
+
+{% assign currency = _price | money | slice: 0 %}
+
+{{ currency }}{{ _price | money_without_currency }}

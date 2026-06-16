@@ -1,0 +1,93 @@
+.youtube-slider {
+  max-width: 1920px;
+  margin: 0 auto;
+  margin-top: 55px;
+  display: flex;
+  flex-direction: column;
+
+  @include above('desktop') {
+    position: relative;
+    overflow: visible;
+  }
+
+  &__navigation {
+    display: none;
+
+    @include above('desktop') {
+      position: absolute;
+      top: -75px;
+      right: 0;
+      width: 200px;
+      display: flex;
+      justify-content: flex-end;
+      margin-left: auto;
+      gap: 16px;
+    }
+
+    .swiper-button {
+      color: white;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      svg {
+        path {
+          stroke: white !important;
+        }
+      }
+
+      &.swiper-button-disabled {
+        color: #ccc;
+
+        svg {
+          path {
+            stroke: #ccc !important;
+          }
+        }
+      }
+    }
+  }
+
+  &__controls {
+    margin: 44px auto 0;
+    display: flex;
+    column-gap: 16px;
+
+    @include above('desktop') {
+      display: none;
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    @include above('desktop') {
+      display: none;
+    }
+
+    .swiper-pagination-bullet {
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      background-color: #E5E5E5;
+
+      &:hover {
+        background: black;
+      }
+
+      &:last-of-type:not(.swiper-pagination-bullet-active) {
+        width: 8px;
+        height: 8px;
+      }
+
+      &.swiper-pagination-bullet-active {
+        width: 48px;
+        border-radius: 18px;
+        background: white;
+      }
+    }
+  }
+}

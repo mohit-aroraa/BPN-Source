@@ -1,0 +1,80 @@
+{%- assign block = section[module] -%}
+{%- assign heading = block.heading -%}
+{%- assign sub_heading = block.sub_heading -%}
+{%- assign image = block.image -%}
+{%- assign review = block.review -%}
+{%- assign reviewer = block.reviewer -%}
+{%- assign length = block.count | minus: 1 -%}
+
+{% include 'five-stars-review' %}
+
+<section class="curatedReviews curatedReviews--{{id}} curatedReviews--{{ template | handle }}">
+  <div class="curatedReviews__header">
+    <h2 class="sectionTitle">{{ heading }}</h2>
+    <p class="curatedReviews__subHeading">{{ sub_heading }}</p>
+  </div>
+  <div class="curatedReviews__wrapper">
+    <div class="curatedReviews__reviewBlock">
+      <div class="swiper" data-review-block>
+        <div class="swiper-wrapper">
+          {%- for index in (0..length) -%}
+            {%- assign review_key = 'review_' | append: index -%}
+            {%- assign reviewer_key = 'reviewer_' | append: index -%}
+            <div class="swiper-slide">
+              <div class="reviewBlock">
+                <div class="reviewStars">
+                  {{ starts }}
+                </div>
+                {%- if block[review_key] != blank -%}
+                  <h2 class="reviewBlock__text">{{ block[review_key] }}</h2>
+                {%- endif -%}
+                {%- if block[reviewer_key] != blank -%}
+                  <p class="reviewBlock__reviewer">{{ block[reviewer_key] }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="curatedReviews__controls">
+        <div class="js-review-prev control">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+            <g fill="none" fill-rule="evenodd"><path stroke="#D8D8D8" d="M55.5.5H.5v55h55z"/><g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M34 28.261H23.043M27.739 34 22 28l5.739-6"/></g></g>
+          </svg>
+        </div>
+        <div class="js-review-next control">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+            <g fill="none" fill-rule="evenodd"><path d="M.5.5h55v55H.5z" stroke="#D8D8D8"/><g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M22 28.261h10.957M28.261 34 34 28l-5.739-6"/></g></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="curatedReviews__reviewerBlock">
+      <div class="swiper" data-reviewer-block>
+        <div class="swiper-wrapper">
+          {%- for index in (0..length) -%}
+            {% assign image_key = 'image_' | append: index %}
+            {% assign review_key = 'review_' | append: index %}
+            {% assign reviewer_key = 'reviewer_' | append: index %}
+            <div class="swiper-slide">
+              <div class="reviewerCard">
+                <div class="reviewerCard__media">
+                  {%- assign foorloop_index = id | plus: forloop.index -%}
+                  {% render 'prismic-responsive-image' with image: block[image_key], aspect_ratio: 1, image_class: "reviewerCard__image", max_width: 500, max_height: 500, image_attributes: 'width="500" height="500"', random_id: foorloop_index, alternate_text: block[reviewer_key] %}
+                </div>
+                <div class="reviewerCard__content">
+                  <div class="reviewStars">
+                    {{ starts }}
+                  </div>
+                  <p class="reviewerCard__review">{{ block[review_key] }}</p>
+                  <p class="reviewerCard__reviewer">{{ block[reviewer_key] }}</p>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="swiper-scrollbar swiper-scrollbar--common"></div>
+      </div>
+    </div>
+  </div>
+</section>

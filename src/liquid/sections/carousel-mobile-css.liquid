@@ -1,0 +1,320 @@
+    <div class="carousel-mobile" data-section-id="{{ section.id }}" data-section-type="carousel-mobile">
+        <div class="carousel-mobile__container">
+
+        {%- if section.settings.show_title and section.settings.title != blank -%}
+            <h2 class="carousel-mobile__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        <div class="carousel-mobile__track" data-carousel-track>
+            {%- for block in section.blocks -%}
+            <div class="carousel-mobile__slide{% if forloop.first %} carousel-mobile__slide--first{% endif %}{% if forloop.last %} carousel-mobile__slide--last{% endif %}" 
+                {{ block.shopify_attributes }} 
+                data-block-id="{{ block.id }}">
+
+                <div class="carousel-mobile__item">
+                {%- case block.type -%}
+                    {%- when 'collection' -%}
+                    {%- assign collection = collections[block.settings.collection] -%}
+                    {%- if collection != empty -%}
+                        <a href="{{ collection.url }}" class="carousel-mobile__link" aria-label="View {{ collection.title }} collection">
+                        <div class="carousel-mobile__image-wrapper {% if section.settings.hidden_img %}hidden{% endif %}">
+                            {%- if block.settings.image != blank -%}
+                            <img
+                                src="{{ block.settings.image | image_url: width: 150 }}"
+                                alt="{{ block.settings.image.alt | default: collection.title }}"
+                                width="84"
+                                height="84"
+                                loading="lazy"
+                                class="carousel-image"
+                            >
+                            {%- elsif collection.image -%}
+                            <img
+                                src="{{ collection.image | image_url: width: 150 }}"
+                                alt="{{ collection.image.alt | default: collection.title }}"
+                                width="75"
+                                height="75"
+                                loading="lazy"
+                                class="carousel-image"
+                            >
+                            {%- else -%}
+                            <div class="carousel-mobile__placeholder" role="img" aria-label="Collection placeholder">
+                                {% include 'icon-image-empty' %}
+                            </div>
+                            {%- endif -%}
+
+                        </div>
+                        <p class="carousel-mobile__caption"
+                            {%- if block.settings.custom_text_color != blank and block.settings.custom_text_color != 'rgba(0,0,0,0)' -%}
+                                style="color: {{ block.settings.custom_text_color }};"
+                            {%- endif -%}
+                        >
+                            {%- if block.settings.title != blank -%}
+                            {{ block.settings.title }}
+                            {%- else -%}
+                            {{ collection.title }}
+                            {%- endif -%}
+                        </p>
+                        </a>
+                    {%- endif -%}
+
+                    {%- when 'custom_item' -%}
+                    <a href="{{ block.settings.link | default: '#' }}" class="carousel-mobile__link" aria-label="View {{ block.settings.title }}">
+                        <div class="carousel-mobile__image-wrapper">
+                        {%- if block.settings.image != blank -%}
+                                <img
+                                src="{{ block.settings.image | image_url: width: 150 }}"
+                                alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                                width="84"
+                                height="84"
+                                loading="lazy"
+                                class="carousel-image"
+                                >
+                        {%- else -%}
+                            <div class="carousel-placeholder">
+                                {% include 'icon-image-empty' %}
+                            </div>
+                        {%- endif -%}
+                        </div>
+                        <p class="carousel-mobile__caption"
+                            {%- if block.settings.custom_text_color != blank and block.settings.custom_text_color != 'rgba(0,0,0,0)' -%}
+                                style="color: {{ block.settings.custom_text_color }};"
+                            {%- endif -%}
+                        >
+                            {{ block.settings.title }}
+                        </p>
+                    </a>
+                {%- endcase -%}
+                </div>
+            </div>
+            {%- endfor -%}
+        </div>
+        </div>
+    </div>
+
+{%- style -%}
+    .carousel-mobile {
+        background-color: {{ section.settings.background_color }};
+    }
+
+    .carousel-mobile__track {
+        gap: {{ section.settings.slide_spacing }}px;
+    }
+
+    .carousel-mobile__slide {
+        max-width: {{ section.settings.slide_width }}px;
+    }
+
+    .carousel-mobile__image-wrapper {
+        width: {{ section.settings.image_size }}px;
+        height: {{ section.settings.image_size }}px;
+        border-radius: {{ section.settings.image_border_radius }}px;
+        background-color: {{ section.settings.placeholder_bg_color }};
+        border: {{ section.settings.image_border_width }}px solid {{ section.settings.image_border_color }};
+    }
+
+    .carousel-mobile__image-wrapper img {
+        border-radius: {{ section.settings.image_border_radius }}px;
+    }
+
+    .carousel-mobile__placeholder {
+        color: {{ section.settings.placeholder_color }};
+    }
+
+    .carousel-mobile__caption {
+        font-size: {{ section.settings.item_font_size }}px;
+        color: {{ section.settings.item_text_color }};
+        font-weight: {{ section.settings.item_font_weight }};
+    }
+{%- endstyle -%}
+
+{% schema %}
+    {
+        "name": "Carousel Mobile",
+        "tag": "section",
+        "class": "section-carousel-mobile",
+        "settings": [
+            {
+                "type": "header",
+                "content": "General Settings"
+            },
+            {
+                "type": "checkbox",
+                "id": "hidden_img",
+                "label": "Hidden Image",
+                "default": true
+            },
+            {
+                "type": "color",
+                "id": "background_color",
+                "label": "Background Color",
+                "default": "#ffffff"
+            },
+            {
+                "type": "header",
+                "content": "Carousel Settings"
+            },
+            {
+                "type": "range",
+                "id": "slide_width",
+                "label": "Slide Width (px)",
+                "min": 60,
+                "max": 120,
+                "step": 1,
+                "default": 80
+            },
+            {
+                "type": "range",
+                "id": "slide_spacing",
+                "label": "Slide Spacing (px)",
+                "min": 0,
+                "max": 30,
+                "step": 1,
+                "default": 12
+            },
+            {
+                "type": "header",
+                "content": "Image Style"
+            },
+            {
+                "type": "range",
+                "id": "image_size",
+                "label": "Image Size (px)",
+                "min": 50,
+                "max": 100,
+                "step": 1,
+                "default": 72
+            },
+            {
+                "type": "range",
+                "id": "image_border_radius",
+                "label": "Image Border Radius (px)",
+                "min": 0,
+                "max": 50,
+                "step": 1,
+                "default": 4
+            },
+            {
+                "type": "range",
+                "id": "image_border_width",
+                "label": "Image Border Width (px)",
+                "min": 0,
+                "max": 5,
+                "step": 1,
+                "default": 0
+            },
+            {
+                "type": "color",
+                "id": "image_border_color",
+                "label": "Image Border Color",
+                "default": "#e5e5e5"
+            },
+            {
+                "type": "color",
+                "id": "placeholder_bg_color",
+                "label": "Placeholder Background Color",
+                "default": "#f8f8f8"
+            },
+            {
+                "type": "color",
+                "id": "placeholder_color",
+                "label": "Placeholder Icon Color",
+                "default": "#cccccc"
+            },
+            {
+                "type": "header",
+                "content": "Text Style"
+            },
+            {
+                "type": "range",
+                "id": "item_font_size",
+                "label": "Text Font Size",
+                "min": 10,
+                "max": 18,
+                "step": 1,
+                "default": 12
+            },
+            {
+                "type": "color",
+                "id": "item_text_color",
+                "label": "Text Color",
+                "default": "#1F2B73"
+            },
+            {
+                "type": "select",
+                "id": "item_font_weight",
+                "label": "Text Font Weight",
+                "options": [
+                    { "value": "300", "label": "Light" },
+                    { "value": "400", "label": "Normal" },
+                    { "value": "500", "label": "Medium" },
+                    { "value": "600", "label": "Semi Bold" },
+                    { "value": "700", "label": "Bold" }
+                ],
+                "default": "700"
+            }
+        ],
+        "blocks": [
+            {
+                "type": "collection",
+                "name": "Collection",
+                "settings": [
+                    {
+                        "type": "collection",
+                        "id": "collection",
+                        "label": "Select Collection"
+                    },
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Custom Image (Optional)"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Custom Title (Optional)"
+                    },
+                    {
+                        "type": "color",
+                        "id": "custom_text_color",
+                        "label": "Custom Text Color (Optional)",
+                        "info": "Leave empty to use default text color"
+                    }
+                ]
+            },
+            {
+                "type": "custom_item",
+                "name": "Custom Item",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Image"
+                    },
+                    {
+                        "type": "text",
+                        "id": "title",
+                        "label": "Title",
+                        "default": "Element"
+                    },
+                    {
+                        "type": "color",
+                        "id": "custom_text_color",
+                        "label": "Custom Text Color (Optional)",
+                        "info": "Leave empty to use default text color"
+                    },
+                    {
+                        "type": "url",
+                        "id": "link",
+                        "label": "Link"
+                    }
+                ]
+            }
+        ],
+        "presets": [
+            {
+                "name": "Carousel Mobile",
+                "blocks": []
+            }
+        ]
+    }
+{% endschema %}

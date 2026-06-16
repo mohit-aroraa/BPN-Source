@@ -1,0 +1,723 @@
+{% layout 'anatta_theme' %}
+{%- comment -%}
+  Storing the current product's data on window
+{%- endcomment -%}
+<script>
+  window.BPN = window.BPN || {};
+  window.BPN.currentProductData = {% render 'product-json' %};
+</script>
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+{%- comment -%}
+  Get the free shipping text from product global document
+  Need to show at bottom of CTA
+{%- endcomment -%}
+{%- assign page_metafields = pages['product-global'].metafields -%}
+{%- assign free_shipping_text_section = page_metafields.free_shipping_text -%}
+{%- assign free_shipping_text = free_shipping_text_section.text -%}
+
+{%- comment -%}
+  Fetch data which is in Prismic
+{%- endcomment -%}
+{%- assign PID = '' | append: product.id -%}
+{%- assign metafields = pages[PID].metafields -%}
+
+{%- comment -%}
+  Global fields data
+{%- endcomment -%}
+{%- assign global_fields_section = metafields.global_fileds -%}
+{%- assign serving_text = global_fields_section.servings -%}
+{%- assign excerpt = global_fields_section.excerpt -%}
+{%- assign product_description = global_fields_section.product_description -%}
+{%- assign show_nutrition_tab = global_fields_section.show_nutrition_tab -%}
+{%- assign show_ingredients_tab = global_fields_section.show_ingredients_tab -%}
+{%- assign show_how_to_use_tab = global_fields_section.show_how_to_use_tab -%}
+{%- assign product_video = global_fields_section.product_video -%}
+{%- assign subscription_product_id = global_fields_section.subscription_product_id -%}
+{%- assign product_title = global_fields_section.product_title -%}
+{%- assign product_subtitle = global_fields_section.product_subtitle -%}
+{%- assign serving_count = global_fields_section.serving_count -%}
+{%- assign ingredients_short_text = global_fields_section.ingredients_short_text -%}
+{%- assign ingredients_modal_text = global_fields_section.ingredients_modal_text -%}
+{%- assign how_to_use_title = global_fields_section.how_to_use_title -%}
+{%- assign how_to_use = global_fields_section.how_to_use -%}
+{%- assign show_size_guide_tab = global_fields_section.show_size_guide_tab -%}
+{%- assign global_fields_section_length = global_fields_section.count | minus: 1 -%}
+
+{%- comment -%}
+  Sale variables
+{%- endcomment -%}
+{%- assign site_global_data_section = pages['site-global-data'].metafields -%}
+{%- assign site_global_data_block = site_global_data_section.sale_information -%}
+{%- assign enable = site_global_data_block.enable -%}
+{%- assign main_sale_start_date = site_global_data_block.main_sale_start_date | date: '%s' | times: 1 -%}
+{%- assign main_sale_end_date = site_global_data_block.main_sale_end_date | date: '%s' | times: 1 -%}
+{%- assign flash_sale_start_date = site_global_data_block.flash_sale_start_date | date: '%s' | times: 1 -%}
+{%- assign flash_sale_end_date = site_global_data_block.flash_sale_end_date | date: '%s' | times: 1 -%}
+{%- assign flash_sale_products = site_global_data_block.flash_sale_products -%}
+{%- assign main_sale_discount = site_global_data_block.main_sale_discount -%}
+{%- assign flash_sale_discount = site_global_data_block.flash_sale_discount -%}
+{%- assign now_date = 'now' | date: '%s' | times: 1 -%}
+{%- assign main_sale_running = false -%}
+{%- assign flash_sale_running = false -%}
+
+{%- if enable and now_date > main_sale_start_date and now_date <= main_sale_end_date -%}
+  {%- unless product.tags contains 'no-sale' -%}
+    {%- assign main_sale_running = true -%}
+  {%- endunless -%}
+{%- endif -%}
+
+{%- if enable
+  and now_date > flash_sale_start_date
+  and now_date <= flash_sale_end_date
+  and flash_sale_products contains product.id
+-%}
+  {%- unless product.tags contains 'no-sale' -%}
+    {%- assign flash_sale_running = true -%}
+    {%- assign main_sale_discount = flash_sale_discount -%}
+  {%- endunless -%}
+{%- endif -%}
+{%- assign original_price = current_variant.price | money_without_currency -%}
+{%- assign main_discounted_price_multiply = original_price | times: main_sale_discount -%}
+{%- assign main_discounted_price_division = main_discounted_price_multiply | divided_by: 100 -%}
+{%- assign main_discount_price = original_price | minus: main_discounted_price_division -%}
+
+{%- comment -%}
+  Nutrition data fetch
+  Get total count of variant slices
+{%- endcomment -%}
+{%- assign variant_slice_count = 0 -%}
+
+{%- for slice in metafields.meta_field_priority.priority -%}
+  {% assign slice_name_downcase = slice | downcase %}
+  {% if slice_name_downcase contains 'variant' %}
+    {% assign variant_slice_count = variant_slice_count | plus: 1 %}
+  {% endif %}
+{%- endfor -%}
+
+{% comment %}
+  This block of logic loops through all product images and checks if we have at least 1 with valid alt text for *each* color option.
+{% endcomment %}
+{%- assign variant_gallery_possible = false -%}
+
+{%- for option in product.options_with_values -%}
+  {% assign option_name_downcase = option.name | downcase %}
+  {% if option_name_downcase == 'flavor' %}
+    {% assign variant_with_images = 0 %}
+    {% for value in option.values %}
+      {% assign value_downcase = value | downcase %}
+      {% for image in product.images %}
+        {% assign image_alt_downcase = image.alt | downcase %}
+        {% if image_alt_downcase contains '@exclude' %}
+          {% continue %}
+        {% endif %}
+        {% if image_alt_downcase contains value_downcase %}
+          {% assign variant_with_images = variant_with_images | plus: 1 %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    {% if variant_with_images == option.values.size %}
+      {% assign variant_gallery_possible = true %}
+    {% endif %}
+  {% endif %}
+{%- endfor -%}
+<main class="PDP">
+  <div class="productSection">
+    <div class="productSectionTopMobile">
+      {% render 'breadcrumb-slice', metafields: metafields, class: 'PDP__breadcrumb PDP__breadcrumb--mobile' %}
+      <div class="PDP__reviews PDP__reviews--mobile">
+        {% render 'pdp-yopto-reviews-summary' %}
+      </div>
+      <h1 class="productTitle">
+        {% if product_title %}
+          {{ product_title }}
+        {% else %}
+          {% render 'product-title', product: product %}
+        {% endif %}
+      </h1>
+      {% render 'product-price',
+        variant: current_variant,
+        main_sale_running: main_sale_running,
+        flash_sale_running: flash_sale_running,
+        main_discount_price: main_discount_price,
+        original_price: original_price,
+        main_sale_discount: main_sale_discount
+      %}
+      <afterpay-placement
+        data-mobile
+        data-locale="en_US"
+        data-currency="USD"
+        data-amount-selector=".js-product-price"
+        data-show-upper-limit="false"
+        data-size="xs"
+        tabindex="-1"
+      ></afterpay-placement>
+    </div>
+    <div class="PDP__container">
+      <div class="productSection__wrapper">
+        <div class="productSection__left js-pdp-buy-box-left">
+          {% render 'breadcrumb-slice', metafields: metafields, class: 'PDP__breadcrumb PDP__breadcrumb--desktop' %}
+          <div class="productGallery">
+            {%- if variant_gallery_possible -%}
+              {% comment %} Make a gallery for each variant {% endcomment %}
+              {% for option in product.options_with_values %}
+                {% assign option_name_downcase = option.name | downcase %}
+                {% if option_name_downcase == 'flavor' %}
+                  {% for value in option.values %}
+                    {% assign value_downcase = value | downcase %}
+                    <div
+                      class="productGallery__thumbnailWrapper js-product-gallery-thumb-{{forloop.index}} swiper {% if option.selected_value != value %} hide{% endif %}"
+                      data-product-gallery-thumbnail
+                      data-variant-gallery="{{ value }}"
+                    >
+                      <div class="productGallery__thumbnailList swiper-wrapper">
+                        {% for image in product.images %}
+                          {% assign image_alt_downcase = image.alt | downcase %}
+                          {% assign product_title_downcase = product.title | downcase %}
+                          {% if image_alt_downcase contains '@exclude' %}
+                            {% continue %}
+                          {% endif %}
+                          {% if image_alt_downcase contains value_downcase %}
+                            {% render 'pdp-swiper-slide', pdp_image: image, type: 'thumb' %}
+                          {% elsif image_alt_downcase == product_title_downcase
+                            or image_alt_downcase contains '@common'
+                          %}
+                            {% render 'pdp-swiper-slide', pdp_image: image, type: 'thumb' %}
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div
+                      class="productGallery__swiper js-product-gallery-{{forloop.index}} swiper{% if option.selected_value != value %} hide{% endif %}"
+                      data-product-gallery
+                      data-variant-gallery="{{ value }}"
+                    >
+                      {% comment %} CONTROL {% endcomment %}
+                      <div
+                        class="swiper-wrapper productGallery__swiperWrapper"
+                        id="slideshow-{{ product.id }}-{{ forloop.index }}"
+                      >
+                        {% for image in product.images %}
+                          {% assign image_alt_downcase = image.alt | downcase %}
+                          {% assign product_title_downcase = product.title | downcase %}
+                          {% if image_alt_downcase contains '@exclude' %}
+                            {% continue %}
+                          {% endif %}
+                          {% if image_alt_downcase contains value_downcase %}
+                            {% render 'pdp-swiper-slide', pdp_image: image %}
+                          {% elsif image_alt_downcase == product_title_downcase
+                            or image_alt_downcase contains '@common'
+                          %}
+                            {% render 'pdp-swiper-slide', pdp_image: image %}
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                      {% render 'pdp-swiper-arrow' %}
+                      {% render 'sale-badge', product_id: product.id, product_slider: true %}
+                    </div>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            {%- else -%}
+              <div
+                class="productGallery__thumbnailWrapper js-product-gallery-thumb-1 swiper"
+                data-product-gallery-thumbnail
+                data-variant-gallery="{{ current_variant.name }}"
+              >
+                <div class="productGallery__thumbnailList swiper-wrapper">
+                  {% for media in product.media %}
+                    {% assign image_alt_downcase = media.image.alt | downcase %}
+                    {% if image_alt_downcase contains '@exclude' %}
+                      {% continue %}
+                    {% endif %}
+                    {% render 'pdp-swiper-slide', pdp_image: media.image, type: 'thumb' %}
+                  {% endfor %}
+                </div>
+              </div>
+              <div
+                class="productGallery__swiper swiper js-product-gallery-1"
+                data-product-gallery
+                data-variant-gallery="{{ current_variant.name }}"
+              >
+                <div class="swiper-wrapper productGallery__swiperWrapper">
+                  {% for media in product.media %}
+                    {% assign image_alt_downcase = media.image.alt | downcase %}
+                    {% if image_alt_downcase contains '@exclude' %}
+                      {% continue %}
+                    {% endif %}
+                    <div class="swiper-slide productGallery__slide">
+                      {% render 'pdp-swiper-slide', pdp_image: media.image %}
+                    </div>
+                  {% endfor %}
+                </div>
+                {% render 'pdp-swiper-arrow' %}
+                {% render 'sale-badge', product_id: product.id, product_slider: true %}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="productSection__right js-pdp-buy-box-right">
+          <div class="productSection__data">
+            <div class="productSectionTopDesktop">
+              <div class="PDP__reviews PDP__reviews--desktop">
+                {% render 'pdp-yopto-reviews-summary' %}
+              </div>
+              <h1 class="productTitle">
+                {% if product_title %}
+                  {{ product_title }}
+                {% else %}
+                  {% render 'product-title', product: product %}
+                {% endif %}
+              </h1>
+              {% render 'product-price',
+                variant: current_variant,
+                main_sale_running: main_sale_running,
+                flash_sale_running: flash_sale_running,
+                main_discount_price: main_discount_price,
+                original_price: original_price,
+                main_sale_discount: main_sale_discount
+              %}
+              <afterpay-placement
+                data-desktop
+                data-locale="en_US"
+                data-currency="USD"
+                data-amount-selector=".js-product-price"
+                data-show-upper-limit="false"
+                data-size="sm"
+                tabindex="-1"
+              ></afterpay-placement>
+            </div>
+            {% if serving_text %}
+              <p class="productServingText">
+                {% render 'product-title', product: product %}
+                ({{ serving_text }})
+              </p>
+            {% endif %}
+            {% if excerpt %}
+              <p class="productShortDescription">{{ excerpt }}</p>
+            {% endif %}
+            {% render 'pdp-form',
+              current_variant: current_variant,
+              main_sale_running: main_sale_running,
+              flash_sale_discount: flash_sale_discount,
+              flash_sale_running: flash_sale_running,
+              main_discount_price: main_discount_price,
+              original_price: original_price,
+              main_sale_discount: main_sale_discount
+            %}
+
+            {% if free_shipping_text != blank %}
+              <p class="productFreeShippingText">{{ free_shipping_text | strip }}</p>
+            {% endif %}
+          </div>
+
+          {%- comment -%}Primary Benefits section{%- endcomment -%}
+          {%- if global_fields_section_length >= 0 -%}
+            <div class="productPrimaryBenefits">
+              {% for index in (0..global_fields_section_length) %}
+                {% assign primary_benefits_icon_key = 'primary_benefits_icon_' | append: index %}
+                {% assign heading_key = 'heading_' | append: index %}
+                {% assign primary_title_key = 'primary_title_' | append: index %}
+                <div class="productPrimaryBenefits__card">
+                  <div class="productPrimaryBenefits__iconWrapper">
+                    {% if global_fields_section[primary_benefits_icon_key].size != 0 %}
+                      <img
+                        class="productPrimaryBenefits__icon productPrimaryBenefits__icon--fixed lazyload"
+                        src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        data-src="{{global_fields_section[primary_benefits_icon_key].url}}"
+                        alt="{{global_fields_section[primary_benefits_icon_key].alt}}"
+                        width="50"
+                        height="50"
+                      >
+                    {% endif %}
+                  </div>
+                  <div class="productPrimaryBenefits__copy">
+                    {% if global_fields_section[heading_key] != blank %}
+                      <p class="lead-4 text-uppercase productPrimaryBenefits__heading">
+                        {{ global_fields_section[heading_key] }}
+                      </p>
+                    {% endif %}
+                    {% if global_fields_section[primary_title_key] != blank %}
+                      <p class="productPrimaryBenefits__text">
+                        {{ global_fields_section[primary_title_key] }}
+                      </p>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {%- endif -%}
+
+          <div class="PDP__details {% if show_size_guide_tab %}PDP__details--sizeGuide{% endif %}">
+            <div class="siteAccordion js-site-accordion-parent">
+              {%- if show_size_guide_tab -%}
+                <div class="siteAccordion__wrapper siteAccordion__wrapper--sizingChart">
+                  <a
+                    class="siteAccordion__header"
+                    role="button"
+                    data-accordion-trigger
+                    href="javascript:void(0);"
+                    aria-expanded="false"
+                    aria-controls="sizing-guide"
+                  >
+                    <span class="siteAccordion__headerText">Size Guide</span>
+                    <span class="siteAccordion__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7">
+                        <path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                  <div class="siteAccordion__content" id="sizing-guide">
+                    <div class="siteAccordion__contentPaddingBottom">
+                      {%- comment -%}Fetch the measurement data{%- endcomment -%}
+                      {%- assign measurements = metafields.measurements -%}
+                      {%- assign measurements_enable = measurements.enable -%}
+                      {%- assign measurements_title = measurements.title -%}
+                      {%- assign measurements_count = measurements.count | minus: 1 -%}
+                      {%- if measurements and measurements_enable -%}
+                        <div class="sizingChartSection">
+                          {%- if measurements_title != blank -%}
+                            <p class="sizingChartSection__text">{{ measurements_title }}</p>
+                          {%- endif -%}
+                          {%- if measurements_count >= 0 -%}
+                            <div class="responsiveTable">
+                              <table class="tableFirstColumnBg">
+                                <thead>
+                                  <tr>
+                                    <th>Size</th>
+                                    <th>Body Length</th>
+                                    <th>Chest Width</th>
+                                    <th>Neck Width</th>
+                                    <th>Sleeve Length</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {%- for index in (0..measurements_count) -%}
+                                    {%- assign measurements_size_key = 'size_' | append: index -%}
+                                    {%- assign measurements_body_length_key = 'body_length_' | append: index -%}
+                                    {%- assign measurements_chest_width_key = 'chest_width_' | append: index -%}
+                                    {%- assign measurements_neck_width_key = 'neck_width_' | append: index -%}
+                                    {%- assign measurements_sleeve_length_key = 'sleeve_length_' | append: index -%}
+                                    <tr>
+                                      <td>{{ measurements[measurements_size_key] }}</td>
+                                      <td>{{ measurements[measurements_body_length_key] }}</td>
+                                      <td>{{ measurements[measurements_chest_width_key] }}</td>
+                                      <td>{{ measurements[measurements_neck_width_key] }}</td>
+                                      <td>{{ measurements[measurements_sleeve_length_key] }}</td>
+                                    </tr>
+                                  {%- endfor -%}
+                                </tbody>
+                              </table>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+
+                      {%- comment -%}Fetch the measurement data{%- endcomment -%}
+                      {%- assign unisex_sizing_conversion_chart = metafields.unisex_sizing_conversion_chart -%}
+                      {%- assign unisex_sizing_conversion_chart_enable = unisex_sizing_conversion_chart.enable -%}
+                      {%- assign unisex_sizing_conversion_chart_title = unisex_sizing_conversion_chart.title -%}
+                      {%- assign unisex_sizing_conversion_chart_count = unisex_sizing_conversion_chart.count
+                        | minus: 1
+                      -%}
+                      {%- if unisex_sizing_conversion_chart and unisex_sizing_conversion_chart_enable -%}
+                        <div class="sizingChartSection">
+                          {%- if unisex_sizing_conversion_chart_title != blank -%}
+                            <p class="sizingChartSection__text">{{ unisex_sizing_conversion_chart_title }}</p>
+                          {%- endif -%}
+                          {%- if unisex_sizing_conversion_chart_count >= 0 -%}
+                            {%- for index in (0..unisex_sizing_conversion_chart_count) -%}
+                              {%- assign unisex_sizing_conversion_chart_men_size_key = 'men_size_' | append: index -%}
+                              {%- assign unisex_sizing_conversion_chart_women_body_length_key = 'women_size_'
+                                | append: index
+                              -%}
+                              {%- capture unisex_men_size -%}
+                                {{ unisex_men_size }}
+                                <td> {{ unisex_sizing_conversion_chart[unisex_sizing_conversion_chart_men_size_key] }} </td>
+                              {%- endcapture -%}
+                              {%- capture unisex_women_size -%}
+                                {{ unisex_women_size }}
+                                <td> {{ unisex_sizing_conversion_chart[unisex_sizing_conversion_chart_women_body_length_key] }} </td>
+                              {%- endcapture -%}
+                            {%- endfor -%}
+                            <div class="responsiveTable">
+                              <table class="tableFirstColumnBg">
+                                <tbody>
+                                  <tr>
+                                    <td>Womens</td>
+                                    {{ unisex_women_size }}
+                                  </tr>
+                                  <tr>
+                                    <td>Mens</td>
+                                    {{ unisex_men_size }}
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+              {% if show_nutrition_tab %}
+                <div class="siteAccordion__wrapper siteAccordion__wrapper--nutrition">
+                  <a
+                    class="siteAccordion__header"
+                    role="button"
+                    data-accordion-trigger
+                    href="javascript:void(0);"
+                    aria-expanded="false"
+                    aria-controls="nutrition"
+                  >
+                    <span class="siteAccordion__headerText">Nutrition</span>
+                    <span class="siteAccordion__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7">
+                        <path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                  <div class="siteAccordion__content" id="nutrition">
+                    <div class="siteAccordion__contentPaddingBottom productNutritionContent">
+                      {% if variant_slice_count >= 1 %}
+                        {% assign variant_slice_loop_count = variant_slice_count | minus: 1 %}
+                        {% for index in (0..variant_slice_loop_count) %}
+                          {% if index == 0 %}
+                            {% assign variant_slice_namespace = 'variant' %}
+                          {% else %}
+                            {% assign variant_slice_namespace = 'variant_' | append: index %}
+                          {% endif %}
+                          {% assign variant_section = metafields[variant_slice_namespace] %}
+                          {% assign variant_name = variant_section.variant_name %}
+                          {% assign variant_id = variant_section.variant_id %}
+                          {% assign short_content = variant_section.short_content %}
+                          {% assign current_variant_id_string = '' | append: current_variant.id %}
+                          {% assign nutrition_above_text = variant_section.nutrition_above_text %}
+                          {% assign nutrition_below_text = variant_section.nutrition_below_text %}
+
+                          {% assign variant_section_count = variant_section.count | minus: 1 %}
+                          <div
+                            class="productNutritionContent__shortText {% unless current_variant_id_string == variant_id %}hide{% endunless %}"
+                            data-nutrition-short-text="{%- if variant_slice_count != product.variants.size -%}common{%- else -%}{{variant_id}}{%-endif-%}"
+                          >
+                            {% render 'prismic-rich-text', rich_text: short_content %}
+                          </div>
+
+                          <div
+                            class="micromodal micromodal-slide"
+                            id="{% if variant_slice_count != product.variants.size %}nutrition-modal{% else %}nutrition-modal-{{variant_id}}{% endif %}"
+                            aria-hidden="true"
+                          >
+                            <div class="micromodal__overlay" tabindex="-1">
+                              <div
+                                class="micromodal__container"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="{{'supplements-title-' | append: index }}"
+                              >
+                                <header class="micromodal__header">
+                                  <h2 class="micromodal__title" id="{{'supplements-title-' | append: index }}">
+                                    SUPPLEMENT FACTS
+                                  </h2>
+                                  <button
+                                    class="micromodal__close"
+                                    aria-label="Close modal"
+                                    data-micromodal-close
+                                  ></button>
+                                </header>
+                                <div class="micromodal__content productNutritionContent__modalContent">
+                                  <div class="productNutritionContent__modalAboveText">
+                                    {% render 'prismic-rich-text', rich_text: nutrition_above_text %}
+                                  </div>
+                                  <div class="productNutritionContent__modalTable">
+                                    <table>
+                                      <thead>
+                                        <tr>
+                                          <th width="60%">&nbsp;</th>
+                                          <th>Amount Per Serving</th>
+                                          <th>% Daily Value</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for index in (0..variant_section_count) %}
+                                          {% assign nutrition_title_key = 'nutrition_title_' | append: index %}
+                                          {% assign amount_per_serving_key = 'amount_per_serving_' | append: index %}
+                                          {% assign percentage_daily_value = 'percentage_daily_value_'
+                                            | append: index
+                                          %}
+                                          <tr>
+                                            <td>{{ variant_section[nutrition_title_key] }}</td>
+                                            <td>{{ variant_section[amount_per_serving_key] }}</td>
+                                            <td>{{ variant_section[percentage_daily_value] }}</td>
+                                          </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  <div class="productNutritionContent__modalBelowText">
+                                    {% render 'prismic-rich-text', rich_text: nutrition_below_text %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% if variant_slice_count != product.variants.size %}{% break %}{% endif %}
+                        {% endfor %}
+
+                        <a
+                          href="javascript:void(0);"
+                          class="button-link"
+                          {% if variant_slice_count != product.variants.size %}
+                            data-micromodal-trigger="nutrition-modal"
+                          {% else %}
+                            data-nutrition-modal-trigger
+                          {% endif %}
+                          >View Supplement Facts</a
+                        >
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              {% if show_ingredients_tab %}
+                <div class="siteAccordion__wrapper siteAccordion__wrapper--ingredients">
+                  <a
+                    class="siteAccordion__header"
+                    role="button"
+                    data-accordion-trigger
+                    href="javascript:void(0);"
+                    aria-expanded="false"
+                    aria-controls="ingredients"
+                  >
+                    <span class="siteAccordion__headerText">Ingredients</span>
+                    <span class="siteAccordion__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7">
+                        <path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                  <div class="siteAccordion__content" id="ingredients">
+                    <div class="siteAccordion__contentPaddingBottom">
+                      {% if ingredients_short_text != blank %}
+                        <p class="productIngredientsShortContent">
+                          {{ ingredients_short_text }}
+                        </p>
+                      {% endif %}
+                      {% if ingredients_modal_text.size > 0 %}
+                        <div
+                          class="micromodal micromodal-slide productIngredients__modal"
+                          id="ingredients-extra-content"
+                          aria-hidden="true"
+                        >
+                          <div class="micromodal__overlay" tabindex="-1">
+                            <div
+                              class="micromodal__container"
+                              role="dialog"
+                              aria-modal="true"
+                              aria-labelledby="Ingredients-title"
+                            >
+                              <header class="micromodal__header">
+                                <h2 class="micromodal__title" id="Ingredients-title">Ingredients</h2>
+                                <button
+                                  class="micromodal__close"
+                                  aria-label="Close modal"
+                                  data-micromodal-close
+                                ></button>
+                              </header>
+                              <div class="micromodal__content productIngredientContent__modalContent">
+                                {% render 'prismic-rich-text', rich_text: ingredients_modal_text %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <a
+                          href="javascript:void(0);"
+                          class="button-link"
+                          data-micromodal-trigger="ingredients-extra-content"
+                          >View More</a
+                        >
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+              {% if show_how_to_use_tab %}
+                <div class="siteAccordion__wrapper siteAccordion__wrapper--howToUse">
+                  <a
+                    class="siteAccordion__header"
+                    role="button"
+                    data-accordion-trigger
+                    href="javascript:void(0);"
+                    aria-expanded="false"
+                    aria-controls="how_to_use"
+                  >
+                    <span class="siteAccordion__headerText">
+                      {% if how_to_use_title != blank %}
+                        {{ how_to_use_title }}
+                      {% else %}
+                        How to use
+                      {% endif %}
+                    </span>
+                    <span class="siteAccordion__icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 7">
+                        <path d="m10.847 1.153-4.73 4.73a.37.37 0 0 1-.539 0l-4.73-4.73" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </a>
+                  <div class="siteAccordion__content siteAccordion__content--howToUse" id="how_to_use">
+                    <div class="siteAccordion__contentPaddingBottom">
+                      {% render 'prismic-rich-text', rich_text: how_to_use %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include 'prismic-dynamic-slices', section: metafields %}
+  {% include 'pdp-reviews' %}
+</main>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {%- if product.featured_media -%}
+      {%- assign media_size = product.featured_media.preview_image.width | append: 'x' -%}
+      "image": [
+        {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+      ],
+    {%- endif -%}
+    "description": {{ product.description | strip_html | json }},
+    {%- if current_variant.sku != blank -%}
+      "sku": {{ current_variant.sku | json }},
+    {%- endif -%}
+    "brand": {
+      "@type": "Thing",
+      "name": {{ product.vendor | json }}
+    },
+    "offers": [
+      {%- for variant in product.variants -%}
+        {
+          "@type" : "Offer",
+          {%- if variant.sku != blank -%}
+            "sku": {{ variant.sku | json }},
+          {%- endif -%}
+          "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price" : {{ variant.price | divided_by: 100.00 | json }},
+          "priceCurrency" : {{ cart.currency.iso_code | json }},
+          "url" : {{ shop.url | append: variant.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  }
+</script>

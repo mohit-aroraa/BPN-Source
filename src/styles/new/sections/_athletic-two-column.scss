@@ -1,0 +1,173 @@
+@import "../utilities/alignment-helpers";
+
+.#{$athleticPrefix}two-column {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  flex-direction: column;
+  letter-spacing: initial;
+
+  @include above('tablet-large') {
+    flex-direction: row;
+    margin-bottom: 80px;
+  }
+}
+
+.#{$athleticPrefix}two-column__description {
+  display: block;
+  margin-bottom: 12px;
+
+  @include athletic-body-base;
+
+  @include above('tablet-large') {
+    margin-bottom: 40px;
+
+    @include athletic-text-style(20px, 26px, 500);
+  }
+}
+
+.#{$athleticPrefix}two-column__content-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.30);
+
+  @include above('tablet-large') {
+    position: relative;
+    height: auto;
+    min-height: 408px;
+    overflow: hidden;
+    padding: 0 42px;
+    background: unset;
+    flex: 1;
+  }
+}
+
+.#{$athleticPrefix}two-column__buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  @include alignment-helpers('tablet-large');
+}
+
+.#{$athleticPrefix}two-column__media-wrapper {
+  position: relative;
+  width: 100%;
+  height: 256px;
+  overflow: hidden;
+
+  @include above('tablet-large') {
+    flex: 1.5;
+    height: 408px;
+  }
+}
+
+.#{$athleticPrefix}two-column__media-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.#{$athleticPrefix}two-column__video-desktop,
+.#{$athleticPrefix}two-column__image-desktop {
+  display: none;
+  height: 100%;
+
+  @include above('tablet-large') {
+    display: block;
+  }
+}
+
+.#{$athleticPrefix}two-column .responsive-image__wrapper {
+  height: 100%;
+}
+
+.#{$athleticPrefix}two-column img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.#{$athleticPrefix}two-column__video-mobile,
+.#{$athleticPrefix}two-column__image-mobile {
+  display: block;
+
+  @include above('tablet-large') {
+    display: none;
+  }
+}
+
+.#{$athleticPrefix}two-column__video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 256px;
+  overflow: hidden;
+  object-fit: cover;
+
+  @include above('tablet-large') {
+    min-height: unset;
+  }
+}
+
+.#{$athleticPrefix}two-column__content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 22px 6px;
+
+  @include alignment-helpers('tablet-large');
+
+  @include above('tablet-large') {
+    padding: 24px;
+  }
+}
+
+.#{$athleticPrefix}two-column__content > div {
+  max-width: 328px;
+}
+
+.#{$athleticPrefix}two-column__eyebrow {
+  margin-bottom: 6px;
+
+  @include above('tablet-large') {
+    margin-bottom: 8px;
+  }
+}
+
+.#{$athleticPrefix}two-column__title {
+  display: block;
+  margin: 0 0 12px;
+  word-break: break-word;
+
+  @include athletic-h4;
+
+  @include above('tablet-large') {
+    margin: 0 0 36px;
+
+    @include athletic-h2;
+  }
+}
+
+.#{$athleticPrefix}two-column .bpn-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 14px 16px;
+
+  @include athletic-body-bold-sm;
+
+  @include above('tablet-large') {
+    width: 100%;
+    height: 56px;
+
+    @include athletic-callout-base;
+  }
+}

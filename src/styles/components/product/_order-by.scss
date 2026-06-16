@@ -1,0 +1,31 @@
+.order-by {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0 10px;
+    gap: 5px;
+
+    &.go-gel-order-by {
+        padding: 0 0 10px;
+    }
+
+    @media screen and (max-width: 768px) {
+        padding: 15px 0 5px;
+    }
+
+    p {
+        text-align: center;
+        margin: 0;
+        font-weight: 500;
+        font-size: 16px;
+
+        b {
+            color: #FF4438;
+            font-weight: 800;
+        }
+
+        @media screen and (max-width: 768px) {
+            font-size: 14px;
+        }
+    }
+}

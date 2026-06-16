@@ -1,0 +1,32 @@
+
+<!-- Why Stack -->
+<div class="why-stack red-stripe-left">
+	<div class="container">
+		<div class="section-title-primary">
+			<h2>{{ section.settings.title }}</h2>
+		</div>
+		<div class="text-center">
+			<img src="{{ section.settings.image | img_url: 'master' }}" alt="ProductLandingPage_Stacks" />
+		</div>
+		<div class="tab-primary">	
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				{% for block in section.blocks %}
+				<li class="nav-item">
+					<a class="nav-link {% if forloop.index == 1 %}active {% endif %}" id="details-tab{{ forloop.index }}" data-toggle="tab" href="#details{{ forloop.index }}" role="tab" aria-controls="details{{ forloop.index }}" aria-selected="true">{{ block.settings.title }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				{% for block in section.blocks %}
+				<div class="tab-pane fade {% if forloop.index == 1 %}show active {% endif %}" id="details{{ forloop.index }}" role="tabpanel" aria-labelledby="details-tab{{ forloop.index }}">
+					<p>{{ block.settings.description }}</p>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="text-center">
+			<a class="btn" href="{{ section.settings.choose_stack_link }}">{{ section.settings.choose_stack_title }}</a>
+		</div>
+	</div>
+</div>
+<!-- /Why Stack -->

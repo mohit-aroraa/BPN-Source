@@ -1,0 +1,57 @@
+.blog-flex {
+  margin: 0 0 calc(var(--base-gutter) * 0.5);
+  margin: var(--base-gutter) 0;
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    a {
+      display: inline-block;
+      text-transform: uppercase;
+      font: {
+        weight: 700;
+        size: 16px;
+      }
+      line-height: 1.1;
+      letter-spacing: 0.075em;
+      padding: var(--base-gutter--half);
+      &.selected {
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+      }
+    }
+  }
+
+  @include mq($large-up) {
+    .tags {
+      a {
+        font-size: 20px;
+        position: relative;
+        padding: var(--base-gutter--half) calc(var(--base-gutter) * 0.66);
+
+        &:not(:last-child):after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          right: -1px;
+          transform: translateY(-50%);
+          height: 20px;
+          width: 2px;
+          background: black;
+        }
+      }
+    }
+  }
+  @include mq($small) {
+    display: block;
+
+    .tags {
+      a {
+        padding: calc(var(--base-gutter--half) * 0.25) var(--base-gutter--half);
+      }
+    }
+  }
+}

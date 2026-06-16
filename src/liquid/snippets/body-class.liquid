@@ -1,0 +1,13 @@
+{%- assign page_type = "template-" | append: request.page_type | handle -%}
+{%- assign path_type = "template-" | append: request.path | handle -%}
+{%- assign template_type = "template--" | append: {{template | replace:'.','-' | replace:'/','-'}} -%}
+{%- assign current_page_title = {{page_title | handleize }} -%}
+{%- assign text = "page-title--" -%}
+{%- assign concat_text = text | append: current_page_title -%}
+{%- if template == 'index' -%}
+    {%- assign home_class = 'home' -%}
+{%- else -%}
+    {%- assign home_class = 'inner-page' -%}
+{%- endif -%}
+{%- capture class -%}{{page_type}} {{path_type}} {{template_type}} {{home_class}} {{concat_text}}{%- endcapture -%}
+{{class}}

@@ -1,0 +1,43 @@
+
+<div class="gray-bg your-goal">
+  <div class="custom-tab">
+    <div class="container">
+      <div class="section-title-fifth">
+        <h2> {{ section.settings.title }}</h2>
+      </div>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        {% for block in section.blocks %}
+        	{% if block.type == 'product_Tab' %}
+              <li class="nav-item">
+                <a class="nav-link {% if forloop.first == true %} active {% endif %}" id="weight-loss-tab-{{ forloop.index }}" data-toggle="tab" href="#weight-loss-{{ forloop.index }}" role="tab" aria-controls="weight-loss-{{ forloop.index }}" aria-selected="{% if forloop.first == true %}true{% else %}false{% endif %}">{{ block.settings.title }}</a>
+              </li>
+        	{% endif; %}
+        {% endfor %}
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        {% for block in section.blocks %}
+        	{% if block.type == 'product_Tab' %}
+        		<div class="tab-pane fade {% if forloop.first == true %} show active {% endif %}" id="weight-loss-{{ forloop.index }}" role="tabpanel" aria-labelledby="weight-loss-tab-{{ forloop.index }}">
+                  <div class="product-list-col">
+                    <div class="row">
+                      {% assign product_item = all_products[block.settings.product_1] %}
+                      {% if product_item != '' %}
+                      	{% include 'perfomance-product-grid', product: product_item %}
+                      {% endif %}
+                      
+                      {% assign product_item = all_products[block.settings.product_2] %}
+                      {% if product_item != '' %}
+	                      {% include 'perfomance-product-grid', product: product_item %}
+                      {% endif %}
+                    </div>
+                    <div class="text-link text-center">
+                      <a href="{{ block.settings.view_more_link }}">VIEW MORE</a>
+                    </div>
+                  </div>
+                </div>
+        	{% endif; %}
+        {% endfor %}
+      </div>  
+    </div>
+  </div>
+</div>

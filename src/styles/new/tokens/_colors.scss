@@ -1,0 +1,80 @@
+/// @access private
+/// @link https://www.oddbird.net/accoutrement/docs/color.html
+/// @group colors
+/// @author BPN Design Team
+
+/// Color Palette
+/// This is the new color system with standardized color values
+/// All tokens use the 'bpn-' prefix to avoid conflicts with the old system
+/// and to represent the BarePerformanceNutrition brand
+///
+/// @type Map
+/// @group colors
+
+// Color Tokens
+// This file contains all color variables used throughout the application
+
+// Base color palette
+$bpnColors: (
+
+  'bpn-black': #000,
+  'bpn-grey': #575757,
+  'bpn-light-grey': #DDD,
+  'bpn-red': #eb1000,
+  'bpn-volt': #dcff00,
+  'bpn-white': #fff,
+
+
+  'bpn-black-80': rgba(51, 51, 51, 0.8),
+  'bpn-black-60': rgba(51, 51, 51, 0.6),
+  'bpn-black-40': rgba(51, 51, 51, 0.4),
+  'bpn-black-20': rgba(51, 51, 51, 0.2),
+  'bpn-black-10': rgba(51, 51, 51, 0.1),
+
+  'bpn-grey-120': #111,
+  'bpn-grey-100': #777,
+  'bpn-grey-80': #575757,
+  'bpn-grey-60': #767676,
+  'bpn-grey-40': #9a9a9a,
+  'bpn-grey-20': #ccc,
+  'bpn-grey-10': #eee,
+  'bpn-grey-950': #0006,
+
+  'bpn-red-150': #5a130e,
+  'bpn-red-100': #ff4438,
+  'bpn-red-80': #ef4033,
+  'bpn-red-60': #f37066,
+  'bpn-red-40': #f79f99,
+  'bpn-red-20': #fbcfcc,
+  'bpn-red-10': #fde7e5,
+
+  'bpn-black-50': #b8b8b8,
+  'bpn-black-100': #adadad,
+  'bpn-black-200': #999,
+  'bpn-black-300': #858585,
+  'bpn-black-400': #707070,
+  'bpn-black-500': #5c5c5c,
+  'bpn-black-600': #474747,
+  'bpn-black-700': #333,
+  'bpn-black-800': #1f1f1f,
+  'bpn-black-900': #0a0a0a,
+  'bpn-black-950': #000,
+
+  'bpn-navy-950': #000,
+
+  'overlay-80': rgba(0, 0, 0, 0.8),
+  'overlay-60': rgba(0, 0, 0, 0.6),
+  'overlay-40': rgba(0, 0, 0, 0.4),
+  'overlay-20': rgba(0, 0, 0, 0.2),
+  'overlay-10': rgba(0, 0, 0, 0.1),
+);
+
+// Make colors available to the color() function
+@include add-colors($bpnColors);
+
+/// Example usage:
+/// .example {
+///   color: color('bpn-black');
+///   background-color: color('bpn-white');
+///   border-color: color('bpn-grey-20');
+/// }

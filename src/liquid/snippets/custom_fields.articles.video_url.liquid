@@ -1,0 +1,14 @@
+
+{% comment %}
+  DO NOT MODIFY THIS FILE DIRECTLY. THIS FILE WILL BE OVERWRITTEN.
+  YOU CAN MODIFY THE LIQUID CODE FOR THIS CUSTOM FIELD HERE:
+  https://customfields.bonify.io/dashboard/bare-performance-nutrition.myshopify.com/articles/configure/187382/edit
+{% endcomment %}
+{% if article.metafields.custom_fields["video_url"] != blank %}
+  <div class="custom-field custom-field__video-url custom-field__type--url">
+    <h3 class="custom-field--title">Video URL</h3>
+    <div class="custom-field--value">
+      {{ article.metafields.custom_fields["video_url"] }}
+    </div>
+  </div>
+{% endif %}

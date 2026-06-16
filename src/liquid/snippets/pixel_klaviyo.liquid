@@ -1,0 +1,13 @@
+<script>
+  (function () {
+    var loadKlaviyo = function () {
+      var klaviyoScript = document.createElement('script');
+      klaviyoScript.src = 'https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WXXxWk';
+      klaviyoScript.type = 'text/javascript';
+      klaviyoScript.setAttribute('data-em-load', 'afterInteractive');
+      klaviyoScript.setAttribute('async', '');
+      document.getElementsByTagName('body')[0].appendChild(klaviyoScript);
+    };
+    window.addEventListener('DOMContentLoaded', loadKlaviyo);
+  })();
+</script>

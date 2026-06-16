@@ -1,0 +1,69 @@
+{% unless template == 'index' or template == 'cart' %}
+    <nav aria-label="breadcrumb" class="breadcrumb-main">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" title="{{ 'general.breadcrumbs.home_link_title' | t }}">Home </a>
+            </li>
+            {% if template contains 'product' %}
+
+                {% if product.collections != blank %}
+
+                    {% if product.collections != blank %}
+                        {% capture url %}/collections/{{ product.collections[0].handle }}{% endcapture %}
+                        <li class="breadcrumb-item">{{ product.collections[0].title | link_to: url }}</li>
+                    {% endif %}
+                {% elsif product.type != blank %}
+                    <li class="breadcrumb-item">{{ product.type | link_to_type }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="/collections/all">Products</a></li>
+                {% endif %}
+                {% liquid
+                    assign bigTtl = product.title
+                    assign smlTtl = ''
+                    assign ttlSplt = '/'
+                    if bigTtl contains ttlSplt
+                        assign var = bigTtl | split: ttlSplt
+                        assign bigTtl = var | first | trim | strip
+                        assign smlTtl = var | last | trim | strip
+                    endif
+                %}
+                <li class="breadcrumb-item">{{ bigTtl }}</li>
+
+            {% elsif template contains 'collection' and collection.handle %}
+
+                {% if current_tags %}
+                    {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
+                    {{ collection.title | link_to: url }}
+                    <li class="breadcrumb-item">{{ current_tags | join: " + " }}</li>
+                {% else %}
+                    <li class="breadcrumb-item">
+                        {% if collection.title == 'Products' %}
+                            Shop
+                        {% else %}
+                            {{ collection.title }}
+                        {% endif %}
+                    </li>
+                {% endif %}
+
+            {% elsif template == 'blog' %}
+
+                {% if current_tags %}
+                    <li class="breadcrumb-item">{{ blog.title | link_to: blog.url }}</li>
+                    <li class="breadcrumb-item">{{ current_tags | join: " + " }}</li>
+                {% else %}
+                    <li class="breadcrumb-item">{{ blog.title }}</li>
+                {% endif %}
+
+            {% elsif template == 'article' %}
+                <li class="breadcrumb-item">{{ blog.title | link_to: blog.url }}</li>
+                <li class="breadcrumb-item">{{ article.title }}</li>
+
+            {% elsif template contains 'page' %}
+                <li class="breadcrumb-item">{{ page.title }}</li>
+
+            {% else %}
+                <li class="breadcrumb-item">{{ page_title }}</li>
+
+            {% endif %}
+        </ol>
+    </nav>
+{% endunless %}

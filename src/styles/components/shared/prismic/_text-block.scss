@@ -1,0 +1,44 @@
+.textBlock {
+  margin-bottom: 56px;
+  @include above("desktop-med") {
+    margin-bottom: 100px;
+  }
+  &__wrapper {
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+    @include above("tablet-large") {
+      padding-left: 64px;
+      padding-right: 64px;
+    }
+  }
+  &__content {
+    max-width: var(--max-width, 640px);
+    margin-left: auto;
+    margin-right: auto;
+    .sectionTitle {
+      text-align: left;
+      margin-bottom: 12px;
+    }
+    @include above("tablet") {
+      text-align: center;
+      .sectionTitle {
+        margin-bottom: 23px;
+        text-align: center;
+      }
+    }
+  }
+  &__description {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.23px;
+    line-height: 1.125;
+    margin-bottom: 16px;
+    @include above("tablet-large") {
+      @include use-text-style("paragraph-body-1");
+      margin-bottom: 23px;
+    }
+  }
+}

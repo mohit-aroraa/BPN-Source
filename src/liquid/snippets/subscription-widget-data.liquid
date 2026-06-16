@@ -1,0 +1,41 @@
+{%- comment -%}
+  Recharge widget metafield data
+{%- endcomment -%}
+{%- assign namespace = 'global_data' -%}
+{%- assign section = pages['product-global'].metafields -%}
+{%- assign block_content = section[namespace] -%}
+{%- assign how_subs_work_tooltip = block_content.how_subscription_works_tooltip
+  | default: '<div class="purchaseTypeTextTooltip__body"><div class="purchaseTypeTextTooltipBody__header"><p class="purchaseTypeTextTooltipBody__headerText">HOW SUBSCRIPTION WORKS</p><button type="button" class="purchaseTypeTextTooltipBody__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><g stroke="#000" stroke-width="1.7" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="m10 1-9 9M1 1l9 9"/></g></svg></button></div><p class="purchaseTypeTextTooltipBody__text">Products are automatically delivered on your schedule. No obligation, modify, skip, pause, or cancel your subscription anytime.</p></div>'
+-%}
+{%- assign learn_more_tooltip = block_content.learn_more_tooltip
+  | default: '<div class="purchaseTypeTextTooltip__body"><div class="purchaseTypeTextTooltipBody__header"><p class="purchaseTypeTextTooltipBody__headerText">BENEFITS OF SUBSCRIPTIONS</p><button type="button" class="purchaseTypeTextTooltipBody__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><g stroke="#000" stroke-width="1.7" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="m10 1-9 9M1 1l9 9"/></g></svg></button></div><ul class="purchaseTypeTextTooltip__list"><li>• 15% off on every recurring order</li><li>• Modify delivery schedule or cancel anytime</li><li>• Automatically delivered on your schedule</li></ul></div>'
+-%}
+{%- assign widget_settings = shop.metafields.subscriptions -%}
+{%- assign widget_published = 'true' -%}
+{%- assign select_subscription_first = widget_settings.select_subscription_first | default: false  -%}
+{%- assign label_onetime = widget_settings.onetime_message | default: 'One-time purchase' -%}
+{%- assign label_autodeliver = widget_settings.subscribe_message -%}
+{%- assign label_deliver_every = widget_settings.widget_deliver_every | default: 'Deliver every' -%}
+{%- assign label_unit_type = subscription_product.label_unit_type | default: shipping_interval_unit_type -%}
+{%- assign subscription_details_label = widget_settings.subscription_details_verbiage
+  | default: 'Subscription details'
+-%}
+{%- assign how_it_works_text = widget_settings.how_it_works
+  | default: '<strong>How subscriptions work</strong><br><br>Products are automatically delivered on your schedule. No obligation, modify, skip, pause, or cancel your subscription anytime.'
+-%}
+{%- assign learnmore_link = widget_settings.learnmore_verbiage | default: 'Learn more...' -%}
+{%- capture subscription_json -%}
+    {
+        "published": {{ widget_published }},
+        "select_subscription_first": {{ select_subscription_first }},
+        "how_subs_work_tooltip": {{ how_subs_work_tooltip | json }},
+        "learn_more_tooltip": {{ learn_more_tooltip | json }},
+        "first_option": "{{ widget_settings.first_option }}",
+        "label_onetime": "{{ label_onetime }}",
+        "label_autodeliver": "{{ label_autodeliver }}",
+        "label_deliver_every": "{{ label_deliver_every }}",
+        "label_unit_type": "{{ label_unit_type }}",
+        "subscription_details_label": "{{ subscription_details_label }}"
+    }
+{%- endcapture -%}
+{{- subscription_json -}}

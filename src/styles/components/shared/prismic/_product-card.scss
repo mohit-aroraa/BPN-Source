@@ -1,0 +1,244 @@
+.product-card {
+  max-width: 304px;
+  border-radius: 5px;
+  background: #FFF;
+  display: grid;
+  grid-template-columns: 1fr;
+  position: relative;
+
+  &__label {
+    z-index: 10;
+    top: 12px;
+    left: 0;
+    position: absolute;
+    background: white;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 701;
+    line-height: 12px;
+    letter-spacing: -0.24px;
+  }
+
+  &__badge {
+    z-index: 10;
+    top: 12px;
+    left: 0;
+    position: absolute;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 701;
+    line-height: 12px;
+    letter-spacing: -0.24px;
+  }
+
+  &__image-container {
+    overflow: hidden;
+    border-radius: 5px 5px 0 0;
+    max-width: 304px;
+    aspect-ratio: 4 / 4;
+  }
+
+  &__image {
+    border-radius: 5px 5px 0 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease-in-out;
+
+    @include above('desktop') {
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  &__content {
+    padding: 7px 16px 24px;
+
+    @include above('desktop') {
+      padding: 8px 16px 24px;
+    }
+  }
+
+  &__rating {
+    --oke-stars-foregroundColor: #000;
+
+    .oke-sr-stars {
+      .oke-stars {
+        .oke-stars-foreground {
+          width: unset;
+        }
+
+        .oke-stars-foreground,
+        .oke-stars-background {
+          display: flex;
+          width: unset;
+
+          svg {
+            height: 12px;
+          }
+        }
+      }
+    }
+
+    .oke-sr-count {
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      text-transform: uppercase;
+
+      span {
+        color: #767676;
+      }
+
+      @include above('desktop') {
+        height: 17px;
+      }
+    }
+
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 16px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+    margin-right: 1px;
+
+    @include above('desktop') {
+      margin-top: 2px;
+    }
+
+    span {
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 16px;
+      letter-spacing: -0.32px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__category {
+    margin-top: 4px;
+    color: color('gray');
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 12px;
+    letter-spacing: -0.24px;
+    text-transform: uppercase;
+  }
+
+  &__dropdown {
+    position: relative;
+    margin-top: 16px;
+
+    &-trigger {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #CCCCCC;
+      padding: 5px 11px 5px 11px;
+      background: white;
+      color: #000;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 12px;
+      text-transform: uppercase;
+
+      & > span {
+        height: 12px;
+      }
+
+      svg:first-of-type {
+        top: -1px;
+        position: relative;
+      }
+
+      .name {
+        margin-left: 5px;
+        letter-spacing: -0.24px;
+      }
+    }
+
+    &-item {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 6px 0 6px 11px;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 12px;
+      letter-spacing: -0.24px;
+      text-transform: uppercase;
+
+      svg {
+        margin-right: 8px;
+      }
+
+      &:hover {
+        background: #EEE;
+      }
+
+      &.selected {
+        background: #EEE;
+      }
+    }
+
+    &-content {
+      display: none;
+      width: 100%;
+      position: absolute;
+      background: white;
+      border: 1px solid #CCC;
+      border-radius: 0 0 5px 5px;
+      border-top: unset;
+    }
+
+    &.active {
+      .product-card__dropdown-content {
+        display: block;
+      }
+
+      .product-card__dropdown-trigger {
+        border-bottom: unset;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .product-card__dropdown-item {
+
+      }
+    }
+  }
+
+  &__add-button {
+    margin-top: 8px;
+    background: black;
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 16px;
+    letter-spacing: -0.32px;
+    text-transform: uppercase;
+  }
+}

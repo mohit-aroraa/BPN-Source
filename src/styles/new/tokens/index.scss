@@ -1,0 +1,19 @@
+// THIS FILE IS IMPORTED IN COMPONENTS as '@design'.
+// DO NOT INCLUDE CODE WHICH GENERATES CSS.
+// Design token system for the new architecture
+
+/// Utility library which makes defining and accessing tokens very easy.
+/// @link https://www.oddbird.net/accoutrement/docs/
+@import '~accoutrement/sass/tools';
+
+// Configuration
+// Enable CSS variables by default for the new system
+/* stylelint-disable-next-line scss/dollar-variable-pattern */
+$can-use-css-variables: true !default;
+
+// Import all token files
+// This file serves as the entry point for all design tokens
+@import 'variables'; // Global variables including prefix
+@import 'colors';
+@import 'typography';
+@import 'layout-queries';

@@ -1,0 +1,212 @@
+{%- liquid
+  assign total = section.blocks.size
+-%}
+{%- if total > 0 -%}
+<section
+  class="img-acc"
+  id="img-acc-{{ section.id }}"
+  aria-label="Product highlights"
+  style="
+    --ia-h: {{ section.settings.desktop_height | default: 620 }}px;
+    --ia-mob-coll: {{ section.settings.mobile_collapsed_height | default: 90 }}px;
+    --ia-mob-exp: {{ section.settings.mobile_expanded_height | default: 520 }}px;
+  "
+>
+  {%- for block in section.blocks -%}
+    {%- assign panel_pos = forloop.index -%}
+    {%- assign content_id = 'ia-content-' | append: section.id | append: '-' | append: forloop.index -%}
+    <div
+      class="img-acc__panel{% if forloop.first %} is-active{% endif %}"
+      data-ia-panel
+      {{ block.shopify_attributes }}
+    >
+
+      {%- if block.settings.image -%}
+        <img
+          class="img-acc__bg"
+          src="{{ block.settings.image | image_url: width: 1400 }}"
+          alt=""
+          role="presentation"
+          loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+          width="{{ block.settings.image.width }}"
+          height="{{ block.settings.image.height }}"
+        >
+      {%- endif -%}
+
+      <div class="img-acc__overlay">
+
+        {%- comment -%} Trigger: visible on mobile, keyboard-accessible always {%- endcomment -%}
+        <button
+          class="img-acc__mob-header"
+          type="button"
+          data-ia-trigger
+          aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="{{ content_id }}"
+        >
+          <span class="img-acc__mob-title">{{ block.settings.title }}</span>
+          <span class="img-acc__toggle" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M3 10H17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path class="img-acc__toggle-v" d="M10 3V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+
+        {%- comment -%} Content: always visible desktop, revealed on tap mobile {%- endcomment -%}
+        <div
+          class="img-acc__content"
+          id="{{ content_id }}"
+          role="region"
+          aria-label="{{ block.settings.title }}"
+        >
+
+          <div class="img-acc__meta">
+            <h2 class="img-acc__title">{{ block.settings.title }}</h2>
+            {%- if block.settings.unit_label != blank -%}
+              <div class="img-acc__unit-row">
+                <span class="img-acc__unit-label">{{ block.settings.unit_label }}</span>
+                <div class="img-acc__squares" aria-hidden="true">
+                  {%- for i in (1..total) -%}
+                    <span class="img-acc__sq{% if i <= panel_pos %} is-filled{% endif %}"></span>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="img-acc__details">
+            {%- if block.settings.description != blank -%}
+              <p class="img-acc__desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+            {%- if block.settings.cta_label != blank -%}
+              <a href="{{ block.settings.cta_url | default: '#' }}" class="img-acc__cta">
+                {{- block.settings.cta_label -}}
+              </a>
+            {%- endif -%}
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  {%- endfor -%}
+</section>
+
+<script src="{{ 'bundle.section.image-accordion.min.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Image Accordion",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "default": 620,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_collapsed_height",
+      "label": "Mobile collapsed height",
+      "min": 60,
+      "max": 140,
+      "step": 10,
+      "default": 90,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_expanded_height",
+      "label": "Mobile expanded height",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "default": 520,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "panel",
+      "name": "Panel",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "PRE"
+        },
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Unit label",
+          "default": "[UNIT A]",
+          "info": "Optional label shown below the title, e.g. [UNIT A]"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "A pre-workout that provides you with sustained energy and mental focus."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Button label",
+          "default": "LEARN MORE"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Button URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Accordion",
+      "category": "Promotional",
+      "blocks": [
+        {
+          "type": "panel",
+          "settings": {
+            "title": "PRE",
+            "unit_label": "[UNIT A]",
+            "description": "A pre-workout that provides you with sustained energy and mental focus.",
+            "cta_label": "LEARN MORE"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "title": "PUMP",
+            "unit_label": "[UNIT B]",
+            "description": "A stimulant-free muscle pump formula designed to maximize blood flow and performance.",
+            "cta_label": "LEARN MORE"
+          }
+        },
+        {
+          "type": "panel",
+          "settings": {
+            "title": "POST",
+            "unit_label": "[UNIT C]",
+            "description": "A post-workout recovery formula to support muscle repair and reduce soreness.",
+            "cta_label": "LEARN MORE"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

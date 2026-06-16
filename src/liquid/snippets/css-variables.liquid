@@ -1,0 +1,147 @@
+{%- comment -%}
+  based on the image overlay opacity, either lighten or darken the image on hover
+{%- endcomment -%}
+{% assign image_overlay_opacity = settings.image_overlay_opacity | divided_by: 100.00 %}
+
+{% if image_overlay_opacity > 0.85 %}
+  {% assign image_overlay_opacity_hover = image_overlay_opacity | minus: 0.3 %}
+{% else %}
+  {% assign image_overlay_opacity_hover = image_overlay_opacity | plus: 0.4 %}
+{% endif %}
+
+
+{% comment %} Create an appropriate poster background color based on background color and brightness {% endcomment %}
+{%- assign color_body_bg = settings.color_body_bg -%}
+{%- assign color_body_bg_brightness = color_body_bg | color_brightness -%}
+{%- if color_body_bg_brightness <= 26 -%}
+  {%- assign background_color_poster = color_body_bg | color_lighten: 10 -%}
+{%- elsif color_body_bg_brightness <= 65 -%}
+  {%- assign background_color_poster = color_body_bg | color_lighten: 5 -%}
+{%- else -%}
+  {%- assign background_color_poster = color_body_bg | color_darken: 5 -%}
+{%- endif -%}
+
+
+{% assign header_font = settings.type_header_font %}
+{% assign base_font = settings.type_base_font %}
+
+{% if settings.type_bold_product_titles %}
+  {%- assign header_font_bold = header_font | font_modify: 'weight', 'bolder' -%}
+{% endif %}
+
+{%- assign base_font_bolder = base_font | font_modify: 'weight', 'bolder' -%}
+{%- assign base_font_bold = base_font | font_modify: 'weight', 'bold' -%}
+{%- assign base_font_italic = base_font | font_modify: 'style', 'italic' -%}
+{%- assign base_font_bold_italic = base_font_bold | font_modify: 'style', 'italic' -%}
+
+
+<style type="text/css">
+/* @FontFace */
+{%- comment -%}
+  {{ header_font | font_face: font_display: 'swap' }}
+  {{ base_font | font_face: font_display: 'swap' }}
+  {{ header_font_bold | font_face: font_display: 'swap' }}
+  {{ base_font_bold | font_face: font_display: 'swap' }}
+  {{ base_font_bolder | font_face: font_display: 'swap' }}
+  {{ base_font_italic | font_face: font_display: 'swap' }}
+  {{ base_font_bold_italic | font_face: font_display: 'swap' }}
+{%- endcomment -%}
+
+  
+:root {
+
+
+  /* Text Colors */
+  --color_text                            : {{ settings.color_text }};
+  --color_text_shadow                     : rgba(0,0,0,0.4);
+  --color_body_text                       : {{ settings.color_body_text }};
+  --color_sale_text                       : {{ settings.color_sale_text }};
+  --color_small_button_text_border        : {{ settings.color_small_button_text_border }};
+  --color_text_field                      : {{ settings.color_text_field }};
+  --color_text_field_text                 : {{ settings.color_text_field_text }};
+  --color_navigation_text                 : {{ settings.color_text }};
+
+  /* Button Colors */
+  --color_button                          : {{ settings.color_button }};
+  --color_button_text                     : {{ settings.color_button_text }};
+  --color_button_darker_10                : {{ settings.color_button | color_darken: 10 }};
+  --color_button_rgba                     : {{ settings.color_button | color_modify: 'alpha', 0.1 | replace: 'rgba(','' | replace: ',0.1)','' }};
+
+  /* Hover and Focus Colors */
+  --color_text_focus                      : {%- include 'adaptive-color', color: settings.color_text -%};
+  --color_overlay_text_focus              : {%- include 'adaptive-color', color: settings.color_image_overlay_text -%};
+  --color_btn_primary_focus               : {%- include 'adaptive-color', color: settings.color_button -%};
+  --color_btn_social_focus                : {%- include 'adaptive-color', color: settings.color_borders -%};
+  --color_small_button_text_border_focus  : {%- include 'adaptive-color', color: settings.color_small_button_text_border -%};
+  --predictive_search_focus               : {%- include 'adaptive-color', color: settings.color_body_bg -%};
+
+  /* Backgrounds */
+  --color_body_bg                         : {{ settings.color_body_bg }};
+  --color_bg_alt                          : {{ settings.color_body_text | color_modify: 'alpha', 0.05 }};
+  --color_drawer_background               : rgba(0, 0, 0, 0.6);
+  --color_drawer_background_darker_5      : {{ 'rgba(0, 0, 0, 0.6)' | color_darken: 5 }};
+  --color_drawer_background_darker_10     : {{ 'rgba(0, 0, 0, 0.6)' | color_darken: 10 }};
+  --currency_selector_background          : {{ settings.color_body_text | color_modify: 'alpha', 0.9  }};
+
+  /* Overlays */
+  --color_image_overlay_text              : {{ settings.color_image_overlay_text }};
+  --color_image_overlay                   : {{ settings.color_image_overlay }};
+  --opacity_image_overlay                 : {{ settings.image_overlay_opacity | divided_by: 100.00 }};
+  --hover_overlay_opacity                 : {{ image_overlay_opacity_hover | at_most: 1 }};
+
+  /* Border Colors */
+  --color_borders                         : {{ settings.color_borders }};
+  --color_borders_lighter                 : {{ settings.color_borders | color_lighten: 5 }};
+  --color_text_field_border               : {{ settings.color_text_field_border }};
+  --color_text_field_border_darken        : {{ settings.color_text_field_border | color_darken: 10 }};
+
+
+  /* Fonts */
+  --font_weight_body__bold                : {{ base_font_bold.weight | default: 700 }};
+  --font_weight_body__bolder              : {{ base_font_bolder.weight | default: 700 }};
+  --font_weight_header__bold              : {{ header_font_bold.weight | default: 700 }};
+  --font_stack_header                     : {{ header_font.family }}, {{ header_font.fallback_families }};
+  /*--font_stack_header                     : 'Figue', serif;*/
+  --font_style_header                     : {{ header_font.style }};
+  --font_weight_header                    : {{ header_font.weight }};
+  --font_stack_body                       : {{ base_font.family }}, {{ base_font.fallback_families }};
+  /*--font_stack_body                       : 'Barlow', sans-serif;*/
+  --font_style_body                       : {{ base_font.style }};
+  --font_weight_body                      : {{ base_font.weight }};
+  --font_size_header                      : {{ settings.type_header_base_size }}px;
+  --font_bold_titles                      : {{ settings.type_bold_product_titles }};
+  --font_size_base                        : {{ settings.type_base_size }}px;
+
+  /* Video */
+  --color_video_bg                        : {{ background_color_poster }};
+
+
+  /* Assets */
+  --ico_select_svg                        : url({{ "ico-select.svg" | asset_url }});
+  --ajax_loader_gif                       : url({{ "ajax-loader.gif" | asset_url }});
+  --Hand_Drawn_Circle_svg                 : url({{ 'Hand_Drawn_Circle.svg' | asset_url }});
+
+
+
+  /* Font Families */
+  --font_main_Light                       : 'AkzidenzGroteskStdLight';
+  --font_main_Md                          : 'AkzidenzGroteskStdMd';
+  --font_main_Bold                        : 'AkzidenzGroteskStdBold';
+  --font_main_Super                       : 'AkzidenzGroteskStdSuper';
+  --font_main_S_Super                     : 'AkzidenzGroteskStd-Super';
+  --font_main_BoldEx                      : 'AkzidenzGroteskStdBoldEx';
+  --font_main_Regular                     : 'AkzidenzGroteskStd-Regular';
+  --font_main_Ext                         : 'AkzidenzGroteskStd-Ext';
+  --font_main_Md                          : 'AkzidenzGroteskStd-Md';
+  --font_gloss_and_bloom                  : 'GlossAndBloom';
+  --font_blender                          : 'Blender-Heavy';
+  --font_blender_Thin                     : 'Blender-Thin';
+  --font_blender_ThinItalic               : 'Blender-ThinItalic';
+
+  /* Global JS set CSS vars */
+  --header-height                         : 72px;
+  --banner-height                         : 40px;
+  --header_total_height                   : calc(var(--header-height) + var(--banner-height)); 
+
+}
+</style>

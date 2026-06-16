@@ -1,0 +1,293 @@
+{% liquid
+  assign show_promo_bar = section.settings.announcement_enable
+  assign background_color = section.settings.announcement_background_color
+  assign text_color = section.settings.announcement_text_color
+
+  assign settings = shop.metaobjects.sms_subscription_settings.global_sms_subscription_settings
+  assign enabled = settings.enabled
+  assign popup_id = settings.desktop_popup_id
+  assign mobile_popup_id = settings.mobile_popup_id
+  assign sms_benefit_popup_id = settings.sms_benefit_popup_id
+  assign sms_benefit_mobile_popup_id = settings.sms_benefit_mobile_popup_id
+  assign show_popup_with_delay = settings.show_popup_with_delay
+  assign show_popup_delay = settings.show_popup_delay
+  assign product_purchase_type = settings.product_purchase_type
+  assign is_facebook_promo_enabled = settings.is_facebook_promo_enabled | default: false
+  assign paid_media_traffic_sources = settings.paid_media_traffic_sources
+
+  assign gwp_id = settings.gwp_id
+
+  if customer.tags contains 'PS-Accepts-SMS'
+    assign sms_marketing_consent = true
+  else
+    assign sms_marketing_consent = false
+  endif
+
+  assign has_gwp_in_cart = false
+  assign is_customer_eligible_for_gift = false
+
+  for item in cart.items
+    if item.variant_id == gwp_id or item.id == gwp_id
+      assign has_gwp_in_cart = true
+    endif
+  endfor
+%}
+
+{% style %}
+  #shopify-section-{{ section.id }} .sms-subscription-modal,
+  #shopify-section-{{ section.id }} .sms-subscription{
+    --background-color: {{ background_color }};
+    --text-color: {{ text_color }};
+  }
+{% endstyle %}
+
+{% if show_promo_bar == true %}
+  <div class='sms-subscription-not-subscribed sms-subscription {% if sms_marketing_consent == true %} hidden {% endif %}'>
+    {% if section.settings.announcement_button_text != blank %}
+      <button
+        class='sms-subscription__button'
+        data-click-id='global_promo-bar_sms'
+        data-action='subscribe'
+      >
+        <span class='sms-subscription__text'>{{ section.settings.announcement_button_text }}</span>
+      </button>
+    {% endif %}
+    {% if section.settings.announcement_text != blank %}
+      <span class='sms-subscription__text'>
+        {{ section.settings.announcement_text }}
+      </span>
+    {% endif %}
+  </div>
+
+  <div class='sms-subscription-subscribed sms-subscription {% if sms_marketing_consent == false %} hidden {% endif %}'>
+    {% if section.settings.subscribed_customer_text != blank %}
+      <span class='sms-subscription__text'>
+        {{ section.settings.subscribed_customer_text }}
+      </span>
+    {% endif %}
+    {% if section.settings.subscribed_customer_button_text != blank %}
+      <button
+        class='sms-subscription__button'
+        data-click-id='global_promo-bar_sms-why'
+        data-action='information'
+      >
+        <span class='sms-subscription__text'>
+          {{- section.settings.subscribed_customer_button_text -}}
+        </span>
+      </button>
+    {% endif %}
+  </div>
+
+  <div class='paid-media-traffic-announcement-bar sms-subscription hidden'>
+    {% if section.settings.paid_media_traffic_not_subscribed_button != blank %}
+      <button class='sms-subscription__button' data-action='subscribe'>
+        <span class='sms-subscription__text'>
+          {{- section.settings.paid_media_traffic_not_subscribed_button -}}
+        </span>
+      </button>
+    {% endif %}
+    {% if section.settings.paid_media_traffic_not_subscribed_text != blank %}
+      <span class='sms-subscription__text'>
+        {{ section.settings.paid_media_traffic_not_subscribed_text }}
+      </span>
+    {% endif %}
+  </div>
+
+  {% if section.settings.paid_media_traffic_subscribed_text != blank %}
+    <div class='paid-media-traffic-announcement-bar-subscribed sms-subscription hidden'>
+      <span class='sms-subscription__text'>
+        {{ section.settings.paid_media_traffic_subscribed_text }}
+      </span>
+    </div>
+  {% endif %}
+
+  {% render 'success-message-modal',
+    popup_id: popup_id,
+    mobile_popup_id: mobile_popup_id,
+    sms_benefit_popup_id: sms_benefit_popup_id,
+    sms_benefit_mobile_popup_id: sms_benefit_mobile_popup_id,
+    gwp_id: gwp_id
+  %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Promo Bar",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "announcement_enable",
+      "label": "Show Promo Bar"
+    },
+    {
+      "type": "color",
+      "id": "announcement_background_color",
+      "label": "Promo Background Color",
+      "default": "#dcff00"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Promo Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "text",
+      "id": "announcement_button_text",
+      "label": "Promo Button",
+      "default": "JOIN BPN MEMBERSHIP"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "announcement_text",
+      "label": "Promo Text",
+      "default": "to unlock 20% off for life"
+    },
+    {
+      "type": "text",
+      "id": "subscribed_customer_button_text",
+      "label": "Promo Button",
+      "default": "here's why"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subscribed_customer_text",
+      "label": "Promo Text",
+      "default": "You've unlocked 20% OFF Subscriptions"
+    },
+    {
+      "type": "text",
+      "id": "paid_media_traffic_not_subscribed_button",
+      "label": "Paid Media Traffic Button - Not Subscribed",
+      "default": "JOIN BPN MEMBERSHIP"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "paid_media_traffic_not_subscribed_text",
+      "label": "Paid Media Traffic Text - Not Subscribed",
+      "default": "to unlock 20% off for life"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "paid_media_traffic_subscribed_text",
+      "label": "Paid Media Traffic Text - Subscribed",
+      "default": "You've unlocked 20% OFF Subscriptions"
+    },
+    {
+      "type": "header",
+      "content": "Success message modal"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "modal_title",
+      "label": "Modal Title",
+      "default": "You are part of the BPN Membership"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "modal_text",
+      "label": "Modal Text",
+      "default": "Stay subscribed to SMS to enjoy an EXTRA 5% OFF on all product subscriptions for life."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "modal_sub_text",
+      "label": "Modal Sub Text",
+      "default": "Reply HELP for help and STOP to cancel. View our Terms of Service and Privacy Policy."
+    }
+  ]
+}
+{% endschema %}
+
+<script
+  id='sms-config'
+>
+  window.BPN = window.BPN || {};
+
+  const IS_CUSTOMER_FROM_FACEBOOK = 'SMS_IS_CUSTOMER_FROM_FACEBOOK'
+  const IS_CUSTOMER_FACEBOOK_PROMO_VIEWED = 'SMS_IS_CUSTOMER_FACEBOOK_PROMO_VIEWED'
+  const IS_CUSTOMER_SUBSCRIBED_FROM_FACEBOOK = 'SMS_IS_CUSTOMER_SUBSCRIBED_FROM_FACEBOOK'
+  const IS_SMS_PROMO_POPUP_VIEWED = 'SMS_IS_SMS_PROMO_POPUP_VIEWED';
+
+  const SOURCE_KEY = 'utm_source'
+  const href = window.location.href.toLowerCase()
+
+  const sources = {{ paid_media_traffic_sources }}
+
+  const checkSource = (source) => {
+    return document.referrer.includes(source) || href.includes(`${SOURCE_KEY}=${source}`)
+  }
+
+  function setIsCustomerFromFacebook() {
+    let isPaidMediaTraffic = 'false'
+
+    if (window.BPN.customer.hasOrder) {
+      localStorage.setItem(IS_CUSTOMER_FROM_FACEBOOK, isPaidMediaTraffic)
+      return;
+    }
+
+    if (localStorage.getItem(IS_CUSTOMER_FROM_FACEBOOK) === 'true') {
+      return
+    }
+
+    if (sources.some(source => checkSource(source.toLowerCase()))) {
+      isPaidMediaTraffic = 'true'
+    }
+
+    localStorage.setItem(IS_CUSTOMER_FROM_FACEBOOK, isPaidMediaTraffic)
+  }
+
+  function getIsCustomerFromFacebook() {
+    return localStorage.getItem(IS_CUSTOMER_FROM_FACEBOOK) === 'true'
+  }
+
+  setIsCustomerFromFacebook()
+
+  const isCustomerFromFacebook = getIsCustomerFromFacebook()
+
+  const isEnabled = {% if enabled == true %}true{% else %}false{% endif %};
+  const isFacebookPromoEnabled = {% if is_facebook_promo_enabled == true %}true{% else %}false{% endif %};
+
+  if (!isFacebookPromoEnabled || !isEnabled) {
+    localStorage.removeItem(IS_CUSTOMER_FROM_FACEBOOK)
+    localStorage.removeItem(IS_CUSTOMER_FACEBOOK_PROMO_VIEWED)
+    localStorage.removeItem(IS_CUSTOMER_SUBSCRIBED_FROM_FACEBOOK)
+  }
+
+  window.BPN.smsConfig = {
+    isEnabled,
+    subscriptionDiscountedAmount: 5,
+    isCustomerFromFacebook,
+    isFacebookPromoEnabled,
+    productPurchaseType: "{{ product_purchase_type }}",
+    popupId: "{{ popup_id }}",
+    mobilePopupId: "{{ mobile_popup_id }}",
+    smsBenefitPopupId: "{{ sms_benefit_popup_id }}",
+    smsBenefitMobilePopupId: "{{ sms_benefit_mobile_popup_id }}",
+    showPopupDelay: Number("{{ show_popup_delay }}" || 6000),
+    showPopupWithDelay: {% if show_popup_with_delay == true %}true{% else %}false{% endif %},
+    hasFreeGiftProduct: {% if has_gwp_in_cart == true %}true{% else %}false{% endif %},
+    isCustomerEligibleForGift: {% if is_customer_eligible_for_gift == true %}true{% else %}false{% endif %},
+    freeProductGiftId: "{{ gwp_id }}",
+    announcementBarSettings: {
+      backgroundColor: "{{ background_color }}",
+      textColor: "{{ text_color }}",
+      notSubscribed: {
+        buttonText: `{{ settings.not_subscribed_customer_button_text | metafield_tag }}`,
+        text: `{{ settings.not_subscribed_customer_text | metafield_tag }}`
+      },
+      subscribed: {
+        buttonText: `{{ settings.subscribed_customer_button_text | metafield_tag }}`,
+        text: `{{ settings.subscribed_customer_text | metafield_tag }}`
+      },
+      paidMediaTraffic: {
+        buttonText: `{{ settings.paid_media_traffic_not_subscribed_customer_button_text | metafield_tag }}`,
+        text: `{{ settings.paid_media_traffic_not_subscribed_customer_text | metafield_tag }}`
+      },
+      paidMediaTrafficSubscribed: {
+        text: `{{ settings.paid_media_traffic_subscribed_customer_text | metafield_tag }}`
+      }
+    }
+  }
+</script>

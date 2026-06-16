@@ -1,0 +1,54 @@
+{%- assign length = header-extra.count | minus: 1 -%}
+
+{%- if customer -%}
+  {%- assign accountUrl = '/account' -%}
+{%- else -%}
+  {%- assign accountUrl = '/account/login' -%}
+{%- endif -%}
+
+<div class="header-extra">
+  {% for index in (0..length) %}
+    {%- assign _icon = 'icon_' | append: index -%}
+    {%- assign _link = 'link_' | append: index -%}
+    {%- assign _type = 'type1_' | append: index -%}
+
+    {% if header-extra[_type] == 'Account' %}
+      <div class="header__customerWrapper">
+        <div class="header-extra__item">
+          <a href="{{ accountUrl }}" class="header__icon js-user-icon" data-sl="user_account" title="User login">
+            <img src="{{ header-extra[_icon].url }}" alt="User login" width="20" height="20"
+                 data-click-id="nav_top-account">
+          </a>
+        </div>
+      </div>
+    {% elsif header-extra[_type] == 'Search' %}
+      <div class="header__search-wrapper search-icon">
+        <a
+          class="header-extra__item js-search"
+          href="javascript:void(0);"
+          data-sl="search_trigger"
+          title="Open searchbar"
+        >
+          {% render 'icon', icon: 'header-search', class: 'icon-search--desktop header-extra__icon', tag: 'nav_top-search' %}
+          {% render 'icon', icon: 'header-close', class: 'js-closeSearch-icon icon--closeSearch--mobile header-extra__icon' %}
+        </a>
+        {% render 'search-drawer' %}
+      </div>
+    {% elsif header-extra[_type] == 'Cart' and request.path != '/cart' %}
+      <div class="header-extra__cart" data-click-id="nav_top-cart"
+      >
+        <a
+          id="cart-trigger"
+          class="header-extra__cartAnchor"
+          data-sl="home-cart-item-count"
+          title="Open cart drawer"
+          data-click-id="nav_top-cart"
+          onclick="window.openCartDrawer && window.openCartDrawer()"
+        >
+          {% render 'icon', icon: 'bag', tag: 'nav_top-cart' %}
+          <span class="cart-count" data-click-id="nav_top-cart">{{ cart.item_count }}</span>
+        </a>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

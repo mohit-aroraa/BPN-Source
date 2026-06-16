@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="{{ locale }}" dir="{{ direction }}" class="{{ checkout_html_classes }}">
+  <head>
+    {% comment %} 1. Character Encodings {% endcomment %}
+    <meta name="em-bypass">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+    <meta name="referrer" content="origin">
+
+    {% comment %} Consent Mode + GTM Container (must load before all other scripts) {% endcomment %}
+    {% render 'gcm-integration-script' %}
+    {% render 'gtm-head' %}
+
+    {% comment %} 2. Title {% endcomment %}
+    <title>{{ page_title }}</title>
+
+    {% comment %} 3. Preconnected Links {% endcomment %}
+    {% render 'head-preconnect' %}
+
+    {% comment %} 4. Synchronous Scripts {% endcomment %}
+    {% include 'head-first-scripts' %}
+
+    {% comment %} 5. Synchronous CSS {% endcomment %}
+    {% render 'head-fonts' %}
+    {% render 'tv-squared' %}
+    {{ checkout_stylesheets }}
+    {{ checkout_scripts }}
+    {% render 'style-bundle', layout: 'checkout' %}
+    <style>
+      .idme {
+        display: none!important;
+      }
+      .os-step__description {
+        display: none!important;
+      } /* hide Shop App button */
+    </style>
+
+    {% comment %} 6. Preloaded Links {% endcomment %}
+
+    {% comment %} 7. Asynchronous or deferred Scripts {% endcomment %}
+    <script async src="https://cdn.rebuyengine.com/onsite/js/rebuy.js?shop={{ shop.permanent_domain }}"></script>
+    <script async type="application/javascript"  src="https://sdk.postscript.io/integrations/sdk-min.js"></script>
+    <script type="text/javascript" async src="//storage.googleapis.com/instapage-assets/conversion-external.js"></script>
+    <!-- begin Convert Experiences code-->
+    <script type="text/javascript">
+      var _conv_page_type = "{{ request.page_type }}";
+      var _conv_category_id = "{{ collection.id }}";
+      var _conv_category_name = "{{ collection.title }}";
+      var _conv_product_sku = "{{ product.selected_variant.sku }}";
+      var _conv_product_name = "{{ product.title }}";
+      var _conv_product_price = "{{ product.price_min | money_without_currency }}";
+      var _conv_customer_id = "{{ customer.id }}";
+      var _conv_custom_v1 = "{{ product.tags.first }}";
+      var _conv_custom_v2 = "{{ collection.current_type }}";
+      var _conv_custom_v3 = "{{ cart.item_count }}";
+      var _conv_custom_v4 = "{{ cart.total_price | money_without_currency }}";
+    </script>
+    <script type="text/javascript" src="//cdn-4.convertexperiments.com/js/10046444-10047025.js"></script>
+    <!-- end Convert Experiences code -->
+
+    {% comment %} 8. Prefetched Links {% endcomment %}
+
+    {% comment %} 9. Prerendered Links {% endcomment %}
+
+    {% comment %} 10. Non-rendering assets {% endcomment %}
+    {% render 'head-favicon' %}
+    {{ content_for_header }}
+
+  </head>
+  <body>
+    {% comment %} Edgemesh Server: Dynamic Data {% endcomment %}
+    <dynamic>
+      {% render 'gtm-body' %}
+      {% render 'gtm-data-layer-user-data' %}
+    </dynamic>
+    {{ skip_to_content_link }}
+
+    <header class="banner" data-header role="banner">
+      <div class="wrap">
+        {{ content_for_logo }}
+      </div>
+    </header>
+
+    {{ order_summary_toggle }}
+    <div class="content" data-content>
+      <div class="wrap">
+        <div class="main">
+          <header class="main__header" role="banner">
+            {{ content_for_logo }}
+            {%- comment -%}{{ breadcrumb }}{%- endcomment -%}
+            {{ alternative_payment_methods }}
+          </header>
+          <main class="main__content" role="main">
+            {{ content_for_layout }}
+          </main>
+          <footer class="main__footer" role="contentinfo">
+            {{ content_for_footer }}
+          </footer>
+        </div>
+        <aside class="sidebar" role="complementary">
+          <div class="sidebar__header">
+            {{ content_for_logo }}
+          </div>
+          <div class="sidebar__content">
+            {{ content_for_order_summary }}
+          </div>
+
+          <div class="hc-check-badge">
+            {% render 'bare-standard-logo' %}
+            <div class="hc-badge-text">
+              Bare Performance Nutrition tests every single batch of product for prohibited substances and quality
+              standards before it’s released to the market.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {{ tracking_code }}
+
+    {% render 'script-bundle', layout: 'checkout' %}
+
+    <div data-rebuy-id="106959"></div>
+    <script
+      async
+      src="https://cdn.rebuyengine.com/onsite/js/rebuy.js?shop=bare-performance-nutrition.myshopify.com"
+    ></script>
+  </body>
+  {{ 'idme-checkout-style.css' | asset_url | stylesheet_tag }}
+  {{ 'idme-checkout-template.js' | asset_url | script_tag }}
+  {% render 'audioeye-script' %}
+  {% include 'footer-crazy-egg' %}
+  <script
+    src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=WXXxWk"
+    type="text/javascript"
+    data-em-load="afterInteractive"
+  ></script>
+  <script src="https://app.octaneai.com/bsg3u3ljo4kplzuf/shopify.js" async defer></script>
+
+  <iframe
+    class="instapage-noscrap"
+    src=""
+    name="instapage-local-storage"
+    id="instapage-local"
+    height="0px"
+    width="0px"
+    onload="
+      (function() { InstapageExternalConversion(23827499);  }
+      )();
+    "
+    style="display: block;"
+    loading="lazy"
+  ></iframe>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+      const iframe = document.querySelector('iframe#instapage-local');
+      iframe && iframe.setAttribute('src', '//d3mwhxgzltpnyp.cloudfront.net/local-storage/index.html');
+    });
+  </script>
+</html>

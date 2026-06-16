@@ -1,0 +1,77 @@
+{% assign _product = product %}
+<a class="product-card swiper-slide" href="{{ _product.url }}">
+    <div class="product-card__image-container">
+        <img class="product-card__image"
+             src="{{ product.images[0].src | img_url: '304x304' }}"
+             alt="{{ product.title }}">
+    </div>
+    <div class="product-card__content">
+        <div class="product-card__rating">
+            {{ _product.metafields.okendo.StarRatingSnippet }}
+        </div>
+
+        <h4 class="product-card__title">
+            {{ _product.title }}
+        </h4>
+
+        {% assign product_card_description = _product.metafields.custom.product_card_description | default: '' %}
+
+        <p class="product-card__category">
+            {{ product_card_description }}
+        </p>
+
+        {% assign variants_count = _product.variants | size | default: 0 %}
+
+        {% if variants_count != 0 %}
+            <div class="product-card__dropdown">
+                <button class="product-card__dropdown-trigger" data-click-id="home_page_video_shop_product_{{ index }}_flavor">
+                    <span>
+                        {% assign variant_icon = _product.selected_or_first_available_variant.metafields.custom.product_card_variation_icon | default: blank %}
+                        {% if variant_icon != blank %}
+                            {{ variant_icon }}
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                 fill="none">
+                            <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5"/>
+                        </svg>
+                        {% endif %}
+                        <span class="name">{{ _product.selected_or_first_available_variant.options }}</span></span>
+                    </span>
+                    {% render 'icon', icon: 'buttom-arrow' %}
+                </button>
+
+                <div class="product-card__dropdown-content">
+                    {% for variant in _product.variants %}
+                        {% assign variant_icon = variant.metafields.custom.product_card_variation_icon | default: blank %}
+
+                        <div class="product-card__dropdown-item{% if forloop.index == 1 %} selected{% endif %}"
+                             data-product_id="{{ product.id }}"
+                             data-variation_id="{{ variant.id }}"
+                             data-product_name="{{ variant.options }}"
+                        >
+                            {% if variant_icon != blank %}
+                                {{ variant_icon }}
+                            {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"
+                                     fill="none">
+                                    <circle cx="6" cy="6" r="5.75" fill="white" stroke="#CCCCCC" stroke-width="0.5"/>
+                                </svg>
+                            {% endif %}
+
+                            {{ variant.options }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <button
+                class="product-card__add-button"
+                data-variation_id="{{ product.selected_or_first_available_variant.id }}"
+                data-product_id="{{ product.id }}"
+                data-click-id="home_page_video_shop_product_{{ index }}_cta"
+        >
+            ADD TO CART - <span>{{ _product.price | money | remove: " " }}</span>
+        </button>
+    </div>
+</a>

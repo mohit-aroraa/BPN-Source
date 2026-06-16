@@ -1,0 +1,87 @@
+@mixin alignment-helpers($bp: 'tablet') {
+  &--m-left {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  &--m-center {
+    justify-content: center;
+    text-align: center;
+  }
+
+  &--m-right {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  &--m-top {
+    align-items: flex-start;
+  }
+
+  &--m-v-center {
+    align-items: center;
+  }
+
+  &--m-bottom {
+    align-items: flex-end;
+  }
+
+  &--mobile-text-left  {
+    justify-self: flex-start;
+    text-align: left;
+    place-content: start;
+  }
+
+  &--mobile-text-center {
+    justify-self: center;
+    text-align: center;
+    place-content: center;
+  }
+
+  &--mobile-text-right {
+    justify-self: flex-end;
+    text-align: right;
+    place-content: end;
+  }
+
+  @include above($bp) {
+    &--d-left {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    &--d-center {
+      justify-content: center;
+      text-align: center;
+    }
+
+    &--d-right {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    &--d-top {
+      align-items: flex-start;
+    }
+
+    &--d-v-center {
+      align-items: center;
+    }
+
+    &--d-bottom {
+      align-items: flex-end;
+    }
+
+    &--desktop-text-left  {
+      text-align: left;
+    }
+
+    &--desktop-text-center {
+      text-align: center;
+    }
+
+    &--desktop-text-right {
+      text-align: right;
+    }
+  }
+}

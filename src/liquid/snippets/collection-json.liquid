@@ -1,0 +1,99 @@
+{%- paginate collection.products by 50 -%}
+  {%- for product in collection.products -%}
+    {%- capture collection_products -%}
+      {{ collection_products }}
+        {
+          "id": {{ product.id }},
+          "handle": "{{ product.handle }}",
+          "title": "{{ product.title | escape | strip }}",
+          "options": {{ product.options | json }},
+          "type":"{{ product.type }}",
+        {%- comment -%}
+          Fetch Category and dietary_preferences from Prismic
+        {%- endcomment -%}
+        {%- assign PID = '' | append: product.id -%}
+        {%- assign product_metafields = pages[PID].metafields -%}
+        {%- assign product_filter_section = product_metafields.filters -%}
+        {%- assign global_section = product_metafields.global_fileds -%}
+        {%- assign _filter_length = product_filter_section.count | minus: 1 -%}
+        {%- assign excerpt = global_section.excerpt -%}
+        {%- assign servings = global_section.servings -%}
+        {%- assign has_badge = product_filter_section.has_badge -%}
+        {%- assign badge_title = product_filter_section.badge_title -%}
+        {%- assign badge_background_color = product_filter_section.badge_background_color -%}
+        {%- assign badge_text_color = product_filter_section.badge_text_color -%}
+        {%- capture okendo_reviews -%}{{ product.metafields.okendo.StarRatingSnippet }}{%- endcapture -%}
+
+        {%- if excerpt != blank -%}
+          "product_description": {{ excerpt | json }},
+        {% endif %}
+        {%- if product.compare_at_price -%}
+          "compare_at_price": {{ product.compare_at_price }},
+        {%- endif -%}
+        {% if servings != blank %}
+          "serving": "{{ servings | escape }}",
+        {%- endif -%}
+
+        {%- if has_badge -%}
+          "product_badge_data": { "has_badge": {{ has_badge }}, "badge_title": "{{ badge_title | escape }}",
+          "badge_background_color": "{{ badge_background_color }}", "badge_text_color": "{{ badge_text_color }}" },
+        {%- endif -%}
+
+        {%- for index in (0.._filter_length) -%}
+          {%- assign _filter_type = 'filter_type_' | append: index -%}
+          {%- assign _filter_tags = 'tags_' | append: index -%}
+          {%- if product_filter_section[_filter_tags] -%}
+            {%- assign split_tags = product_filter_section[_filter_tags] | split: ' | ' -%}
+
+            {%- capture category -%}
+              [
+              {%- for tag in split_tags -%}
+                "{{ tag }}"
+                {%- unless forloop.last -%}
+                  ,
+                {%- endunless -%}
+              {%- endfor -%}
+              ]
+            {%- endcapture -%}
+
+            {%- if product_filter_section[_filter_type] == 'category' -%}
+              "product_category": {{ category }},
+            {%- endif -%}
+
+            {%- if product_filter_section[_filter_type] == 'dietary_preferences' -%}
+              "product_dietary_preferences": {{ category }},
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        "available": {{ product.available }},
+        "price":{{ product.price }},
+        "published_at": "{{- product.published_at | date: '%Y-%m-%d %H:%M' -}}",
+        "created_at": "{{ product.created_at | date: '%Y-%m-%d %H:%M' }}",
+        "url": "{{ product.url }}",
+        "media": {{ product.media | json }},
+        "images": {{ product.images | json }}, "tags":{{ product.tags | json }},
+        "reviews_markup": {{ okendo_reviews | json }},
+        "recharge_widget_status": {{ shop.metafields.subscriptions.published }},
+        "requires_selling_plan": {{ product.requires_selling_plan }},
+        {%- capture _spg_json -%}[{%- assign _is_first = true -%}{%- for spg in product.selling_plan_groups -%}{%- if settings.subscription_platform == 'skio' and spg.app_id != 'SKIO' -%}{%- continue -%}{%- endif -%}{%- if settings.subscription_platform != 'skio' and spg.app_id == 'SKIO' -%}{%- continue -%}{%- endif -%}{%- unless _is_first -%},{%- endunless -%}{%- assign _is_first = false -%}{{ spg | json }}{%- endfor -%}]{%- endcapture -%}
+        "selling_plan_groups": {{ _spg_json }},
+        "variants": [
+          {%- for variant in product.variants -%}
+            {
+              "id": {{ variant.id }},
+              "title": "{{ variant.title | escape }}",
+              "price": {{ variant.price }},
+              "available": {{ variant.available }},
+              "featured_image": {{ variant.featured_image | json }},
+              "inventory_quantity": {{ variant.inventory_quantity }},
+              "sku": "{{ variant.sku }}"
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+          ]
+        }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endcapture -%}
+  {%- endfor -%}
+{%- endpaginate -%}
+[
+{{- collection_products -}}
+]

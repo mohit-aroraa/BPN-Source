@@ -1,0 +1,161 @@
+{% comment %}put this field to dropdown{% endcomment %}
+{% assign show_menu_link = true %}
+{%- assign linklist = linklists[dropdownData.dropdown_handle] | default: blank -%}
+{%- assign length = dropdownData.count | minus: 1 -%}
+
+{% assign cta_text = dropdownData.dropdown_cta_text | default: blank %}
+{% assign cta_link = dropdownData.dropdown_cta_link | default: blank %}
+{% assign click_id_prefix = click_id_prefix | replace: 'supplements', 'supps' | default: "" %}
+{% assign show_dropdown_menu_title = dropdownData.show_dropdown_menu_title %}
+
+<div class="header-dropdown">
+    <div class="header-container">
+        {% if linklist and linklist.links.size > 0 %}
+            <div class="header-dropdown__menu{% if length == 0 %} full-view{% endif %}">
+                <ul class="header-dropdown__menu-header">
+                    {% for link in linklist.links %}
+                        {% assign dropdown_click_id_prefix = click_id_prefix %}
+                        <li class="header-dropdown__menu-item">
+                            {% if show_dropdown_menu_title %}
+                                {% assign dropdown_click_id_prefix = click_id_prefix | append: link.title | append: '_' %}
+                                <div class="header-dropdown__menu-title">
+                                    <a onclick="return undefined">
+                                        {{- link.title | remove: '@border' -}}
+                                    </a>
+                                </div>
+                            {% endif %}
+                            {% if link.links.size > 0 %}
+                                <ul class="header-dropdown__subMenu-header">
+                                    {% for sublink in link.links %}
+                                        {% assign click_id = dropdown_click_id_prefix | append: sublink.title | downcase | replace: ' ', '-' | replace: '.', '' %}
+                                        {% assign click_id = click_id | replace: '-protein', '' %}
+                                        {% if sublink.title contains '@b' %}
+                                            <li class="header-dropdown__subMenu-item">
+                                                <a
+                                                        href="{{ sublink.url }}"
+                                                        class="header-dropdown__subMenu-title header-dropdown__subMenu-title--bold"
+                                                        data-sl="{{ sublink.title | downcase | replace: ' ', '_' }}"
+                                                        data-click-id="{{- click_id -}}"
+                                                >
+                                                    {{- sublink.title | remove: '@b' -}}
+                                                </a>
+                                            </li>
+                                        {% elsif sublink.title contains '@title' %}
+                                            <li class="header-dropdown__menu-title header-dropdown__menu-title--subMenu">
+                                                <a
+                                                        href="{{ sublink.url }}"
+                                                        data-click-id="{{- click_id -}}"
+                                                >
+                                                    {{- sublink.title | remove: '@title' -}}
+                                                </a>
+                                            </li>
+                                        {% elsif sublink.title contains '@lr' %}
+                                            <li class="header-dropdown__subMenu-item">
+                                                <a
+                                                        href="{{ sublink.url }}"
+                                                        class="header-dropdown__subMenu-title header-dropdown__subMenu-title--red"
+                                                        data-sl="{{ sublink.title | downcase | replace: ' ', '_' }}"
+                                                        data-click-id="{{- click_id -}}"
+
+                                                >
+                                                    {{- sublink.title | remove: '@lr' -}}
+                                                </a>
+                                            </li>
+                                        {% elsif sublink.title contains '@ft' %}
+                                            <li class="header-dropdown__subMenu-item header-dropdown__subMenu-item--new">
+                                                {% assign _featured_text_letters = sublink.title | split: '=' %}
+                                                {% for letter in _featured_text_letters %}
+                                                    {% if letter contains '$' %}
+                                                        {% assign _feature_text = letter %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% assign _remove_text_from_title = '@ft=' | append: _feature_text | append: '=' %}
+                                                <a
+                                                        href="{{ sublink.url }}"
+                                                        class="header-dropdown__subMenu-title"
+                                                        data-sl="{{ sublink.title | downcase | replace: ' ', '_' }}"
+                                                        data-click-id="{{- click_id -}}"
+
+                                                >
+                                                    {{- sublink.title | remove: _remove_text_from_title -}}
+                                                </a>
+                                                <sup>{{ _feature_text | remove: '$' }}</sup>
+                                            </li>
+                                        {% else %}
+                                            <li class="header-dropdown__subMenu-item">
+                                                <a
+                                                        href="{{ sublink.url }}"
+                                                        class="header-dropdown__subMenu-title"
+                                                        data-sl="{{ sublink.title | downcase | replace: ' ', '_' }}"
+                                                        data-click-id="{{- click_id -}}"
+
+                                                >
+                                                    {{- sublink.title -}}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if cta_text != blank and cta_link != blank %}
+                    {% assign cta_click_id = click_id_prefix | append: cta_text | downcase | replace: ' ', '-' %}
+                    <p class="header-dropdown__menu-link-container">
+                        <a href="{{ cta_link.url }}" data-click-id="{{- cta_click_id | replace: '_supplements', '_supps' | replace: '-content', '' | replace: '-supplements', '' -}}">{{ cta_text }}</a>
+                    </p>
+                {% endif %}
+            </div>
+        {% endif %}
+        <div class="header-dropdown__activity-container{% if length == 0 %} full-view{% endif %} {% if linklist == blank or linklist.links.size == 0 %} full-size{% endif %}">
+            {% for index in (0..length) %}
+                {% assign _activity_header_text = 'activity_header_text_' | append: index %}
+                {% assign _activity_header_text_clr = 'activity_header_text_color_' | append: index %}
+                {% assign _activity_image = 'activity_image_' | append: index %}
+                {% assign _cta_variant = 'cta_variant_' | append: index %}
+                {% assign _cta_link = 'cta_link_' | append: index %}
+                {% assign _cta_text = 'cta_text_' | append: index %}
+                {% assign activity_click_id = "" %}
+                {% assign one_index = index | plus: 1 %}
+                {% case click_id_prefix %}
+                    {% when 'nav_supps_' %}
+                        {% assign activity_click_id = click_id_prefix | append: 'promo' %}
+                {% else %}
+                        {% assign activity_click_id = click_id_prefix | append: 'thumbnail-' | append: one_index %}
+                {% endcase %}
+                <div class="header-dropdown__activity-area" data-href="{{ dropdownData[_cta_link] }}"                        
+                    data-click-id="{{- activity_click_id -}}"
+                >
+                    <img
+                            class="header-dropdown__activity-img lazyload"
+                            src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                            data-src="{{ dropdownData[_activity_image].url }}"
+                            alt="{{ dropdownData[_activity_image].alt }}"
+                            data-click-id="{{- activity_click_id -}}"
+                    >
+                    <div class="header-dropdown__activity-content" 
+                        data-click-id="{{- activity_click_id -}}"
+                    >
+                        <p
+                                class="header-dropdown__activity-title"
+                                style="color:{% if dropdownData[_activity_header_text_clr] %}{{ dropdownData[_activity_header_text_clr] }};{% else %}#000000;{% endif %}"
+                                data-click-id="{{- activity_click_id -}}"
+                        >
+                            {{ dropdownData[_activity_header_text] }}
+                        </p>
+                        <a
+                                href="{{ dropdownData[_cta_link] }}"
+                                data-sl="{{ dropdownData[_cta_text] | downcase | replace: ' ', '_' }}"
+                                class="button button-small{% if dropdownData[_cta_variant] == 'primary' %} button-primary {% else %} button-secondary {% endif %}"
+                                data-click-id="{{- activity_click_id -}}"
+                        >
+                            {{- dropdownData[_cta_text] -}}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

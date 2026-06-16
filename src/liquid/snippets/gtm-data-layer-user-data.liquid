@@ -1,0 +1,50 @@
+{%- comment -%}
+  GTM Data Layer - User Data
+  Pushes user_data_update event on every page load.
+  Rendered inside <dynamic> tags for Edgemesh compatibility.
+  Must fire before page_view so GTM has user context available.
+{%- endcomment -%}
+{%- if settings.gtm_datalayer_enabled -%}
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  {%- liquid
+    assign ltv_tier = 'guest'
+    if customer
+      assign total_spent = customer.total_spent | plus: 0
+      assign ltv_tier = 'low'
+      assign medium_threshold = settings.gtm_ltv_medium_threshold | default: 100 | plus: 0
+      assign high_threshold = settings.gtm_ltv_high_threshold | default: 500 | plus: 0
+
+      if total_spent >= high_threshold
+        assign ltv_tier = 'high'
+      elsif total_spent >= medium_threshold
+        assign ltv_tier = 'medium'
+      endif
+    endif
+  -%}
+
+  window.dataLayer.push({
+    event: 'user_data_update',
+    user_id: {%- if customer -%}{{ customer.id | json }}{%- else -%}null{%- endif -%},
+    user_properties: {
+      logged_in_status: {%- if customer -%}"member"{%- else -%}"guest"{%- endif -%},
+      customer_ltv_tier: "{{ ltv_tier }}",
+      orders_count: {%- if customer -%}{{ customer.orders_count | default: 0 }}{%- else -%}0{%- endif -%},
+      total_spent: {%- if customer -%}{{ customer.total_spent | plus: 0 }}{%- else -%}0{%- endif -%}
+    },
+    user_data: {%- if customer -%}{
+      email: {{ customer.email | json }},
+      phone_number: {{ customer.phone | json | default: 'null' }},
+      address: {
+        first_name: {{ customer.default_address.first_name | json | default: 'null' }},
+        last_name: {{ customer.default_address.last_name | json | default: 'null' }},
+        city: {{ customer.default_address.city | json | default: 'null' }},
+        region: {{ customer.default_address.province_code | json | default: 'null' }},
+        postal_code: {{ customer.default_address.zip | json | default: 'null' }},
+        country: {{ customer.default_address.country_code | json | default: 'null' }}
+      }
+    }{%- else -%}null{%- endif -%}
+  });
+</script>
+{%- endif -%}

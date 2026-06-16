@@ -1,0 +1,38 @@
+{%- comment -%}
+  -combo-product-area.scss required
+{%- endcomment -%}
+{%- assign block = section[module] -%}
+{%- assign title = block.title -%}
+{%- assign length = block.count | minus: 1 -%}
+<section class="comboProductArea" id="comboProductArea">
+  <div class="comboProductArea__title">{% render 'prismic-rich-text', rich_text: title %}</div>
+
+  <div class="comboProductArea__grid">
+    {%- for index in (0..length) -%}
+      {% assign featured_image_key = 'featured_image_' | append: index %}
+      {% assign combo_product_key = 'combo_product_' | append: index %}
+      {% assign product_handle_key = 'product_handle_' | append: index %}
+      {% assign product_description_key = 'product_description_' | append: index %}
+      {% assign feature_text_key = 'feature_text_' | append: index %}
+      {% assign discount_tag_key = 'discount_tag_' | append: index %}
+      {% assign product_id_key = 'product_id_' | append: index %}
+      {% if block[combo_product_key] %}
+        {% assign class = 'landingPageProductCard__combo' %}
+        {% assign card_type = 'combo' %}
+      {% else %}
+        {% assign class = '' %}
+        {% assign card_type = 'single' %}
+      {% endif %}
+      {% render 'landing-page-product-card',
+        class: class,
+        featured_image: block[featured_image_key],
+        featured_text: block[feature_text_key],
+        product_handle: block[product_handle_key],
+        description: block[product_description_key],
+        card_type: card_type,
+        discount_tag: block[discount_tag_key],
+        product_id: block[product_id_key]
+      %}
+    {%- endfor -%}
+  </div>
+</section>

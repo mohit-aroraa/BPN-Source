@@ -1,0 +1,47 @@
+{%- comment -%}
+  -selected_variant: required
+  -variants: required
+  -variant_selector: required for combo product
+{%- endcomment -%}
+{% assign variants_count = variants | size %}
+
+<div class="productVariantDropdown productVariantDropdown--landingPage  {% if variants_count == 1 %}hide{% endif %}">
+  <button
+    type="button"
+    title="Product variant selector"
+    aria-expanded="false"
+    data-sl="landing_page_variant_selector_trigger"
+    data-variant-dropdown-trigger
+    data-selected-item="{{ selected_variant.id }}"
+    class="productVariantDropdown__trigger gtm-landing-page-variant-selector-trigger"
+    {% if product.variants.size == 1 %}
+      disabled
+    {% endif %}
+  >
+    <span class="text">{{ selected_variant.title }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6" class="arrow">
+      <path d="M9.126 1.126 5.222 5.03a.305.305 0 0 1-.444 0L.874 1.126" stroke="#000" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </button>
+  <ul class="productVariantDropdown__items">
+    {% for variant in variants %}
+      <li
+        role="button"
+        data-variant-id="{{variant.id}}"
+        data-variant-title="{{variant.title}}"
+        data-variant-selector
+        {% if variant_selector != blank %}
+          data-product-variant-selector="{{variant_selector | strip}}"
+        {% endif %}
+        data-variant-available="{{variant.available}}"
+        class="productVariantDropdown__item {% if variant.id == selected_variant.id %}productVariantDropdown__item--selected js-product-variant-dropdown-item-selected{% endif %} {% unless variant.available %}productVariantDropdown__item--soldOut{% endunless %}"
+        title="{{ variant.title }}"
+      >
+        {{ variant.title }}
+        {% unless variant.available %}
+          <sup>Sold Out</sup>
+        {% endunless %}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

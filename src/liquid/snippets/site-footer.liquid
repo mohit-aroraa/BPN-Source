@@ -1,0 +1,183 @@
+{%- assign footer_metafields = pages.footer.metafields -%}
+{%- assign footer_global_section = footer_metafields.footer_global -%}
+
+{%- assign enable = footer_global_section.enable -%}
+{%- assign fda_statement = footer_global_section.fda_statement -%}
+{%- assign running_line_text = footer_global_section.running_line_text -%}
+{%- assign bottom_nav_handle = footer_global_section.bottom_nav_handle -%}
+{%- assign nav_handle = footer_global_section.nav_handle | default: 'footer-navigation' -%}
+
+{%- assign primary_cta_text = footer_global_section.primary_cta_text -%}
+{%- assign primary_cta_url = footer_global_section.primary_cta_url -%}
+{%- assign secondary_cta_text = footer_global_section.secondary_cta_text -%}
+{%- assign secondary_cta_link = footer_global_section.secondary_cta_link -%}
+
+{%- comment -%}
+  Fetch social links
+{%- endcomment -%}
+{%- assign global_data_meta = pages['site-global-data'].metafields -%}
+{%- assign social_section = global_data_meta.social_links -%}
+{%- assign fb_link = social_section.facebook_link -%}
+{%- assign yt_link = social_section.youtube_link -%}
+{%- assign ig_link = social_section.instagram_link -%}
+{%- assign tiktok_link = social_section.tiktok_link -%}
+
+{% assign footer_navigation_links = linklists[nav_handle].links %}
+
+{%- if enable -%}
+  <footer class='footer'>
+    <div class='footer-header'>
+      <div class='footer-header__logo'>
+        {% render 'icon', icon: 'site-logo', class: 'siteFooter__logo' %}
+        {% render 'icon', icon: 'desktop-site-logo', class: 'siteFooter__logo' %}
+      </div>
+      <div class='footer-header__links'>
+        <a
+          class='footer-header__secondary-link link'
+          href='{{ primary_cta_url.url }}'
+        >
+          {{- primary_cta_text -}}
+        </a>
+        <a
+          class='footer-header__primary-link link'
+          href='{{ secondary_cta_link.url }}'
+          target='_blank'
+        >
+          {{- secondary_cta_text -}}
+        </a>
+      </div>
+    </div>
+
+    <nav class='footer-navigation'>
+      {% for link in footer_navigation_links %}
+        {% assign click_id_prefix = 'footer_' %}
+        {% assign link_handle = link.handle | downcase %}
+        {% case link_handle %}
+          {% when 'apparel-gear' %}
+            {% assign click_id_prefix = click_id_prefix | append: 'gear_' %}
+          {% when 'contact-us' %}
+            {% assign click_id_prefix = click_id_prefix | append: 'contact_' %}
+          {% else %}
+            {% assign click_id_prefix = click_id_prefix | append: link_handle | append: '_' %}
+        {% endcase %}
+        <div class='footer-navigation__link-list'>
+          <h3 class='footer-navigation__link-list-name'>{{ link.title }}</h3>
+          {% for sub_link in link.links %}
+            {% assign sublink_handle = sub_link.handle | downcase %}
+            {% assign click_id = click_id_prefix %}
+            {% case sublink_handle %}
+              {% when 'take-the-quiz' %}
+                {% assign click_id = click_id | append: 'take-quiz' %}
+              {% when 'frequently-asked-questions' %}
+                {% assign click_id = click_id | append: 'faqs' %}
+              {% when 'send-a-message' %}
+                {% assign click_id = click_id | append: 'send-message' %}
+              {% when 'data-subject-access-request' %}
+                {% assign click_id = click_id | append: 'data-request' %}
+              {% else %}
+                {% assign click_id = click_id | append: sublink_handle %}
+            {% endcase %}
+            {%- if sub_link.title == 'Accessibility Tool' -%}
+              <a
+                class='footer-navigation__link js-ae-toolbar-trigger'
+                data-click-id='{{ click_id }}'
+              >
+                {{- sub_link.title -}}
+              </a>
+            {% else %}
+              <a
+                href='{{ sub_link.url }}'
+                class='footer-navigation__link'
+                data-click-id='{{ click_id }}'
+              >
+                {{- sub_link.title -}}
+              </a>
+            {%- endif -%}
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </nav>
+
+    <div class='footer-social'>
+      <ul class='footer-social__list'>
+        <li class='footer-social__list-item'>
+          <a
+            href='{{ yt_link | strip }}'
+            target='_blank'
+            aria-label='YouTube url'
+            data-click-id='footer_socials_youtube'
+          >
+            {% render 'social-icons', icon: 'youtube' %}
+            YouTube
+            {% render 'icon', icon: 'plus' %}
+          </a>
+        </li>
+        <li class='footer-social__list-item'>
+          <a
+            href='{{ ig_link | strip }}'
+            target='_blank'
+            aria-label='BPN instagram url'
+            data-click-id='footer_socials_ig'
+          >
+            {% render 'social-icons', icon: 'insta' %}
+            INSTAGRAM
+            {% render 'icon', icon: 'plus' %}
+          </a>
+        </li>
+        <li class='footer-social__list-item'>
+          <a
+            href='{{ fb_link | strip }}'
+            target='_blank'
+            aria-label='BPN facebook url'
+            data-click-id='footer_socials_facebook'
+          >
+            {% render 'social-icons', icon: 'facebook' %}
+            FACEBOOK
+            {% render 'icon', icon: 'plus' %}
+          </a>
+        </li>
+        <li class='footer-social__list-item'>
+          <a
+            href='{{ tiktok_link | strip }}'
+            target='_blank'
+            aria-label='BPN tiktok url'
+            data-click-id='footer_socials_tiktok'
+          >
+            {% render 'social-icons', icon: 'tik-tok' %}
+            TIKTOK
+            {% render 'icon', icon: 'plus' %}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class='footer-bottom'>
+      <div class='footer-bottom__running-line'>
+        <p>{{ running_line_text }}</p>
+      </div>
+
+      <p class='footer-bottom__statement'>
+        {{ fda_statement | strip }}
+      </p>
+
+      <ul class='footer-bottom__links'>
+        {% for link in linklists[bottom_nav_handle].links %}
+          <li>
+            <a href='{{ link.url }}'>
+              {% if link.title == 'Accessibility' %}
+                <span class='mobile-only'
+                  >Access-<br>
+                  ibility</span
+                >
+                <span class='desktop-only'>Accessibility</span>
+              {% else %}
+                {{ link.title }}
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% render 'theme-version' %}
+  </footer>
+{% endif %}

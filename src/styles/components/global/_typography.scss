@@ -1,0 +1,88 @@
+/*========================================
+These are created using design system
+========================================*/
+
+.heading-1,
+.heading-2,
+.heading-3,
+.heading-4,
+.heading-5 {
+  @include use-text-style("heading");
+  text-transform: uppercase;
+}
+
+.heading-1 {
+  @include use-text-style("heading-1");
+}
+.heading-2 {
+  @include use-text-style("heading-2");
+}
+.heading-3 {
+  @include use-text-style("heading-3");
+}
+.heading-4 {
+  @include use-text-style("heading-4");
+}
+.heading-5 {
+  @include use-text-style("heading-5");
+}
+.text-display-1 {
+  @include use-text-style("display-1");
+}
+.para-body-1,
+.para-body-2,
+.para-body-3,
+.para-body-4 {
+  @include use-text-style("paragraph");
+}
+.para-body-1 {
+  @include use-text-style("paragraph-body-1");
+}
+.para-body-2 {
+  @include use-text-style("paragraph-body-2");
+}
+.para-body-3 {
+  @include use-text-style("paragraph-body-3");
+}
+.para-body-4 {
+  @include use-text-style("paragraph-body-4");
+}
+.para--strong {
+  font-weight: 700;
+}
+.lead-1,
+.lead-2,
+.lead-3,
+.lead-4 {
+  @include use-text-style("lead");
+}
+.lead-1 {
+  @include use-text-style("lead-1");
+}
+.lead-2 {
+  @include use-text-style("lead-2");
+}
+.lead-3 {
+  @include use-text-style("lead-3");
+}
+.lead-4 {
+  @include use-text-style("lead-4");
+}
+.sectionTitle {
+  font-size: 24px;
+  letter-spacing: -0.7px;
+  line-height: 1.167;
+  font-weight: 900;
+  margin-bottom: 24px;
+  text-align: center;
+
+  @include above("tablet-large") {
+    font-size: 40px;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 48px;
+  }
+}
+.text-uppercase {
+  text-transform: uppercase;
+}

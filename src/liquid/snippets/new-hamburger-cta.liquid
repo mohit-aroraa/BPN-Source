@@ -1,0 +1,12 @@
+{% if section.settings.mobile_cta_copy or section.settings.mobile_cta_text and section.settings.mobile_cta_link %}
+<div class="bpn-hamburger-drawer-cta-container">
+  {% if section.settings.mobile_cta_copy %}
+    <div class="bpn-hamburger-drawer-cta-container__copy">
+      {{ section.settings.mobile_cta_copy }}
+    </div>
+  {% endif %}
+  {% if section.settings.mobile_cta_text and section.settings.mobile_cta_link %}
+    <a class="bpn-hamburger-drawer-cta-container__cta" href="{{ section.settings.mobile_cta_link }}">{{ section.settings.mobile_cta_text  }}</a>
+  {% endif %}
+</div>
+{% endif %}

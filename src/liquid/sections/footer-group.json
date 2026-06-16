@@ -1,0 +1,58 @@
+ {
+   "type": "footer",
+   "name": "Footer",
+   "sections": {
+     "main_footer_Er7Axm": {
+       "type": "main-footer",
+       "blocks": {
+         "buttons_CTWFQB": {
+           "type": "buttons",
+           "settings": {
+             "button_text": "START HERE: TAKE THE QUIZ",
+             "button_link": "shopify://pages/quiz",
+             "open_in_new_tab": false,
+             "button_style": "secondary"
+           }
+         },
+         "buttons_eUzXGV": {
+           "type": "buttons",
+           "settings": {
+             "button_text": "SHOP WITH THE BPN APP",
+             "button_link": "https://apps.apple.com/us/app/bpn-supps/id1478543231",
+             "open_in_new_tab": true,
+             "button_style": "primary"
+           }
+         },
+         "scrolling_text_dMWncT": {
+           "type": "scrolling_text",
+           "settings": {
+             "scrolling_text": "GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;GO ONE MORE®&nbsp;&nbsp;&nbsp;&nbsp;"
+           }
+         },
+         "footer_statement_VDWEMH": {
+           "type": "footer_statement",
+           "settings": {
+             "footer_statement": "These statements have not been evaluated by the Food and Drug Administration. These products are not intended to diagnose, treat, cure or prevent any disease."
+           }
+         }
+       },
+       "block_order": [
+         "buttons_CTWFQB",
+         "buttons_eUzXGV",
+         "scrolling_text_dMWncT",
+         "footer_statement_VDWEMH"
+       ],
+       "settings": {
+        "footer_nav_handle": "footer-navigation",
+        "footer_bottom_nav": "footer-bottom",
+        "youtube_link": "https://www.youtube.com/user/barelifenutrition",
+         "instagram_link": "https://instagram.com/bpnsupps/",
+         "facebook_link": "https://www.facebook.com/BarePerformanceNutrition/",
+         "tiktok_link": "https://www.tiktok.com/@bpnsupps"
+       }
+     }
+   },
+   "order": [
+     "main_footer_Er7Axm"
+   ]
+ }

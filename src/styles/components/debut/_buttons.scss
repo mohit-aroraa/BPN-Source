@@ -1,0 +1,222 @@
+/*================ #Links and Buttons ================*/
+a {
+  color: $color-text;
+  text-decoration: none;
+
+  &:not([disabled]):hover,
+  &:focus {
+    color: $color-text-focus;
+  }
+
+  &.classic-link {
+    text-decoration: underline;
+  }
+}
+
+a[href^="tel"] {
+  color: inherit;
+}
+
+/*================ Buttons ================*/
+.btn {
+  @include user-select();
+  @include prefix(appearance, none, webkit moz spec);
+  display: inline-block;
+  width: auto;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+  padding: $input-padding-top-bottom-small $input-padding-left-right-small;
+  background-color: $color-btn-primary;
+  color: $color-btn-primary-text;
+  font-style: $font-style-header;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: normal;
+  font-size: calc(#{$font-size-base} - 2px);
+
+  @include mq($medium-up) {
+    padding: $input-padding-top-bottom $input-padding-left-right;
+  }
+
+  &:not([disabled]):hover,
+  &:focus {
+    color: $color-btn-primary-text;
+    background-color: $color-btn-primary-focus;
+  }
+
+  .icon-arrow-right,
+  .icon-arrow-left {
+    height: 9px;
+  }
+
+  &[disabled],
+  &[aria-disabled] {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: $color-btn-primary;
+  border-color: $color-btn-primary;
+
+  &:not([disabled]):hover,
+  &:focus {
+    background-color: transparent;
+    color: $color-btn-primary-focus;
+    border-color: $color-btn-primary-focus;
+  }
+}
+
+.btn--secondary-accent {
+  background-color: $color-body;
+  color: $color-btn-primary;
+  border-color: $color-btn-primary;
+
+  &:not([disabled]):hover,
+  &:focus {
+    background-color: $color-body;
+    color: $color-btn-primary-focus;
+    border-color: $color-btn-primary-focus;
+  }
+}
+
+.btn--small {
+  padding: 8px 10px;
+  font-size: calc(12);
+  line-height: 1;
+}
+
+.btn--tertiary {
+  background-color: transparent;
+  color: $color-small-button-text-border;
+  border-color: $color-small-button-text-border;
+
+  &:not([disabled]):hover,
+  &:focus {
+    background-color: transparent;
+    color: $color-small-button-text-border-focus;
+    border-color: $color-small-button-text-border-focus;
+  }
+}
+
+/*================ Button variations ================*/
+@include mq($small) {
+  .btn--small-wide {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+.btn--link {
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  color: $color-text;
+  text-align: left;
+
+  &:not([disabled]):hover,
+  &:focus {
+    color: $color-text-focus;
+    background-color: transparent;
+  }
+
+  .icon {
+    vertical-align: middle;
+  }
+}
+
+.btn--narrow {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.btn--has-icon-after {
+  .icon {
+    margin-left: 10px;
+  }
+}
+
+.btn--has-icon-before {
+  .icon {
+    margin-right: 10px;
+  }
+}
+
+/*================ Force an input/button to look like a text link ================*/
+.text-link {
+  /*  display: inline;*/
+  border: 0 none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+.text-link--accent {
+  color: $color-btn-primary;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+
+  &:not([disabled]):hover,
+  &:focus {
+    color: $color-btn-primary-focus;
+  }
+}
+
+/*================ Return to collection/blog links ================*/
+.return-link-wrapper {
+  margin-top: ($section-spacing * 1.5);
+  margin-bottom: 0;
+
+  @include mq($small) {
+    margin-top: $section-spacing;
+  }
+}
+
+.full-width-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
+.btn--share {
+  background-color: transparent;
+  border-color: $color-border;
+  color: $color-text;
+  margin-right: 5px;
+  margin-bottom: 10px;
+
+  &:not([disabled]):hover,
+  &:focus {
+    background-color: transparent;
+    border-color: $color-btn-social-focus;
+    color: $color-text;
+  }
+
+  .icon {
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+
+  .icon-facebook {
+    fill: $color-facebook;
+  }
+
+  .icon-twitter {
+    fill: $color-twitter;
+  }
+
+  .icon-pinterest {
+    fill: $color-pinterest;
+  }
+}

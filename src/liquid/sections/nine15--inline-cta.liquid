@@ -1,0 +1,76 @@
+<!-- sections/nine15--inline-cta -->
+
+{% include 'master--inline-cta' %}
+
+{% schema %}
+{
+	"name": "Inline CTA",
+	"settings": [
+	    {
+	      	"type":"image_picker",
+	      	"id":"image",
+	      	"label":"Icon Image"
+	    },
+	    {
+	      	"type":"text",
+	      	"id":"title",
+	      	"label":"Title"
+	    },
+	    {
+	      	"type":"textarea",
+	      	"id":"text",
+	      	"label":"Text"
+	    },
+	    {
+	      	"type":"text",
+	      	"id":"link_text",
+	      	"label":"Link Text"
+	    },
+	    {
+	      	"type":"url",
+	      	"id":"link_url",
+	      	"label":"Link Url"
+	    },
+	    {
+	      	"type":"header",
+	      	"content": "Custom CSS Rules"
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Explanation of Custom CSS rules below input."
+	    },
+	    {
+	      	"type": "html",
+	      	"id": "custom_css",
+	      	"label": "Custom CSS"
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Use '==' to reference this block's parent container, that way the css you use only applies to this container. The example below applies font size to only the h2 element in the current block's container."
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Ex: '== h2 { font-size: 20px; }'"
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Use '/MEDIA_QUERY/' to create media queries that match css defaults. The example below would output '@media screen and (max-width: 749px)' before the css."
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Ex: '/small/ { == h2 { font-size: 20px; } }'"
+	    },
+	    {
+	      	"type":"paragraph",
+	      	"content": "Media Queries: narrow, not-narrow, small, medium, medium-up, medium-down, large, large-up, large-down, ex-large, ex-large-up, ex-large-down, widescreen"
+	    }
+	],
+	"presets": [
+		{
+			"name": "Inline CTA",
+			"category": "1 - NINE15"
+		}
+	]
+}
+{% endschema %}
+

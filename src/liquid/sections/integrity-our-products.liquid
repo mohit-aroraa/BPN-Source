@@ -1,0 +1,53 @@
+<div class="bs-brand-section  gray-bg  right-top-strip behind-our-products">
+  <div class="bs-brand-inner text-center">
+    <h2 class="wow fadeInUp">
+      {{ section.settings.title }}
+    </h2>
+
+    <ul class="brands-wrap wow fadeInUp">
+      {% for block in section.blocks %}
+        <li>
+          <a href="{{ block.settings.product_url }}">
+            <img src="{{ block.settings.logo }}" width="75" height="75" loading="lazy"
+          ></a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Our Products",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "our-products",
+      "name": "Our products",
+      "settings": [
+        {
+          "id": "logo",
+          "type": "text",
+          "label": "Logo URL"
+        },
+        {
+          "id": "product_url",
+          "type": "text",
+          "label": "Product URL"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

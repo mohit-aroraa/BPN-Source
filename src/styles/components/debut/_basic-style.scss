@@ -1,0 +1,23 @@
+/*================ #Basic Styles ================*/
+body,
+html {
+  background-color: $color-body;
+  scroll-behavior: smooth;
+}
+
+.main-content {
+  display: block;
+  padding-top: $section-spacing-small;
+
+  @include mq($medium-up) {
+    padding-top: $section-spacing;
+  }
+}
+
+.section-header {
+  margin-bottom: $section-spacing-small;
+
+  @include mq($medium-up) {
+    margin-bottom: $section-spacing;
+  }
+}

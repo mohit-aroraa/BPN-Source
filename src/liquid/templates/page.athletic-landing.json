@@ -1,0 +1,14 @@
+{
+  "layout": "anatta_theme",
+  "wrapper": "div#div_id.div_class[attribute-one=value]",
+  "sections": {
+    "main": {
+      "type": "product",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

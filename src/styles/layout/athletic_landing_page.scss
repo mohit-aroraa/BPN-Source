@@ -1,0 +1,49 @@
+/*
+ * Basic file with global styles.
+ * Files imported here will be available on every page.
+ */
+
+@charset 'UTF-8';
+
+// Normalization
+// @import "~accoutrement/sass/init";
+
+//  Only Required components of bootstrap
+// @import "../font-face";
+@import "../minimum-resets";
+
+// Design Tokens
+@import "./src/design-tokens/index";
+@import "../root";
+
+body {
+  font-family: "Blender pro","Arial","Helvetica Neue","Helvetica",sans-serif;
+}
+
+// Global Components
+@import "swiper/swiper.scss";
+@import "swiper/modules/a11y/a11y.scss";
+@import "swiper/modules/scrollbar/scrollbar.scss";
+@import "swiper/modules/free-mode/free-mode.scss";
+@import "swiper/modules/controller/controller.scss";
+@import "swiper/modules/autoplay/autoplay.scss";
+@import "swiper/modules/thumbs/thumbs.scss";
+@import "swiper/modules/lazy/lazy.scss";
+@import "swiper/modules/mousewheel/mousewheel.scss";
+@import "./src/styles/components/global/index";
+@import "../components/shared/prismic/site-accordion";
+@import "../components/shared/prismic/landing-header.scss";
+
+.div-tooltip {
+  background-color: color("white");
+}
+.hover-reveal {
+  cursor: pointer;
+}
+.swiper-lazy-preloader {
+  width: 30px;
+  height: 30px;
+  border-width: 2px;
+  margin-left: -15px;
+  margin-top: -15px;
+}

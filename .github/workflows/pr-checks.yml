@@ -1,0 +1,52 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint (ESLint + Stylelint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linters
+        run: npm run lint
+
+  build-check:
+    name: Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build (production)
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Confirm dist is complete
+        run: |
+          echo "dist/ summary:"
+          echo "  Total files : $(find dist -type f | wc -l | tr -d ' ')"
+          echo "  JS/CSS files: $(find dist/assets -name '*.js' -o -name '*.css' | wc -l | tr -d ' ')"
+          echo "  Liquid files: $(find dist -name '*.liquid' | wc -l | tr -d ' ')"

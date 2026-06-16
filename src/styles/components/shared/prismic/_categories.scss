@@ -1,0 +1,112 @@
+.categories {
+  $parent: &;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 64px;
+  padding-left: 12px;
+  @include above("mobile-large") {
+    padding-right: 12px;
+  }
+  @include above("tablet-large") {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @include above("desktop-med") {
+    margin-bottom: 126px;
+  }
+  &__wrapperSwiper {
+    @include above("tablet") {
+      margin-left: -16px;
+      margin-right: -16px;
+      box-sizing: border-box;
+      justify-content: center;
+    }
+  }
+}
+.categoryBlock {
+  $parent: &;
+  @include above("tablet") {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-left: 16px;
+    padding-right: 16px;
+    .swiper-lazy-preloader {
+      display: none;
+    }
+  }
+  &__link {
+    color: color("black");
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    &:hover,
+    &:focus {
+      &:not([disabled]) {
+        color: color("black");
+      }
+      #{$parent}__action {
+        .arrow {
+          left: 8px;
+          & > * {
+            stroke: color("warm-red");
+          }
+        }
+      }
+      #{$parent}__image {
+        transform: scale(1.1);
+      }
+    }
+  }
+  &__media {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+    @include above("desktop-med") {
+      margin-bottom: 20px;
+      height: 260px;
+    }
+  }
+  &__image {
+    width: 100%;
+    transition: transform ease-in-out 0.2s;
+
+    &--mobile {
+      @include above("tablet") {
+        display: none;
+      }
+    }
+    &--desktop {
+      display: none;
+      @include above("tablet") {
+        display: block;
+      }
+    }
+  }
+  &__action {
+    display: flex;
+    align-items: center;
+    .text {
+      @include use-text-style("paragraph-body-2");
+      font-weight: 700;
+      margin-right: 8px;
+      @include above("tablet-large") {
+        @include use-text-style("heading-5");
+      }
+    }
+    .arrow {
+      position: relative;
+      left: 0;
+      transition: left ease-in-out 0.2s;
+      width: 11.79px;
+      height: 10px;
+      flex-shrink: 0;
+      @include above("tablet-large") {
+        width: 12.99px;
+        height: 12px;
+      }
+    }
+  }
+}

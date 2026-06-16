@@ -1,0 +1,179 @@
+{%- assign _section = section.settings -%}
+<section class='bpn-reviews'>
+  <div class='bpn-reviews__content'>
+    <div class='bpn-reviews__stars-container'>
+      {% render 'icon', icon: 'stars-red' %}
+    </div>
+    {% if _section.subtitle != blank %}
+      <h3
+        class='bpn-reviews__subtitle bpn-text-title-1-large'
+        style='color: {{ _section.subtitle_color }}'
+      >
+        {{ _section.subtitle }}
+      </h3>
+    {% endif %}
+    {% if _section.title != blank %}
+      <h2 class='bpn-reviews__title bpn-text-h3' style='color: {{ _section.title_color }}'>
+        {{ _section.title }}
+      </h2>
+    {% endif %}
+  </div>
+
+  <div class='bpn-reviews-slider swiper' data-reviews-swiper>
+    <div class='bpn-reviews-slider__navigation'>
+      <div class='swiper-button swiper-button-prev' data-click-id='homepage_reviews_navigation'>
+        {% render 'icon', icon: 'left-arrow', tag: 'homepage_reviews_navigation' %}
+      </div>
+      <div class='swiper-button swiper-button-next' data-click-id='homepage_reviews_navigation'>
+        {% render 'icon', icon: 'right-arrow', tag: 'homepage_reviews_navigation' %}
+      </div>
+    </div>
+
+    <div class='swiper-wrapper bpn-reviews-slider__wrapper'>
+      {% for block in section.blocks %}
+        {%- assign _block = block.settings -%}
+
+        <div class='bpn-review-card swiper-slide'>
+          <div class='bpn-review-card__rating'>
+            {% render 'icon', icon: 'black-stars' %}
+          </div>
+          {% if _block.product_name != blank %}
+            <h4
+              class='bpn-review-card__title bpn-text-title-1-large'
+              style='color: {{ _block.product_name_color }}'
+            >
+              {{ _block.product_name }}
+            </h4>
+          {% endif %}
+          {% if _block.author_name != blank %}
+            <p
+              class='bpn-review-card__author bpn-text-body-base'
+              style='color: {{ _block.author_name_color }}'
+            >
+              {{ _block.author_name }}
+              {% render 'icon', icon: 'verivied' %}
+              {% if _block.author_role != blank %}
+                <span
+                  class='bpn-review-card__author-title bpn-text-body-base'
+                  style='color: {{ _block.author_role_color }}'
+                >
+                  {{- _block.author_role -}}
+                </span>
+              {% endif %}
+            </p>
+          {% endif %}
+          {% if _block.author_comment != blank %}
+            <p
+              class='bpn-review-card__text bpn-text-body-base'
+              style='color: {{ _block.author_comment_color }}'
+            >
+              {{ _block.author_comment }}
+            </p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class='bpn-reviews-slider__controls'>
+      <div class='swiper-pagination bpn-reviews-slider__pagination'></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "BPN Reviews",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Color"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Product"
+        },
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Name"
+        },
+        {
+          "type": "color",
+          "id": "product_name_color",
+          "label": "Name Color"
+        },
+        {
+          "type": "header",
+          "content": "Author"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Name"
+        },
+        {
+          "type": "color",
+          "id": "author_name_color",
+          "label": "Name Color"
+        },
+        {
+          "type": "text",
+          "id": "author_role",
+          "label": "Role"
+        },
+        {
+          "type": "color",
+          "id": "author_role_color",
+          "label": "Role Color"
+        },
+        {
+          "type": "header",
+          "content": "Review"
+        },
+        {
+          "type": "textarea",
+          "id": "author_comment",
+          "label": "Comment"
+        },
+        {
+          "type": "color",
+          "id": "author_comment_color",
+          "label": "Comment Color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BPN Reviews",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

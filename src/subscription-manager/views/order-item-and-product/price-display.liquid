@@ -1,0 +1,17 @@
+<div class="og-price">
+  {% set final_unit_price = order_item.total_price / order_item.quantity %}
+  <span class="og-price og-final-price">{{ final_unit_price | currency(order.currency_code) }}</span>
+  {% if order_item.show_original_price %}
+    <span class="visually-hidden">{{ 'price_a11y_discount_label' | t }}</span>
+    <span class="og-price og-original-price">
+      <s>{{ order_item.price | currency(order.currency_code) }}</s>
+    </span>
+  {% endif %}
+</div>
+{% set discount = order_item.price - final_unit_price %}
+{% if order_item.show_original_price %}
+  <p class="og-item-description-text">
+    {{ 'price_savings_preview' | t }}
+    {{ discount | currency(order.currency_code) }}
+  </p>
+{% endif %}

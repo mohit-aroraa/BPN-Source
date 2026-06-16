@@ -1,0 +1,15 @@
+{% assign gwp_settings = shop.metaobjects.gwp['settings'] %}
+{% if gwp_settings.enable_timer %}
+  {% render 'bfcm-offer-banner' , fixed : true %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "BFCM Offer Banner",
+  "presets": [
+    {
+      "name": "BFCM Offer Banner"
+    }
+  ]
+}
+{% endschema %}

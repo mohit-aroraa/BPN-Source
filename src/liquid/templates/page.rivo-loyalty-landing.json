@@ -1,0 +1,308 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "rivo-loyalty-landing-page": {
+      "type": "rivo-loyalty-landing-page",
+      "settings": {
+        "primary_color": "#111111",
+        "secondary_color": "#ffffff",
+        "page_background_color": "",
+        "rivo_icon_color": "#111111",
+        "title_font_style": "uppercase",
+        "title_font_family": "Blender pro",
+        "subtitle_font_family": "Blender pro",
+        "section_title_font_color": "#111111",
+        "section_subtitle_font_color": "#111111",
+        "page_max_width": 1200,
+        "section_title_font_size": 48,
+        "section_title_font_weight": 800,
+        "section_subtitle_font_size": 18,
+        "section_subtitle_font_weight": 400,
+        "section_padding": 40,
+        "card_background_color": "#ffffff",
+        "card_font_color": "#000000",
+        "card_title_font_size": 18,
+        "card_title_font_weight": 600,
+        "card_subtitle_font_size": 16,
+        "card_subtitle_font_weight": 500,
+        "card_icon_size": 44,
+        "card_container_max_width": 960,
+        "card_order": "stacked",
+        "corner_type": "rounded",
+        "modal_background_color": "#ffffff",
+        "modal_font_color": "#000000",
+        "modal_icon_color": "#000000",
+        "modal_icon_position_top": 15,
+        "modal_icon_position_right": 15,
+        "modal_login_title_font_size": 22,
+        "modal_title_font_size": 22,
+        "modal_subtitle_font_size": 16,
+        "modal_body_font_size": 16,
+        "modal_icon_size": 44,
+        "vip_desktop_progress_bar_width": 50,
+        "vip_table_tier_td_border_top": "none",
+        "custom_css": ".rivo-content-wrapper {\n  padding-left: 15px;\n  padding-right: 15px;\n}\n\n/* — REFERRALS — */\n#rivo-lp-referral-campaign {\n  padding: 0px !important;\n}\n\niframe.rivo-referral {\n  margin: 0 auto;\n  background: #000;\n}\n\n.rivo-lp-content {\n  padding: 0px;\n  max-width: 100%;\n}\n\n/* — MOBILE — */\n@media (max-width: 749px) {\n  .rivo-content-wrapper {\n    padding-left: 10px;\n    padding-right: 10px;\n    padding-top: 20px !important;\n    padding-bottom: 20px !important;\n  }\n  .rivo-mobile-banner-overlay .rivo-lp-content {\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n  }\n  .rivo-lp-cards-container {\n    width: 100% !important;\n  }\n  .rivo-hero-banner-text {\n    padding-top: 40px;\n    padding-bottom: 40px;\n  }\n  #rivo-lp-my-rewards .rivo-lp-content {\n    padding: 25px 10px;\n    margin: 0 10px;\n  }\n  .rivo-card-icon svg,\n  .rivo-card-icon img {\n    height: 50px !important;\n    width: 50px !important;\n  }\n}"
+      }
+    },
+    "1779723851f01c7ce8": {
+      "type": "apps",
+      "blocks": {
+        "rivo_loyalty_rewards_referrals_lp_referral_campaign_cgQcBq": {
+          "type": "shopify://apps/rivo-loyalty-rewards-referrals/blocks/lp-referral-campaign/580e9665-b2cd-4dbc-b6ba-6445ac9e6871",
+          "settings": {
+            "background_color": "",
+            "referral_campaign_id": ""
+          }
+        }
+      },
+      "block_order": [
+        "rivo_loyalty_rewards_referrals_lp_referral_campaign_cgQcBq"
+      ],
+      "settings": {}
+    },
+    "rivo_how_it_works_refer_2_qVUfGp": {
+      "type": "rivo-how-it-works-refer-2",
+      "blocks": {
+        "step_CtgMMe": {
+          "type": "step",
+          "settings": {
+            "title": "Sign Up",
+            "content": "<p>Simply share your unique referral link with your friends and family. </p>"
+          }
+        },
+        "step_FTXTVy": {
+          "type": "step",
+          "settings": {
+            "title": "Share Your Link",
+            "content": "<p>When they use your link to make a purchase, they get $5 off their first order of $30 or more, and you'll get $5 off your next purchase.</p>"
+          }
+        },
+        "step_TdAG73": {
+          "type": "step",
+          "settings": {
+            "title": "Keep Referring",
+            "content": "<p>The more people you refer, the more rewards you'll earn.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_CtgMMe",
+        "step_FTXTVy",
+        "step_TdAG73"
+      ],
+      "name": "Rivo: How It Works",
+      "settings": {
+        "left_image": "shopify://shop_images/SECONDARY_IMAGE.jpg",
+        "kicker": "How It Works",
+        "heading": "Pass It On",
+        "subheading": "",
+        "background": "#111111",
+        "title_color": "#ffffff",
+        "subtitle_color": "#ffffff",
+        "body_color": "#ffffff",
+        "kicker_text": "#eb1001",
+        "border_color": "#eb1001",
+        "accordion_title_color": "#ffffff",
+        "arrow_color": "#ffffff",
+        "arrow_hover_color": "#eb1001"
+      }
+    },
+    "testimonials_AiMCDY": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_mydFet": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Luke Hopkins",
+            "name_color": "",
+            "role": "Hybrid Athlete",
+            "role_color": "",
+            "text": "\"BPN is more than a supplement company; it's the source that fuels the relentless devotion to achieve greatness.\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo6k_R5LeNNTw_4w_lukehop.png"
+          }
+        },
+        "testimonial_WKUwAn": {
+          "type": "testimonial",
+          "settings": {
+            "name": "SALLY McRAE",
+            "name_color": "",
+            "role": "Professional Ultrarunner",
+            "role_color": "",
+            "text": "“I'm always looking for good, wholesome fuel, to make me feel good and strong. BPN helps me keep fueling strong to keep training strong!\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5yNR5LeNNTw_Sy_sally.png"
+          }
+        },
+        "testimonial_yQhPXn": {
+          "type": "testimonial",
+          "settings": {
+            "name": "RUSSEL ORHII",
+            "name_color": "",
+            "role": "Professional Powerlifter",
+            "role_color": "",
+            "text": "“I choose BPN because of how everything is thoroughly tested to ensure I’m getting products that are CLEAN.”",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5y7R5LeNNTw_TJ_russ.png"
+          }
+        },
+        "testimonial_9cFYwN": {
+          "type": "testimonial",
+          "settings": {
+            "name": "LOGAN WILSON",
+            "name_color": "",
+            "role": "NFL® Linebacker",
+            "role_color": "",
+            "text": "\"I choose BPN products because they test for banned substances all while being a high-quality product that delivers good taste and results.”",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo5zsh5LeNNTw_Tn_wilson.png"
+          }
+        },
+        "testimonial_EeEDH8": {
+          "type": "testimonial",
+          "settings": {
+            "name": "AMANDA KIMIKO",
+            "name_color": "",
+            "role": "Hybrid Athlete",
+            "role_color": "",
+            "text": "\"I choose BPN because of the brand’s dedication to using high quality, and clean ingredients while still offering incredible flavors.\"",
+            "testimonial_text_color": "",
+            "image": "shopify://shop_images/Zo53yh5LeNNTw_WS_amanda.png"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_mydFet",
+        "testimonial_WKUwAn",
+        "testimonial_yQhPXn",
+        "testimonial_9cFYwN",
+        "testimonial_EeEDH8"
+      ],
+      "disabled": true,
+      "name": "BPN Testimonials Section",
+      "settings": {
+        "title": "WE ARE A BRAND FOR THE COMMITTED",
+        "title_color": "",
+        "subtitle": "- UNWAVERING IN THE PURSUIT OF YOUR GOALS.",
+        "subtitle_color": ""
+      }
+    },
+    "rivo_faq_74cyeP": {
+      "type": "rivo-faq",
+      "blocks": {
+        "faq_item_6QehUG": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "How does the refer a friend program work?",
+            "rivo_faq_answer": "<p>When you refer a friend, they will receive a link to purchase with a special discount that will automatically apply to their first order, and you'll receive a reward too.</p>",
+            "rivo_faq_open_default": true
+          }
+        },
+        "faq_item_i7k3YQ": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "How do I refer a friend?",
+            "rivo_faq_answer": "<p>Simply share your unique referral link with friends and family. You can find your referral link on the referral page.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_QxHFmr": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "How do I track the number of referrals I've made?",
+            "rivo_faq_answer": "<p>You can track all your referrals and their status through the rewards page. It will show you how many friends you've referred and which ones have completed a purchase.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_wL7Cwb": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "Is there a limit to how many people I can refer?",
+            "rivo_faq_answer": "<p>No, there is no limit! You can refer as many friends as you'd like and earn rewards for each successful referral.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_iJBC4m": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "How does my friend get the discount?",
+            "rivo_faq_answer": "<p>When your friend clicks on your referral link, the discount will be automatically applied to their cart at checkout. No coupon code needed.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_963km4": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "Can I refer friends who are already customers?",
+            "rivo_faq_answer": "<p>The referral program is designed for new customers. Friends who have already made a purchase may not be eligible for the referral discount.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_F7TQGH": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "How will I know if my friend has made a purchase?",
+            "rivo_faq_answer": "<p>You'll receive a notification and your reward will be automatically added to your account once your friend completes their first purchase using your referral link.</p>",
+            "rivo_faq_open_default": false
+          }
+        },
+        "faq_item_kwnDVf": {
+          "type": "faq_item",
+          "settings": {
+            "rivo_faq_question": "What happens if my referral fails?",
+            "rivo_faq_answer": "<p>It's rare, but every once in a while a referral doesn't go through. Usually it's one of these:<br/><br/>  - Your friend has shopped with us before, so the new-customer reward doesn't apply<br/>  - Their order didn't quite meet the minimum the referral requires<br/>  - Their order was canceled or refunded after they placed it<br/>  - Our anti-fraud system blocked it (this is automatic and we don't see every case, so if you think it's a mistake, just ask)<br/><br/>  You can always check the status of your referrals from your <a href=\"https://www.bareperformancenutrition.com/pages/loyalty-program?popup_panel=email_stats\" title=\"https://www.bareperformancenutrition.com/pages/loyalty-program?popup_panel=email_stats\">account</a>. If you have any questions, drop us a note. We're happy to look into it for you.</p>",
+            "rivo_faq_open_default": false
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_6QehUG",
+        "faq_item_i7k3YQ",
+        "faq_item_QxHFmr",
+        "faq_item_wL7Cwb",
+        "faq_item_iJBC4m",
+        "faq_item_963km4",
+        "faq_item_F7TQGH",
+        "faq_item_kwnDVf"
+      ],
+      "name": "Rivo: FAQ Accordion",
+      "settings": {
+        "rivo_section_id_prefix": "rivo-faq",
+        "rivo_section_bg_color": "#f2f2f2",
+        "rivo_section_bg_gradient": "",
+        "rivo_section_padding_top": 40,
+        "rivo_section_padding_bottom": 60,
+        "rivo_section_title": "Frequently Asked Questions",
+        "rivo_section_title_color": "#111111",
+        "rivo_section_subtitle": "",
+        "rivo_section_subtitle_color": "#111111",
+        "rivo_header_bottom_margin": 20,
+        "rivo_faq_question_color": "#111111",
+        "rivo_faq_answer_color": "#111111",
+        "rivo_faq_divider_color": "#111111",
+        "rivo_faq_divider_width": 2,
+        "rivo_faq_icon_color": "#111111",
+        "rivo_faq_icon_size": 24,
+        "rivo_faq_question_padding": 22,
+        "rivo_faq_enable_highlight": true,
+        "rivo_faq_highlight_color": "#d2f34c",
+        "rivo_faq_max_width": 1440
+      }
+    }
+  },
+  "order": [
+    "rivo-loyalty-landing-page",
+    "1779723851f01c7ce8",
+    "rivo_how_it_works_refer_2_qVUfGp",
+    "testimonials_AiMCDY",
+    "rivo_faq_74cyeP"
+  ]
+}

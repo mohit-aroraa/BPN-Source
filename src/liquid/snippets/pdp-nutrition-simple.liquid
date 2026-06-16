@@ -1,0 +1,105 @@
+
+
+  {%- for variant in product.variants -%}
+  <div data-id="{{ variant.id }}" class="variation-data variation-data-{{ variant.id }}" style="display:none"%}>
+  	{% if variant.metafields.custom_fields["text_above_table"] != blank %}
+    	{{ variant.metafields.custom_fields["text_above_table"] }}
+    {% else if product.metafields.custom_fields["text_above_table"] != blank %}
+    	{{ product.metafields.custom_fields["text_above_table"] }}
+    {% endif %}
+
+    {% if variant.metafields.custom_fields["nutrition_table"] != blank %}
+    	<table class="table">
+        <thead>
+          <tr>
+            <th width="60%">&nbsp;</th>
+            <th>Amount per Serving</th>
+            <th>% Daily Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% assign separator = "|###|" %}
+          {% assign nutrition_title_array = variant.metafields.custom_fields["nutrition_title"] | split: separator %}
+          {% assign amount_per_serving_array = variant.metafields.custom_fields["amount_per_serving"] | split: separator %}
+          {% assign percentage_daily_value_array = variant.metafields.custom_fields["percentage_daily_value"] | split: separator %}
+          {% assign fc_keys = variant.metafields.custom_fields["nutrition_table"] | split: "," %}
+          {% for i in fc_keys %}
+          {% assign index = i | plus: 0 %}
+          <tr>
+            <td>{{ nutrition_title_array[index] }}</td>
+            <td>{{ amount_per_serving_array[index] }}</td>
+            <td>{{ percentage_daily_value_array[index] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+	{% else if product.metafields.custom_fields["nutrition_table"] != blank %}
+    	<table class="table">
+          <thead>
+            <tr>
+              <th width="60%">&nbsp;</th>
+              <th>Amount per Serving</th>
+              <th>% Daily Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% assign separator = "|###|" %}
+            {% assign nutrition_title_array = product.metafields.custom_fields["nutrition_title"] | split: separator %}
+            {% assign amount_per_serving_array = product.metafields.custom_fields["amount_per_serving"] | split: separator %}
+            {% assign percentage_daily_value_array = product.metafields.custom_fields["percentage_daily_value"] | split: separator %}
+            {% assign fc_keys = product.metafields.custom_fields["nutrition_table"] | split: "," %}
+            {% for i in fc_keys %}
+            {% assign index = i | plus: 0 %}
+            <tr>
+              <td>{{ nutrition_title_array[index] }}</td>
+              <td>{{ amount_per_serving_array[index] }}</td>
+              <td>{{ percentage_daily_value_array[index] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
+
+    {% if variant.metafields.custom_fields["text_below_table"] != blank %}
+    	{{ variant.metafields.custom_fields["text_below_table"] }}
+    {% else if product.metafields.custom_fields["text_below_table"] != blank %}
+    	{{ product.metafields.custom_fields["text_below_table"] }}
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div class="data-content-default variation-data">
+  {% if product.metafields.custom_fields["text_above_table"] != blank %}
+  	{{ product.metafields.custom_fields["text_above_table"] }}
+  {% endif %}
+
+  {% if product.metafields.custom_fields["nutrition_table"] != blank %}
+  	<table class="table">
+    <thead>
+      <tr>
+        <th width="60%">&nbsp;</th>
+        <th>Amount per Serving</th>
+        <th>% Daily Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% assign separator = "|###|" %}
+      {% assign nutrition_title_array = product.metafields.custom_fields["nutrition_title"] | split: separator %}
+      {% assign amount_per_serving_array = product.metafields.custom_fields["amount_per_serving"] | split: separator %}
+      {% assign percentage_daily_value_array = product.metafields.custom_fields["percentage_daily_value"] | split: separator %}
+      {% assign fc_keys = product.metafields.custom_fields["nutrition_table"] | split: "," %}
+      {% for i in fc_keys %}
+      {% assign index = i | plus: 0 %}
+      <tr>
+        <td>{{ nutrition_title_array[index] }}</td>
+        <td>{{ amount_per_serving_array[index] }}</td>
+        <td>{{ percentage_daily_value_array[index] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if product.metafields.custom_fields["text_below_table"] != blank %}
+  	{{ product.metafields.custom_fields["text_below_table"] }}
+  {% endif %}
+  </div>

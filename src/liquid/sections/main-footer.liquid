@@ -1,0 +1,255 @@
+{%- liquid
+  assign youtube_link = section.settings.youtube_link
+  assign instagram_link = section.settings.instagram_link
+  assign facebook_link = section.settings.facebook_link
+  assign tiktok_link = section.settings.tiktok_link
+-%}
+
+<footer class='bpn-footer'>
+  <div class='bpn-footer__header'>
+    <div class='bpn-footer__logo'>
+      {% render 'icon', icon: 'site-logo' %}
+    </div>
+
+    {% assign button_blocks = section.blocks | where: 'type', 'buttons' %}
+    {% if button_blocks.size > 0 %}
+      <div class='bpn-footer__header-links'>
+        {% for block in button_blocks %}
+          {% if block.settings.button_link != blank %}
+            <a
+              class='bpn-footer__link bpn-footer__link--{{ block.settings.button_style }}'
+              href='{{ block.settings.button_link }}'
+              {% if block.settings.open_in_new_tab == true %}
+                target='_blank'
+              {% endif %}
+            >
+              {{ block.settings.button_text }}
+            </a>
+          {% endif %}
+        {% endfor %}
+        {% if section.settings.enable_country_selector %}
+          {% render 'localization-form' %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <nav class='bpn-footer__navigation'>
+    {% for link in linklists[section.settings.footer_nav_handle].links %}
+      {%- liquid
+        assign click_id_prefix = 'footer_'
+        assign link_handle = link.handle | downcase
+        case link_handle
+          when 'apparel-gear'
+            assign click_id_prefix = click_id_prefix | append: 'gear_'
+          when 'contact-us'
+            assign click_id_prefix = click_id_prefix | append: 'contact_'
+          else
+            assign click_id_prefix = click_id_prefix | append: link_handle | append: '_'
+        endcase
+      -%}
+
+      <div class='bpn-footer__nav-group'>
+        <h3 class='bpn-footer__nav-title'>{{ link.title }}</h3>
+        {% for sub_link in link.links %}
+          {%- liquid
+            assign sublink_handle = sub_link.handle | downcase
+            assign click_id = click_id_prefix
+            case sublink_handle
+              when 'take-the-quiz'
+                assign click_id = click_id | append: 'take-quiz'
+              when 'frequently-asked-questions'
+                assign click_id = click_id | append: 'faqs'
+              when 'send-a-message'
+                assign click_id = click_id | append: 'send-message'
+              when 'data-subject-access-request'
+                assign click_id = click_id | append: 'data-request'
+              else
+                assign click_id = click_id | append: sublink_handle
+            endcase
+          -%}
+          {%- if sub_link.title == 'Accessibility Tool' -%}
+            <a class='bpn-footer__nav-link js-ae-toolbar-trigger' data-click-id='{{ click_id }}'>
+              {{- sub_link.title -}}
+            </a>
+          {% else %}
+            <a
+              href='{{ sub_link.url }}'
+              class='bpn-footer__nav-link'
+              data-click-id='{{ click_id }}'
+            >
+              {{- sub_link.title -}}
+            </a>
+          {%- endif -%}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </nav>
+  {% if youtube_link != blank
+    or instagram_link != blank
+    or facebook_link != blank
+    or tiktok_link != blank
+  %}
+    <div class='bpn-footer__social'>
+      {% render 'footer-social-list',
+        youtube_link: youtube_link,
+        instagram_link: instagram_link,
+        facebook_link: facebook_link,
+        tiktok_link: tiktok_link
+      %}
+    </div>
+  {% endif %}
+
+  <div class='bpn-footer__bottom'>
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'scrolling_text' %}
+          {% if block.settings.scrolling_text != blank %}
+            <div class='bpn-footer__running-text'>
+              <p>{{ block.settings.scrolling_text }}</p>
+            </div>
+          {% endif %}
+        {% when 'footer_statement' %}
+          {% if block.settings.footer_statement != blank %}
+            <p class='bpn-footer__statement'>
+              {{ block.settings.footer_statement }}
+            </p>
+          {% endif %}
+      {% endcase %}
+    {% endfor %}
+
+    <ul class='bpn-footer__bottom-links'>
+      {% for link in linklists[section.settings.footer_bottom_nav].links %}
+        <li class='bpn-footer__bottom-item'>
+          <a href='{{ link.url }}' class='bpn-footer__bottom-link'>
+            {% if link.title == 'Accessibility' %}
+              <span class='bpn-footer__bottom-link--mobile'
+                >Access-<br>
+                ibility</span
+              >
+              <span class='bpn-footer__bottom-link--desktop'>{{ link.title }}</span>
+            {% else %}
+              {{ link.title }}
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% render 'theme-version' %}
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_nav_handle",
+      "label": "Footer Primary Nav"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_bottom_nav",
+      "label": "Footer Bottom/Secondary Nav"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "label": "Enable Country Selector",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Social Media"
+    },
+    {
+      "type": "url",
+      "id": "youtube_link",
+      "label": "Youtube"
+    },
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Facebook"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_link",
+      "label": "TikTok"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "buttons",
+      "name": "Buttons",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_in_new_tab",
+          "label": "Open in new tab"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "scrolling_text",
+      "name": "Scrolling Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "scrolling_text",
+          "label": "Scrolling Text"
+        }
+      ]
+    },
+    {
+      "type": "footer_statement",
+      "name": "Footer Statement",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "footer_statement",
+          "label": "Footer Statement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

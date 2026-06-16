@@ -1,0 +1,321 @@
+{% assign section_id = 'rivo-' | append: section.id %}
+{% if section.settings.rivo_section_id_prefix != blank %}
+  {% assign section_id = 'rivo-' | append: section.settings.rivo_section_id_prefix %}
+{% endif %}
+
+<div class="rivo-lp-section">
+  <div id="{{ section_id }}" class="rivo-content-wrapper" style="
+    background-color: {{ section.settings.rivo_section_bg_color }};
+    {% if section.settings.rivo_section_bg_image != blank %}
+      background-image: url('{{ section.settings.rivo_section_bg_image | image_url: width: 1920 }}');
+      background-size: cover;
+      background-position: center center;
+    {% endif %}
+    {% if section.settings.rivo_section_bg_gradient != blank %}
+      background: {{ section.settings.rivo_section_bg_gradient }};
+    {% endif %}
+    padding-top: {{ section.settings.rivo_section_padding_top }}px;
+    padding-bottom: {{ section.settings.rivo_section_padding_bottom }}px;
+  ">
+    <div class="rivo-lp-content">
+
+      <!-- Section Header -->
+      <div class="rivo-lp-section-header">
+        {% if section.settings.rivo_section_title != blank %}
+          <h2 class="rivo-lp-section-title" style="color: {{ section.settings.rivo_section_title_color | default: '#0a0a0a' }};">
+            {{ section.settings.rivo_section_title }}
+          </h2>
+        {% endif %}
+        {% if section.settings.rivo_section_subtitle != blank %}
+          <div class="rivo-lp-section-subtitle" style="color: {{ section.settings.rivo_section_subtitle_color | default: '#666666' }};">
+            {{ section.settings.rivo_section_subtitle }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- FAQ Items -->
+      <div class="rivo-faq-list">
+        {% for block in section.blocks %}
+          {% if block.type == 'faq_item' %}
+            <div class="rivo-faq-item {% if block.settings.rivo_faq_open_default %}rivo-faq-active{% endif %}" {{ block.shopify_attributes }}>
+              <button class="rivo-faq-question" aria-expanded="{% if block.settings.rivo_faq_open_default %}true{% else %}false{% endif %}" aria-controls="{{ section_id }}-answer-{{ forloop.index }}">
+                <span class="rivo-faq-question-text" style="color: {{ section.settings.rivo_faq_question_color }};">{{ block.settings.rivo_faq_question }}</span>
+                <span class="rivo-faq-icon" style="color: {{ section.settings.rivo_faq_icon_color }};" aria-hidden="true">+</span>
+              </button>
+              <div class="rivo-faq-answer" id="{{ section_id }}-answer-{{ forloop.index }}" role="region">
+                <div class="rivo-faq-answer-inner" style="color: {{ section.settings.rivo_faq_answer_color }};">
+                  {{ block.settings.rivo_faq_answer }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  {% if section.settings.rivo_section_bg_image_mobile != blank %}
+    @media (max-width: 768px) {
+      #{{ section_id }} {
+        background-image: url('{{ section.settings.rivo_section_bg_image_mobile | image_url: width: 800 }}') !important;
+      }
+    }
+  {% endif %}
+
+  #{{ section_id }} .rivo-lp-content {
+    width: 100%;
+    margin: 0px auto 0px auto;
+    padding: 0px 3rem;
+    align-items: start;
+  }
+
+  #{{ section_id }} .rivo-lp-section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0px 0px {{ section.settings.rivo_header_bottom_margin }}px 0px;
+    text-align: left;
+  }
+
+  #{{ section_id }} .rivo-lp-section-title {
+    font-size: var(--rivo-page-section-title-font-size, 32px);
+    font-family: var(--rivo-title-font-family, sans-serif);
+    font-weight: var(--rivo-page-section-title-font-weight, 900);
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    margin: 0px 0px 0px 0px;
+    text-align: left;
+  }
+
+  #{{ section_id }} .rivo-lp-section-subtitle {
+    font-size: var(--rivo-page-section-subtitle-font-size, 18px);
+    font-family: var(--rivo-subtitle-font-family, sans-serif);
+    font-weight: var(--rivo-page-section-subtitle-font-weight, 400);
+    line-height: 1.5;
+    margin: 0px 0px 0px 0px;
+    text-align: left;
+  }
+
+  #{{ section_id }} .rivo-faq-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #{{ section_id }} .rivo-faq-item {
+    border-bottom-width: {{ section.settings.rivo_faq_divider_width }}px;
+    border-bottom-style: solid;
+    border-bottom-color: {{ section.settings.rivo_faq_divider_color }};
+  }
+
+  #{{ section_id }} .rivo-faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: {{ section.settings.rivo_faq_question_padding }}px 0px {{ section.settings.rivo_faq_question_padding }}px 0px;
+    gap: 20px;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  #{{ section_id }} .rivo-faq-question:focus-visible {
+    outline: 2px solid {{ section.settings.rivo_faq_question_color }};
+    outline-offset: 4px;
+    border-radius: 2px 2px 2px 2px;
+  }
+
+  #{{ section_id }} .rivo-faq-question-text {
+    font-size: var(--rivo-page-section-subtitle-font-size, 14px);
+    font-family: var(--rivo-title-font-family, sans-serif);
+    font-weight: var(--rivo-page-section-title-font-weight, 800);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    {% if section.settings.rivo_faq_enable_highlight %}
+      background-color: {{ section.settings.rivo_faq_highlight_color }};
+      padding: 4px 8px 4px 8px;
+      display: inline;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    {% endif %}
+  }
+
+  #{{ section_id }} .rivo-faq-icon {
+    font-size: {{ section.settings.rivo_faq_icon_size }}px;
+    font-weight: 300;
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    line-height: 1;
+  }
+
+  #{{ section_id }} .rivo-faq-item.rivo-faq-active .rivo-faq-icon {
+    transform: rotate(45deg);
+  }
+
+  #{{ section_id }} .rivo-faq-answer {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  #{{ section_id }} .rivo-faq-item.rivo-faq-active .rivo-faq-answer {
+    max-height: 500px;
+  }
+
+  #{{ section_id }} .rivo-faq-answer-inner {
+    font-size: var(--rivo-page-section-subtitle-font-size, 15px);
+    font-family: var(--rivo-subtitle-font-family, sans-serif);
+    font-weight: var(--rivo-page-section-subtitle-font-weight, 400);
+    line-height: 1.7;
+    padding: 0px 0px 24px 0px;
+    max-width: 90%;
+    text-align: left;
+  }
+
+  #{{ section_id }} .rivo-faq-answer-inner p {
+    line-height: 1.3em;
+  }
+
+  /* ——— Mobile ——— */
+  @media (max-width: 768px) {
+    #{{ section_id }} .rivo-lp-content {
+      padding: 5px;
+    }
+
+    #{{ section_id }} .rivo-faq-answer-inner {
+      max-width: 100%;
+    }
+
+    #{{ section_id }} .rivo-faq-icon {
+      font-size: 20px;
+    }
+
+    #{{ section_id }} .rivo-faq-question {
+      padding: 18px 0px 18px 0px;
+      gap: 12px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var sectionId = '{{ section_id | escape }}';
+    var sectionEl = document.getElementById(sectionId);
+    if (!sectionEl) return;
+
+    var items = sectionEl.querySelectorAll('.rivo-faq-item');
+
+    items.forEach(function(item) {
+      var btn = item.querySelector('.rivo-faq-question');
+      if (!btn) return;
+
+      btn.addEventListener('click', function() {
+        var isActive = item.classList.contains('rivo-faq-active');
+
+        // Close all items
+        items.forEach(function(i) {
+          i.classList.remove('rivo-faq-active');
+          var b = i.querySelector('.rivo-faq-question');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+
+        // Open clicked item if it wasn't already open
+        if (!isActive) {
+          item.classList.add('rivo-faq-active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      btn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Rivo: FAQ Accordion",
+  "settings": [
+    { "type": "header", "content": "01 — SECTION" },
+    { "type": "text", "id": "rivo_section_id_prefix", "label": "Section ID (optional)", "info": "Custom ID for anchor links (e.g. 'faqs'). Outputs as #rivo-faqs. Leave blank for default." },
+
+    { "type": "header", "content": "Background" },
+    { "type": "color", "id": "rivo_section_bg_color", "label": "Background Color", "default": "#e8e8e8" },
+    { "type": "color_background", "id": "rivo_section_bg_gradient", "label": "Background Gradient" },
+    { "type": "image_picker", "id": "rivo_section_bg_image", "label": "Background Image (Desktop)" },
+    { "type": "image_picker", "id": "rivo_section_bg_image_mobile", "label": "Background Image (Mobile)", "info": "Optional. Overrides desktop image on screens 768px and below." },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "rivo_section_padding_top", "label": "Padding Top", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 60 },
+    { "type": "range", "id": "rivo_section_padding_bottom", "label": "Padding Bottom", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 60 },
+
+    { "type": "header", "content": "02 — CONTENT" },
+    { "type": "header", "content": "Section Header" },
+    { "type": "text", "id": "rivo_section_title", "label": "Section Title", "default": "Frequently Asked Questions" },
+    { "type": "color", "id": "rivo_section_title_color", "label": "Title Color", "default": "#0a0a0a" },
+    { "type": "textarea", "id": "rivo_section_subtitle", "label": "Section Subtitle" },
+    { "type": "color", "id": "rivo_section_subtitle_color", "label": "Subtitle Color", "default": "#666666" },
+    { "type": "range", "id": "rivo_header_bottom_margin", "label": "Header Bottom Margin", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 40 },
+
+    { "type": "header", "content": "FAQ Appearance" },
+    { "type": "color", "id": "rivo_faq_question_color", "label": "Question Text Color", "default": "#0a0a0a" },
+    { "type": "color", "id": "rivo_faq_answer_color", "label": "Answer Text Color", "default": "#2a2a2a" },
+    { "type": "color", "id": "rivo_faq_divider_color", "label": "Divider Color", "default": "#1a1a1a" },
+    { "type": "range", "id": "rivo_faq_divider_width", "label": "Divider Width", "min": 1, "max": 4, "step": 1, "unit": "px", "default": 2 },
+    { "type": "color", "id": "rivo_faq_icon_color", "label": "Toggle Icon Color", "default": "#0a0a0a" },
+    { "type": "range", "id": "rivo_faq_icon_size", "label": "Toggle Icon Size", "min": 16, "max": 36, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "rivo_faq_question_padding", "label": "Question Vertical Padding", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 22 },
+
+    { "type": "header", "content": "Question Highlight" },
+    { "type": "checkbox", "id": "rivo_faq_enable_highlight", "label": "Enable question highlight", "default": false, "info": "Adds a colored background behind the question text." },
+    { "type": "color", "id": "rivo_faq_highlight_color", "label": "Highlight Color", "default": "#d2f34c" },
+
+    { "type": "header", "content": "03 — STYLE" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "rivo_faq_max_width", "label": "Content Max Width", "min": 600, "max": 1440, "step": 20, "unit": "px", "default": 1200 }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        { "type": "text", "id": "rivo_faq_question", "label": "Question", "default": "How does this work?" },
+        { "type": "richtext", "id": "rivo_faq_answer", "label": "Answer", "default": "<p>Answer goes here.</p>" },
+        { "type": "checkbox", "id": "rivo_faq_open_default", "label": "Open by default", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rivo: FAQ Accordion",
+      "category": "Custom",
+      "blocks": [
+        { "type": "faq_item", "settings": { "rivo_faq_question": "How does the refer a friend program work?", "rivo_faq_answer": "<p>When you refer a friend, they will receive a link to purchase with a special discount that will automatically apply to their first order, and you'll receive a reward too!</p>", "rivo_faq_open_default": true } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "How do I refer a friend?", "rivo_faq_answer": "<p>Simply share your unique referral link with friends and family. You can find your referral link on the rewards page.</p>", "rivo_faq_open_default": false } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "How do I track the number of referrals I've made?", "rivo_faq_answer": "<p>You can track all your referrals and their status through the rewards page. It will show you how many friends you've referred and which ones have completed a purchase.</p>", "rivo_faq_open_default": false } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "Is there a limit to how many people I can refer?", "rivo_faq_answer": "<p>No, there is no limit! You can refer as many friends as you'd like and earn rewards for each successful referral.</p>", "rivo_faq_open_default": false } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "How does my friend get the discount?", "rivo_faq_answer": "<p>When your friend clicks on your referral link, the discount will be automatically applied to their cart at checkout. No coupon code needed!</p>", "rivo_faq_open_default": false } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "Can I refer friends who are already customers?", "rivo_faq_answer": "<p>The referral program is designed for new customers. Friends who have already made a purchase may not be eligible for the referral discount.</p>", "rivo_faq_open_default": false } },
+        { "type": "faq_item", "settings": { "rivo_faq_question": "How will I know if my friend has made a purchase?", "rivo_faq_answer": "<p>You'll receive a notification and your reward will be automatically added to your account once your friend completes their first purchase using your referral link.</p>", "rivo_faq_open_default": false } }
+      ]
+    }
+  ]
+}
+{% endschema %}

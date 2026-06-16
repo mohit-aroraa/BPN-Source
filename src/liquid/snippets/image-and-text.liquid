@@ -1,0 +1,74 @@
+{%- assign block = section[module] -%}
+{%- assign _layout = block.layout -%}
+{%- assign title = block.title[0] -%}
+{%- assign content = block.content -%}
+{%- assign text_color = block.text_color -%}
+{%- assign desktop_image = block.desktop_image -%}
+{%- assign desktop_image_height = block.desktop_image_height -%}
+{%- assign mobile_image = block.mobile_image | default: desktop_image -%}
+{%- assign mobile_image_height = block.mobile_image_height -%}
+{%- assign cta_text = block.cta_text -%}
+{%- assign cta_link = block.cta_link -%}
+{%- assign open_cta_on_new_tab = block.open_cta_on_new_tab -%}
+{%- assign is_athletic_template = false -%}
+{% if template contains 'athletic' %}
+  {%- assign is_athletic_template = true -%}
+  {%- assign title = block.title -%}
+{% endif %}
+
+{% assign _layout_string = 'image-on-left' %}
+{% if _layout %}
+  {%- assign _layout_string = 'image-on-right' -%}
+{% endif %}
+
+{% capture section_classes %}
+  {{ snippet_name }}
+  imageAndText imageAndText--{{ id }} imageAndText--{{ _layout_string }}
+{% endcapture %}
+
+{% capture section_styles %}
+  --text-color:{{ text_color }}; --mobile-image-height:{{ mobile_image_height }}; --desktop-image-height:
+  {{- desktop_image_height -}}
+  ;
+{% endcapture %}
+
+<section class="{{- section_classes -}}" style="{{- section_styles -}}">
+  <div class="imageAndText__container">
+    <div class="imageAndText__inner">
+      <div class="imageAndText__aside">
+        <div class="imageAndText__image is-desktop">
+          {% render 'prismic-responsive-image' with image: desktop_image, random: id %}
+        </div>
+        <div class="imageAndText__image is-mobile">
+          {% render 'prismic-responsive-image' with image: mobile_image, random_id: id %}
+        </div>
+      </div>
+
+      <div class="imageAndText__content">
+        {% if is_athletic_template %}
+          {% render 'prismic-rich-text', rich_text: title %}
+        {% else %}
+          {% if title != blank %}
+            <h1 class="imageAndText__title">{{- title.text -}}</h1>
+          {% endif %}
+        {% endif %}
+        {% if content != blank %}
+          <div class="imageAndText__entry">
+            {{- content -}}
+          </div>
+        {% endif %}
+        {%- if cta_text != blank -%}
+          <a
+            href="{{ cta_link }}"
+            class="button-link"
+            {% if open_cta_on_new_tab %}
+              target="_blank"
+            {% endif %}
+          >
+            {{- cta_text -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>

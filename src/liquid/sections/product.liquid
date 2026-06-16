@@ -1,0 +1,463 @@
+<script type='text/javascript'>
+  window.dataLayer = window.dataLayer || [];
+  window.BPN = window.BPN || {};
+  window.BPN.currentProductData = {% render 'product-json' %};
+
+  const { currentProductData } = window.BPN;
+
+  const item = {
+    item_list_id: currentProductData.id,
+    item_list_name: currentProductData.type,
+    item_id: currentProductData.id,
+    item_name: currentProductData.shopify_raw_title,
+    affiliation: 'Bare Performance Nutrition',
+    coupon: '',
+    currency: `${Shopify.currency.active}`,
+    discount: '',
+    index: 0,
+    item_brand: 'Bare Performance Nutrition',
+    item_category: `${currentProductData.type}`,
+    item_category2: '',
+    item_category3: '',
+    item_category4: '',
+    item_variant: "{{ product.selected_or_first_available_variant.title }}",
+    price: "{{ product.selected_or_first_available_variant.price | money_without_currency }}",
+    quantity: 1,
+  };
+
+  const event = {
+    event: 'ga4_view_item',
+    ecommerce: {
+      currency: "{{- shop.currency -}}",
+      value: "{{ product.selected_or_first_available_variant.price | money_without_currency }}",
+      items: [ item ],
+    },
+  };
+
+  window.dataLayer.push({ ecommerce: null });
+  window.dataLayer.push(event);
+</script>
+
+{% liquid
+  assign page_metafields = pages['product-global'].metafields
+  assign PID = '' | append: product.id
+  assign metafields = pages[PID].metafields
+  assign subtitle = section.settings.subtitle
+  assign description = section.settings.description
+  assign show_quantity_selector = section.settings.show_quantity_selector
+  assign tooltip_text = section.settings.tooltip_text
+  assign nutrition_facts_title = section.settings.nutrition_facts_title
+  assign subscription_plans = product.selling_plan_groups
+  assign default_subscription_plan = null
+  for group in subscription_plans
+    if settings.subscription_platform == 'skio' and group.app_id == 'SKIO'
+      assign default_subscription_plan = group
+      break
+    elsif settings.subscription_platform != 'skio' and group.app_id != 'SKIO'
+      assign default_subscription_plan = group
+      break
+    endif
+  endfor
+  assign selected_variation = product.selected_or_first_available_variant
+%}
+
+{% assign tag_discount = blank %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'ssale' %}
+    {% assign tag_discount = tag | remove: 'ssale' %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% assign _tag_discount_adjusted = tag_discount | divided_by: 100.00 %}
+{% assign tag_discounted_price = selected_variation.price | times: _tag_discount_adjusted %}
+{% assign tag_final_price = selected_variation.price | minus: tag_discounted_price %}
+
+{% liquid
+  assign default_to_otp = false
+  assign otp_only_sale = false
+  for tag in product.tags
+    assign tag_downcase = tag | downcase | strip
+    if tag_downcase == 'pdp-default-to-otp'
+      assign default_to_otp = true
+    endif
+    if tag_downcase == 'otp-only-sale'
+      assign otp_only_sale = true
+    endif
+  endfor
+%}
+
+<div id='product-hero' class='product'>
+  {% render 'product-images-carousel', selected_variation: selected_variation %}
+
+  <div class='product-hero product-hero--{{ product.handle }}'>
+    {% render 'product-breadcrumb', metafields: metafields, click_id: 'pdp_buyblock_breadcrumbs' %}
+
+    <h1 class='product-hero__title'>
+      {{ product.title }}
+    </h1>
+
+    <div class='product-hero__price-container'>
+      <div class='product-hero__rating'>
+        {{- product.metafields.okendo.StarRatingSnippet -}}
+      </div>
+
+      {% comment %} If otp_only_sale, only show sale price when OTP is the default {% endcomment %}
+      {% assign show_tag_sale = false %}
+      {% if tag_discount != blank %}
+        {% if otp_only_sale == false or default_to_otp %}
+          {% assign show_tag_sale = true %}
+        {% endif %}
+      {% endif %}
+
+      <p class='product-hero__price'>
+        {% if show_tag_sale %}
+          <span class='discounted-price'>{% render 'price-value', price: tag_final_price %}</span>
+          <span class='original-price'>
+            {%- render 'price-value', price: selected_variation.price -%}
+          </span>
+          {% elsif product.compare_at_price != blank %}
+            <span class='discounted-price'>{% render 'price-value', price: selected_variation.price %}</span>
+          <span class='original-price'>
+            {%- render 'price-value', price: selected_variation.compare_at_price -%}
+          </span>
+          {% elsif default_to_otp %}
+          {% render 'price-value', price: selected_variation.price %}
+        {% else %}
+          {% assign default_selling_plan = selected_variation.selling_plan_allocations | first %}
+          {% assign default_price = selected_variation.price %}
+          {% if default_selling_plan != null %}
+            {% assign default_price = default_selling_plan.price %}
+          {% endif %}
+          {% if product.metafields.custom.enable_stack_and_save and default_price != selected_variation.price %}
+            {% render 'price-value', price: selected_variation.price %}
+            / <small class="price-divided"></small>
+            {% render 'price-value', price: default_price %}
+          {% else %}
+            {% render 'price-value', price: default_price %}
+          {% endif %}
+        {% endif %}
+      </p>
+    </div>
+    {% if tag_discount != blank %}
+      <p class='product-hero__discount-label {% unless show_tag_sale %}hidden{% endunless %}'>Save {{ tag_discount }}%</p>
+    {% endif %}
+    <h2 class='product-hero__subtitle'>
+      {{ subtitle }}
+    </h2>
+
+    <p class='product-hero__description'>
+      {{ description }}
+    </p>
+
+    {% liquid
+    assign custom_buybox_added = false
+    assign buybox_v2_added = false
+    assign variants_count = product.variants | size | default: 0
+    %}
+    {% if variants_count != 0 %}
+      {% render 'product-variation-selectors', selected_variation: selected_variation %}
+    {% endif %}
+
+    {% for block in section.blocks %}
+      {% if block.type == 'buybox' %}
+        {% assign custom_buybox_added = true %}
+        {% if block.settings.buy_box_type == 'v1' %}
+          {% render 'buy-box',
+            selected_variation: selected_variation,
+            show_quantity_selector: show_quantity_selector,
+            tooltip_text: tooltip_text,
+            tag_discount: tag_discount,
+            tag_final_price: tag_final_price
+          %}
+        {% else %}
+          {% assign buybox_v2_added = true %}
+            <div>
+              {% render 'buy-box-v2',
+                selected_variation: selected_variation,
+                show_quantity_selector: show_quantity_selector,
+                tooltip_text: tooltip_text,
+                tag_discount: tag_discount,
+                tag_final_price: tag_final_price
+              %}
+            </div>
+        {% endif %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+    {% unless custom_buybox_added %}
+      {% render 'buy-box',
+        selected_variation: selected_variation,
+        show_quantity_selector: show_quantity_selector,
+        tooltip_text: tooltip_text,
+        tag_discount: tag_discount,
+        tag_final_price: tag_final_price
+      %}
+    {% endunless %}
+
+    {% render 'product-cross-sell', metaobject_handle: 'cross-sell-list-shwhctpy' %}
+    {% render 'product-information-blocks',
+      selected_variation_id: selected_variation.id,
+      nutrition_facts_title: nutrition_facts_title
+    %}
+    {% render 'product-liquid-lab-widget-block' %}
+    {% render 'product-badge-blocks' %}
+  </div>
+
+  {% render 'product-add-to-cart',
+    selected_variation: selected_variation,
+    tooltip_text: tooltip_text,
+    tag_discount: tag_discount,
+    buybox_v2_added: buybox_v2_added
+  %}
+</div>
+
+{% schema %}
+{
+  "name": "Product Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "subscription_title",
+      "label": "Subscription title",
+      "default": "Subscribe & Save"
+    },
+    {
+      "type": "text",
+      "id": "previous_discount_percentage",
+      "label": "Previous Discount Percentage"
+    },
+    {
+      "type": "text",
+      "id": "subscription_discount_text",
+      "label": "Subscription Discount text"
+    },
+    {
+      "type": "text",
+      "id": "subscription_text",
+      "label": "Subscription text",
+      "default": "Pause, Skip or Cancel anytime."
+    },
+    {
+      "type": "richtext",
+      "id": "tooltip_text",
+      "label": "Tooltip Text"
+    },
+    {
+      "type": "text",
+      "id": "otp_title",
+      "label": "OTP title",
+      "default": "One Time Purchase"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector?",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_order_by",
+      "label": "Show order by?",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_copy_text",
+      "label": "Show copy text?",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "copy_text",
+      "label": "Copy text",
+      "default": "Military and First Responder discounts available at checkout."
+    },
+    {
+      "type": "text",
+      "id": "nutrition_facts_title",
+      "label": "Nutrition Facts Title",
+      "default": "NUTRITION FACTS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "information",
+      "name": "Information item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "packs",
+      "name": "Pack Option Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "number",
+          "id": "num_boxes",
+          "label": "Number of Boxes",
+          "default": 1
+        },
+        {
+          "type": "number",
+          "id": "discount_pct",
+          "label": "Discount %",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Unit Label (e.g. gel, serving, unit)",
+          "default": "unit"
+        },
+        {
+          "type": "checkbox",
+          "id": "most_popular",
+          "label": "Most Popular",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "best_deal",
+          "label": "Best Deal",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "badge",
+      "name": "Badge item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Liquid Content",
+          "default": "<p>Add your custom liquid code here.</p>"
+        }
+      ]
+    },
+    {
+      "type": "buybox",
+      "name": "Buy Box",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "select",
+          "label": "Buy Box Type",
+          "id": "buy_box_type",
+          "default": "v1",
+          "options": [
+            {
+              "value": "v1",
+              "label": "Version 1"
+            },
+            {
+              "value": "v2",
+              "label": "Version 2"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "subscription_usp",
+          "label": "Subscription USP",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Best Value - Save 25%"
+        },
+        {
+          "type": "text",
+          "id":"switch_to_subscription_text",
+          "label": "Switch to Subscription Text",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Want to save 25%? Switch to Subscription"
+        },
+        {
+          "type": "header",
+          "content": "Subscription Benefits"
+        },
+        {
+          "type": "text",
+          "id": "benefit_1",
+          "label": "Benefit 1",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Pause/Cancel Anytime"
+        },
+        {
+          "type": "text",
+          "id": "benefit_2",
+          "label": "Benefit 2",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Save 25%"
+        },
+        {
+          "type": "text",
+          "id": "benefit_3",
+          "label": "Benefit 3",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Swap Flavors"
+        },
+        {
+          "type": "text",
+          "id": "benefit_4",
+          "label": "Benefit 4",
+          "visible_if": "{{ block.settings.buy_box_type == 'v2' }}",
+          "default":"Automatically delivered"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name": "Product Hero"
+    }
+  ]
+}
+{% endschema %}

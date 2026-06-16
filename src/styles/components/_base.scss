@@ -1,0 +1,9 @@
+// Cart drawer open state styles
+html.cart-open {
+  overflow: hidden !important;
+  
+  body {
+    overflow: hidden !important;
+    padding-right: var(--scrollbar-width, 0);
+  }
+} 

@@ -1,0 +1,59 @@
+<div class="sectiontype1 space-bottom animation-img">
+  <div class="mobile-view">
+    <!-- <h2>A Message <span>From Our CEO</span></h2> -->
+    {% assign title1 = section.settings.title | slice: 0, 9 %}
+    {% assign title2 = section.settings.title | slice: 9, 15 %}
+    <h2>
+      {{ title1 }}
+      <span>{{ title2 }}</span>
+    </h2>
+  </div>
+  <div class="img-block texture-wrap">
+    <div class="anim__image-swipe anim__image-swipe--left">
+      <img
+        src="{{ section.settings.image | image_url: width: 1000 }}"
+        alt="{{ section.settings.image.alt }}"
+        width="320"
+        height="352"
+        loading="lazy"
+      >
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="desktop-view">
+      <h2 class="wow fadeInUp">
+        {{ title1 }}
+        <span>{{ title2 }}</span>
+      </h2>
+    </div>
+    <div class="wow fadeInUp">{{ section.settings.content }}</div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Image with description",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title"
+    },
+    {
+      "id": "content",
+      "type": "richtext",
+      "label": "Content"
+    },
+    {
+      "id": "image",
+      "type": "image_picker",
+      "label": "Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

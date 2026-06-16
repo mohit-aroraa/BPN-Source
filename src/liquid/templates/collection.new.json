@@ -1,0 +1,28 @@
+{
+  "layout": "anatta_theme",
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "sidebar_MmrMMM": {
+          "type": "sidebar",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "sidebar_MmrMMM"
+      ],
+      "custom_css": [],
+      "settings": {
+        "class": "",
+        "show_promo_image": true,
+        "promo_image": "shopify://shop_images/122825_BANNER_CARD-COMMIT_IN_2026-min.png",
+        "promo_image_link": "",
+        "promo_image_class": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

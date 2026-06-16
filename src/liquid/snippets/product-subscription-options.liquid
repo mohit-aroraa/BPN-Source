@@ -1,0 +1,187 @@
+{%- assign namespace = 'product_page_tooltip' -%}
+{%- assign section = pages['product-global'].metafields -%}
+{%- assign block_content = section[namespace] -%}
+{%- assign how_subs_work_tooltip = block_content.how_subscription_works_tolltip
+  | default: '<div class="purchaseTypeTextTooltip__body"><div class="purchaseTypeTextTooltipBody__header"><p class="purchaseTypeTextTooltipBody__headerText">HOW SUBSCRIPTION WORKS</p><button type="button" class="purchaseTypeTextTooltipBody__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><g stroke="#000" stroke-width="1.7" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="m10 1-9 9M1 1l9 9"/></g></svg></button></div><p class="purchaseTypeTextTooltipBody__text">Products are automatically delivered on your schedule. No obligation, modify, skip, pause, or cancel your subscription anytime.</p></div>'
+-%}
+{%- assign learn_more_tooltip = block_content.learn_more_tooltip
+  | default: '<div class="purchaseTypeTextTooltip__body"><div class="purchaseTypeTextTooltipBody__header"><p class="purchaseTypeTextTooltipBody__headerText">BENEFITS OF SUBSCRIPTIONS</p><button type="button" class="purchaseTypeTextTooltipBody__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 11"><g stroke="#000" stroke-width="1.7" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"><path d="m10 1-9 9M1 1l9 9"/></g></svg></button></div><ul class="purchaseTypeTextTooltip__list"><li>• 15% off on every recurring order</li><li>• Modify, skip, pause, or cancel anytime</li><li>• Automatically delivered on your schedule</li></ul></div>'
+-%}
+
+{%- assign original_price = current_variant.price -%}
+
+{%- assign widget_settings = shop.metafields.subscriptions -%}
+{%- assign widget_published = widget_settings.published -%}
+{%- assign select_subscription_first = widget_settings.select_subscription_first -%}
+{%- if widget_settings.select_subscription_first == 'true' -%}
+  {%- assign select_subscription_first = true -%}
+{%- else -%}
+  {%- assign select_subscription_first = false -%}
+{%- endif -%}
+
+{% assign label_onetime = widget_settings.onetime_message | default: 'One-time purchase' %}
+{% assign label_autodeliver = widget_settings.subscribe_message | default: 'Subscribe &amp; save' %}
+{% assign label_deliver_every = widget_settings.widget_deliver_every | default: 'Deliver every' %}
+{% assign label_unit_type = subscription_product.label_unit_type | default: shipping_interval_unit_type %}
+{% assign subscription_details_label = widget_settings.subscription_details_verbiage
+  | default: 'Subscription details'
+%}
+{% assign how_it_works_text = widget_settings.how_it_works
+  | default: '<strong>How subscriptions work</strong><br><br>Products are automatically delivered on your schedule. No obligation, modify, skip, pause, or cancel your subscription anytime.'
+%}
+{% assign learnmore_link = widget_settings.learnmore_verbiage | default: 'Learn more...' %}
+
+{%- assign subscription_only = product.requires_selling_plan -%}
+
+{%- if product.selling_plan_groups.size > 0 and widget_published == 'true' -%}
+  {% assign subscription_plans = product.selling_plan_groups.first.selling_plans %}
+  {% assign subscription_plans_size = subscription_plans | size %}
+  {% assign default_subscription_plan = subscription_plans | first %}
+  {% assign default_price_adjustment = default_subscription_plan.price_adjustments | first %}
+  {% assign discount_type = default_price_adjustment.value_type %}
+  {% assign discount_percentage = default_price_adjustment.value | times: 1 %}
+  {% assign percentOff = default_price_adjustment.value | times: 1 %}
+
+  <div
+    id="rc_container"
+    {% if subscription_only %}
+      class="rc_subscription-only"
+    {% endif %}
+  >
+    {% comment %} Load default subscription values {% endcomment %}
+    <input
+      type="hidden"
+      name="selling_plan"
+      id="subscription-id"
+      value="{{default_subscription_plan.id}}"
+      class="js-subscription-input"
+      data-discount-percentage="{{discount_percentage}}"
+    >
+    <p
+      class="purchaseTypeTextTooltip howItWorks hover-reveal"
+      role="tooltip"
+      tabindex="0"
+      aria-label="How subscription works"
+      data-markup="{{how_subs_work_tooltip | escape}}"
+    >
+      How subscriptions work?
+    </p>
+    <div role="radiogroup" aria-labelledby="Purchase options">
+      <div class="js-rc-block rc_block rc_block__type rc_block__type__autodeliver {% if select_subscription_first or subscription_only %}rc_block__type--active{% endif %}">
+        <input
+          type="radio"
+          name="purchase_type"
+          id="rc_purchase_type_autodeliver"
+          value="autodeliver"
+          {% if select_subscription_first or subscription_only %}
+            checked
+          {% endif %}
+          class="rc_radio rc_radio__autodeliver"
+        >
+        <label for="rc_purchase_type_autodeliver" class="rc_label rc_label__autodeliver">
+          <div class="purchaseType">
+            <div class="purchaseType__left">
+              <p class="purchaseType__heading">
+                {{ label_autodeliver }}
+                {% if discount_percentage > 0 -%}
+                  <span class="rc_label__discount" aria-label="subscription discount">{{ discount_percentage }}%</span>
+                {%- endif %}
+              </p>
+
+              <div class="purchaseTypeSmallText">
+                Cancel anytime.
+                <span
+                  class="purchaseTypeTextTooltip hover-reveal"
+                  role="tooltip"
+                  tabindex="0"
+                  aria-label="Learn more about subscription"
+                  data-markup="{{learn_more_tooltip | escape}}"
+                  >Learn More</span
+                >
+              </div>
+            </div>
+            {% for val in subscription_plans %}
+              {% assign subscription_interval = val.options | first %}
+              {% assign price_adjustment = val.price_adjustments | first %}
+              {% assign discount_type = price_adjustment.value_type %}
+              {% assign discount_percentage = price_adjustment.value | times: 1 %}
+              {% assign subscription_discount_price = current_variant.price
+                | money_without_currency
+                | times: discount_percentage
+              %}
+              {% capture discount_amount %}
+                {% assign discount_price = current_variant.price | minus: subscription_discount_price %}
+                {{ discount_price}}
+              {% endcapture %}
+              {% capture selling_plan_options %}
+                {{selling_plan_options}}
+                <option value="{{val.id}}" {% if forloop.first %}selected{% endif %} >{{subscription_interval.value | replace: '(s)', 's'}}</option>
+              {% endcapture %}
+            {% endfor %}
+            <div class="purchaseType__right">
+              <p class="purchaseType__itemPrice">
+                {% if discount_percentage > 0 %}
+                  <span id="rc_price_autodeliver" class="rc_price rc_price__autodeliver" aria-label="recurring price">
+                    {{- discount_amount | money_with_currency | remove: 'USD' | strip -}}
+                  </span>
+                {% endif %}
+              </p>
+              <p class="purchaseTypeSmallText purchaseTypeSmallText--discount">
+                {{ subscription_discount_price | money_with_currency | remove: 'USD' | strip }}
+              </p>
+            </div>
+          </div>
+        </label>
+        <div class="rc_block rc_block__type__options">
+          <label
+            for="rc_shipping_interval_frequency"
+            class="rc_label rc_label__deliver_every"
+            aria-label="Subscription frequency options"
+          >
+            <span class="rc_label__delivery">{{ label_deliver_every }}</span>
+            <select
+              name=""
+              data-recharge-shipping-interval-frequency
+              id="rc_shipping_interval_frequency"
+              class="rc_select rc_select__frequency styled replaced"
+              data-original-price="{{ original_price | money_with_currency | remove: 'USD' | strip }}"
+              data-discount-amount="{{ discount_amount | money_with_currency | remove: 'USD' | strip }}"
+              data-discounted-price="{{subscription_discount_price | money_with_currency | remove: 'USD' | strip}}"
+            >
+              {{ selling_plan_options }}
+            </select>
+          </label>
+        </div>
+      </div>
+      {% unless subscription_only %}
+        <div class="js-rc-block rc_block rc_block__type rc_block__type__onetime {% unless select_subscription_first %}rc_block__type--active{% endunless %}">
+          <input
+            type="radio"
+            id="rc_purchase_type_onetime"
+            name="purchase_type"
+            value="onetime"
+            {% unless select_subscription_first %}
+              checked
+            {% endunless %}
+            class="rc_radio rc_radio__onetime"
+          >
+          <label for="rc_purchase_type_onetime" class="rc_label rc_label__onetime">
+            <div class="purchaseType">
+              <div class="purchaseType__left">
+                <p class="purchaseType__heading">{{ label_onetime }}</p>
+                <div class="purchaseTypeSmallText">Purchase this time only.</div>
+              </div>
+              <div class="purchaseType__right">
+                <p class="purchaseType__itemPrice">
+                  {% if discount_percentage > 0 %}
+                    <span id="rc_price_onetime" class="rc_price rc_price__onetime" aria-label="original price"></span>
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+          </label>
+        </div>
+      {% endunless %}
+    </div>
+  </div>
+{%- endif -%}

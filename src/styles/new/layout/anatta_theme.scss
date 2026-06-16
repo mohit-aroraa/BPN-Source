@@ -1,0 +1,88 @@
+// Layout Layer - Global
+// Contains global styles for the entire site
+
+// Design tokens
+@import '../tokens';
+
+// Import base styles
+@import '../base/fonts';
+@import '../base/typography';
+@import '../base/athletic-typography';
+
+// Global components
+@import '../components/logo';
+@import '../components/hamburger-menu';
+@import '../components/button';
+@import '../components/utility-nav';
+@import '../components/global-menu';
+@import '../components/product-grid';
+@import '../components/product-drawer';
+
+// Global sections
+@import '../sections/header';
+@import '../sections/footer';
+@import '../sections/mediabanner';
+@import '../sections/category-list';
+@import '../sections/category-slides';
+@import '../sections/testimonial';
+@import '../sections/quiz';
+@import '../sections/two-column-group';
+@import '../sections/bpn-recommendations';
+@import '../sections/bpn-reviews';
+@import '../sections/bpn-youtube-video';
+@import '../sections/bpn-newsletter';
+@import '../sections/interstitial_cart_popup';
+@import '../sections/interstitial_cart_product-card';
+@import '../sections/announcement-banner';
+@import '../sections/ticker';
+@import '../sections/image-accordion';
+@import '../sections/accordion-image';
+@import '../sections/testimonials-image';
+@import '../sections/strength-collection-callout';
+@import '../sections/main-product-strength-bundle';
+
+
+// Collection Sections
+@import '../sections/collection_layout';
+@import '../sections/filter';
+
+// Import templates
+@import '../templates/customers/account';
+
+// Athletic Landing Pages
+@import '../sections/athletic-hero-banner';
+@import '../sections/athletic-two-column';
+@import '../sections/athletic_callout';
+@import '../sections/athletic-feature-row-dropdowns';
+@import '../sections/athletic-media-quote';
+@import '../sections/athletic-image-multiple-column';
+@import '../sections/athletic-tabbed-products';
+
+
+.bpn-product-grid-item__add-to-cart {
+    &.loading {
+      opacity: 0.8;
+      cursor: wait;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+
+    100% { transform: translateY(-50%) rotate(360deg); }
+  }

@@ -1,0 +1,20 @@
+{%- layout none -%}
+{%- capture availability_array -%}
+  [
+  {%- for variant in product.variants -%}
+    {
+    "id": "{{ variant.id }}",
+    "title": "{{ variant.title }}",
+    {% if variant.available == false %}
+      "availability": "oos",
+    {% else %}
+      "availability": "{{ variant.metafields.custom.availability | default: 'default' }}",
+    {% endif %}
+    "external_link_url": "{{ variant.metafields.custom.external_link.value.url | default: '' }}",
+    "external_link_text": "{{ variant.metafields.custom.external_link.value.text | default: '' }}"
+    }{%- if forloop.last == false -%},{%- endif -%}
+  {%- endfor -%}
+  ]
+{%- endcapture -%}
+
+{{ availability_array | strip }}

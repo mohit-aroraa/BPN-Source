@@ -1,0 +1,120 @@
+{%- comment -%}
+  Mega Menu Component
+  -------------
+  Dropdown mega menu component for global navigation.
+
+  Parameters:
+  - block: Block settings for the mega menu configuration
+{%- endcomment -%}
+
+{%- comment -%}Main mega menu wrapper{%- endcomment -%}
+
+{% assign link_lowercase = link.title | strip | downcase %}
+{% assign featured_count = 0 %}
+{% for media_block in blocks %}
+  {% assign block_link_lowercase = media_block.settings.parent_link | strip | downcase %}
+  {% if media_block.type == 'featured_media_desktop' and block_link_lowercase == link_lowercase %}
+    {% assign featured_count = featured_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+<div id="{{ id }}" class='bpn-megamenu{% if featured_count >= 1 %} full-view {% endif %}'>
+  {%- comment -%}Full-width background overlay{%- endcomment -%}
+  <div class='bpn-megamenu__background'></div>
+  {%- comment -%}Content container with max-width{%- endcomment -%}
+  <div class='bpn-megamenu__container'>
+    {%- comment -%}Left side: Menu columns{%- endcomment -%}
+    <div class='bpn-megamenu__menus-wrapper'>
+      <div class='bpn-megamenu__menus'>
+
+        {% for link_level_2 in link.links %}
+          {% if link_level_2.links.size > 0 %}
+            <div class='bpn-megamenu__menu'>
+              <h4 class="bpn-megamenu__title">
+                {{ link_level_2.title }}
+              </h4>
+              <ul class='bpn-megamenu__links' role="menubar">
+                {% for link_level_3 in link_level_2.links %}
+                  <li class='bpn-megamenu__link-item' role="none">
+                    <a href='{{ link_level_3.url }}' role="menuitem" tabindex="0" class='bpn-megamenu__link'>
+                      {{- link_level_3.title -}}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% else %}
+            <div>
+            <a class="bpn-megamenu__link" role="menuitem" tabindex="0" href="{{ link_level_2.url }}">{{ link_level_2.title }}</a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {%- comment -%}CTA Section{%- endcomment -%}
+      {% if section.settings.main_cta_text != blank and section.settings.main_cta_link != blank %}
+        {% assign cta_click_id = 'mega-menu-cta'
+          | append: section.settings.main_cta_text
+          | downcase
+          | replace: ' ', '-'
+        %}
+        <div class='bpn-megamenu__cta'>
+          <a
+            href='{{ section.settings.main_cta_link }}'
+            class='bpn-megamenu__cta-link'
+            data-click-id='{{- cta_click_id | replace: '_supplements', '_supps' | replace: '-content', '' | replace: '-supplements', '' -}}'
+          >
+            {{- section.settings.main_cta_text -}}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class='bpn-megamenu__featured'>
+    {% for featured_block in blocks %}
+      {% assign block_link_lowercase = featured_block.settings.parent_link | strip | downcase %}
+      {% if  featured_block.type == 'featured_media_desktop' and block_link_lowercase == link_lowercase %}
+          <div class='bpn-megamenu__image'>
+            {% if featured_block.settings.image_overlay_color != blank %}
+              <div class="bpn-megamenu__image-overlay" style='--overlay-color: {{ featured_block.settings.image_overlay_color }};'></div>
+            {% endif %}
+              <a
+                href='{{ featured_block.settings.featured_desktop_image_link | default: '#' }}'
+                class='bpn-megamenu__image-link'
+                {% if featured_block.settings.featured_desktop_image_link == nil %} tabindex="-1" aria-hidden="true" {% endif %}
+              >
+                {%- if featured_block.settings.featured_desktop_image != blank -%}
+                  {{
+                    featured_block.settings.featured_desktop_image
+                    | image_url: width: 704
+                    | image_tag:
+                      loading: 'lazy',
+                      width: 704,
+                      height: 320,
+                      sizes: '(min-width: 990px) 33vw, (min-width: 768px) 50vw, 100vw',
+                      widths: '275, 375, 533, 704, 1066',
+                      class: 'bpn-megamenu__image-img'
+                  }}
+                {%- endif -%}
+              </a>
+              {% if featured_block.settings.featured_desktop_image_title != blank %}
+                <div class='bpn-megamenu__image-content'>
+                  <div class='bpn-megamenu__image-title'>
+                    {{ featured_block.settings.featured_desktop_image_title }}
+                  </div>
+                  <a
+                    href='{{ featured_block.settings.featured_desktop_image_link }}'
+                    class='bpn-megamenu__image-button'
+                  >
+                    {{ featured_block.settings.featured_desktop_image_cta_text | default: 'Shop Now' }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+
+
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+</div>

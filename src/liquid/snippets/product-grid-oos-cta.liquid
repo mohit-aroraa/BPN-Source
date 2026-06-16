@@ -1,0 +1,24 @@
+{% assign cta_text = 'Sold Out' %}
+{% if show_bis_cta %}
+  {% assign cta_text = 'Notify me via email' %}
+{% endif %}
+<button
+  type='button'
+  class='bpn-product-grid-item__sold-out bpn-product-grid-item__add-to-cart button {% if show_bis_cta %} BIS_trigger {% endif %}'
+  {% if show_bis_cta %}
+    onclick='
+      window.openBackInStackModal({
+      "productId": "{{ product.id }}",
+      "handle": "{{ product.handle }}",
+      "title": "{{ product.title }}",
+      "variantId": "{{ product.selected_or_first_available_variant.id }}",
+      "variantTitle": "{{ product.selected_or_first_available_variant.title }}",
+      "variants": {{ variants_json | strip_newlines }}
+      })
+    '
+    {% else %}
+    disabled
+  {% endif %}
+>
+  {{ cta_text }}
+</button>

@@ -1,0 +1,48 @@
+{% assign settings = shop.metaobjects.cart_settings['global-cart-settings'] %}
+
+<script defer>
+  window.BPN = window.BPN || {};
+
+  window.BPN.cart = {
+    currency: "{{ shop.currency }}",
+    currencySymbol: "{{ cart.currency.symbol }}",
+    cartUrl: "{{ routes.cart_url }}",
+    cartCheckoutUrl: "{{ routes.cart_url }}/checkout",
+    footerText: "{{ settings.cart_footer_text | default: '' }}",
+    freeDeliveryThreshold: {{ settings.free_delivery_threshold | defalut: 10000 }},
+    emptyCartText: "{{ settings.empty_cart_text }}",
+    emptyStateShopNowCollectionUrl: "{{ settings.empty_state_shop_now_collection.value.url }}",
+    upsellTitle: "{{ settings.upsell_title }}",
+    recommendedStackTitle: "{{ settings.recommended_stack_title }}",
+    emptyCartButtonText: "{{ settings.empty_cart_button_text }}",
+    upsellCollectionHandle: "{{ settings.upsell_collection.value.handle }}",
+    enableThresholds: {{ settings.enable_thresholds | default: false }},
+    enableUrgencyTimer: {{ settings.enable_urgency_timer | default: false }}
+  };
+
+  window.BPN.cart.thresholds = [
+    {% for threshold in settings.thresholds.value %}
+      {
+        amount: {{ threshold.amount |  json }},
+        label: {{ threshold.label |  json }},
+        message: "{{ threshold.message }}",
+        freeGiftProduct: {% if threshold.free_gift.value | json %}
+        {
+          id: {{ threshold.free_gift.value.id | json }},
+          title: {{ threshold.free_gift.value.title | json }}
+        }
+      {% else %}
+        null
+      {% endif %}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+
+  window.BPN.stackAndSaveProductHandles = [{% assign _first_sns = true %}{% for item in cart.items %}{% if item.product.metafields.custom.enable_stack_and_save %}{% unless _first_sns %},{% endunless %}{% assign _first_sns = false %}"{{ item.product.handle }}"{% endif %}{% endfor %}];
+</script>
+
+<!-- Cart backdrop overlay -->
+<div id='cart-backdrop'></div>
+
+<!-- Cart drawer mount point -->
+<div id='cart'></div>
