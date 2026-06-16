@@ -1,8 +1,0 @@
-<div class="og-order-processing">
-  <h2 class="og-subheading">{{ 'shipment_sent_processing' | t }}</h2>
-  {% if orders %}
-    {% for order in orders | select(status='SEND_NOW') | key %}
-      {% include 'order' %}
-    {% endfor %}
-  {% endif %}
-</div>

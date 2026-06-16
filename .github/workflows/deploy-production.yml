@@ -70,13 +70,11 @@ jobs:
           PROD_DIR=$(mktemp -d)
           git clone "https://x-access-token:${PROD_REPO_PAT}@github.com/${PROD_REPO}.git" "$PROD_DIR"
 
-          # Wipe all tracked files (preserving .git) so deleted source files
-          # don't linger in the production repo
-          find "$PROD_DIR" -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
-
-          # Copy dist/ output excluding all JSON files — the Shopify GitHub App
-          # manages all JSON bidirectionally with the live theme, so we never overwrite them.
-          rsync -a --exclude="*.json" dist/. "$PROD_DIR/"
+          # Sync dist/ into production repo — updates/adds/removes non-JSON files.
+          # --delete removes files no longer in source (e.g. deleted Liquid files).
+          # --exclude="*.json" leaves all JSON completely untouched — the Shopify
+          # GitHub App owns JSON via bidirectional sync with the live theme.
+          rsync -a --delete --exclude="*.json" --exclude=".git" dist/. "$PROD_DIR/"
 
           cd "$PROD_DIR"
           git add -A

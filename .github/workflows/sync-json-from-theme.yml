@@ -1,47 +1,126 @@
-name: Sync JSON from Production Repo
+name: Sync JSON from Live Theme
 
 on:
   workflow_dispatch:
+    inputs:
+      sync_branch:
+        description: 'Branch to create and push JSON changes to (e.g. sync/json-20240615)'
+        required: true
+      pr_target:
+        description: 'Branch to raise the PR against (e.g. main, develop)'
+        required: true
+        default: 'main'
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   sync-json:
-    name: Pull template JSON from production repo → source repo
+    name: Pull JSON from production repo → source repo
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ inputs.pr_target }}
+          fetch-depth: 0
 
-      - name: Pull all JSON from production repo
+      - name: Create sync branch from target
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${{ inputs.sync_branch }}"
+
+      - name: Pull JSON from production repo
         env:
           PROD_REPO_PAT: ${{ secrets.PROD_REPO_PAT }}
         run: |
           PROD_DIR=$(mktemp -d)
           git clone "https://x-access-token:${PROD_REPO_PAT}@github.com/mohit-aroraa/BPN-Prod.git" "$PROD_DIR"
 
-          # Pull all JSON files from production repo into source — no merge, full replace.
-          # Covers templates/, config/, locales/ and any other JSON the live theme manages.
-          find "$PROD_DIR" -name '*.json' -not -path '*/.git/*' | while IFS= read -r f; do
-            REL="${f#$PROD_DIR/}"
-            TARGET="src/liquid/$REL"
-            mkdir -p "$(dirname "$TARGET")"
-            cp "$f" "$TARGET"
-            echo "Synced: $REL"
-          done
+          # templates/**/*.json → src/liquid/templates/**/*.json
+          if [ -d "$PROD_DIR/templates" ]; then
+            find "$PROD_DIR/templates" -name '*.json' | while IFS= read -r f; do
+              REL="${f#$PROD_DIR/templates/}"
+              TARGET="src/liquid/templates/$REL"
+              mkdir -p "$(dirname "$TARGET")"
+              cp "$f" "$TARGET"
+            done
+          fi
 
-      - name: Commit and push if changed
+          # config/*.json → src/config/*.json
+          if [ -d "$PROD_DIR/config" ]; then
+            find "$PROD_DIR/config" -name '*.json' | while IFS= read -r f; do
+              REL="${f#$PROD_DIR/config/}"
+              TARGET="src/config/$REL"
+              mkdir -p "$(dirname "$TARGET")"
+              cp "$f" "$TARGET"
+            done
+          fi
+
+          # locales/*.json → src/locales/*.json
+          if [ -d "$PROD_DIR/locales" ]; then
+            find "$PROD_DIR/locales" -name '*.json' | while IFS= read -r f; do
+              REL="${f#$PROD_DIR/locales/}"
+              TARGET="src/locales/$REL"
+              mkdir -p "$(dirname "$TARGET")"
+              cp "$f" "$TARGET"
+            done
+          fi
+
+      - name: Commit and push sync branch
+        id: commit
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # -f to include gitignored files like settings_data.json
+          git add -f src/liquid/templates/ src/config/ src/locales/
 
-          git add src/liquid/
           if git diff --staged --quiet; then
-            echo "No JSON changes — source repo is already up to date."
+            echo "No JSON changes detected — source repo is already up to date."
+            echo "changed=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          CHANGED=$(git diff --staged --name-only | wc -l | tr -d ' ')
-          git commit -m "sync: pull ${CHANGED} json files from production repo"
-          git push origin main
+          CHANGED_FILES=$(git diff --staged --name-only)
+          CHANGED_COUNT=$(echo "$CHANGED_FILES" | wc -l | tr -d ' ')
+
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "changed_count=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
+
+          # Store multiline file list for PR body
+          DELIMITER=$(dd if=/dev/urandom bs=15 count=1 2>/dev/null | base64)
+          echo "changed_files<<${DELIMITER}" >> $GITHUB_OUTPUT
+          echo "${CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+
+          git commit -m "sync: pull ${CHANGED_COUNT} json files from live theme"
+          git push origin "${{ inputs.sync_branch }}"
+
+      - name: Create pull request
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "sync: json from live theme into \`${{ inputs.pr_target }}\`" \
+            --base "${{ inputs.pr_target }}" \
+            --head "${{ inputs.sync_branch }}" \
+            --body "$(cat <<'EOF'
+          ## JSON Sync from Live Theme
+
+          Pulled latest JSON files from the production repo (kept in sync with the live theme by the Shopify GitHub App).
+
+          **Source:** \`mohit-aroraa/BPN-Prod\`
+          **Target branch:** \`${{ inputs.pr_target }}\`
+
+          ### Changed files (${{ steps.commit.outputs.changed_count }})
+
+          ```
+          ${{ steps.commit.outputs.changed_files }}
+          ```
+
+          > These reflect changes made via the Shopify theme editor on the live theme.
+          > Review before merging — particularly \`settings_data.json\` and \`settings_schema.json\`.
+          EOF
+          )"
