@@ -26,6 +26,7 @@ jobs:
         with:
           ref: ${{ inputs.pr_target }}
           fetch-depth: 0
+          token: ${{ secrets.PROD_REPO_PAT }}
 
       - name: Create sync branch from target
         run: |
