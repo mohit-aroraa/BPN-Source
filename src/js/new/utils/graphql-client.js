@@ -10,7 +10,7 @@ export class GraphQLClient {
   constructor() {
     try {
       // const shopifyStorefrontToken = '575c78378d52ed540959fab685814b1a';
-      const shopifyStorefrontToken = '58965592df0d77b23a6d324e6eaa9b56';
+      const shopifyStorefrontToken = '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';
 
       if (!shopifyStorefrontToken) {
         console.error('Shopify Storefront API token not found. Make sure it is set in theme.liquid with a meta tag.');
@@ -181,12 +181,12 @@ export class GraphQLClient {
 
       Object.keys(filterParams).forEach(key => {
         const value = filterParams[key];
-        if (!value) {return;}
+        if (!value) { return; }
 
         // Handle custom metafield filters
         if (key.startsWith('filter.p.m.custom._filter_')) {
           const metafieldKey = key.replace('filter.p.m.custom.', '');
-          const values = Array.isArray(value) ? value : [ value ];
+          const values = Array.isArray(value) ? value : [value];
 
           values.forEach(val => {
             filters.push({
@@ -201,7 +201,7 @@ export class GraphQLClient {
 
         // Handle legacy product type filter (optional)
         else if (key === 'filter.p.product_type') {
-          const values = Array.isArray(value) ? value : [ value ];
+          const values = Array.isArray(value) ? value : [value];
 
           values.forEach(val => {
             filters.push({
@@ -216,7 +216,7 @@ export class GraphQLClient {
 
         // Handle tag filters (optional)
         else if (key === 'filter.p.tag') {
-          const values = Array.isArray(value) ? value : [ value ];
+          const values = Array.isArray(value) ? value : [value];
 
           values.forEach(val => {
             filters.push({
