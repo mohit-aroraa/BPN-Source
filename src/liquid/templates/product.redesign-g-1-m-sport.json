@@ -1,0 +1,319 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "wrapper": "div#div_id.div_class[attribute-one=value]",
+  "layout": "anatta_theme",
+  "sections": {
+    "main": {
+      "type": "product",
+      "blocks": {
+        "packs_iDX9BP": {
+          "type": "packs",
+          "settings": {
+            "heading": "",
+            "num_boxes": 3,
+            "discount_pct": 25,
+            "unit_label": "unit",
+            "most_popular": false,
+            "best_deal": false
+          }
+        },
+        "packs_Xtg3rL": {
+          "type": "packs",
+          "settings": {
+            "heading": "Most popular",
+            "num_boxes": 1,
+            "discount_pct": 0,
+            "unit_label": "unit",
+            "most_popular": true,
+            "best_deal": false
+          }
+        },
+        "packs_qTWWpN": {
+          "type": "packs",
+          "settings": {
+            "heading": "best deal",
+            "num_boxes": 2,
+            "discount_pct": 15,
+            "unit_label": "unit",
+            "most_popular": false,
+            "best_deal": true
+          }
+        },
+        "buybox_qrcyLJ": {
+          "type": "buybox",
+          "settings": {
+            "buy_box_type": "v2",
+            "subscription_usp": "Best Value - Save 25%",
+            "switch_to_subscription_text": "Want to save 25%? Switch to Subscription",
+            "benefit_1": "Easily Pause/Cancel",
+            "benefit_2": "Save 25% For Life",
+            "benefit_3": "Swap Flavors",
+            "benefit_4": "For The Committed"
+          }
+        },
+        "liquid_zFTnxY": {
+          "type": "liquid",
+          "settings": {
+            "custom_liquid": "<lightlabs-widget company-id=\"404\"></lightlabs-widget>"
+          }
+        },
+        "information_JFEii9": {
+          "type": "information",
+          "settings": {
+            "title": "HOW TO USE",
+            "text": "<ul><li>Add 1 scoop to 15-20 oz of water and mix. To start, consume 1 serving per hour of exercise to refuel with carbohydrates and replenish the electrolytes lost during training sessions.</li><li>Use before training, during training, or after training.</li></ul>"
+          }
+        },
+        "information_danGfx": {
+          "type": "information",
+          "settings": {
+            "title": "INGREDIENTS",
+            "text": "<p><strong>Cluster Dextrin</strong>®</p><p>Cluster Dextrin® is known as Highly Branched Cyclic Dextrin (HBCD). Cluster Dextrin® has a high molecular weight and is very fast gastric emptying. This means that it passes through your stomach at a faster rate, compared to other carbohydrate sources, which makes it more readily available for your body to use as energy without stomach discomfort or bloating (due to Cluster Dextrin®'s low osmotic pressure).</p><p>In addition to Cluster Dextrin®'s fast gastric emptying rate, it also provides a sustained release of energy without a sudden spike in blood sugar or insulin response.†</p><p><strong>Electrolytes</strong></p><p>We decided to source the sodium from Pink Himalayan Salt, which is free of additives and naturally contains up to 84 different minerals in trace amounts.</p><p>Our other electrolytes are sourced from Albion®, a trusted source of safe, proven, and effective organic minerals. The proven effectiveness of Albion® minerals, chelated for better absorption, ensures your confidence in our product. They are more easily absorbed into the human body and have been scientifically proven to cause less gastric upset.†</p>"
+          }
+        },
+        "badge_nYJm94": {
+          "type": "badge",
+          "settings": {
+            "text": "third-party certified",
+            "image": "shopify://shop_images/tested.png"
+          }
+        },
+        "badge_NUGRLj": {
+          "type": "badge",
+          "settings": {
+            "text": "NATURALLY SWEETENED",
+            "image": "shopify://shop_images/Natrually_Sweetned.png"
+          }
+        },
+        "badge_EUfNPi": {
+          "type": "badge",
+          "settings": {
+            "text": "Gluten Free",
+            "image": "shopify://shop_images/Group_2221.svg"
+          }
+        }
+      },
+      "block_order": [
+        "packs_iDX9BP",
+        "packs_Xtg3rL",
+        "packs_qTWWpN",
+        "buybox_qrcyLJ",
+        "liquid_zFTnxY",
+        "information_JFEii9",
+        "information_danGfx",
+        "badge_nYJm94",
+        "badge_NUGRLj",
+        "badge_EUfNPi"
+      ],
+      "settings": {
+        "subtitle": "20 G CARBOHYDRATES + 350 MG SODIUM",
+        "description": "An endurance supplement with carbohydrates and electrolytes to fuel, hydrate, and improve performance while training.",
+        "subscription_title": "Subscribe & Save",
+        "previous_discount_percentage": "15%",
+        "subscription_discount_text": "FOR LIFE",
+        "subscription_text": "Swap Flavors, Pause or Cancel Anytime",
+        "tooltip_text": "<ul><li>Easy and flexible subscription plan</li><li>Modify or cancel anytime</li><li>Lock in 20% discount until you cancel</li><li>Automatically delivered on your schedule</li></ul>",
+        "otp_title": "One Time Purchase",
+        "show_quantity_selector": true,
+        "show_order_by": true,
+        "show_copy_text": true,
+        "copy_text": "Military and First Responder discounts available at checkout.",
+        "nutrition_facts_title": "NUTRITION FACTS"
+      }
+    },
+    "product_details_CiRfq6": {
+      "type": "product-details",
+      "blocks": {
+        "slide_YzrtpQ": {
+          "type": "Slide",
+          "settings": {
+            "title": "TRAIN FUELED, NOT FASTED",
+            "text": "Many endurance athletes suffer from under-fueling. G.1.M Sport was created to fuel your potential and maximize performance.",
+            "image": "shopify://shop_images/nick2.png"
+          }
+        },
+        "slide_9zpaj6": {
+          "type": "Slide",
+          "settings": {
+            "title": "FAST DIGESTING CARBOHYDRATES",
+            "text": "20 grams of Cluster Dextrin® per serving, which provides a sustained release of energy without stomach discomfort.",
+            "image": "shopify://shop_images/G1M_d7902d8a-6f4c-4815-a81c-2a4eb9f59777.png"
+          }
+        },
+        "slide_XxEYjM": {
+          "type": "Slide",
+          "settings": {
+            "title": "HYDRATION SUPPORT",
+            "text": "350 mg of sodium per serving to replenish what is lost through sweat, allowing you to maintain greater efforts for longer.",
+            "image": "shopify://shop_images/G1M.png"
+          }
+        },
+        "slide_pGyiBq": {
+          "type": "Slide",
+          "settings": {
+            "title": "third-party certified",
+            "text": "G.1.M Sport is tested and certified by NSF Certified for Sport® to verify it does not contain unsafe levels of contaminants or prohibited substances.",
+            "image": "shopify://shop_images/testing.png"
+          }
+        }
+      },
+      "block_order": [
+        "slide_YzrtpQ",
+        "slide_9zpaj6",
+        "slide_XxEYjM",
+        "slide_pGyiBq"
+      ],
+      "settings": {
+        "title": "ENGINEERED FOR ENDURANCE",
+        "subtitle": "FORMULATED FOR PERFORMANCE"
+      }
+    },
+    "media_carousel_xnEHcr": {
+      "type": "media-carousel",
+      "blocks": {
+        "slide_ggtwEm": {
+          "type": "Slide",
+          "settings": {
+            "title": "EFFECTIVE FUEL FOR THE COMMITTED",
+            "text": "G.1.M Sport was created out of necessity. As we began training for long-distance endurance events, we learned the importance of fueling the body with carbohydrates and electrolytes. Unfortunately, everything on the market caused stomach issues and training disturbances. We set out to solve that problem, and G.1.M Sport is our solution. Now, you can train fueled without the concern of a product slowing you down and holding you back.",
+            "iframe": "",
+            "image": "shopify://shop_images/mitchrun.png",
+            "icon": "shopify://shop_images/barestandard_87d461bc-1f23-421b-a5e4-8c48f3422192.png"
+          }
+        }
+      },
+      "block_order": [
+        "slide_ggtwEm"
+      ],
+      "settings": {}
+    },
+    "stack_recommendations_nijCAw": {
+      "type": "stack-recommendations",
+      "blocks": {
+        "product_3DccFA": {
+          "type": "product",
+          "settings": {
+            "product": "electrolytes"
+          }
+        },
+        "product_FMtix6": {
+          "type": "product",
+          "settings": {
+            "product": "go-gel"
+          }
+        },
+        "product_77y4pc": {
+          "type": "product",
+          "settings": {
+            "product": "g-1-m-sport-plus"
+          }
+        },
+        "product_RDVxEY": {
+          "type": "product",
+          "settings": {
+            "product": "whey-protein-powder"
+          }
+        }
+      },
+      "block_order": [
+        "product_3DccFA",
+        "product_FMtix6",
+        "product_77y4pc",
+        "product_RDVxEY"
+      ],
+      "settings": {
+        "title": "Complete your stack",
+        "text": "Pair your G.1.M Sport with our other products to fuel your performance."
+      }
+    },
+    "faq_jajCx3": {
+      "type": "faq",
+      "blocks": {
+        "slide_4iBXHM": {
+          "type": "Slide",
+          "settings": {
+            "title": "What makes G.1.M Sport superior?",
+            "text": "G.1.M Sport utilizes a specific carbohydrate source called Cluster Dextrin®, far superior to other sources on the market for athletes. Compared to glucose, Cluster Dextrin® has a high molecular weight and low osmotic pressure, leading to fast gastric emptying and reducing the risk of gastrointestinal distress."
+          }
+        },
+        "slide_UNzi6C": {
+          "type": "Slide",
+          "settings": {
+            "title": "When and how to use G.1.M Sport?",
+            "text": "Add one scoop of G.1.M Sport to 15-20 oz of water and mix. To start, consume one serving per hour of exercise to refuel, replenish, and rehydrate. Depending on your training methods, volume, and intensity of workouts, you can increase your servings per hour to maximize performance benefits. G.1.M Sport can be used before, during, or after training."
+          }
+        },
+        "slide_B6eC8Y": {
+          "type": "Slide",
+          "settings": {
+            "title": "Is G.1.M Sport Gluten Free?",
+            "text": "Yes, G.1.M Sport is a gluten free product. We test every batch to ensure our quality standards. **According to the Food and Drug Administration (FDA) a product is considered \"gluten free\" as long as it contains less than 20 parts per million (ppm) of gluten."
+          }
+        },
+        "slide_nFG7zH": {
+          "type": "Slide",
+          "settings": {
+            "title": "IS G.1.M Sport THIRD-PARTY TESTED FOR BANNED SUBSTANCES?",
+            "text": "Yes, G.1.M Sport is enrolled in NSF's Certified for Sport® Program. In addition to testing for over 290+ athletic banned substances, products bearing the Certified for Sport® mark on package must be produced in a manufacturing facility that complies with cGMP requirements. If you use a BPN product that bears the NSF Certified for Sport® mark, you can be confident that its contents were thoroughly tested by one of the most respected certifiers in the world."
+          }
+        },
+        "slide_kkYTLR": {
+          "type": "Slide",
+          "settings": {
+            "title": "Does BPN Test For Label Accuracy?",
+            "text": "All BPN products are enrolled in the NSF Contents Certified Certification Program. The product and label are tested to verify product formulation and label claims, to be sure that what’s on the label is in the product. Chemical and contaminant testing is also conducted to make sure there are no potentially harmful levels of specific contaminants, pesticides, heavy metals, and more. In addition, a toxicological review of the label is performed to make sure all ingredients are allowed to be used in a product and that the amount of each ingredient does not exceed typical use levels established by NSF."
+          }
+        },
+        "slide_d7Fakq": {
+          "type": "Slide",
+          "settings": {
+            "title": "Product Warnings",
+            "text": "Warning: Consuming this product can expose you to chemicals including Lead which is known to the State of California to cause birth defects or other reproductive harm. For more information go to <a href=\"https://www.P65Warnings.ca.gov/food\"> www.P65Warnings.ca.gov/food.</a>"
+          }
+        }
+      },
+      "block_order": [
+        "slide_4iBXHM",
+        "slide_UNzi6C",
+        "slide_B6eC8Y",
+        "slide_nFG7zH",
+        "slide_kkYTLR",
+        "slide_d7Fakq"
+      ],
+      "settings": {
+        "title": "WHAT CUSTOMERS ARE ASKING",
+        "subtitle": "LEARN MORE"
+      }
+    },
+    "product_reviews_9Cny8q": {
+      "type": "product-reviews",
+      "disabled": true,
+      "settings": {
+        "title": "CUSTOMER REVIEWS"
+      }
+    },
+    "join_us_9BTGqX": {
+      "type": "join-us",
+      "settings": {
+        "handle": "join-us-global"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "product_details_CiRfq6",
+    "media_carousel_xnEHcr",
+    "stack_recommendations_nijCAw",
+    "faq_jajCx3",
+    "product_reviews_9Cny8q",
+    "join_us_9BTGqX"
+  ]
+}

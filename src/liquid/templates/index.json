@@ -129,15 +129,13 @@
       ],
       "settings": {
         "desktop_media_type": "image",
-        "hero_image": "shopify://shop_images/DESKTOP_HOMEPAGE_BANNER_1_1.jpg",
-        "hero_video": "shopify://files/videos/G.1.M ULTRA DRONE LOOP_2_16X9 (1).mp4",
+        "hero_image": "shopify://shop_images/Zo6szx5LeNNTw_-L_G_M.png",
         "desktop_height": 750,
         "mobile_media_type": "image",
-        "hero_mobile_image": "shopify://shop_images/MOBILE_HOMEPAGE_BANNER_1.jpg",
-        "hero_mobile_video": "shopify://files/videos/G.1.M ULTRA DRONE LOOP_2_16X9 (1).mp4",
+        "hero_mobile_image": "shopify://shop_images/zWHEY_PROTEIN_PHOTOS-9-min.jpg",
         "mobile_height": 550,
-        "desktop_overlay_color": "linear-gradient(60deg, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.1) 40%)",
-        "mobile_overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.25) 10%, rgba(0, 0, 0, 0.5) 60%)",
+        "desktop_overlay_color": "linear-gradient(60deg, rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0.5) 100%)",
+        "mobile_overlay_color": "linear-gradient(112deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.25) 10%)",
         "title": "THE STRENGTH COLLECTION",
         "title_color": "",
         "text": "<p><strong>NOW LIVE - PRE, PUMP, POST</strong></p><p>Three products with clinically studied ingredients to prepare for training, maximize performance, and recover for tomorrow. </p><p>Your new ritual is here. </p>",
@@ -167,8 +165,6 @@
             "category_name": "Endurance",
             "category_url": "shopify://collections/endurance",
             "cta_text": "SHOP NOW",
-            "category_image": "shopify://shop_images/zzd3590b46-d9be-4dd1-a0ac-fd7001983121_1.jpg",
-            "category_mobile_image": "shopify://shop_images/zzd3590b46-d9be-4dd1-a0ac-fd7001983121_1.jpg",
             "title_color": "",
             "cta_color": ""
           }
@@ -203,8 +199,6 @@
             "category_name": "Wellness",
             "category_url": "shopify://collections/health-wellness",
             "cta_text": "SHOP NOW",
-            "category_image": "shopify://shop_images/zzBPN_9287_2.jpg",
-            "category_mobile_image": "shopify://shop_images/zzBPN_9287_2.jpg",
             "title_color": "",
             "cta_color": ""
           }
