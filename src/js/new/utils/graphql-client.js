@@ -10,7 +10,7 @@ export class GraphQLClient {
   constructor() {
     try {
       // const shopifyStorefrontToken = '575c78378d52ed540959fab685814b1a';
-      const shopifyStorefrontToken = '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';
+      const shopifyStorefrontToken = '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';
 
       if (!shopifyStorefrontToken) {
         console.error('Shopify Storefront API token not found. Make sure it is set in theme.liquid with a meta tag.');
