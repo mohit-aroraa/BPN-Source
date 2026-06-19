@@ -1,0 +1,399 @@
+{%- assign _section = section.settings -%}
+{%- assign image_style = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;' -%}
+{%- assign video_style = 'position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;' -%}
+
+{%- capture desktop_image -%}
+  {{
+    _section.hero_image
+    | image_url: width: 1920
+    | image_tag:
+      loading: 'eager',
+      class: 'bpn-homepage-hero__img-desktop',
+      style: image_style,
+      alt: _section.hero_image.alt
+  }}
+{%- endcapture -%}
+
+{%- capture mobile_image -%}
+  {{
+    _section.hero_mobile_image
+    | image_url: width: 800
+    | image_tag:
+      loading: 'eager',
+      class: 'bpn-homepage-hero__img-mobile',
+      style: image_style,
+      alt: _section.hero_mobile_image.alt
+  }}
+{%- endcapture -%}
+
+<section
+  class='bpn-homepage-hero'
+  style='
+    --desktop-height: {{ _section.desktop_height }}px;
+    --mobile-height: {{ _section.mobile_height }}px;
+    {% if _section.desktop_overlay_color != blank %}--desktop-overlay: {{ _section.desktop_overlay_color }};{% endif %}
+    {% if _section.mobile_overlay_color != blank %}--mobile-overlay: {{ _section.mobile_overlay_color }};{% endif %}
+  '
+>
+  <div class='bpn-homepage-hero__video-container'>
+    {%- comment -%} Desktop Media {%- endcomment -%}
+    {% if _section.desktop_media_type == 'video' and _section.hero_video != blank %}
+      <div class='bpn-homepage-hero__video'>
+        {{
+          _section.hero_video
+          | video_tag:
+            image_size: '1920x',
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            playsinline: true,
+            class: 'bpn-homepage-hero__video-desktop',
+            style: video_style
+        }}
+      </div>
+    {% elsif _section.hero_image != blank %}
+      <div class='bpn-homepage-hero__video'>
+        {{ desktop_image }}
+      </div>
+    {% endif %}
+
+    {%- comment -%} Mobile Media {%- endcomment -%}
+    {% if _section.mobile_media_type == 'video' and _section.hero_mobile_video != blank %}
+      <div class='bpn-homepage-hero__video bpn-homepage-hero__video--mobile'>
+        {{
+          _section.hero_mobile_video
+          | video_tag:
+            image_size: '800x',
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            playsinline: true,
+            class: 'bpn-homepage-hero__video-mobile',
+            style: video_style
+        }}
+      </div>
+    {% elsif _section.hero_mobile_image != blank %}
+      <div class='bpn-homepage-hero__video bpn-homepage-hero__video--mobile'>
+        {{ mobile_image }}
+      </div>
+    {% endif %}
+
+    {%- comment -%} Overlay — sits between media and content {%- endcomment -%}
+    <div class='bpn-homepage-hero__video-overlay'></div>
+  </div>
+
+  <div class='bpn-homepage-hero__content mobile-v-{{ _section.mobile_vertical_alignment }} desktop-v-{{ _section.desktop_vertical_alignment }}'>
+    <div
+      class='bpn-homepage-hero__content-wrapper mobile-h-{{ _section.mobile_horizontal_alignment }} desktop-h-{{ _section.desktop_horizontal_alignment }}'
+    >
+      {% if _section.title != blank %}
+        <h1 class='bpn-homepage-hero__title bpn-text-h2' style='color: {{ _section.title_color }}'>
+          {{ _section.title }}
+        </h1>
+      {% endif %}
+
+      {% if _section.text != blank %}
+        <div
+          class='bpn-homepage-hero__text bpn-text-body-base'
+          style='color: {{ _section.text_color }}'
+        >
+          {{ _section.text }}
+        </div>
+      {% endif %}
+
+      <div class='bpn-homepage-hero__controls'>
+        {% for block in section.blocks %}
+          {% if block.type == 'button' %}
+            <a
+              class='bpn-homepage-hero__cta bpn-text-callout-base bpn-homepage-hero__cta--{{ block.settings.button_style }}'
+              href='{{ block.settings.button_link }}'
+              data-click-id='{{ block.settings.click_id }}'
+              {{ block.shopify_attributes }}
+            >
+              {{- block.settings.button_text -}}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Media Banner 2",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media Settings"
+    },
+    {
+      "type": "select",
+      "id": "desktop_media_type",
+      "label": "Desktop Media Type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "id": "hero_image",
+      "type": "image_picker",
+      "label": "Desktop Image",
+      "info": "Recommended size: 1920px x 1080px",
+      "visible_if": "{{ section.settings.desktop_media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Desktop Video",
+      "visible_if": "{{ section.settings.desktop_media_type == 'video' }}"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop Height (in px)",
+      "min": 600,
+      "max": 1500,
+      "step": 10,
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_type",
+      "label": "Mobile Media Type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "id": "hero_mobile_image",
+      "type": "image_picker",
+      "label": "Mobile Image",
+      "info": "Recommended size: 800px x 1080px",
+      "visible_if": "{{ section.settings.mobile_media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "hero_mobile_video",
+      "label": "Mobile Video",
+      "visible_if": "{{ section.settings.mobile_media_type == 'video' }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile Height (in px)",
+      "min": 450,
+      "max": 1200,
+      "step": 10,
+      "default": 450
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color_background",
+      "id": "desktop_overlay_color",
+      "label": "Desktop Overlay"
+    },
+    {
+      "type": "color_background",
+      "id": "mobile_overlay_color",
+      "label": "Mobile Overlay"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "FUEL FOR MORE"
+    },
+    {
+      "id": "title_color",
+      "type": "color",
+      "label": "Title Color"
+    },
+    {
+      "id": "text",
+      "type": "richtext",
+      "label": "Description",
+      "default": "<p>Effective health and performance supplements you can trust.</p>"
+    },
+    {
+      "id": "text_color",
+      "type": "color",
+      "label": "Text Color"
+    },
+    {
+      "type": "header",
+      "content": "Content Alignment"
+    },
+    {
+      "type": "select",
+      "id": "desktop_horizontal_alignment",
+      "label": "Desktop Horizontal Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "desktop_vertical_alignment",
+      "label": "Desktop Vertical Alignment",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "mobile_horizontal_alignment",
+      "label": "Mobile Horizontal Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_vertical_alignment",
+      "label": "Mobile Vertical Alignment",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Take the Quiz"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button Style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "text",
+          "id": "click_id",
+          "label": "Click ID",
+          "info": "Used for analytics tracking"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media Banner 2",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Take the Quiz",
+            "button_style": "primary",
+            "click_id": "homepage_hero_quiz_cta"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_text": "Shop Supps",
+            "button_style": "secondary",
+            "click_id": "homepage_hero_shop-supps_cta"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
