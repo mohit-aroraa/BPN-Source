@@ -1,8 +1,20 @@
 name: Cross-Sync JSON Between Themes
 
-# Copies JSON files from source theme into target theme.
-# Files that exist only in the target (e.g. new templates added by devs) are preserved.
-# Nothing is committed to git — this is a direct Shopify-to-Shopify sync.
+# Copies JSON from source theme into target theme using a proper 3-way merge
+# for settings_data.json — git is used as the common base (last deployed/synced state).
+#
+# 3-way merge rules for settings_data.json:
+#   • Only source changed vs git  → take source
+#   • Only target changed vs git  → keep target
+#   • Both changed vs git         → TRUE CONFLICT → target kept, flagged in logs
+#   • New section in source       → added to target
+#   • Section deleted in source, target unchanged → removed from target
+#   • Section deleted in source, target modified  → kept in target (flagged)
+#
+# All other JSON files (templates, locales, config): source wins.
+#
+# NOTE: Run a deploy first so git has a fresh snapshot. A stale git base
+# reduces merge accuracy.
 
 on:
   workflow_dispatch:
@@ -22,6 +34,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Install Shopify CLI
         run: npm install -g @shopify/cli@3.84.1
 
@@ -51,21 +66,122 @@ jobs:
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
 
-      - name: Overlay source JSON onto target
-        # Copies JSON files from source into target.
-        # JSON files that only exist in target (new dev templates etc.) are untouched.
+      - name: Merge JSON files
         run: |
-          JSON_FILES=$(find "$SOURCE_DIR" -name "*.json")
-          COUNT=$(echo "$JSON_FILES" | grep -c . || true)
+          GIT_BASE="src/config/settings_data.json"
+          SOURCE_SETTINGS="$SOURCE_DIR/config/settings_data.json"
+          TARGET_SETTINGS="$TARGET_DIR/config/settings_data.json"
 
-          echo "Syncing $COUNT JSON files from theme ${{ inputs.source_theme_id }} → theme ${{ inputs.target_theme_id }}"
-          echo "$JSON_FILES" | sed "s|$SOURCE_DIR/|  |"
+          # ── settings_data.json: 3-way merge using git as base ─────────────
+          if [ -f "$SOURCE_SETTINGS" ] && [ -f "$TARGET_SETTINGS" ] && [ -f "$GIT_BASE" ]; then
+            echo "Running 3-way merge on settings_data.json (base = git snapshot)"
+            python3 - "$GIT_BASE" "$SOURCE_SETTINGS" "$TARGET_SETTINGS" "$TARGET_SETTINGS" <<'PYEOF'
+          import json, sys
 
-          echo "$JSON_FILES" | while IFS= read -r f; do
+          base   = json.load(open(sys.argv[1]))
+          source = json.load(open(sys.argv[2]))
+          target = json.load(open(sys.argv[3]))
+          out    = sys.argv[4]
+
+          result = json.loads(json.dumps(target))
+
+          b_secs = base.get('current', {}).get('sections', {})
+          s_secs = source.get('current', {}).get('sections', {})
+          t_secs = target.get('current', {}).get('sections', {})
+          r_secs = result['current']['sections']
+
+          added, from_source, from_target, removed, conflicts = [], [], [], [], []
+
+          for sid, s_sec in s_secs.items():
+              b_sec = b_secs.get(sid)
+              t_sec = t_secs.get(sid)
+              s_changed = s_sec != b_sec
+              t_changed = t_sec != b_sec if t_sec is not None else False
+
+              if sid not in t_secs:
+                  if b_sec is None:
+                      r_secs[sid] = s_sec
+                      added.append(sid)
+                  # else: deleted in target → respect it
+              elif s_changed and not t_changed:
+                  r_secs[sid] = s_sec
+                  from_source.append(sid)
+              elif not s_changed and t_changed:
+                  from_target.append(sid)  # already in r_secs
+              elif not s_changed and not t_changed:
+                  pass  # identical, no action
+              else:
+                  conflicts.append(sid)  # both changed → target kept
+
+          # Sections deleted in source
+          for sid in list(r_secs.keys()):
+              if sid in b_secs and sid not in s_secs:
+                  t_changed = t_secs.get(sid) != b_secs[sid] if sid in t_secs else False
+                  if not t_changed:
+                      del r_secs[sid]
+                      removed.append(sid)
+                  else:
+                      conflicts.append(f"{sid} (deleted in source, modified in target — kept)")
+
+          # Merge section order
+          s_order = source.get('current', {}).get('order', [])
+          t_order = target.get('current', {}).get('order', [])
+          merged  = [s for s in s_order if s in r_secs]
+          t_only  = [s for s in t_order if s in r_secs and s not in merged]
+          result['current']['order'] = merged + t_only
+
+          json.dump(result, open(out, 'w'), indent=2)
+
+          print(f"\nsettings_data.json — 3-way merge result:")
+          print(f"  Added from source        : {len(added)}       {added}")
+          print(f"  Updated from source      : {len(from_source)} {from_source}")
+          print(f"  Kept from target         : {len(from_target)} {from_target}")
+          print(f"  Removed (deleted in src) : {len(removed)}     {removed}")
+          if conflicts:
+              print(f"\n  ⚠ CONFLICTS (target kept): {len(conflicts)}")
+              for c in conflicts: print(f"    - {c}")
+              print(f"  Both themes changed these sections since last git snapshot.")
+              print(f"  Run sync-json + open a PR to review and apply source changes manually.")
+          else:
+              print(f"  ✓ No conflicts.")
+          PYEOF
+
+          elif [ -f "$SOURCE_SETTINGS" ] && [ -f "$TARGET_SETTINGS" ]; then
+            echo "⚠ No git base found for settings_data.json — falling back to 2-way merge (target wins on conflict)."
+            python3 - "$SOURCE_SETTINGS" "$TARGET_SETTINGS" "$TARGET_SETTINGS" <<'PYEOF'
+          import json, sys
+          source = json.load(open(sys.argv[1]))
+          target = json.load(open(sys.argv[2]))
+          out    = sys.argv[3]
+          result = json.loads(json.dumps(target))
+          s_secs = source.get('current', {}).get('sections', {})
+          t_secs = target.get('current', {}).get('sections', {})
+          r_secs = result['current']['sections']
+          added, conflicts = [], []
+          for sid, s_sec in s_secs.items():
+              if sid not in t_secs:
+                  r_secs[sid] = s_sec
+                  added.append(sid)
+              elif s_sec != t_secs[sid]:
+                  conflicts.append(sid)
+          s_order = source.get('current', {}).get('order', [])
+          t_order = target.get('current', {}).get('order', [])
+          merged  = [s for s in s_order if s in r_secs]
+          t_only  = [s for s in t_order if s in r_secs and s not in merged]
+          result['current']['order'] = merged + t_only
+          json.dump(result, open(out, 'w'), indent=2)
+          print(f"2-way merge: added {len(added)}, conflicts (target kept): {len(conflicts)} {conflicts}")
+          print(f"Tip: deploy to a theme first so git has a snapshot for accurate 3-way merges.")
+          PYEOF
+          fi
+
+          # ── All other JSON files: source wins, target-only files preserved ─
+          find "$SOURCE_DIR" -name "*.json" | while IFS= read -r f; do
             REL="${f#$SOURCE_DIR/}"
-            TARGET="$TARGET_DIR/$REL"
-            mkdir -p "$(dirname "$TARGET")"
-            cp "$f" "$TARGET"
+            [ "$REL" = "config/settings_data.json" ] && continue
+            TARGET_FILE="$TARGET_DIR/$REL"
+            mkdir -p "$(dirname "$TARGET_FILE")"
+            cp "$f" "$TARGET_FILE"
           done
 
       - name: Push updated target theme to Shopify

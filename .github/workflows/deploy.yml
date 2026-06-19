@@ -12,6 +12,9 @@ concurrency:
   group: deploy-${{ inputs.theme_id }}
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     name: Build & Deploy
@@ -23,6 +26,7 @@ jobs:
         with:
           # Full history required — ThemeVersionPlugin embeds git SHA + branch + timestamp
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -49,8 +53,7 @@ jobs:
 
       - name: Pull JSON from target theme
         # Overlay the theme's current JSON onto the built dist/ before pushing.
-        # This preserves all content-editor changes (settings_data.json, template JSONs)
-        # and avoids overwriting merchant settings with developer defaults.
+        # This preserves all content-editor changes and avoids overwriting merchant settings.
         run: |
           TEMP=$(mktemp -d)
 
@@ -80,3 +83,44 @@ jobs:
           echo "Deployed to theme ${{ inputs.theme_id }}"
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+
+      - name: Commit JSON snapshot to git
+        # Stores the deployed JSON state back into src/ so git stays in sync with
+        # the live theme. This snapshot is used as the base for 3-way merges in
+        # the cross-sync workflow — without it, we can't tell who changed what.
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Map dist/ → src/ (mirrors the build's reverse mapping)
+          find dist/templates -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#dist/templates/}"
+            TARGET="src/liquid/templates/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          find dist/config -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#dist/config/}"
+            TARGET="src/config/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          find dist/locales -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#dist/locales/}"
+            TARGET="src/locales/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          git add -f src/liquid/templates/ src/config/ src/locales/
+
+          if git diff --staged --quiet; then
+            echo "JSON already in sync with git — no snapshot needed."
+            exit 0
+          fi
+
+          COUNT=$(git diff --staged --name-only | grep -c . || true)
+          git commit -m "snapshot: sync $COUNT json files from theme ${{ inputs.theme_id }}"
+          git push origin HEAD

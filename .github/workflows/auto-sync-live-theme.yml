@@ -1,0 +1,135 @@
+name: Auto-Sync from Live Theme
+
+# Pulls JSON from the published live theme on a schedule and opens (or updates)
+# a standing PR so git stays in sync with content-editor changes.
+# There is always at most one open PR from this workflow at a time.
+
+on:
+  schedule:
+    - cron: '0 */3 * * *' # every 3 hours — adjust to taste
+  workflow_dispatch: # also runnable manually
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-sync:
+    name: Pull live theme JSON → PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@3.84.1
+
+      - name: Pull JSON from published live theme
+        run: |
+          TEMP=$(mktemp -d)
+
+          # --live targets the currently published theme — no theme ID needed
+          shopify theme pull \
+            --store "${{ vars.SHOPIFY_STORE_URL }}" \
+            --live \
+            --path "$TEMP" \
+            --force
+
+          # Map theme structure → src/ structure
+          find "$TEMP/templates" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/templates/}"
+            TARGET="src/liquid/templates/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          find "$TEMP/config" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/config/}"
+            TARGET="src/config/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          find "$TEMP/locales" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/locales/}"
+            TARGET="src/locales/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git add -f src/liquid/templates/ src/config/ src/locales/
+
+          if git diff --staged --quiet; then
+            echo "No JSON changes detected — live theme is already in sync with git."
+            echo "changed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          CHANGED=$(git diff --staged --name-only)
+          COUNT=$(echo "$CHANGED" | grep -c . || true)
+
+          echo "changed=true"          >> $GITHUB_OUTPUT
+          echo "count=$COUNT"          >> $GITHUB_OUTPUT
+
+          DELIMITER=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | head -c 16)
+          echo "files<<$DELIMITER"     >> $GITHUB_OUTPUT
+          echo "$CHANGED"              >> $GITHUB_OUTPUT
+          echo "$DELIMITER"            >> $GITHUB_OUTPUT
+
+      - name: Commit and push to sync branch
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          # Fixed branch name — force-push updates the existing PR automatically
+          BRANCH="sync/live-theme-auto"
+          git checkout -B "$BRANCH"
+          git commit -m "sync: ${{ steps.diff.outputs.count }} json files from live theme"
+          git push --force origin "$BRANCH"
+
+      - name: Create or update PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="sync/live-theme-auto"
+
+          # Check if a PR already exists for this branch
+          EXISTING=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number' 2>/dev/null || true)
+
+          if [ -n "$EXISTING" ]; then
+            echo "PR #$EXISTING already exists — branch updated, PR refreshed automatically."
+          else
+            gh pr create \
+              --title "sync: live theme json → main" \
+              --base "main" \
+              --head "$BRANCH" \
+              --body "$(cat <<'EOF'
+          ## Auto-Sync from Live Theme
+
+          Content-editor changes detected on the published Shopify theme.
+          This PR keeps git in sync so cross-sync can use git as a merge base.
+
+          ### Changed files (${{ steps.diff.outputs.count }})
+
+          \`\`\`
+          ${{ steps.diff.outputs.files }}
+          \`\`\`
+
+          > Review \`settings_data.json\` before merging.
+          > This PR is automatically updated every 3 hours if new changes are detected.
+          EOF
+              )"
+          fi
