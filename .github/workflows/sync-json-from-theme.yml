@@ -1,4 +1,4 @@
-name: Sync JSON from Live Theme
+name: "[PAUSED] Sync JSON from Live Theme"
 
 on:
   workflow_dispatch:

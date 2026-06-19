@@ -1,4 +1,4 @@
-name: Build & Deploy to Production Repo
+name: "[PAUSED] Build & Deploy to Production Repo"
 
 on:
   push:
