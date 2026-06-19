@@ -1,0 +1,152 @@
+name: Sync JSON from Shopify Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Theme to pull JSON from'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - prod
+          - preprod
+      source_theme_id:
+        description: 'Theme ID (required when source is preprod)'
+        required: false
+        type: string
+      sync_branch:
+        description: 'Branch to create (e.g. sync/json-20260619)'
+        required: true
+      pr_target:
+        description: 'Branch to raise the PR against'
+        required: true
+        default: 'main'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-json:
+    name: Pull JSON from Shopify → PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.pr_target }}
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${{ inputs.sync_branch }}"
+
+      - name: Resolve source theme ID
+        id: theme
+        run: |
+          if [ "${{ inputs.source }}" = "prod" ]; then
+            echo "id=${{ vars.PROD_THEME_ID }}" >> $GITHUB_OUTPUT
+          else
+            if [ -z "${{ inputs.source_theme_id }}" ]; then
+              echo "::error::source_theme_id is required when source is preprod"
+              exit 1
+            fi
+            echo "id=${{ inputs.source_theme_id }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@latest
+
+      - name: Pull JSON from Shopify theme
+        run: |
+          TEMP=$(mktemp -d)
+
+          shopify theme pull \
+            --store "${{ vars.SHOPIFY_STORE_URL }}" \
+            --theme "${{ steps.theme.outputs.id }}" \
+            --path "$TEMP" \
+            --force
+
+          # Map theme structure → source repo structure
+          # templates/ → src/liquid/templates/
+          find "$TEMP/templates" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/templates/}"
+            TARGET="src/liquid/templates/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          # config/ → src/config/
+          find "$TEMP/config" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/config/}"
+            TARGET="src/config/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+
+          # locales/ → src/locales/
+          find "$TEMP/locales" -name "*.json" 2>/dev/null | while IFS= read -r f; do
+            REL="${f#$TEMP/locales/}"
+            TARGET="src/locales/$REL"
+            mkdir -p "$(dirname "$TARGET")"
+            cp "$f" "$TARGET"
+          done
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+
+      - name: Commit and push sync branch
+        id: commit
+        run: |
+          # -f to include any gitignored JSON files (e.g. settings_data.json)
+          git add -f src/liquid/templates/ src/config/ src/locales/ 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No JSON changes — source repo is already up to date."
+            echo "changed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          CHANGED_FILES=$(git diff --staged --name-only)
+          CHANGED_COUNT=$(echo "$CHANGED_FILES" | grep -c . || true)
+
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "changed_count=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
+
+          DELIMITER=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | head -c 16)
+          echo "changed_files<<${DELIMITER}" >> $GITHUB_OUTPUT
+          echo "${CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "${DELIMITER}" >> $GITHUB_OUTPUT
+
+          git commit -m "sync: pull ${CHANGED_COUNT} json files from ${{ inputs.source }} theme"
+          git push --force origin "${{ inputs.sync_branch }}"
+
+      - name: Create pull request
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "sync: json from ${{ inputs.source }} theme → \`${{ inputs.pr_target }}\`" \
+            --base "${{ inputs.pr_target }}" \
+            --head "${{ inputs.sync_branch }}" \
+            --body "$(cat <<'EOF'
+          ## JSON Sync from Shopify Theme
+
+          Pulled latest JSON files directly from the **${{ inputs.source }}** Shopify theme (ID: `${{ steps.theme.outputs.id }}`).
+
+          **Target branch:** \`${{ inputs.pr_target }}\`
+
+          ### Changed files (${{ steps.commit.outputs.changed_count }})
+
+          ```
+          ${{ steps.commit.outputs.changed_files }}
+          ```
+
+          > Review `settings_data.json` carefully before merging — it reflects live content-editor changes.
+          > These will become the developer defaults applied on next deploy (then immediately overwritten by the live theme's JSON anyway).
+          EOF
+          )"

@@ -1,0 +1,123 @@
+name: Deploy to Shopify Theme
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Deployment target'
+        required: true
+        default: 'preprod'
+        type: choice
+        options:
+          - prod
+          - preprod
+      preprod_theme_id:
+        description: 'Pre-prod theme ID (required when target is preprod)'
+        required: false
+        type: string
+      force:
+        description: 'Deploy even if no theme files changed'
+        required: false
+        default: false
+        type: boolean
+
+# Queue deploys to the same target — never cancel in progress
+concurrency:
+  group: deploy-${{ github.event_name == 'push' && 'prod' || inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Full history required — ThemeVersionPlugin embeds git SHA + branch + timestamp
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Verify build output
+        run: |
+          echo "Build complete:"
+          echo "  Total files : $(find dist -type f | wc -l | tr -d ' ')"
+          echo "  JS/CSS files: $(find dist/assets -name '*.js' -o -name '*.css' | wc -l | tr -d ' ')"
+          echo "  Liquid files: $(find dist -name '*.liquid' | wc -l | tr -d ' ')"
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@latest
+
+      - name: Resolve target theme
+        id: theme
+        run: |
+          # push to main always deploys to prod; workflow_dispatch picks the target
+          if [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.target }}" = "prod" ]; then
+            echo "id=${{ vars.PROD_THEME_ID }}" >> $GITHUB_OUTPUT
+            echo "is_live=true" >> $GITHUB_OUTPUT
+            echo "label=prod (theme ${{ vars.PROD_THEME_ID }})" >> $GITHUB_OUTPUT
+          else
+            if [ -z "${{ inputs.preprod_theme_id }}" ]; then
+              echo "::error::preprod_theme_id is required when target is preprod"
+              exit 1
+            fi
+            echo "id=${{ inputs.preprod_theme_id }}" >> $GITHUB_OUTPUT
+            echo "is_live=false" >> $GITHUB_OUTPUT
+            echo "label=preprod (theme ${{ inputs.preprod_theme_id }})" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Pull live JSON from target theme
+        # Overlay the theme's current JSON onto the built dist/ before pushing.
+        # This preserves all content-editor changes (settings_data.json, template JSONs)
+        # and avoids overwriting merchant settings with developer defaults.
+        run: |
+          TEMP=$(mktemp -d)
+
+          shopify theme pull \
+            --store "${{ vars.SHOPIFY_STORE_URL }}" \
+            --theme "${{ steps.theme.outputs.id }}" \
+            --path "$TEMP" \
+            --force
+
+          find "$TEMP" -name "*.json" | while IFS= read -r f; do
+            REL="${f#$TEMP/}"
+            mkdir -p "$(dirname "dist/$REL")"
+            cp "$f" "dist/$REL"
+          done
+
+          echo "JSON overlay complete from ${{ steps.theme.outputs.label }}"
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+
+      - name: Push theme to Shopify
+        run: |
+          ALLOW_LIVE_FLAG=""
+          if [ "${{ steps.theme.outputs.is_live }}" = "true" ]; then
+            ALLOW_LIVE_FLAG="--allow-live"
+          fi
+
+          shopify theme push \
+            --store "${{ vars.SHOPIFY_STORE_URL }}" \
+            --theme "${{ steps.theme.outputs.id }}" \
+            --path dist/ \
+            $ALLOW_LIVE_FLAG
+
+          echo "Deployed to ${{ steps.theme.outputs.label }}"
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
