@@ -1,26 +1,15 @@
 name: Cross-Sync JSON Between Themes
 
-# Copies JSON files from one Shopify theme directly to another — no git commit.
-# Primary use case: propagate prod content-editor changes into pre-prod before a release.
+# Copies JSON files from source theme into target theme.
+# Files that exist only in the target (e.g. new templates added by devs) are preserved.
+# Nothing is committed to git — this is a direct Shopify-to-Shopify sync.
 
 on:
   workflow_dispatch:
     inputs:
-      source:
-        description: 'Source theme (pull JSON from here)'
-        required: true
-        default: 'prod'
-        type: choice
-        options:
-          - prod
-          - preprod
-      prod_theme_id:
-        description: 'Prod theme ID (required when source is prod)'
-        required: false
-        type: string
       source_theme_id:
-        description: 'Source theme ID (required when source is preprod)'
-        required: false
+        description: 'Source theme ID (pull JSON from here)'
+        required: true
         type: string
       target_theme_id:
         description: 'Target theme ID (push JSON to here)'
@@ -34,73 +23,57 @@ jobs:
 
     steps:
       - name: Install Shopify CLI
-        run: npm install -g @shopify/cli@latest
-
-      - name: Resolve source theme ID
-        id: source
-        run: |
-          if [ "${{ inputs.source }}" = "prod" ]; then
-            if [ -z "${{ inputs.prod_theme_id }}" ]; then
-              echo "::error::prod_theme_id is required when source is prod"
-              exit 1
-            fi
-            echo "id=${{ inputs.prod_theme_id }}" >> $GITHUB_OUTPUT
-          else
-            if [ -z "${{ inputs.source_theme_id }}" ]; then
-              echo "::error::source_theme_id is required when source is preprod"
-              exit 1
-            fi
-            echo "id=${{ inputs.source_theme_id }}" >> $GITHUB_OUTPUT
-          fi
+        run: npm install -g @shopify/cli@3.84.1
 
       - name: Pull source theme
         run: |
+          SOURCE_DIR=$(mktemp -d)
+          echo "SOURCE_DIR=$SOURCE_DIR" >> $GITHUB_ENV
+
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
-            --theme "${{ steps.source.outputs.id }}" \
-            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
-            --path /tmp/source_theme \
+            --theme "${{ inputs.source_theme_id }}" \
+            --path "$SOURCE_DIR" \
             --force
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
 
       - name: Pull target theme
         run: |
+          TARGET_DIR=$(mktemp -d)
+          echo "TARGET_DIR=$TARGET_DIR" >> $GITHUB_ENV
+
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ inputs.target_theme_id }}" \
-            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
-            --path /tmp/target_theme \
+            --path "$TARGET_DIR" \
             --force
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
 
-      - name: Overlay source JSON onto target theme
-        # Takes only JSON files from source and applies them to the target theme's
-        # full directory. Non-JSON files (liquid, assets) on the target are untouched.
+      - name: Overlay source JSON onto target
+        # Copies JSON files from source into target.
+        # JSON files that only exist in target (new dev templates etc.) are untouched.
         run: |
-          JSON_FILES=$(find /tmp/source_theme -name "*.json")
-          FILE_COUNT=$(echo "$JSON_FILES" | grep -c . || true)
+          JSON_FILES=$(find "$SOURCE_DIR" -name "*.json")
+          COUNT=$(echo "$JSON_FILES" | grep -c . || true)
 
-          echo "Syncing $FILE_COUNT JSON files from ${{ inputs.source }} (theme ${{ steps.source.outputs.id }}) → target (theme ${{ inputs.target_theme_id }}):"
-          echo "$JSON_FILES" | sed 's|/tmp/source_theme/|  |'
+          echo "Syncing $COUNT JSON files from theme ${{ inputs.source_theme_id }} → theme ${{ inputs.target_theme_id }}"
+          echo "$JSON_FILES" | sed "s|$SOURCE_DIR/|  |"
 
           echo "$JSON_FILES" | while IFS= read -r f; do
-            REL="${f#/tmp/source_theme/}"
-            TARGET="/tmp/target_theme/$REL"
+            REL="${f#$SOURCE_DIR/}"
+            TARGET="$TARGET_DIR/$REL"
             mkdir -p "$(dirname "$TARGET")"
             cp "$f" "$TARGET"
           done
 
       - name: Push updated target theme to Shopify
-        # Pushes the full target theme (original code + source JSON overlay).
-        # Target is always a non-published theme, so --allow-live is not needed.
         run: |
           shopify theme push \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ inputs.target_theme_id }}" \
-            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
-            --path /tmp/target_theme
+            --path "$TARGET_DIR"
 
           echo "Cross-sync complete → theme ${{ inputs.target_theme_id }}"
         env:
