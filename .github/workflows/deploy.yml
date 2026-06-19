@@ -91,6 +91,7 @@ jobs:
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ steps.theme.outputs.id }}" \
+            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
             --path "$TEMP" \
             --force
 
@@ -114,6 +115,7 @@ jobs:
           shopify theme push \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ steps.theme.outputs.id }}" \
+            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
             --path dist/ \
             $ALLOW_LIVE_FLAG
 

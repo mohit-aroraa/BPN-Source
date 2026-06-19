@@ -58,6 +58,7 @@ jobs:
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ steps.source.outputs.id }}" \
+            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
             --path /tmp/source_theme \
             --force
         env:
@@ -68,6 +69,7 @@ jobs:
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ inputs.target_theme_id }}" \
+            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
             --path /tmp/target_theme \
             --force
         env:
@@ -97,6 +99,7 @@ jobs:
           shopify theme push \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
             --theme "${{ inputs.target_theme_id }}" \
+            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
             --path /tmp/target_theme
 
           echo "Cross-sync complete → theme ${{ inputs.target_theme_id }}"
