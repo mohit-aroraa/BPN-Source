@@ -20,6 +20,7 @@ concurrency:
 jobs:
   build-and-deploy:
     name: Build Theme & Push to Production Repo
+    if: false # paused — replaced by deploy.yml
     runs-on: ubuntu-latest
 
     steps:

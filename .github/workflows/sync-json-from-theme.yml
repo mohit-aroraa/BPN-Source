@@ -18,6 +18,7 @@ permissions:
 jobs:
   sync-json:
     name: Pull JSON from production repo → source repo
+    if: false # paused — replaced by sync-json.yml
     runs-on: ubuntu-latest
 
     steps:

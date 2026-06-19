@@ -14,6 +14,10 @@ on:
         options:
           - prod
           - preprod
+      prod_theme_id:
+        description: 'Prod theme ID (required when source is prod)'
+        required: false
+        type: string
       source_theme_id:
         description: 'Source theme ID (required when source is preprod)'
         required: false
@@ -36,7 +40,11 @@ jobs:
         id: source
         run: |
           if [ "${{ inputs.source }}" = "prod" ]; then
-            echo "id=${{ vars.PROD_THEME_ID }}" >> $GITHUB_OUTPUT
+            if [ -z "${{ inputs.prod_theme_id }}" ]; then
+              echo "::error::prod_theme_id is required when source is prod"
+              exit 1
+            fi
+            echo "id=${{ inputs.prod_theme_id }}" >> $GITHUB_OUTPUT
           else
             if [ -z "${{ inputs.source_theme_id }}" ]; then
               echo "::error::source_theme_id is required when source is preprod"

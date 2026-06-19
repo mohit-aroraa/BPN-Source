@@ -1,9 +1,6 @@
 name: Deploy to Shopify Theme
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       target:
@@ -14,19 +11,18 @@ on:
         options:
           - prod
           - preprod
+      prod_theme_id:
+        description: 'Prod theme ID (required when target is prod)'
+        required: false
+        type: string
       preprod_theme_id:
         description: 'Pre-prod theme ID (required when target is preprod)'
         required: false
         type: string
-      force:
-        description: 'Deploy even if no theme files changed'
-        required: false
-        default: false
-        type: boolean
 
 # Queue deploys to the same target — never cancel in progress
 concurrency:
-  group: deploy-${{ github.event_name == 'push' && 'prod' || inputs.target }}
+  group: deploy-${{ inputs.target }}
   cancel-in-progress: false
 
 jobs:
@@ -67,11 +63,14 @@ jobs:
       - name: Resolve target theme
         id: theme
         run: |
-          # push to main always deploys to prod; workflow_dispatch picks the target
-          if [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.target }}" = "prod" ]; then
-            echo "id=${{ vars.PROD_THEME_ID }}" >> $GITHUB_OUTPUT
+          if [ "${{ inputs.target }}" = "prod" ]; then
+            if [ -z "${{ inputs.prod_theme_id }}" ]; then
+              echo "::error::prod_theme_id is required when target is prod"
+              exit 1
+            fi
+            echo "id=${{ inputs.prod_theme_id }}" >> $GITHUB_OUTPUT
             echo "is_live=true" >> $GITHUB_OUTPUT
-            echo "label=prod (theme ${{ vars.PROD_THEME_ID }})" >> $GITHUB_OUTPUT
+            echo "label=prod (theme ${{ inputs.prod_theme_id }})" >> $GITHUB_OUTPUT
           else
             if [ -z "${{ inputs.preprod_theme_id }}" ]; then
               echo "::error::preprod_theme_id is required when target is preprod"
