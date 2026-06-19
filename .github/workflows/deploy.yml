@@ -3,26 +3,13 @@ name: Deploy to Shopify Theme
 on:
   workflow_dispatch:
     inputs:
-      target:
-        description: 'Deployment target'
+      theme_id:
+        description: 'Theme ID to deploy to'
         required: true
-        default: 'preprod'
-        type: choice
-        options:
-          - prod
-          - preprod
-      prod_theme_id:
-        description: 'Prod theme ID (required when target is prod)'
-        required: false
-        type: string
-      preprod_theme_id:
-        description: 'Pre-prod theme ID (required when target is preprod)'
-        required: false
         type: string
 
-# Queue deploys to the same target — never cancel in progress
 concurrency:
-  group: deploy-${{ inputs.target }}
+  group: deploy-${{ inputs.theme_id }}
   cancel-in-progress: false
 
 jobs:
@@ -58,30 +45,9 @@ jobs:
           echo "  Liquid files: $(find dist -name '*.liquid' | wc -l | tr -d ' ')"
 
       - name: Install Shopify CLI
-        run: npm install -g @shopify/cli@latest
+        run: npm install -g @shopify/cli@3.84.1
 
-      - name: Resolve target theme
-        id: theme
-        run: |
-          if [ "${{ inputs.target }}" = "prod" ]; then
-            if [ -z "${{ inputs.prod_theme_id }}" ]; then
-              echo "::error::prod_theme_id is required when target is prod"
-              exit 1
-            fi
-            echo "id=${{ inputs.prod_theme_id }}" >> $GITHUB_OUTPUT
-            echo "is_live=true" >> $GITHUB_OUTPUT
-            echo "label=prod (theme ${{ inputs.prod_theme_id }})" >> $GITHUB_OUTPUT
-          else
-            if [ -z "${{ inputs.preprod_theme_id }}" ]; then
-              echo "::error::preprod_theme_id is required when target is preprod"
-              exit 1
-            fi
-            echo "id=${{ inputs.preprod_theme_id }}" >> $GITHUB_OUTPUT
-            echo "is_live=false" >> $GITHUB_OUTPUT
-            echo "label=preprod (theme ${{ inputs.preprod_theme_id }})" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Pull live JSON from target theme
+      - name: Pull JSON from target theme
         # Overlay the theme's current JSON onto the built dist/ before pushing.
         # This preserves all content-editor changes (settings_data.json, template JSONs)
         # and avoids overwriting merchant settings with developer defaults.
@@ -90,8 +56,7 @@ jobs:
 
           shopify theme pull \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
-            --theme "${{ steps.theme.outputs.id }}" \
-            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
+            --theme "${{ inputs.theme_id }}" \
             --path "$TEMP" \
             --force
 
@@ -101,24 +66,17 @@ jobs:
             cp "$f" "dist/$REL"
           done
 
-          echo "JSON overlay complete from ${{ steps.theme.outputs.label }}"
+          echo "JSON overlay complete for theme ${{ inputs.theme_id }}"
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
 
       - name: Push theme to Shopify
         run: |
-          ALLOW_LIVE_FLAG=""
-          if [ "${{ steps.theme.outputs.is_live }}" = "true" ]; then
-            ALLOW_LIVE_FLAG="--allow-live"
-          fi
-
           shopify theme push \
             --store "${{ vars.SHOPIFY_STORE_URL }}" \
-            --theme "${{ steps.theme.outputs.id }}" \
-            --password "${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}" \
-            --path dist/ \
-            $ALLOW_LIVE_FLAG
+            --theme "${{ inputs.theme_id }}" \
+            --path dist/
 
-          echo "Deployed to ${{ steps.theme.outputs.label }}"
+          echo "Deployed to theme ${{ inputs.theme_id }}"
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
