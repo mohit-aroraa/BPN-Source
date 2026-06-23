@@ -54,18 +54,6 @@
     },
     "1779723851f01c7ce8": {
       "type": "apps",
-      "blocks": {
-        "rivo_loyalty_rewards_referrals_lp_referral_campaign_cgQcBq": {
-          "type": "shopify://apps/rivo-loyalty-rewards-referrals/blocks/lp-referral-campaign/580e9665-b2cd-4dbc-b6ba-6445ac9e6871",
-          "settings": {
-            "background_color": "",
-            "referral_campaign_id": ""
-          }
-        }
-      },
-      "block_order": [
-        "rivo_loyalty_rewards_referrals_lp_referral_campaign_cgQcBq"
-      ],
       "settings": {}
     },
     "rivo_how_it_works_refer_2_qVUfGp": {
