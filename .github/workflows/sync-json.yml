@@ -1,63 +1,21 @@
 name: Sync JSON from Shopify Theme
 
-# ─────────────────────────────────────────────────────────────────────────────
-# HOW TO USE THIS FILE
-#
-# 1. FIRST RUN — leave `diagnostics_only` = true (the default).
-#    This does NOT pull or open a PR. It just:
-#      • prints the token prefix + length (no secret leak)
-#      • prints the exact store string being used (check prod vs staging,
-#        no https://, no trailing slash)
-#      • runs `shopify theme list` — the decisive auth probe
-#
-#    Read the result:
-#      • theme list 401s  → the token is NOT paired with this store.
-#                           Use `store_override` to try the other store,
-#                           or regenerate the Theme Access password on the
-#                           SAME store you're pulling from.
-#      • theme list works → token↔store is fine; confirm theme ID appears
-#                           in the list, then set diagnostics_only = false
-#                           and run again to do the real pull.
-#
-# 2. SECOND RUN — set `diagnostics_only` = false to perform the pull + PR.
-#    The pull runs with --verbose so any 401 shows the exact failing call.
-# ─────────────────────────────────────────────────────────────────────────────
-
 on:
   workflow_dispatch:
     inputs:
-      source:
-        description: 'Theme to pull JSON from'
+      theme_id:
+        description: 'Theme ID to pull JSON from'
         required: true
-        default: 'prod'
-        type: choice
-        options:
-          - prod
-          - preprod
-      store_override:
-        description: 'TEST ONLY — override store (e.g. staging-bare-performance-nutrition.myshopify.com). Leave blank to use vars.SHOPIFY_STORE_URL'
-        required: false
         type: string
-      prod_theme_id:
-        description: 'Prod theme ID (required when source is prod)'
-        required: false
-        type: string
-      source_theme_id:
-        description: 'Theme ID (required when source is preprod)'
-        required: false
-        type: string
-      diagnostics_only:
-        description: 'Run auth diagnostics only (no pull, no PR)'
-        required: true
-        default: true
-        type: boolean
       sync_branch:
-        description: 'Branch to create (e.g. sync/json-20260619)'
-        required: false
+        description: 'Branch to create (e.g. sync/json-20260623)'
+        required: true
+        type: string
       pr_target:
         description: 'Branch to raise the PR against'
         required: false
         default: 'main'
+        type: string
 
 permissions:
   contents: write
@@ -75,105 +33,25 @@ jobs:
           ref: ${{ inputs.pr_target }}
           fetch-depth: 0
 
-      - name: Resolve store and theme ID
-        id: resolve
-        run: |
-          # Store: override wins for testing, else the repo variable
-          STORE="${{ inputs.store_override }}"
-          if [ -z "$STORE" ]; then
-            STORE="${{ vars.SHOPIFY_STORE_URL }}"
-          fi
-
-          # Strip accidental scheme / trailing slash that break --store
-          STORE="${STORE#https://}"
-          STORE="${STORE#http://}"
-          STORE="${STORE%/}"
-
-          if [ -z "$STORE" ]; then
-            echo "::error::No store resolved. Set vars.SHOPIFY_STORE_URL or pass store_override."
-            exit 1
-          fi
-
-          # Theme ID by source
-          if [ "${{ inputs.source }}" = "prod" ]; then
-            THEME_ID="${{ inputs.prod_theme_id }}"
-            [ -z "$THEME_ID" ] && { echo "::error::prod_theme_id is required when source is prod"; exit 1; }
-          else
-            THEME_ID="${{ inputs.source_theme_id }}"
-            [ -z "$THEME_ID" ] && { echo "::error::source_theme_id is required when source is preprod"; exit 1; }
-          fi
-
-          echo "store=$STORE"       >> "$GITHUB_OUTPUT"
-          echo "theme_id=$THEME_ID" >> "$GITHUB_OUTPUT"
-
-      - name: Install Shopify CLI
-        # Pinned off @latest — recent releases have shipped theme-auth regressions.
-        # Bump only after a clean run if you want a newer version.
-        run: npm install -g @shopify/cli@3.84.1
-
-      - name: Auth diagnostics
-        env:
-          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
-        run: |
-          echo "── CLI version ──────────────────────────────"
-          shopify version || true
-
-          echo "── Token fingerprint (no secret leaked) ─────"
-          echo "prefix=${SHOPIFY_CLI_THEME_TOKEN:0:7}  length=${#SHOPIFY_CLI_THEME_TOKEN}"
-          # Expect: prefix=shptka_  and a stable length.
-          # If prefix=shpat_  → that's a custom-app token, wrong type for theme cmds.
-
-          echo "── Resolved store ───────────────────────────"
-          echo "store=${{ steps.resolve.outputs.store }}"
-          echo "theme_id=${{ steps.resolve.outputs.theme_id }}"
-
-          echo "── Auth probe: theme list ───────────────────"
-          # Non-fatal so we always see the outcome in the log.
-          set +e
-          shopify theme list --store "${{ steps.resolve.outputs.store }}"
-          PROBE=$?
-          set -e
-          if [ $PROBE -ne 0 ]; then
-            echo "::warning::theme list FAILED (exit $PROBE). Token is not valid for this store — check store↔token pairing."
-          else
-            echo "theme list succeeded — token↔store pairing is good. Confirm theme_id above appears in the list."
-          fi
-
-      - name: Stop after diagnostics
-        if: ${{ inputs.diagnostics_only }}
-        run: |
-          echo "diagnostics_only = true — stopping before pull/PR."
-          echo "Set diagnostics_only = false to perform the real pull."
-
-      # ── Everything below runs ONLY when diagnostics_only = false ──────────────
-
       - name: Configure git
-        if: ${{ !inputs.diagnostics_only }}
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -z "${{ inputs.sync_branch }}" ]; then
-            echo "::error::sync_branch is required when diagnostics_only is false"; exit 1
-          fi
           git checkout -b "${{ inputs.sync_branch }}"
 
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@3.84.1
+
       - name: Pull JSON from Shopify theme
-        if: ${{ !inputs.diagnostics_only }}
-        env:
-          # Single, blessed auth path: env var only (no --password flag).
-          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
         run: |
           TEMP=$(mktemp -d)
 
           shopify theme pull \
-            --store "${{ steps.resolve.outputs.store }}" \
-            --theme "${{ steps.resolve.outputs.theme_id }}" \
+            --store "${{ vars.SHOPIFY_STORE_URL }}" \
+            --theme "${{ inputs.theme_id }}" \
             --path "$TEMP" \
-            --force \
-            --verbose
+            --force
 
-          # Map theme structure → source repo structure
-          # templates/ → src/liquid/templates/
           find "$TEMP/templates" -name "*.json" 2>/dev/null | while IFS= read -r f; do
             REL="${f#$TEMP/templates/}"
             TARGET="src/liquid/templates/$REL"
@@ -181,7 +59,6 @@ jobs:
             cp "$f" "$TARGET"
           done
 
-          # config/ → src/config/
           find "$TEMP/config" -name "*.json" 2>/dev/null | while IFS= read -r f; do
             REL="${f#$TEMP/config/}"
             TARGET="src/config/$REL"
@@ -189,63 +66,62 @@ jobs:
             cp "$f" "$TARGET"
           done
 
-          # locales/ → src/locales/
           find "$TEMP/locales" -name "*.json" 2>/dev/null | while IFS= read -r f; do
             REL="${f#$TEMP/locales/}"
             TARGET="src/locales/$REL"
             mkdir -p "$(dirname "$TARGET")"
             cp "$f" "$TARGET"
           done
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
 
       - name: Commit and push sync branch
         id: commit
-        if: ${{ !inputs.diagnostics_only }}
         run: |
-          # -f to include any gitignored JSON files (e.g. settings_data.json)
           git add -f src/liquid/templates/ src/config/ src/locales/ 2>/dev/null || true
 
           if git diff --staged --quiet; then
-            echo "No JSON changes — source repo is already up to date."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No JSON changes — already up to date."
+            echo "changed=false" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          CHANGED_FILES=$(git diff --staged --name-only)
-          CHANGED_COUNT=$(echo "$CHANGED_FILES" | grep -c . || true)
+          CHANGED=$(git diff --staged --name-only)
+          COUNT=$(echo "$CHANGED" | grep -c . || true)
 
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "changed_count=${CHANGED_COUNT}" >> "$GITHUB_OUTPUT"
+          echo "changed=true"   >> $GITHUB_OUTPUT
+          echo "count=$COUNT"   >> $GITHUB_OUTPUT
 
           DELIMITER=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | head -c 16)
-          echo "changed_files<<${DELIMITER}" >> "$GITHUB_OUTPUT"
-          echo "${CHANGED_FILES}" >> "$GITHUB_OUTPUT"
-          echo "${DELIMITER}" >> "$GITHUB_OUTPUT"
+          echo "files<<$DELIMITER" >> $GITHUB_OUTPUT
+          echo "$CHANGED"          >> $GITHUB_OUTPUT
+          echo "$DELIMITER"        >> $GITHUB_OUTPUT
 
-          git commit -m "sync: pull ${CHANGED_COUNT} json files from ${{ inputs.source }} theme"
+          git commit -m "sync: pull $COUNT json files from theme ${{ inputs.theme_id }}"
           git push --force origin "${{ inputs.sync_branch }}"
 
       - name: Create pull request
-        if: ${{ !inputs.diagnostics_only && steps.commit.outputs.changed == 'true' }}
+        if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr create \
-            --title "sync: json from ${{ inputs.source }} theme → \`${{ inputs.pr_target }}\`" \
+            --title "sync: json from theme ${{ inputs.theme_id }} → \`${{ inputs.pr_target }}\`" \
             --base "${{ inputs.pr_target }}" \
             --head "${{ inputs.sync_branch }}" \
             --body "$(cat <<'EOF'
           ## JSON Sync from Shopify Theme
 
-          Pulled latest JSON files directly from the **${{ inputs.source }}** Shopify theme (ID: `${{ steps.resolve.outputs.theme_id }}`).
+          Pulled latest JSON files from theme `${{ inputs.theme_id }}`.
 
           **Target branch:** \`${{ inputs.pr_target }}\`
 
-          ### Changed files (${{ steps.commit.outputs.changed_count }})
+          ### Changed files (${{ steps.commit.outputs.count }})
 
-          ```
-          ${{ steps.commit.outputs.changed_files }}
-          ```
+          \`\`\`
+          ${{ steps.commit.outputs.files }}
+          \`\`\`
 
-          > Review `settings_data.json` carefully before merging — it reflects live content-editor changes.
+          > Review \`settings_data.json\` carefully before merging.
           EOF
           )"
