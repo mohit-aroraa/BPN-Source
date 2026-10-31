@@ -117,7 +117,7 @@
         "subtitle": "20 G CARBOHYDRATES + 350 MG SODIUM",
         "description": "An endurance supplement with carbohydrates and electrolytes to fuel, hydrate, and improve performance while training.",
         "subscription_title": "Subscribe & Save",
-        "previous_discount_percentage": "15%",
+        "previous_discount_percentage": "25%",
         "subscription_discount_text": "FOR LIFE",
         "subscription_text": "Swap Flavors, Pause or Cancel Anytime",
         "tooltip_text": "<ul><li>Easy and flexible subscription plan</li><li>Modify or cancel anytime</li><li>Lock in 20% discount until you cancel</li><li>Automatically delivered on your schedule</li></ul>",
@@ -204,12 +204,6 @@
             "product": "electrolytes"
           }
         },
-        "product_FMtix6": {
-          "type": "product",
-          "settings": {
-            "product": "go-gel"
-          }
-        },
         "product_77y4pc": {
           "type": "product",
           "settings": {
@@ -225,7 +219,6 @@
       },
       "block_order": [
         "product_3DccFA",
-        "product_FMtix6",
         "product_77y4pc",
         "product_RDVxEY"
       ],
